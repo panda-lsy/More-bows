@@ -25,7 +25,6 @@ jobs:
         path: |
           ~/.gradle/caches
           ~/.gradle/wrapper
-          ~/build/dirtyArtifacts
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
         restore-keys: |
           ${{ runner.os }}-gradle-
