@@ -31,7 +31,7 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
-      run: ./gradlew SetupCIWorkspace build
+      run: ./gradlew build
       env:
         BUILD_RELEASE: false
     - uses: actions/upload-artifact@v2
