@@ -24,7 +24,7 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew SetupCIWorkspace build
       env:
-        BUILD_RELEASE: ${{ github.event.prerelease == false }}
+        BUILD_RELEASE: ${{ github.event.release.prerelease == false }}
     - uses: actions/upload-artifact@v2
       with:
         name: Package
