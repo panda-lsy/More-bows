@@ -5,6 +5,7 @@
 .gradle
 build
 bin
+run
 
 # eclipse 
 .settings

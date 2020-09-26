@@ -1,195 +1,169 @@
 package iDiamondhunter.morebowsmod;
 
-import iDiamondhunter.morebowsmod.client.ClientProxyiDiamondhunter;
-import iDiamondhunter.morebowsmod.common.CommonProxyiDiamondhunter;
-import net.minecraft.src.Block;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.ModLoader;
-import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.Init;
-import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.Mod.Instance;
+//import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.LanguageRegistry;
+import iDiamondhunter.morebowsmod.bows.*;
+//import iDiamondhunter.morebowsmod.proxy.*;
+import iDiamondhunter.morebowsmod.entities.EntityiDiamondhunterFireArrow;
+import iDiamondhunter.morebowsmod.entities.EntityiDiamondhunterFrostArrow;
 
+import org.apache.logging.log4j.Logger;
 
-
-
-@Mod(modid = "More Bows mod by iDiamondhunter", name = "More Bows mod", version = "1.4.4")
-@NetworkMod(clientSideRequired = true, serverSideRequired = true)
+@Mod(modid = MoreBowsMod.MOD_ID, name = MoreBowsMod.MOD_NAME, version = MoreBowsMod.MOD_VERSION)
 public class MoreBowsMod
 {
-
-    @SidedProxy(clientSide = "iDiamondhunter.client.ClientProxyiDiamondhunter", serverSide= "iDiamondhunter.common.CommonProxyiDiamondhunter")
-    public static CommonProxyiDiamondhunter proxy;
-    public static ClientProxyiDiamondhunter proxy1;
-
+	public static final String MOD_ID = "iDiamondhunterMoreBows";
+	public static final String MOD_NAME	= "More Bows mod";
+	public static final String MOD_VERSION	= "1.4.5";
 	
+	@Instance("iDiamondhunterMoreBows")
+	public static MoreBowsMod instance;
+	
+    public static Logger modLog;
+    
+    /* TODO: Make proxies. */
+    //at SidedProxy(clientSide = "iDiamondhunter.morebowsmod.client.ClientProxyiDiamondhunter", serverSide= "iDiamondhunter.morebowsmod.common.CommonProxyiDiamondhunter")
+    //public static CommonProxyiDiamondhunter commonProxy;
+    //public static ClientProxyiDiamondhunter clientProxy;
+    
+    /* TODO Re-evaluate where stuff should be declared and initialized. */
     public static Item DiamondBow;
-	public static int DiamondBow_1;
-	public static int DiamondBow_2;
-	public static int DiamondBow_3;
-	public static int DiamondBow_4;
+    public final static String DiamondBowName = "DiamondBow";
+    
 	public static Item GoldBow;
-	public static int GoldBow_1;
-	public static int GoldBow_2;
-	public static int GoldBow_3;
-	public static int GoldBow_4;
+	public final static String GoldBowName = "GoldBow";
+
 	public static Item EnderBow;
-	public static int EnderBow_1;
-	public static int EnderBow_2;
-	public static int EnderBow_3;
-	public static int EnderBow_4;
+	public final static String EnderBowName = "EnderBow";
+
 	public static Item StoneBow;
-	public static int StoneBow_1;
-	public static int StoneBow_2;
-	public static int StoneBow_3;
-	public static int StoneBow_4;
+	public final static String StoneBowName = "StoneBow";
+
 	public static Item IronBow;
-	public static int IronBow_1;
-	public static int IronBow_2;
-	public static int IronBow_3;
-	public static int IronBow_4;
+	public final static String IronBowName = "IronBow";
+
 	public static Item MultiBow;
-	public static int MultiBow_1;
-	public static int MultiBow_2;
-	public static int MultiBow_3;
-	public static int MultiBow_4;
+	public final static String MultiBowName = "MultiBow";
+
 	public static Item FlameBow;
-	public static int FlameBow_1;
-	public static int FlameBow_2;
-	public static int FlameBow_3;
-	public static int FlameBow_4;
-	/*public static Item IceBow;
-	public static int IceBow_1;
-	public static int IceBow_2;
-	public static int IceBow_3;
-	public static int IceBow_4;*/
-	
-	
-	public void load(FMLPreInitializationEvent event)
-	{
-        MinecraftForgeClient.preloadTexture("/MoreBows/Bows.png");
+	public final static String FlameBowName = "FlameBow";
 
-
+	public static Item FrostBow;
+	public final static String FrostBowName = "FrostBow";
+	
+	@EventHandler
+	public void preInit(FMLPreInitializationEvent event) {
+		
+		modLog = event.getModLog();
+		modLog.info("Too many bows, or not enough?");
+		initItems();
+		
 	}
 	
-	@Init
-	public void load(FMLInitializationEvent event)
-	{
-
+	@EventHandler
+	public void init(FMLInitializationEvent event) {
 		
-
+		registerItems();
 		
+	}
+	
+	private void initItems() {
 		
+		DiamondBow = new ItemDiamondBow().setUnlocalizedName(DiamondBowName).setTextureName("morebowsmod:" + DiamondBowName);
+		GoldBow = new ItemGoldBow().setUnlocalizedName(GoldBowName).setTextureName("morebowsmod:" + GoldBowName);
+		EnderBow = new ItemBowEnder().setUnlocalizedName(EnderBowName).setTextureName("morebowsmod:" + EnderBowName);
+		StoneBow = new ItemStoneBow().setUnlocalizedName(StoneBowName).setTextureName("morebowsmod:" + StoneBowName);
+		IronBow = new ItemIronBow().setUnlocalizedName(IronBowName).setTextureName("morebowsmod:" + IronBowName);
+		MultiBow = new ItemMultiBow().setUnlocalizedName(MultiBowName).setTextureName("morebowsmod:" + MultiBowName);
+		FlameBow = new ItemFlameBow().setUnlocalizedName(FlameBowName).setTextureName("morebowsmod:" + FlameBowName);
+		FrostBow = new ItemFrostBow().setUnlocalizedName(FrostBowName).setTextureName("morebowsmod:" + FrostBowName);
 		
-		DiamondBow = new ItemDiamondBow(3906, 0).setItemName("DiamondBow").setIconIndex(0);
-		GoldBow = new ItemGoldBow(3907, 12).setItemName("GoldBow").setIconIndex(12);
-		EnderBow = new ItemBowEnder(3908, 4).setItemName("EnderBow").setIconIndex(4);
-		StoneBow = new ItemStoneBow(3909, 24).setItemName("StoneBow").setIconIndex(24);
-		IronBow = new ItemIronBow(3910, 16).setItemName("IronBow").setIconIndex(16);
-		MultiBow = new ItemMultiBow(3911, 20).setItemName("MultiBow").setIconIndex(20);
-		FlameBow = new ItemFlameBow(3912, 8).setItemName("FlameBow").setIconIndex(8);
-		//IceBow = new ItemIceBow(3913, 28).setItemName("IceBow").setIconIndex(28);
-
-		DiamondBow_1 = 0;
-		GoldBow_1 = 12;
-		EnderBow_1 = 4;
-		StoneBow_1 = 24;
-		IronBow_1 = 16;
-		FlameBow_1 = 8;
-		MultiBow_1 = 20;
-		//IceBow_1 = 28;
-		GoldBow_2 = 13;
-		GoldBow_3 = 14;
-		GoldBow_4 = 15;
-		EnderBow_2 = 5;
-		EnderBow_3 = 6;
-		EnderBow_4 = 7;
-		StoneBow_2 = 25;
-		StoneBow_3 = 26;
-		StoneBow_4 = 27;
-		IronBow_2 = 17;
-		IronBow_3 = 18;
-		IronBow_4 = 19;
-		MultiBow_2 = 21;
-		MultiBow_3 = 22;
-		MultiBow_4 = 23;
-		FlameBow_2 = 9;
-		FlameBow_3 = 10;
-		FlameBow_4 = 11;
-		/*IceBow_1 = 29;
-		IceBow_1 = 30;
-		IceBow_1 = 31;*/
-
-		LanguageRegistry.addName(DiamondBow, "Crystal Bow");
-		LanguageRegistry.addName(GoldBow, "Golden Bow");
-		LanguageRegistry.addName(MultiBow, "Legia Bow");
-		LanguageRegistry.addName(FlameBow, "Blazing Bow");
-		LanguageRegistry.addName(IronBow, "Iron Bow");
-		LanguageRegistry.addName(StoneBow, "Reinforced Bow");
-		LanguageRegistry.addName(EnderBow, "Ender Bow");
-		//LanguageRegistry.addName(IceBow, "Frostbite Bow");
+	}
+	
+	private void registerItems() {
 		
+		/* TODO check if this is the right way of doing things. */
+		
+        GameRegistry.registerItem(DiamondBow, DiamondBowName);
+        GameRegistry.registerItem(GoldBow, GoldBowName);
+        GameRegistry.registerItem(EnderBow, EnderBowName);
+        GameRegistry.registerItem(StoneBow, StoneBowName);
+        GameRegistry.registerItem(IronBow, IronBowName);
+        GameRegistry.registerItem(MultiBow, MultiBowName);
+        GameRegistry.registerItem(FlameBow, FlameBowName);
+        GameRegistry.registerItem(FrostBow, FrostBowName);
 		
 		GameRegistry.addRecipe(new ItemStack(StoneBow, 1), new Object[]
                 {
-                    " $*", "#(*", " $*", '#', Item.stick, '*', Item.silk, '$', Block.stone, '(', Item.bow
+                    " $*", "#(*", " $*", '#', Items.stick, '*', Items.string, '$', Blocks.stone, '(', Items.bow
                 });
         GameRegistry.addRecipe(new ItemStack(StoneBow, 1), new Object[]
                 {
-                    "*$ ", "*(#", "*$ ", '#', Item.stick, '*', Item.silk, '$', Block.stone, '(', Item.bow
+                    "*$ ", "*(#", "*$ ", '#', Items.stick, '*', Items.string, '$', Blocks.stone, '(', Items.bow
                 });
         GameRegistry.addRecipe(new ItemStack(IronBow, 1), new Object[]
                 {
-                    " $*", "$(*", " $*", '*', Item.silk, '$', Item.ingotIron, '(', Item.bow
+                    " $*", "$(*", " $*", '*', Items.string, '$', Items.iron_ingot, '(', Items.bow
                 });
         GameRegistry.addRecipe(new ItemStack(IronBow, 1), new Object[]
                 {
-                    "*$ ", "*($", "*$ ", '*', Item.silk, '$', Item.ingotIron, '(', Item.bow
+                    "*$ ", "*($", "*$ ", '*', Items.string, '$', Items.iron_ingot, '(', Items.bow
                 });
         GameRegistry.addRecipe(new ItemStack(GoldBow, 1), new Object[]
                 {
-                    " $*", "$(*", " $*", '*', Item.silk, '$', Item.ingotGold, '(', Item.bow
+                    " $*", "$(*", " $*", '*', Items.string, '$', Items.gold_ingot, '(', Items.bow
                 });
         GameRegistry.addRecipe(new ItemStack(GoldBow, 1), new Object[]
                 {
-                    "*$ ", "*($", "*$ ", '*', Item.silk, '$', Item.ingotGold, '(', Item.bow
+                    "*$ ", "*($", "*$ ", '*', Items.string, '$', Items.gold_ingot, '(', Items.bow
                 });
         GameRegistry.addRecipe(new ItemStack(DiamondBow, 1), new Object[]
                 {
-                    " $*", "I(*", " $*", '*', Item.silk, '$', Item.diamond, 'I', Item.ingotIron, '(', Item.bow
+                    " $*", "I(*", " $*", '*', Items.string, '$', Items.diamond, 'I', Items.iron_ingot, '(', Items.bow
                 });
         GameRegistry.addRecipe(new ItemStack(DiamondBow, 1), new Object[]
                 {
-                    "*$ ", "*(I", "*$ ", '*', Item.silk, '$', Item.diamond, 'I', Item.ingotIron, '(', Item.bow
+                    "*$ ", "*(I", "*$ ", '*', Items.string, '$', Items.diamond, 'I', Items.iron_ingot, '(', Items.bow
                 });
         GameRegistry.addRecipe(new ItemStack(MultiBow, 1), new Object[]
                 {
-                    " $*", "#(*", " $*", '*', Item.silk, '#', Item.ingotIron, '$', iDiamondhunter.IronBow
+                    " $*", "#(*", " $*", '*', Items.string, '#', Items.iron_ingot, '$', IronBow
                 });
         GameRegistry.addRecipe(new ItemStack(MultiBow, 1), new Object[]
                 {
-                    "*$ ", "* #", "*$ ", '*', Item.silk, '#', Item.ingotIron, '$', iDiamondhunter.IronBow
+                    "*$ ", "* #", "*$ ", '*', Items.string, '#', Items.iron_ingot, '$', IronBow
                 });
         GameRegistry.addRecipe(new ItemStack(FlameBow, 1), new Object[]
-                {"NB ", "GI ", "NB ",   'G', Item.ingotGold, 'B', Item.blazeRod,  'I', iDiamondhunter.IronBow, 'N',Block.netherrack
+                {"NB ", "GI ", "NB ",   'G', Items.gold_ingot, 'B', Items.blaze_rod,  'I', IronBow, 'N',Blocks.netherrack
         	    });
         GameRegistry.addRecipe(new ItemStack(FlameBow, 1), new Object[]
-                {" NB", " GI", " NB",   'G', Item.ingotGold, 'B', Item.blazeRod, 'I', iDiamondhunter.IronBow, 'N', Block.netherrack
+                {" NB", " GI", " NB",   'G', Items.gold_ingot, 'B', Items.blaze_rod, 'I', IronBow, 'N', Blocks.netherrack
         	    });
         GameRegistry.addRecipe(new ItemStack(EnderBow, 1), new Object[]
                 {
-                    "GP ", "EI ", "GP ",   'G', Item.ingotGold, 'P', Item.enderPearl,  'I', iDiamondhunter.IronBow, 'E',Item.eyeOfEnder
+                    "GP ", "EI ", "GP ",   'G', Items.gold_ingot, 'P', Items.ender_pearl,  'I', IronBow, 'E',Items.ender_eye
                 });
         GameRegistry.addRecipe(new ItemStack(EnderBow, 1), new Object[]
                 {
-                    " GP", " EI", " GP",  'G', Item.ingotGold, 'P', Item.enderPearl,  'I', iDiamondhunter.IronBow, 'E', Item.eyeOfEnder
+                    " GP", " EI", " GP",  'G', Items.gold_ingot, 'P', Items.ender_pearl,  'I', IronBow, 'E', Items.ender_eye
                 });
+        GameRegistry.addRecipe(new ItemStack(FrostBow, 1), new Object[]
+        		{
+        			" IR", "SER", " IR", 'R', Items.string, 'I', Blocks.ice, 'S', Items.snowball, 'E', IronBow
+        		});
+		
+		EntityRegistry.registerModEntity(EntityiDiamondhunterFireArrow.class, "iDiamondhunterFireArrow", 1, this, 64, 20, true);
+		EntityRegistry.registerModEntity(EntityiDiamondhunterFrostArrow.class, "iDiamondhunterFrostArrow", 2, this, 64, 20, true);
 		
 	}
 }

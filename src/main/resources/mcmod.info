@@ -1,16 +1,15 @@
 [
 {
-  "modid": "morebowsmod",
+  "modid": "iDiamondhunterMoreBows",
   "name": "More Bows mod",
-  "description": "A port of the More Bows mod, originally created by iDiamondhunter.",
+  "logoFile": "morebowsLogo.jpg",
+  "description": "A port of the More Bows mod to 1.7.10! This mod was originally created by GaussFire, and maintained + updated by iDiamondhunter. Ported by NeRd!",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "https://github.com/NeRdTheNed/More-bows",
-  "updateUrl": "",
-  "authorList": ["iDiamondhunter", "NeRd"],
-  "credits": "",
-  "logoFile": "/tempLogo.png",
-  "screenshots": ["ScreenshotLegiaBow.jpg", "ScreenshotThirdPerson.png", "ScreenshotShootingPigs.png"],
-  "dependencies": []
+  "updateUrl": "https://github.com/NeRdTheNed/More-bows/commits",
+  "authorList": ["GaussFire", "iDiamondhunter", "Ninjamight", "NeRd"],
+  "credits": "GaussFire and iDiamondhunter, for making the mod and assets! Ninjamight, for making the mod logo!",
+  "screenshots": ["ScreenshotLegiaBow.jpg", "ScreenshotThirdPerson.png", "ScreenshotShootingPigs.png"]
 }
 ]
