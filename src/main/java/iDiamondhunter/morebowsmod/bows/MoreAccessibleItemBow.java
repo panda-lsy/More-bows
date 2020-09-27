@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Items;
@@ -36,7 +37,7 @@ public abstract class MoreAccessibleItemBow extends ItemBow
 	protected int flameBurnTime = 100;
 	protected double damageMultiplier = 1;
 	/** TODO why did I add this? */
-	protected String bowSoundName = "random.bow"; 
+	protected String defaultShotSound = "random.bow"; 
 
 	/** TODO better parameter order, decide which variables should be set in the constructor (possibly provide a better default one) */
 	public MoreAccessibleItemBow(int maxDamage)
@@ -82,7 +83,7 @@ public abstract class MoreAccessibleItemBow extends ItemBow
             addModifiersToArrows(par2World, par1ItemStack, flag, false);
 
             par1ItemStack.damageItem(1, par3EntityPlayer);
-            par2World.playSoundAtEntity(par3EntityPlayer, bowSoundName, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + shotVelocity * 0.5F);
+            playBowNoise(par2World, par3EntityPlayer);
 
             if (!flag)
             {
@@ -95,6 +96,13 @@ public abstract class MoreAccessibleItemBow extends ItemBow
             }
         }
     }
+	
+	/** TODO: Go through each bow and check if they have custom noises. Also make this better. */
+	public void playBowNoise(World world, EntityPlayer player) {
+		
+		world.playSoundAtEntity(player, defaultShotSound, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + shotVelocity * 0.5F);
+		
+	}
 	
 	@Deprecated
 	public void setArrows(World world, EntityPlayer player) { //TODO rename later
@@ -194,7 +202,7 @@ public abstract class MoreAccessibleItemBow extends ItemBow
         return this.iconArray[index];
     }
     
-    /** TODO Fix animation timers */
+    /** TODO Replace this system! */
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining) {

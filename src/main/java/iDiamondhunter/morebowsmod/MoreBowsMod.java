@@ -8,14 +8,13 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 //import cpw.mods.fml.common.SidedProxy;
+//import iDiamondhunter.morebowsmod.proxy.*;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import iDiamondhunter.morebowsmod.bows.*;
-//import iDiamondhunter.morebowsmod.proxy.*;
-import iDiamondhunter.morebowsmod.entities.EntityiDiamondhunterFireArrow;
-import iDiamondhunter.morebowsmod.entities.EntityiDiamondhunterFrostArrow;
+import iDiamondhunter.morebowsmod.entities.*;
 
 import org.apache.logging.log4j.Logger;
 
@@ -164,6 +163,7 @@ public class MoreBowsMod
 		
 		EntityRegistry.registerModEntity(EntityiDiamondhunterFireArrow.class, "iDiamondhunterFireArrow", 1, this, 64, 20, true);
 		EntityRegistry.registerModEntity(EntityiDiamondhunterFrostArrow.class, "iDiamondhunterFrostArrow", 2, this, 64, 20, true);
+		EntityRegistry.registerModEntity(EntityiDiamondhunterParticleArrow.class, "iDiamondhunterFrostArrow", 3, this, 64, 20, true);
 		
 	}
 }

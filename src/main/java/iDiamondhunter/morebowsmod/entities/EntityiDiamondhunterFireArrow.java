@@ -42,7 +42,7 @@ public class EntityiDiamondhunterFireArrow extends EntityArrow
     }
     
     @SubscribeEvent
-    public void onLivingAttackEvent(LivingAttackEvent event)
+    public void onLivingHurtEvent(LivingAttackEvent event)
     {
         //if(!event.source.getSourceOfDamage().isEntityEqual(this) && !event.entity.isBurning() && !event.entity.handleWaterMovement()) {
     	if(this == event.source.getSourceOfDamage() && event.entity.isBurning()) {

@@ -1,15 +1,20 @@
 package iDiamondhunter.morebowsmod.bows;
 
 import java.util.Random;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 public class ItemMultiBow extends MoreAccessibleItemBow
 {
 	private Random rand = new Random();
+	protected int thirdArrow = 42;
 	
     public ItemMultiBow()
     {
@@ -25,6 +30,7 @@ public class ItemMultiBow extends MoreAccessibleItemBow
 				new EntityArrow(world, player, shotVelocity * 1.65F),
 				new EntityArrow(world, player, shotVelocity * 1.275F)
 				};
+		
 		bowShots[1].canBePickedUp = 0;
 		bowShots[2].canBePickedUp = 0;
 	}
@@ -33,7 +39,6 @@ public class ItemMultiBow extends MoreAccessibleItemBow
 	@Override
 	public void spawnArrows(World world) { 
 		
-		//TODO where is the third shot supposed to come from??? go through the code again.
 		world.spawnEntityInWorld(bowShots[0]);
 		world.spawnEntityInWorld(bowShots[1]);
 		
@@ -50,7 +55,8 @@ public class ItemMultiBow extends MoreAccessibleItemBow
     	bowShots[1].setDamage(bowShots[1].getDamage() * 1.3D);
     	bowShots[2].setDamage(bowShots[2].getDamage() * 1.15D);
     	
-        if(rand.nextInt(4) == 0)
+    	thirdArrow = rand.nextInt(4);
+        if(thirdArrow == 0)
         {
         	world.spawnEntityInWorld(bowShots[2]);
         	if(bowShots[2].shootingEntity.rotationYaw > 180)
@@ -64,11 +70,45 @@ public class ItemMultiBow extends MoreAccessibleItemBow
         }
 		
 	}
+	
+	@Override
+	public void playBowNoise(World world, EntityPlayer player) {
+		
+		//TODO: Clean this up
+		
+		double xpos = player.posX;
+		double ypos = player.posY;
+		double zpos = player.posZ;
+		
+		world.playSoundAtEntity(player, defaultShotSound, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + shotVelocity * 0.5F);
+		world.playSoundEffect(xpos + player.rotationYaw / 180, ypos, zpos, defaultShotSound, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + shotVelocity * 0.5F);
+		if (thirdArrow == 0) {
+			world.playSoundEffect(xpos - player.rotationYaw / 180, ypos, zpos, defaultShotSound, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + shotVelocity * 0.5F);
+		}
+		
+	}
     
     @Override
     public EnumRarity getRarity(ItemStack par1ItemStack)
     {
         return EnumRarity.rare;
+    }
+    
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining) {
+        if (usingItem == null) { return itemIcon; }
+        int ticksInUse = stack.getMaxItemUseDuration() - useRemaining;
+
+        if (ticksInUse >= 12) {
+              return iconArray[2];
+        } else if (ticksInUse > 7) {
+            return iconArray[1];
+        } else if (ticksInUse > 0) {
+            return iconArray[0];
+        } else {
+            return itemIcon;
+        }
     }
 
 }
