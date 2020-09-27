@@ -35,4 +35,4 @@ As iDiamondhunter ["removed the copyrights" from this mod](https://www.minecraft
 
 <p align="center"> <img src="https://raw.githubusercontent.com/NeRdTheNed/More-bows/master/docs/images/1-7-10.png" alt="CurseForge user the_spider_overlord: dangit if only this had a 1.7.10 backport!" title="Did someone say backport???" style='width: 100%; object-fit: contain'/> </p>
 
-<p align="center"> <img src="https://raw.githubusercontent.com/NeRdTheNed/More-bows/master/src/main/resources/ScreenshotShootingPigs.png" alt="A mod for 1.7.10 in 2020? When pigs fly..." title="A mod for 1.7.10 in 2020? When pigs fly..." style='height: 100%; width: 100%; object-fit: contain'/> </p>
+<p align="center"> <img src="https://raw.githubusercontent.com/NeRdTheNed/More-bows/master/docs/images/ScreenshotShootingPigs.png" alt="A mod for 1.7.10 in 2020? When pigs fly..." title="A mod for 1.7.10 in 2020? When pigs fly..." style='height: 100%; width: 100%; object-fit: contain'/> </p>
