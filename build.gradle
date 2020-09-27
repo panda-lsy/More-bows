@@ -103,6 +103,13 @@ processResources
     }
     
     rename '(.+_at.cfg)', 'META-INF/$1'
+    
+    // Here's a hilarious micro-optimisation for you!
+    doLast {
+        fileTree(dir: outputs.files.asPath, include: "**/mcmod.info").each {
+            File file -> file.text = JsonOutput.toJson(new JsonSlurper().parse(file))
+        }
+    }
 }
 
 tasks.withType(JavaCompile) {
