@@ -163,7 +163,7 @@ public class MoreBowsMod
 		
 		EntityRegistry.registerModEntity(EntityiDiamondhunterFireArrow.class, "iDiamondhunterFireArrow", 1, this, 64, 20, true);
 		EntityRegistry.registerModEntity(EntityiDiamondhunterFrostArrow.class, "iDiamondhunterFrostArrow", 2, this, 64, 20, true);
-		EntityRegistry.registerModEntity(EntityiDiamondhunterParticleArrow.class, "iDiamondhunterFrostArrow", 3, this, 64, 20, true);
+		EntityRegistry.registerModEntity(EntityiDiamondhunterEnderArrow.class, "iDiamondhunterEnderArrow", 3, this, 64, 20, true);
 		
 	}
 }

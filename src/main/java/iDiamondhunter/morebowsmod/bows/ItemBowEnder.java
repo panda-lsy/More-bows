@@ -18,7 +18,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 //import cpw.mods.fml.relauncher.Side;
 import iDiamondhunter.morebowsmod.MoreBowsMod;
-import iDiamondhunter.morebowsmod.entities.EntityiDiamondhunterParticleArrow;
+import iDiamondhunter.morebowsmod.entities.EntityiDiamondhunterEnderArrow;
 
 public class ItemBowEnder extends MoreAccessibleItemBow
 {
@@ -36,12 +36,12 @@ public class ItemBowEnder extends MoreAccessibleItemBow
 	public void setArrows(World world, EntityPlayer player) {
 		
 		super.bowShots = new EntityArrow[] {
-		new EntityiDiamondhunterParticleArrow(world, player, shotVelocity * 2.0F),
-		new EntityiDiamondhunterParticleArrow(world, player, shotVelocity * 1F),
-		new EntityiDiamondhunterParticleArrow(world, player, shotVelocity * 1.2F),
-		new EntityiDiamondhunterParticleArrow(world, player, shotVelocity * 1.5F),
-		new EntityiDiamondhunterParticleArrow(world, player, shotVelocity * 1.75F),
-		new EntityiDiamondhunterParticleArrow(world, player, shotVelocity * 1.825F)
+		new EntityiDiamondhunterEnderArrow(world, player, shotVelocity * 2.0F),
+		new EntityiDiamondhunterEnderArrow(world, player, shotVelocity * 1F),
+		new EntityiDiamondhunterEnderArrow(world, player, shotVelocity * 1.2F),
+		new EntityiDiamondhunterEnderArrow(world, player, shotVelocity * 1.5F),
+		new EntityiDiamondhunterEnderArrow(world, player, shotVelocity * 1.75F),
+		new EntityiDiamondhunterEnderArrow(world, player, shotVelocity * 1.825F)
 		};
 		
 		bowShots[1].canBePickedUp = 2;

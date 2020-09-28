@@ -7,30 +7,30 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
-public class EntityiDiamondhunterParticleArrow extends EntityArrow
+public class EntityiDiamondhunterEnderArrow extends EntityArrow
 {
 	
 	public String particle = "portal";
 	
-    public EntityiDiamondhunterParticleArrow(World world)
+    public EntityiDiamondhunterEnderArrow(World world)
     {
         super(world);
         MinecraftForge.EVENT_BUS.register(this);
     }
 	
-    public EntityiDiamondhunterParticleArrow(World world, double var1, double var2, double var3)
+    public EntityiDiamondhunterEnderArrow(World world, double var1, double var2, double var3)
     {
     	super(world, var1, var2, var3);
     	MinecraftForge.EVENT_BUS.register(this);
     }
     
-    public EntityiDiamondhunterParticleArrow(World world, EntityLivingBase living1, EntityLivingBase living2, float var1, float var2)
+    public EntityiDiamondhunterEnderArrow(World world, EntityLivingBase living1, EntityLivingBase living2, float var1, float var2)
     {
     	super(world, living1, living2, var1, var2);
     	MinecraftForge.EVENT_BUS.register(this);
     }
     
-    public EntityiDiamondhunterParticleArrow(World world, EntityLivingBase living, float var)
+    public EntityiDiamondhunterEnderArrow(World world, EntityLivingBase living, float var)
     {
     	super(world, living, var);
     	MinecraftForge.EVENT_BUS.register(this);
