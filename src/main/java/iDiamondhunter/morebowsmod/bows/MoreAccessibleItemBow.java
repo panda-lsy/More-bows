@@ -19,6 +19,9 @@ import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 
 /** This entire class is a huge hack. I'm ashamed of myself. And yes, this is important to document. 
  * TODO: Re-write all of this (or at least re-think most of it). Burn the original.
+ * 
+ * Ideas: Re-write as interface? Actually use the "abstract" part of the class?
+ * 
  **/
 public abstract class MoreAccessibleItemBow extends ItemBow 
 {
@@ -37,7 +40,8 @@ public abstract class MoreAccessibleItemBow extends ItemBow
 	protected int flameBurnTime = 100;
 	protected double damageMultiplier = 1;
 	/** TODO why did I add this? */
-	protected String defaultShotSound = "random.bow"; 
+	@Deprecated
+	protected final static String defaultShotSound = "random.bow"; 
 
 	/** TODO better parameter order, decide which variables should be set in the constructor (possibly provide a better default one) */
 	public MoreAccessibleItemBow(int maxDamage)
@@ -193,7 +197,7 @@ public abstract class MoreAccessibleItemBow extends ItemBow
         }
     }
     
-    /** TODO I don't think anything will ever use this? Remove if possible */
+    /** TODO I don't think anything will ever use this? Remove if possible... */
     @Deprecated
     @Override
     @SideOnly(Side.CLIENT)

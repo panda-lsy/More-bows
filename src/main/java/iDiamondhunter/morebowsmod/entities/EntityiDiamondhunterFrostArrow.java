@@ -20,7 +20,7 @@ public class EntityiDiamondhunterFrostArrow extends EntityArrow implements IProj
 	//final static int snowID = GameData.getBlockRegistry().getId(Blocks.snow);
 	//final static int iceID = GameData.getBlockRegistry().getId(Blocks.ice);
 	
-	public boolean isThisActuallyCriticalThough;
+	private boolean isThisActuallyCriticalThough = false;
 	
     public EntityiDiamondhunterFrostArrow(World world)
     {

@@ -19,13 +19,13 @@ public class ItemDiamondBow extends MoreAccessibleItemBow
     }
 
   	@Override
-    public int getMaxItemUseDuration(ItemStack par1ItemStack)
+    public final int getMaxItemUseDuration(ItemStack par1ItemStack)
     {
         return 36000;
     }
 
   	@Override
-    public EnumRarity getRarity(ItemStack par1ItemStack)
+    public final EnumRarity getRarity(ItemStack par1ItemStack)
     {
         return EnumRarity.rare;
     }

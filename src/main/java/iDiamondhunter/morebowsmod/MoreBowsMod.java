@@ -30,42 +30,34 @@ public class MoreBowsMod
 	
     public static Logger modLog;
     
-    /* TODO: Make proxies. */
-    //at SidedProxy(clientSide = "iDiamondhunter.morebowsmod.client.ClientProxyiDiamondhunter", serverSide= "iDiamondhunter.morebowsmod.common.CommonProxyiDiamondhunter")
-    //public static CommonProxyiDiamondhunter commonProxy;
-    //public static ClientProxyiDiamondhunter clientProxy;
+    /* TODO: Make proxies, re-evaluate how & where stuff should be declared & initialized. */
     
-    /* TODO Re-evaluate where stuff should be declared and initialized. */
-    public static Item DiamondBow;
     public final static String DiamondBowName = "DiamondBow";
+    public final static String GoldBowName = "GoldBow";
+    public final static String EnderBowName = "EnderBow";
+    public final static String StoneBowName = "StoneBow";
+    public final static String IronBowName = "IronBow";
+    public final static String MultiBowName = "MultiBow";
+    public final static String FlameBowName = "FlameBow";
+    public final static String FrostBowName = "FrostBow";
     
-	public static Item GoldBow;
-	public final static String GoldBowName = "GoldBow";
-
-	public static Item EnderBow;
-	public final static String EnderBowName = "EnderBow";
-
-	public static Item StoneBow;
-	public final static String StoneBowName = "StoneBow";
-
-	public static Item IronBow;
-	public final static String IronBowName = "IronBow";
-
-	public static Item MultiBow;
-	public final static String MultiBowName = "MultiBow";
-
-	public static Item FlameBow;
-	public final static String FlameBowName = "FlameBow";
-
-	public static Item FrostBow;
-	public final static String FrostBowName = "FrostBow";
+    /* This is super janky, rethink. */
+    private final static String modSeperator = "morebowsmod:";
+    
+    public final static Item DiamondBow = new ItemDiamondBow().setUnlocalizedName(DiamondBowName).setTextureName(modSeperator + DiamondBowName);
+	public final static Item GoldBow = new ItemGoldBow().setUnlocalizedName(GoldBowName).setTextureName(modSeperator + GoldBowName);
+	public final static Item EnderBow = new ItemBowEnder().setUnlocalizedName(EnderBowName).setTextureName(modSeperator + EnderBowName);
+	public final static Item StoneBow = new ItemStoneBow().setUnlocalizedName(StoneBowName).setTextureName(modSeperator + StoneBowName);
+	public final static Item IronBow = new ItemIronBow().setUnlocalizedName(IronBowName).setTextureName(modSeperator + IronBowName);
+	public final static Item MultiBow = new ItemMultiBow().setUnlocalizedName(MultiBowName).setTextureName(modSeperator + MultiBowName);
+	public final static Item FlameBow = new ItemFlameBow().setUnlocalizedName(FlameBowName).setTextureName(modSeperator + FlameBowName);
+	public final static Item FrostBow = new ItemFrostBow().setUnlocalizedName(FrostBowName).setTextureName(modSeperator + FrostBowName);
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		
 		modLog = event.getModLog();
 		modLog.info("Too many bows, or not enough?");
-		initItems();
 		
 	}
 	
@@ -73,19 +65,6 @@ public class MoreBowsMod
 	public void init(FMLInitializationEvent event) {
 		
 		registerItems();
-		
-	}
-	
-	private void initItems() {
-		
-		DiamondBow = new ItemDiamondBow().setUnlocalizedName(DiamondBowName).setTextureName("morebowsmod:" + DiamondBowName);
-		GoldBow = new ItemGoldBow().setUnlocalizedName(GoldBowName).setTextureName("morebowsmod:" + GoldBowName);
-		EnderBow = new ItemBowEnder().setUnlocalizedName(EnderBowName).setTextureName("morebowsmod:" + EnderBowName);
-		StoneBow = new ItemStoneBow().setUnlocalizedName(StoneBowName).setTextureName("morebowsmod:" + StoneBowName);
-		IronBow = new ItemIronBow().setUnlocalizedName(IronBowName).setTextureName("morebowsmod:" + IronBowName);
-		MultiBow = new ItemMultiBow().setUnlocalizedName(MultiBowName).setTextureName("morebowsmod:" + MultiBowName);
-		FlameBow = new ItemFlameBow().setUnlocalizedName(FlameBowName).setTextureName("morebowsmod:" + FlameBowName);
-		FrostBow = new ItemFrostBow().setUnlocalizedName(FrostBowName).setTextureName("morebowsmod:" + FrostBowName);
 		
 	}
 	
@@ -161,6 +140,7 @@ public class MoreBowsMod
         			" IR", "SER", " IR", 'R', Items.string, 'I', Blocks.ice, 'S', Items.snowball, 'E', IronBow
         		});
 		
+        /* I'm not sure how this works. */
 		EntityRegistry.registerModEntity(EntityiDiamondhunterFireArrow.class, "iDiamondhunterFireArrow", 1, this, 64, 20, true);
 		EntityRegistry.registerModEntity(EntityiDiamondhunterFrostArrow.class, "iDiamondhunterFrostArrow", 2, this, 64, 20, true);
 		EntityRegistry.registerModEntity(EntityiDiamondhunterEnderArrow.class, "iDiamondhunterEnderArrow", 3, this, 64, 20, true);

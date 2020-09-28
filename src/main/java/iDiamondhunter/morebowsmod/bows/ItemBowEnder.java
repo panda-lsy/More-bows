@@ -23,7 +23,10 @@ import iDiamondhunter.morebowsmod.entities.EntityiDiamondhunterEnderArrow;
 public class ItemBowEnder extends MoreAccessibleItemBow
 {
 	@Deprecated
-	Timer timer = new Timer();
+	final Timer timer = new Timer();
+	
+	@Deprecated
+	private final static String bonusArrowSounds = "mob.endermen.portal";
 	
 	public ItemBowEnder()
     {
@@ -70,8 +73,12 @@ public class ItemBowEnder extends MoreAccessibleItemBow
 	 * The original mod technically beats me on being thread safe, but only because it froze the entire game for 3 seconds. 
 	 * Yes, really, it was using thread.sleep. */
 	@Deprecated
-    class MoreArrowsTask extends TimerTask {
+	final class MoreArrowsTask extends TimerTask {
     	
+		//TODO: Future self, have some reminders.
+		//MoreBowsMod.modLog.info("Ender arrows lost in transit! World " + event.world.getWorldInfo().getWorldName() + " was unloaded before arrows could be spawned.");
+		//MoreBowsMod.modLog.info("Ender arrows lost in transit! Player " + event.player.getDisplayName() + " logged out before arrows could be spawned.");
+		
     	EntityArrow[] arrows;
     	World world;
     	
@@ -81,24 +88,6 @@ public class ItemBowEnder extends MoreAccessibleItemBow
     		this.arrows = arrows;
     		this.world = world;
     		
-    	}
-    	
-    	@SubscribeEvent
-    	public void unloadingWorld (WorldEvent.Unload event)
-    	{
-    		if (event.world == world) {
-    		MoreBowsMod.modLog.info("Ender arrows lost in transit! World " + event.world.getWorldInfo().getWorldName() + " was unloaded before arrows could be spawned.");
-    		this.cancel();
-    		}
-    	}
-    	
-    	@SubscribeEvent
-    	public void playerLoggedOutEvent (PlayerEvent.PlayerLoggedOutEvent event)
-    	{
-    		if (event.player == arrows[0].shootingEntity) {
-    		MoreBowsMod.modLog.info("Ender arrows lost in transit! Player " + event.player.getDisplayName() + " logged out before arrows could be spawned.");
-    		this.cancel();
-    		}
     	}
     	
     	@Deprecated
@@ -116,7 +105,7 @@ public class ItemBowEnder extends MoreAccessibleItemBow
 		/* TODO Replace these sounds as well */
 		
     	world.spawnEntityInWorld(arrows[1]);
-    	world.playSoundAtEntity(arrows[1], "mob.endermen.portal", 0.5F, 1F / (itemRand.nextFloat() * 0.4F + 1F) + shotVelocity * 0.4F);
+    	world.playSoundAtEntity(arrows[1], bonusArrowSounds, 0.5F, 1F / (itemRand.nextFloat() * 0.4F + 1F) + shotVelocity * 0.4F);
     	
     	world.spawnEntityInWorld(arrows[2]);
     	arrows[2].posY++;
@@ -128,7 +117,7 @@ public class ItemBowEnder extends MoreAccessibleItemBow
 		arrows[3].posY += 1.45;
 		arrows[3].posX -= 2.25;
 		arrows[3].posZ -= 0.75;
-		world.playSoundAtEntity(arrows[3], "mob.endermen.portal", 0.25F, 1F / (itemRand.nextFloat() * 0.4F + 1F) + shotVelocity * 0.3F);
+		world.playSoundAtEntity(arrows[3], bonusArrowSounds, 0.25F, 1F / (itemRand.nextFloat() * 0.4F + 1F) + shotVelocity * 0.3F);
 		
 		world.spawnEntityInWorld(arrows[4]);
         arrows[4].posY += 2;
@@ -140,14 +129,14 @@ public class ItemBowEnder extends MoreAccessibleItemBow
         arrows[5].posY += 1.75;
         arrows[5].posX += 1.75;
         arrows[5].posZ += 1.5;
-        world.playSoundAtEntity(arrows[5], "mob.endermen.portal", 0.5F, 1F / (itemRand.nextFloat() * 0.4F + 1F) + shotVelocity * 0.4F);
+        world.playSoundAtEntity(arrows[5], bonusArrowSounds, 0.5F, 1F / (itemRand.nextFloat() * 0.4F + 1F) + shotVelocity * 0.4F);
     	
         /* Portal 3 confirmed??? */
         
     }
 	
     @Override
-    public EnumRarity getRarity(ItemStack itemstack)
+    public final EnumRarity getRarity(ItemStack itemstack)
     {
     	return EnumRarity.epic;
     }

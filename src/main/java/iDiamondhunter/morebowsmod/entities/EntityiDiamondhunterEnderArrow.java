@@ -10,7 +10,8 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 public class EntityiDiamondhunterEnderArrow extends EntityArrow
 {
 	
-	public String particle = "portal";
+	@Deprecated
+	private static final String particle = "portal";
 	
     public EntityiDiamondhunterEnderArrow(World world)
     {

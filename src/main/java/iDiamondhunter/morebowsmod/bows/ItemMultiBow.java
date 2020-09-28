@@ -13,8 +13,8 @@ import net.minecraft.world.World;
 
 public class ItemMultiBow extends MoreAccessibleItemBow
 {
-	private Random rand = new Random();
-	protected int thirdArrow = 42;
+	private final Random rand = new Random();
+	protected boolean thirdArrow = false;
 	
     public ItemMultiBow()
     {
@@ -55,8 +55,8 @@ public class ItemMultiBow extends MoreAccessibleItemBow
     	bowShots[1].setDamage(bowShots[1].getDamage() * 1.3D);
     	bowShots[2].setDamage(bowShots[2].getDamage() * 1.15D);
     	
-    	thirdArrow = rand.nextInt(4);
-        if(thirdArrow == 0)
+    	thirdArrow = (rand.nextInt(4) == 0);
+        if(thirdArrow)
         {
         	world.spawnEntityInWorld(bowShots[2]);
         	if(bowShots[2].shootingEntity.rotationYaw > 180)
@@ -82,14 +82,14 @@ public class ItemMultiBow extends MoreAccessibleItemBow
 		
 		world.playSoundAtEntity(player, defaultShotSound, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + shotVelocity * 0.5F);
 		world.playSoundEffect(xpos + player.rotationYaw / 180, ypos, zpos, defaultShotSound, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + shotVelocity * 0.5F);
-		if (thirdArrow == 0) {
+		if (thirdArrow) {
 			world.playSoundEffect(xpos - player.rotationYaw / 180, ypos, zpos, defaultShotSound, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + shotVelocity * 0.5F);
 		}
 		
 	}
     
     @Override
-    public EnumRarity getRarity(ItemStack par1ItemStack)
+    public final EnumRarity getRarity(ItemStack par1ItemStack)
     {
         return EnumRarity.rare;
     }

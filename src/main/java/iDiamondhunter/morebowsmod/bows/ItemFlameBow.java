@@ -46,7 +46,7 @@ public class ItemFlameBow extends MoreAccessibleItemBow
     }
     
     @Override
-    public EnumRarity getRarity(ItemStack par1ItemStack)
+    public final EnumRarity getRarity(ItemStack par1ItemStack)
     {
         return EnumRarity.uncommon;
     }

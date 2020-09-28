@@ -18,7 +18,7 @@ public class ItemGoldBow extends MoreAccessibleItemBow
     }
     
     @Override
-    public EnumRarity getRarity(ItemStack itemstack)
+    public final EnumRarity getRarity(ItemStack itemstack)
     {
     	return EnumRarity.uncommon;
     }
