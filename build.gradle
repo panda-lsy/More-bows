@@ -24,7 +24,7 @@ plugins {
 }
 
 sourceCompatibility = 1.5
-targetCompatibility = 1.5
+targetCompatibility = 1.6 //Minecraft 1.6+ requires Java 1.6+, and building for Java 6 should actually speed up class loading times, due to preverifying classes.
 
 ext.configFile = file "build.properties"
 
