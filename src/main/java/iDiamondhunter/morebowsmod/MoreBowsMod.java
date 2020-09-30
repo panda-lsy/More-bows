@@ -21,11 +21,11 @@ import org.apache.logging.log4j.Logger;
 @Mod(modid = MoreBowsMod.MOD_ID, name = MoreBowsMod.MOD_NAME, version = MoreBowsMod.MOD_VERSION)
 public class MoreBowsMod
 {
-	public static final String MOD_ID = "iDiamondhunterMoreBows";
-	public static final String MOD_NAME	= "More Bows mod";
-	public static final String MOD_VERSION	= "1.4.5";
+	public static final String MOD_ID = "${archivesBaseName}";
+	public static final String MOD_NAME	= "${modName}";
+	public static final String MOD_VERSION	= "${version}";
 	
-	@Instance("iDiamondhunterMoreBows")
+	@Instance("${archivesBaseName}")
 	public static MoreBowsMod instance;
 	
     public static Logger modLog;
@@ -81,45 +81,45 @@ public class MoreBowsMod
         GameRegistry.registerItem(FlameBow, FlameBowName);
         GameRegistry.registerItem(FrostBow, FrostBowName);
 		
-		GameRegistry.addRecipe(new ItemStack(StoneBow, 1), new Object[]
+		GameRegistry.addRecipe(new ItemStack(StoneBow, 1), new Object[] //TEST TO SEE IF THE RECIPES WORK
                 {
-                    " $*", "#(*", " $*", '#', Items.stick, '*', Items.string, '$', Blocks.stone, '(', Items.bow
+                    " Ss", "TBs", " Ss", 'T', Items.stick, 's', Items.string, 'S', Blocks.stone, 'B', Items.bow
                 });
         GameRegistry.addRecipe(new ItemStack(StoneBow, 1), new Object[]
                 {
-                    "*$ ", "*(#", "*$ ", '#', Items.stick, '*', Items.string, '$', Blocks.stone, '(', Items.bow
+                    "sS ", "sBT", "sS ", 'T', Items.stick, 's', Items.string, 'S', Blocks.stone, 'B', Items.bow
                 });
         GameRegistry.addRecipe(new ItemStack(IronBow, 1), new Object[]
                 {
-                    " $*", "$(*", " $*", '*', Items.string, '$', Items.iron_ingot, '(', Items.bow
+                    " Is", "IBs", " Is", 's', Items.string, 'I', Items.iron_ingot, 'B', Items.bow
                 });
         GameRegistry.addRecipe(new ItemStack(IronBow, 1), new Object[]
                 {
-                    "*$ ", "*($", "*$ ", '*', Items.string, '$', Items.iron_ingot, '(', Items.bow
+                    "sI ", "sBI", "sI ", 's', Items.string, 'I', Items.iron_ingot, 'B', Items.bow
                 });
         GameRegistry.addRecipe(new ItemStack(GoldBow, 1), new Object[]
                 {
-                    " $*", "$(*", " $*", '*', Items.string, '$', Items.gold_ingot, '(', Items.bow
+                    " Gs", "GBs", " Gs", 's', Items.string, 'G', Items.gold_ingot, 'B', Items.bow
                 });
         GameRegistry.addRecipe(new ItemStack(GoldBow, 1), new Object[]
                 {
-                    "*$ ", "*($", "*$ ", '*', Items.string, '$', Items.gold_ingot, '(', Items.bow
+                    "sG ", "sBG", "sG ", 's', Items.string, 'G', Items.gold_ingot, 'B', Items.bow
                 });
         GameRegistry.addRecipe(new ItemStack(DiamondBow, 1), new Object[]
                 {
-                    " $*", "I(*", " $*", '*', Items.string, '$', Items.diamond, 'I', Items.iron_ingot, '(', Items.bow
+                    " Ds", "IBs", " Ds", 's', Items.string, 'D', Items.diamond, 'I', Items.iron_ingot, 'B', Items.bow
                 });
         GameRegistry.addRecipe(new ItemStack(DiamondBow, 1), new Object[]
                 {
-                    "*$ ", "*(I", "*$ ", '*', Items.string, '$', Items.diamond, 'I', Items.iron_ingot, '(', Items.bow
+                    "sD ", "sBI", "sD ", 's', Items.string, 'D', Items.diamond, 'I', Items.iron_ingot, 'B', Items.bow
                 });
         GameRegistry.addRecipe(new ItemStack(MultiBow, 1), new Object[]
                 {
-                    " $*", "#(*", " $*", '*', Items.string, '#', Items.iron_ingot, '$', IronBow
+                    " Bs", "I s", " Bs", 's', Items.string, 'I', Items.iron_ingot, 'B', IronBow
                 });
         GameRegistry.addRecipe(new ItemStack(MultiBow, 1), new Object[]
                 {
-                    "*$ ", "* #", "*$ ", '*', Items.string, '#', Items.iron_ingot, '$', IronBow
+                    "sB ", "s I", "sB ", 's', Items.string, 'I', Items.iron_ingot, 'B', IronBow
                 });
         GameRegistry.addRecipe(new ItemStack(FlameBow, 1), new Object[]
                 {"NB ", "GI ", "NB ",   'G', Items.gold_ingot, 'B', Items.blaze_rod,  'I', IronBow, 'N',Blocks.netherrack

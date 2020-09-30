@@ -44,10 +44,11 @@ version = config.mod_version
 group = config.mod_group
 archivesBaseName = config.mod_basename
 
+def modName = config.mod_name
 def build_release = System.getenv("BUILD_RELEASE") == "true"
 
 if (!build_release) {
-    version += "-SNAPSHOT"
+    version += ("-SNAPSHOT+" + getTimestampSuffix())
 }
 
 minecraft {
@@ -59,7 +60,7 @@ minecraft {
 // builds and not intended to be the end-all be-all; rather, a temporary solution
 def getTimestampSuffix() {
 	   def date = new Date()
-       return date.format('yyyy-MM-dd_HH-mm-ss')
+       return date.format('yyyy-MM-dd_HHmmss')
 }
 
 //version = "${config.mod_version}-${getTimestampSuffix()}"
@@ -92,7 +93,7 @@ processResources
         exclude 'version.properties'
                 
         // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+        expand 'version':version, 'mcversion':project.minecraft.version, 'modName':modName, 'archivesBaseName':archivesBaseName
     }
         
     // copy everything else, thats not the mcmod.info
@@ -110,6 +111,24 @@ processResources
             File file -> file.text = JsonOutput.toJson(new JsonSlurper().parse(file))
         }
     }
+}
+
+task processSource(type: Sync) {
+    
+    from(sourceSets.main.java) {
+    	// only process this file
+        include 'iDiamondhunter/morebowsmod/MoreBowsMod.java'
+        
+        // replace build variables
+        expand 'version':version, 'mcversion':project.minecraft.version, 'modName':modName, 'archivesBaseName':archivesBaseName
+    }
+    
+    from(sourceSets.main.java) {
+    	//copy everything else
+        exclude 'iDiamondhunter/morebowsmod/MoreBowsMod.java'
+    }
+    
+    into "$buildDir/src"
 }
 
 tasks.withType(JavaCompile) {
@@ -132,6 +151,11 @@ tasks.withType(JavaCompile) {
 		config.JDK6LOC + "/Classes/alt-rt.jar", 
 		config.JDK6LOC + "/Classes/jce.jar")
 	}
+}
+
+compileJava {
+	//use the processed source with replaced build variables
+    source = processSource.outputs
 }
 
 // properties that instruct gradle on how to create the .jar outputs
@@ -163,28 +187,19 @@ task javadocJar(type: Jar, dependsOn: 'javadoc') {
     classifier "javadoc"
 }
 
-task sourceJar(type: Jar, dependsOn: 'sourceMainJava') {
-    //from sourceSets.main.allSource
-    from "build/sources/java"
-    from "build/resources/main/java"
+task sourceJar(type: Jar, dependsOn: ['sourceMainJava', 'processSource']) {
+    from "build/src"
     classifier "sources"
 }
 
-//task deobfJar(type: Jar, dependsOn: 'jar') {
-    //from "build/source/main"
-    //classifier "dev"
-//}
-
-task deobfJar(type: Jar) {
-
-    from sourceSets.main.output
-
+task deobfJar(type: Jar, dependsOn: 'processSource') {
+    from compileJava
+    from "build/resources/main/java"
     classifier = 'dev'
-
 }
 
 artifacts {
-    archives javadocJar 
+    //archives javadocJar //don't think this is important enough to be on by default
     archives sourceJar
     archives deobfJar
 }

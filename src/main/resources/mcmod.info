@@ -1,7 +1,7 @@
 [
 {
-  "modid": "iDiamondhunterMoreBows",
-  "name": "More Bows mod",
+  "modid": "${archivesBaseName}",
+  "name": "${modName}",
   "logoFile": "morebowsLogo.jpg",
   "description": "A port of the More Bows mod to 1.7.10! This mod was originally created by GaussFire, and maintained + updated by iDiamondhunter. Ported by NeRd!",
   "version": "${version}",
