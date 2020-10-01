@@ -1,8 +1,8 @@
-//TODO clean up and document 
+//TODO clean up and document
 
 buildscript {
     repositories {
-    	maven { url = "https://jcenter.bintray.com/" }
+        maven { url = "https://jcenter.bintray.com/" }
         maven { url = "https://repo1.maven.org/maven2/" }
         maven {
             name = "forge"
@@ -59,7 +59,7 @@ minecraft {
 // creates a timestamp to be appended to the end of the build; a simple way to keep track of dev
 // builds and not intended to be the end-all be-all; rather, a temporary solution
 def getTimestampSuffix() {
-	   def date = new Date()
+       def date = new Date()
        return date.format('yyyy-MM-dd_HHmmss')
 }
 
@@ -70,7 +70,7 @@ dependencies {
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"
     //compile "some.group:artifact:version"
-      
+
     // real examples
     //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
     //compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
@@ -91,20 +91,20 @@ processResources
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
         exclude 'version.properties'
-                
+
         // replace version and mcversion
         expand 'version':version, 'mcversion':project.minecraft.version, 'modName':modName, 'archivesBaseName':archivesBaseName
     }
-        
+
     // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         // exclude 'mcmod.info'
         exclude '**/mcmod.info'
         exclude '**/version.properties'
     }
-    
+
     rename '(.+_at.cfg)', 'META-INF/$1'
-    
+
     // Here's a hilarious micro-optimisation for you!
     doLast {
         fileTree(dir: outputs.files.asPath, include: "**/mcmod.info").each {
@@ -114,20 +114,20 @@ processResources
 }
 
 task processSource(type: Sync) {
-    
+
     from(sourceSets.main.java) {
-    	// only process this file
+        // only process this file
         include 'iDiamondhunter/morebowsmod/MoreBowsMod.java'
-        
+
         // replace build variables
         expand 'version':version, 'mcversion':project.minecraft.version, 'modName':modName, 'archivesBaseName':archivesBaseName
     }
-    
+
     from(sourceSets.main.java) {
-    	//copy everything else
+        //copy everything else
         exclude 'iDiamondhunter/morebowsmod/MoreBowsMod.java'
     }
-    
+
     into "$buildDir/src"
 }
 
@@ -137,49 +137,49 @@ tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 
     //used to satisfy certain dumb issues, TODO: document
-	if (config.JDK6LOC != null && config.JDK6LOC != "" && config.JDK6LOC != [:]) {
-	
-	    logger.warn('Building {} with Java 6 bootstrap classpath ({})!', name , config.JDK6LOC)
-		// TODO FIX THIS FOR NON-MAC OS JAVA 1.6
-				             
-		// options.bootClasspath = "$JDK6LOC/jre/lib/rt.jar"
-		// CompileOptions.setBootstrapClasspath = config.JDK6LOC + "/jre/lib/rt.jar" 
-		// options.bootstrapClasspath = config.JDK6LOC + "/jre/lib/rt.jar" 
-		// options.bootstrapClasspath = files(config.JDK6LOC + "/lib/jsse.jar", config.JDK6LOC + "/jre/lib/rt.jar")
-		options.bootstrapClasspath = files(config.JDK6LOC + "/Classes/classes.jar", 
-		config.JDK6LOC + "/Classes/jsse.jar", 
-		config.JDK6LOC + "/Classes/alt-rt.jar", 
-		config.JDK6LOC + "/Classes/jce.jar")
-	}
+    if (config.JDK6LOC != null && config.JDK6LOC != "" && config.JDK6LOC != [:]) {
+
+        logger.warn('Building {} with Java 6 bootstrap classpath ({})!', name , config.JDK6LOC)
+        // TODO FIX THIS FOR NON-MAC OS JAVA 1.6
+
+        // options.bootClasspath = "$JDK6LOC/jre/lib/rt.jar"
+        // CompileOptions.setBootstrapClasspath = config.JDK6LOC + "/jre/lib/rt.jar"
+        // options.bootstrapClasspath = config.JDK6LOC + "/jre/lib/rt.jar"
+        // options.bootstrapClasspath = files(config.JDK6LOC + "/lib/jsse.jar", config.JDK6LOC + "/jre/lib/rt.jar")
+        options.bootstrapClasspath = files(config.JDK6LOC + "/Classes/classes.jar",
+        config.JDK6LOC + "/Classes/jsse.jar",
+        config.JDK6LOC + "/Classes/alt-rt.jar",
+        config.JDK6LOC + "/Classes/jce.jar")
+    }
 }
 
 compileJava {
-	//use the processed source with replaced build variables
+    //use the processed source with replaced build variables
     source = processSource.outputs
 }
 
 // properties that instruct gradle on how to create the .jar outputs
 jar {
-	// create a version plate for the beginning of the mod name to avoid confusion as to which
-	// version of minecraft/forge this build was for; at some point in the future would like to 
-	// expand this to create multiple builds as necessary for different Minecraft/Forge versions
-	
-	//baseName = "[${config.minecraft_version}-${config.forge_version}] ${config.mod_basename}"
-	//${config.mod_version}-${getTimestampSuffix()}
-	
-	baseName = "${config.mod_basename}"
-	//appendix = 'universal'
-	
-	// don't put in the version.properties file if it exists, and definitely leave out the MCP 
-	// (i.e. Minecraft) sources
-	exclude 'mcp'
-	exclude 'version.properties'
-	
-	manifest {
-        attributes 'FMLAT': 'iDiamondhunterMoreBows_at.cfg' 
-        //attributes 'FMLAT': 'transformers.cfg' 
+    // create a version plate for the beginning of the mod name to avoid confusion as to which
+    // version of minecraft/forge this build was for; at some point in the future would like to
+    // expand this to create multiple builds as necessary for different Minecraft/Forge versions
+
+    //baseName = "[${config.minecraft_version}-${config.forge_version}] ${config.mod_basename}"
+    //${config.mod_version}-${getTimestampSuffix()}
+
+    baseName = "${config.mod_basename}"
+    //appendix = 'universal'
+
+    // don't put in the version.properties file if it exists, and definitely leave out the MCP
+    // (i.e. Minecraft) sources
+    exclude 'mcp'
+    exclude 'version.properties'
+
+    manifest {
+        attributes 'FMLAT': 'iDiamondhunterMoreBows_at.cfg'
+        //attributes 'FMLAT': 'transformers.cfg'
     }
-	
+
 }
 
 task javadocJar(type: Jar, dependsOn: 'javadoc') {
@@ -207,9 +207,9 @@ artifacts {
 // instructions to gradle on which source to use
 sourceSets {
     main {
-	    java {
-	        srcDir '${config.mod_basename} mod src/main/java' exclude('net/minecraft/**')
-	    }
+        java {
+            srcDir '${config.mod_basename} mod src/main/java' exclude('net/minecraft/**')
+        }
         resources {
             srcDir '${config.mod_basename} mod src/main/resources' include('assets/**','*.cfg','*.png','*.mcmeta','*.info')
         }
@@ -220,9 +220,9 @@ sourceSets {
 publishing {
     publications {
         mavenObfsMod(MavenPublication) {
-			artifact(file("${project.buildDir}/libs/${config.mod_basename}-${version}.jar")) {
-			builtBy build
-			}
+            artifact(file("${project.buildDir}/libs/${config.mod_basename}-${version}.jar")) {
+            builtBy build
+            }
         }
     }
 }

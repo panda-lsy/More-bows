@@ -13,7 +13,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 public class ItemFlameBow extends MoreAccessibleItemBow
-{	
+{
     public ItemFlameBow()
     {
         super(576);
@@ -22,35 +22,35 @@ public class ItemFlameBow extends MoreAccessibleItemBow
     }
 
     @Override
-	public void setArrows(World world, EntityPlayer player) {
-		bowShots = new EntityArrow[] { new EntityiDiamondhunterFireArrow(world, player, shotVelocity * 2.0F) };
-	}
-    
+    public void setArrows(World world, EntityPlayer player) {
+        bowShots = new EntityArrow[] { new EntityiDiamondhunterFireArrow(world, player, shotVelocity * 2.0F) };
+    }
+
     @Override
     public void addModifiersToArrows(World world, ItemStack stack, Boolean noPickupFlag, Boolean alwaysCrit) {
-    	super.addModifiersToArrows(world, stack, noPickupFlag, alwaysCrit);
-    	
-    	/* TODO this is a bit sus, I think it's the right original behavior though */
-    	boolean flameEnchantmentFlag = (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack) > 0);
-    	
-    	for (EntityArrow arr : bowShots) {
-    		
-	        if (flameEnchantmentFlag)
-	        {
-	        	arr.setDamage(arr.getDamage() * 1.25D);
-	        }
-	        
-	        arr.setFire(50);
-    		
-    	}
+        super.addModifiersToArrows(world, stack, noPickupFlag, alwaysCrit);
+
+        /* TODO this is a bit sus, I think it's the right original behavior though */
+        boolean flameEnchantmentFlag = (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack) > 0);
+
+        for (EntityArrow arr : bowShots) {
+
+            if (flameEnchantmentFlag)
+            {
+                arr.setDamage(arr.getDamage() * 1.25D);
+            }
+
+            arr.setFire(50);
+
+        }
     }
-    
+
     @Override
     public final EnumRarity getRarity(ItemStack par1ItemStack)
     {
         return EnumRarity.uncommon;
     }
-    
+
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining) {
@@ -67,5 +67,5 @@ public class ItemFlameBow extends MoreAccessibleItemBow
             return itemIcon;
         }
     }
-    
+
 }

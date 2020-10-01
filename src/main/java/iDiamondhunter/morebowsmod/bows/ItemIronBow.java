@@ -7,8 +7,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
 public class ItemIronBow extends MoreAccessibleItemBow
-{	
-	/** M i n i m a l i s m */
+{
+    /** M i n i m a l i s m */
     public ItemIronBow()
     {
         super(550);
@@ -17,7 +17,7 @@ public class ItemIronBow extends MoreAccessibleItemBow
         super.flameBurnTime = 105;
         super.damageMultiplier = 1.5D;
     }
-    
+
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining) {

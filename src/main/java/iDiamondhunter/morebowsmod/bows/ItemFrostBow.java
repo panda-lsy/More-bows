@@ -16,12 +16,12 @@ public class ItemFrostBow extends MoreAccessibleItemBow
         super(550);
         super.arrowPowerDivisor = 26.0F;
     }
-    
+
     @Override
-	public void setArrows(World world, EntityPlayer player) {
-		bowShots = new EntityArrow[] { new EntityiDiamondhunterFrostArrow(world, player, shotVelocity * 2.4F) };
-	}
-    
+    public void setArrows(World world, EntityPlayer player) {
+        bowShots = new EntityArrow[] { new EntityiDiamondhunterFrostArrow(world, player, shotVelocity * 2.4F) };
+    }
+
     /** TODO THIS ISN'T RIGHT, FIND THE RIGHT VALUE */
     @Override
     @SideOnly(Side.CLIENT)
@@ -39,5 +39,5 @@ public class ItemFrostBow extends MoreAccessibleItemBow
             return itemIcon;
         }
     }
-    
+
 }

@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
 public class ItemGoldBow extends MoreAccessibleItemBow
-{	
+{
     public ItemGoldBow()
     {
         super(550);
@@ -16,13 +16,13 @@ public class ItemGoldBow extends MoreAccessibleItemBow
         super.arrowPowerDivisor = 5F;
         super.damageMultiplier = 1.5D;
     }
-    
+
     @Override
     public final EnumRarity getRarity(ItemStack itemstack)
     {
-    	return EnumRarity.uncommon;
+        return EnumRarity.uncommon;
     }
-    
+
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining) {
@@ -39,5 +39,5 @@ public class ItemGoldBow extends MoreAccessibleItemBow
             return itemIcon;
         }
     }
-	
+
 }

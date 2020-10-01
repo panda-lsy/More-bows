@@ -17,44 +17,44 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 
-/** This entire class is a huge hack. I'm ashamed of myself. And yes, this is important to document. 
+/** This entire class is a huge hack. I'm ashamed of myself. And yes, this is important to document.
  * TODO: Re-write all of this (or at least re-think most of it). Burn the original.
- * 
+ *
  * Ideas: Re-write as interface? Actually use the "abstract" part of the class?
- * 
+ *
  **/
-public abstract class MoreAccessibleItemBow extends ItemBow 
+public abstract class MoreAccessibleItemBow extends ItemBow
 {
-	/* TODO better names */
-	@SideOnly(Side.CLIENT)
-	protected IIcon[] iconArray;
-	/** TODO: replace this */
-	@Deprecated
-	protected EntityArrow[] bowShots;
-	/** TODO: replace this */
-	@Deprecated
-	protected float shotVelocity;
-	/* TODO assign defaults in constructor, make final for values that shouldn't be changed */
-	protected float arrowPowerDivisor = 20.0F;
-	protected float defaultShotVelocityMultiplier = 2.0F;
-	protected int flameBurnTime = 100;
-	protected double damageMultiplier = 1;
-	/** TODO why did I add this? */
-	@Deprecated
-	protected final static String defaultShotSound = "random.bow"; 
+    /* TODO better names */
+    @SideOnly(Side.CLIENT)
+    protected IIcon[] iconArray;
+    /** TODO: replace this */
+    @Deprecated
+    protected EntityArrow[] bowShots;
+    /** TODO: replace this */
+    @Deprecated
+    protected float shotVelocity;
+    /* TODO assign defaults in constructor, make final for values that shouldn't be changed */
+    protected float arrowPowerDivisor = 20.0F;
+    protected float defaultShotVelocityMultiplier = 2.0F;
+    protected int flameBurnTime = 100;
+    protected double damageMultiplier = 1;
+    /** TODO why did I add this? */
+    @Deprecated
+    protected final static String defaultShotSound = "random.bow";
 
-	/** TODO better parameter order, decide which variables should be set in the constructor (possibly provide a better default one) */
-	public MoreAccessibleItemBow(int maxDamage)
+    /** TODO better parameter order, decide which variables should be set in the constructor (possibly provide a better default one) */
+    public MoreAccessibleItemBow(int maxDamage)
     {
-		this.maxStackSize = 1;
-		this.setMaxDamage(maxDamage);
-		this.bFull3D = true;
+        this.maxStackSize = 1;
+        this.setMaxDamage(maxDamage);
+        this.bFull3D = true;
         this.setCreativeTab(CreativeTabs.tabCombat);
     }
-	
-	/** TODO find a cleaner way to implement this, change like all of this. also make better names. */
-	@Override
-	public void onPlayerStoppedUsing(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer, int par4)
+
+    /** TODO find a cleaner way to implement this, change like all of this. also make better names. */
+    @Override
+    public void onPlayerStoppedUsing(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer, int par4)
     {
         int bowCharge = this.getMaxItemUseDuration(par1ItemStack) - par4;
 
@@ -70,8 +70,8 @@ public abstract class MoreAccessibleItemBow extends ItemBow
 
         if (flag || par3EntityPlayer.inventory.hasItem(Items.arrow))
         {
-        	shotVelocity = (float)bowCharge / arrowPowerDivisor;
-        	shotVelocity = (shotVelocity * shotVelocity + shotVelocity * 2.0F) / 3.0F;
+            shotVelocity = (float)bowCharge / arrowPowerDivisor;
+            shotVelocity = (shotVelocity * shotVelocity + shotVelocity * 2.0F) / 3.0F;
 
             if ((double)shotVelocity < 0.1D)
             {
@@ -80,7 +80,7 @@ public abstract class MoreAccessibleItemBow extends ItemBow
 
             if (shotVelocity > 1.0F)
             {
-            	shotVelocity = 1.0F;
+                shotVelocity = 1.0F;
             }
 
             setArrows(par2World, par3EntityPlayer);
@@ -96,90 +96,90 @@ public abstract class MoreAccessibleItemBow extends ItemBow
 
             if (!par2World.isRemote)
             {
-            	spawnArrows(par2World);
+                spawnArrows(par2World);
             }
         }
     }
-	
-	/** TODO: Go through each bow and check if they have custom noises. Also make this better. */
-	public void playBowNoise(World world, EntityPlayer player) {
-		
-		world.playSoundAtEntity(player, defaultShotSound, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + shotVelocity * 0.5F);
-		
-	}
-	
-	@Deprecated
-	public void setArrows(World world, EntityPlayer player) { //TODO rename later
-		
-		//default behavior 
-		bowShots = new EntityArrow[] { new EntityArrow(world, player, shotVelocity * defaultShotVelocityMultiplier) };
-		
-	}
-	
-	@Deprecated
-	public void addModifiersToArrows(World world, ItemStack stack, Boolean noPickupFlag, Boolean alwaysCrit) { //TODO rename later
-		
-		//TODO THIS CODE IS AWFULL FIX IT
-		//not just the readability, but also the fact that this is literal garbage to work with
-		//when you need to insert an effect into this chain
-		//see: ItemFlameBow
-		
-		boolean shotPowerFlag = (shotVelocity == 1.0F) || alwaysCrit;
-		int k = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, stack);
-		boolean powerEnchantmentFlag = (k > 0);
-		int l = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, stack);
-		boolean punchEnchantmentFlag = (l > 0);
-		boolean flameEnchantmentFlag = (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack) > 0);
-		boolean damageMultiplierFlag = (damageMultiplier != 1);
-		
-		//default behavior 
-		for (EntityArrow arr : bowShots) {
-			
-	        if (shotPowerFlag)
-	        {
-	    			arr.setIsCritical(true);
-	        }
 
-	        if (powerEnchantmentFlag)
-	        {
-	    			arr.setDamage(arr.getDamage() + (double)k * 0.5D + 0.5D);
-	        }
+    /** TODO: Go through each bow and check if they have custom noises. Also make this better. */
+    public void playBowNoise(World world, EntityPlayer player) {
 
-	        if (punchEnchantmentFlag)
-	        {
-	    			arr.setKnockbackStrength(l);
-	        }
+        world.playSoundAtEntity(player, defaultShotSound, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + shotVelocity * 0.5F);
 
-	        if (flameEnchantmentFlag)
-	        {
-	    			arr.setFire(flameBurnTime);
-	        }
-	        
-	        if (noPickupFlag)
-	        {
-	    			arr.canBePickedUp = 2;
-	        }
-	        
-	        if (damageMultiplierFlag) {
-	        		arr.setDamage(arr.getDamage() * damageMultiplier);
-	        }
-			
-		}
-		
-	}
-	
-	@Deprecated
-	public void spawnArrows(World world) { //TODO rename later
-		
-		//TODO add logic to spawn arrows over time
-		for (EntityArrow arr : bowShots) {
-			
-			world.spawnEntityInWorld(arr);
-			
-		}
-		
-	}
-    
+    }
+
+    @Deprecated
+    public void setArrows(World world, EntityPlayer player) { //TODO rename later
+
+        //default behavior
+        bowShots = new EntityArrow[] { new EntityArrow(world, player, shotVelocity * defaultShotVelocityMultiplier) };
+
+    }
+
+    @Deprecated
+    public void addModifiersToArrows(World world, ItemStack stack, Boolean noPickupFlag, Boolean alwaysCrit) { //TODO rename later
+
+        //TODO THIS CODE IS AWFULL FIX IT
+        //not just the readability, but also the fact that this is literal garbage to work with
+        //when you need to insert an effect into this chain
+        //see: ItemFlameBow
+
+        boolean shotPowerFlag = (shotVelocity == 1.0F) || alwaysCrit;
+        int k = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, stack);
+        boolean powerEnchantmentFlag = (k > 0);
+        int l = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, stack);
+        boolean punchEnchantmentFlag = (l > 0);
+        boolean flameEnchantmentFlag = (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack) > 0);
+        boolean damageMultiplierFlag = (damageMultiplier != 1);
+
+        //default behavior
+        for (EntityArrow arr : bowShots) {
+
+            if (shotPowerFlag)
+            {
+                    arr.setIsCritical(true);
+            }
+
+            if (powerEnchantmentFlag)
+            {
+                    arr.setDamage(arr.getDamage() + (double)k * 0.5D + 0.5D);
+            }
+
+            if (punchEnchantmentFlag)
+            {
+                    arr.setKnockbackStrength(l);
+            }
+
+            if (flameEnchantmentFlag)
+            {
+                    arr.setFire(flameBurnTime);
+            }
+
+            if (noPickupFlag)
+            {
+                    arr.canBePickedUp = 2;
+            }
+
+            if (damageMultiplierFlag) {
+                    arr.setDamage(arr.getDamage() * damageMultiplier);
+            }
+
+        }
+
+    }
+
+    @Deprecated
+    public void spawnArrows(World world) { //TODO rename later
+
+        //TODO add logic to spawn arrows over time
+        for (EntityArrow arr : bowShots) {
+
+            world.spawnEntityInWorld(arr);
+
+        }
+
+    }
+
     //Overrides are used as ItemBow's icon related variables are not visible :(
     @Override
     @SideOnly(Side.CLIENT)
@@ -192,11 +192,11 @@ public abstract class MoreAccessibleItemBow extends ItemBow
         for (int i = 0; i < this.iconArray.length; ++i)
         {
             //this.iconArray[i] = iconRegistry.registerIcon(this.getIconString() + "_" + this.bowPullIconNameArray[i]);
-        	this.iconArray[i] = iconRegistry.registerIcon(this.getIconString() + (i + 2)); //awful hack, icons start from 2 here
-        	//this.iconArray[i] = iconRegistry.registerIcon(this.bowPullIconNameArray[i]);
+            this.iconArray[i] = iconRegistry.registerIcon(this.getIconString() + (i + 2)); //awful hack, icons start from 2 here
+            //this.iconArray[i] = iconRegistry.registerIcon(this.bowPullIconNameArray[i]);
         }
     }
-    
+
     /** TODO I don't think anything will ever use this? Remove if possible... */
     @Deprecated
     @Override
@@ -205,7 +205,7 @@ public abstract class MoreAccessibleItemBow extends ItemBow
     {
         return this.iconArray[index];
     }
-    
+
     /** TODO Replace this system! */
     @Override
     @SideOnly(Side.CLIENT)
@@ -223,6 +223,6 @@ public abstract class MoreAccessibleItemBow extends ItemBow
             return itemIcon;
         }
     }
-    
+
 
 }

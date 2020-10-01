@@ -18,18 +18,18 @@ public class ItemDiamondBow extends MoreAccessibleItemBow
         super.damageMultiplier = 2.25;
     }
 
-  	@Override
+    @Override
     public final int getMaxItemUseDuration(ItemStack par1ItemStack)
     {
         return 36000;
     }
 
-  	@Override
+    @Override
     public final EnumRarity getRarity(ItemStack par1ItemStack)
     {
         return EnumRarity.rare;
     }
-  	
+
     /** TODO Replace this system! */
     @Override
     @SideOnly(Side.CLIENT)
@@ -47,5 +47,5 @@ public class ItemDiamondBow extends MoreAccessibleItemBow
             return itemIcon;
         }
     }
-  	
+
 }

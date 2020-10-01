@@ -4,7 +4,7 @@ package iDiamondhunter.morebowsmod.proxy;
 
 public class ClientProxyiDiamondhunter implements iDiamondhunterProxy
 {
-	
-	//TODO
+
+    //TODO
 
 }

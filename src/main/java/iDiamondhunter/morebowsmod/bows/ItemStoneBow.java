@@ -4,7 +4,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public class ItemStoneBow extends MoreAccessibleItemBow
-{	
+{
     public ItemStoneBow()
     {
         super(484);
@@ -15,7 +15,7 @@ public class ItemStoneBow extends MoreAccessibleItemBow
     /** Create a better way to do this with {@code MoreAccessibleItemBow}! */
     @Override
     public void addModifiersToArrows(World world, ItemStack stack, Boolean noPickupFlag, Boolean alwaysCrit) {
-    	super.addModifiersToArrows(world, stack, noPickupFlag, true);
+        super.addModifiersToArrows(world, stack, noPickupFlag, true);
     }
-    
+
 }
