@@ -1,6 +1,5 @@
 # More Bows for 1.7.10! 
 
-[![Latest build status badge](https://github.com/NeRdTheNed/More-bows/workflows/Java%20CI%20with%20Gradle/badge.svg "Latest build status")](https://github.com/NeRdTheNed/More-bows/actions)
 [![Licence badge](https://img.shields.io/github/license/NeRdTheNed/More-bows "Licence")](https://github.com/NeRdTheNed/More-bows/blob/master/LICENSE)
 [![Java SE version compatibility badge](https://img.shields.io/badge/Java%20SE-5-orange?logo=java "Java SE version compatibility")](https://en.wikipedia.org/wiki/Java_version_history#J2SE_5.0)
 
