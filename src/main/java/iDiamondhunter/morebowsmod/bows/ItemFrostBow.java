@@ -9,10 +9,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
-public class ItemFrostBow extends MoreAccessibleItemBow
-{
-    public ItemFrostBow()
-    {
+public class ItemFrostBow extends MoreAccessibleItemBow {
+    public ItemFrostBow() {
         super(550);
         super.arrowPowerDivisor = 26.0F;
     }
@@ -26,11 +24,14 @@ public class ItemFrostBow extends MoreAccessibleItemBow
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining) {
-        if (usingItem == null) { return itemIcon; }
+        if (usingItem == null) {
+            return itemIcon;
+        }
+
         int ticksInUse = stack.getMaxItemUseDuration() - useRemaining;
 
         if (ticksInUse >= 26) {
-              return iconArray[2];
+            return iconArray[2];
         } else if (ticksInUse >= 13) {
             return iconArray[1];
         } else if (ticksInUse > 0) {

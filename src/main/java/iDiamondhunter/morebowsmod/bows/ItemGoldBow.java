@@ -7,10 +7,8 @@ import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
-public class ItemGoldBow extends MoreAccessibleItemBow
-{
-    public ItemGoldBow()
-    {
+public class ItemGoldBow extends MoreAccessibleItemBow {
+    public ItemGoldBow() {
         super(550);
         super.defaultShotVelocityMultiplier = 2.4F;
         super.arrowPowerDivisor = 5F;
@@ -18,19 +16,21 @@ public class ItemGoldBow extends MoreAccessibleItemBow
     }
 
     @Override
-    public final EnumRarity getRarity(ItemStack itemstack)
-    {
+    public final EnumRarity getRarity(ItemStack itemstack) {
         return EnumRarity.uncommon;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining) {
-        if (usingItem == null) { return itemIcon; }
+        if (usingItem == null) {
+            return itemIcon;
+        }
+
         int ticksInUse = stack.getMaxItemUseDuration() - useRemaining;
 
         if (ticksInUse >= 8) {
-              return iconArray[2];
+            return iconArray[2];
         } else if (ticksInUse > 4) {
             return iconArray[1];
         } else if (ticksInUse > 0) {

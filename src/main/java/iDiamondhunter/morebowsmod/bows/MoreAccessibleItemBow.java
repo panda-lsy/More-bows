@@ -23,8 +23,7 @@ import net.minecraftforge.event.entity.player.ArrowLooseEvent;
  * Ideas: Re-write as interface? Actually use the "abstract" part of the class?
  *
  **/
-public abstract class MoreAccessibleItemBow extends ItemBow
-{
+public abstract class MoreAccessibleItemBow extends ItemBow {
     /* TODO better names */
     @SideOnly(Side.CLIENT)
     protected IIcon[] iconArray;
@@ -44,8 +43,7 @@ public abstract class MoreAccessibleItemBow extends ItemBow
     protected final static String defaultShotSound = "random.bow";
 
     /** TODO better parameter order, decide which variables should be set in the constructor (possibly provide a better default one) */
-    public MoreAccessibleItemBow(int maxDamage)
-    {
+    public MoreAccessibleItemBow(int maxDamage) {
         this.maxStackSize = 1;
         this.setMaxDamage(maxDamage);
         this.bFull3D = true;
@@ -54,48 +52,40 @@ public abstract class MoreAccessibleItemBow extends ItemBow
 
     /** TODO find a cleaner way to implement this, change like all of this. also make better names. */
     @Override
-    public void onPlayerStoppedUsing(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer, int par4)
-    {
+    public void onPlayerStoppedUsing(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer, int par4) {
         int bowCharge = this.getMaxItemUseDuration(par1ItemStack) - par4;
-
         ArrowLooseEvent event = new ArrowLooseEvent(par3EntityPlayer, par1ItemStack, bowCharge);
         MinecraftForge.EVENT_BUS.post(event);
-        if (event.isCanceled())
-        {
+
+        if (event.isCanceled()) {
             return;
         }
-        bowCharge = event.charge;
 
+        bowCharge = event.charge;
         boolean flag = par3EntityPlayer.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, par1ItemStack) > 0;
 
-        if (flag || par3EntityPlayer.inventory.hasItem(Items.arrow))
-        {
+        if (flag || par3EntityPlayer.inventory.hasItem(Items.arrow)) {
             shotVelocity = (float)bowCharge / arrowPowerDivisor;
             shotVelocity = (shotVelocity * shotVelocity + shotVelocity * 2.0F) / 3.0F;
 
-            if ((double)shotVelocity < 0.1D)
-            {
+            if ((double)shotVelocity < 0.1D) {
                 return;
             }
 
-            if (shotVelocity > 1.0F)
-            {
+            if (shotVelocity > 1.0F) {
                 shotVelocity = 1.0F;
             }
 
             setArrows(par2World, par3EntityPlayer);
             addModifiersToArrows(par2World, par1ItemStack, flag, false);
-
             par1ItemStack.damageItem(1, par3EntityPlayer);
             playBowNoise(par2World, par3EntityPlayer);
 
-            if (!flag)
-            {
+            if (!flag) {
                 par3EntityPlayer.inventory.consumeInventoryItem(Items.arrow);
             }
 
-            if (!par2World.isRemote)
-            {
+            if (!par2World.isRemote) {
                 spawnArrows(par2World);
             }
         }
@@ -103,27 +93,21 @@ public abstract class MoreAccessibleItemBow extends ItemBow
 
     /** TODO: Go through each bow and check if they have custom noises. Also make this better. */
     public void playBowNoise(World world, EntityPlayer player) {
-
         world.playSoundAtEntity(player, defaultShotSound, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + shotVelocity * 0.5F);
-
     }
 
     @Deprecated
     public void setArrows(World world, EntityPlayer player) { //TODO rename later
-
         //default behavior
         bowShots = new EntityArrow[] { new EntityArrow(world, player, shotVelocity * defaultShotVelocityMultiplier) };
-
     }
 
     @Deprecated
     public void addModifiersToArrows(World world, ItemStack stack, Boolean noPickupFlag, Boolean alwaysCrit) { //TODO rename later
-
         //TODO THIS CODE IS AWFULL FIX IT
         //not just the readability, but also the fact that this is literal garbage to work with
         //when you need to insert an effect into this chain
         //see: ItemFlameBow
-
         boolean shotPowerFlag = (shotVelocity == 1.0F) || alwaysCrit;
         int k = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, stack);
         boolean powerEnchantmentFlag = (k > 0);
@@ -134,38 +118,30 @@ public abstract class MoreAccessibleItemBow extends ItemBow
 
         //default behavior
         for (EntityArrow arr : bowShots) {
-
-            if (shotPowerFlag)
-            {
-                    arr.setIsCritical(true);
+            if (shotPowerFlag) {
+                arr.setIsCritical(true);
             }
 
-            if (powerEnchantmentFlag)
-            {
-                    arr.setDamage(arr.getDamage() + (double)k * 0.5D + 0.5D);
+            if (powerEnchantmentFlag) {
+                arr.setDamage(arr.getDamage() + (double)k * 0.5D + 0.5D);
             }
 
-            if (punchEnchantmentFlag)
-            {
-                    arr.setKnockbackStrength(l);
+            if (punchEnchantmentFlag) {
+                arr.setKnockbackStrength(l);
             }
 
-            if (flameEnchantmentFlag)
-            {
-                    arr.setFire(flameBurnTime);
+            if (flameEnchantmentFlag) {
+                arr.setFire(flameBurnTime);
             }
 
-            if (noPickupFlag)
-            {
-                    arr.canBePickedUp = 2;
+            if (noPickupFlag) {
+                arr.canBePickedUp = 2;
             }
 
             if (damageMultiplierFlag) {
-                    arr.setDamage(arr.getDamage() * damageMultiplier);
+                arr.setDamage(arr.getDamage() * damageMultiplier);
             }
-
         }
-
     }
 
     @Deprecated
@@ -173,24 +149,19 @@ public abstract class MoreAccessibleItemBow extends ItemBow
 
         //TODO add logic to spawn arrows over time
         for (EntityArrow arr : bowShots) {
-
             world.spawnEntityInWorld(arr);
-
         }
-
     }
 
     //Overrides are used as ItemBow's icon related variables are not visible :(
     @Override
     @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister iconRegistry)
-    {
+    public void registerIcons(IIconRegister iconRegistry) {
         this.itemIcon = iconRegistry.registerIcon(this.getIconString() + "1"); //redo with off-by-one error fixed
         //this.iconArray = new IIcon[this.bowPullIconNameArray.length];
         this.iconArray = new IIcon[3];
 
-        for (int i = 0; i < this.iconArray.length; ++i)
-        {
+        for (int i = 0; i < this.iconArray.length; ++i) {
             //this.iconArray[i] = iconRegistry.registerIcon(this.getIconString() + "_" + this.bowPullIconNameArray[i]);
             this.iconArray[i] = iconRegistry.registerIcon(this.getIconString() + (i + 2)); //awful hack, icons start from 2 here
             //this.iconArray[i] = iconRegistry.registerIcon(this.bowPullIconNameArray[i]);
@@ -201,8 +172,7 @@ public abstract class MoreAccessibleItemBow extends ItemBow
     @Deprecated
     @Override
     @SideOnly(Side.CLIENT)
-    public IIcon getItemIconForUseDuration(int index)
-    {
+    public IIcon getItemIconForUseDuration(int index) {
         return this.iconArray[index];
     }
 
@@ -210,11 +180,14 @@ public abstract class MoreAccessibleItemBow extends ItemBow
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining) {
-        if (usingItem == null) { return itemIcon; }
+        if (usingItem == null) {
+            return itemIcon;
+        }
+
         int ticksInUse = stack.getMaxItemUseDuration() - useRemaining;
 
         if (ticksInUse >= 18) {
-              return iconArray[2];
+            return iconArray[2];
         } else if (ticksInUse > 13) {
             return iconArray[1];
         } else if (ticksInUse > 0) {

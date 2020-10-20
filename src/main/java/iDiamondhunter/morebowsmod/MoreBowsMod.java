@@ -19,8 +19,7 @@ import iDiamondhunter.morebowsmod.entities.*;
 import org.apache.logging.log4j.Logger;
 
 @Mod(modid = MoreBowsMod.MOD_ID, name = MoreBowsMod.MOD_NAME, version = MoreBowsMod.MOD_VERSION)
-public class MoreBowsMod
-{
+public class MoreBowsMod {
     public static final String MOD_ID = "${archivesBaseName}";
     public static final String MOD_NAME = "${modName}";
     public static final String MOD_VERSION = "${version}";
@@ -55,23 +54,17 @@ public class MoreBowsMod
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-
         modLog = event.getModLog();
         modLog.info("Too many bows, or not enough?");
-
     }
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-
         registerItems();
-
     }
 
     private void registerItems() {
-
         /* TODO check if this is the right way of doing things. */
-
         GameRegistry.registerItem(DiamondBow, DiamondBowName);
         GameRegistry.registerItem(GoldBow, GoldBowName);
         GameRegistry.registerItem(EnderBow, EnderBowName);
@@ -80,70 +73,54 @@ public class MoreBowsMod
         GameRegistry.registerItem(MultiBow, MultiBowName);
         GameRegistry.registerItem(FlameBow, FlameBowName);
         GameRegistry.registerItem(FrostBow, FrostBowName);
-
-        GameRegistry.addRecipe(new ItemStack(StoneBow, 1), new Object[] //TEST TO SEE IF THE RECIPES WORK
-                {
-                    " Ss", "TBs", " Ss", 'T', Items.stick, 's', Items.string, 'S', Blocks.stone, 'B', Items.bow
-                });
-        GameRegistry.addRecipe(new ItemStack(StoneBow, 1), new Object[]
-                {
-                    "sS ", "sBT", "sS ", 'T', Items.stick, 's', Items.string, 'S', Blocks.stone, 'B', Items.bow
-                });
-        GameRegistry.addRecipe(new ItemStack(IronBow, 1), new Object[]
-                {
-                    " Is", "IBs", " Is", 's', Items.string, 'I', Items.iron_ingot, 'B', Items.bow
-                });
-        GameRegistry.addRecipe(new ItemStack(IronBow, 1), new Object[]
-                {
-                    "sI ", "sBI", "sI ", 's', Items.string, 'I', Items.iron_ingot, 'B', Items.bow
-                });
-        GameRegistry.addRecipe(new ItemStack(GoldBow, 1), new Object[]
-                {
-                    " Gs", "GBs", " Gs", 's', Items.string, 'G', Items.gold_ingot, 'B', Items.bow
-                });
-        GameRegistry.addRecipe(new ItemStack(GoldBow, 1), new Object[]
-                {
-                    "sG ", "sBG", "sG ", 's', Items.string, 'G', Items.gold_ingot, 'B', Items.bow
-                });
-        GameRegistry.addRecipe(new ItemStack(DiamondBow, 1), new Object[]
-                {
-                    " Ds", "IBs", " Ds", 's', Items.string, 'D', Items.diamond, 'I', Items.iron_ingot, 'B', Items.bow
-                });
-        GameRegistry.addRecipe(new ItemStack(DiamondBow, 1), new Object[]
-                {
-                    "sD ", "sBI", "sD ", 's', Items.string, 'D', Items.diamond, 'I', Items.iron_ingot, 'B', Items.bow
-                });
-        GameRegistry.addRecipe(new ItemStack(MultiBow, 1), new Object[]
-                {
-                    " Bs", "I s", " Bs", 's', Items.string, 'I', Items.iron_ingot, 'B', IronBow
-                });
-        GameRegistry.addRecipe(new ItemStack(MultiBow, 1), new Object[]
-                {
-                    "sB ", "s I", "sB ", 's', Items.string, 'I', Items.iron_ingot, 'B', IronBow
-                });
-        GameRegistry.addRecipe(new ItemStack(FlameBow, 1), new Object[]
-                {"NB ", "GI ", "NB ",   'G', Items.gold_ingot, 'B', Items.blaze_rod,  'I', IronBow, 'N',Blocks.netherrack
-                });
-        GameRegistry.addRecipe(new ItemStack(FlameBow, 1), new Object[]
-                {" NB", " GI", " NB",   'G', Items.gold_ingot, 'B', Items.blaze_rod, 'I', IronBow, 'N', Blocks.netherrack
-                });
-        GameRegistry.addRecipe(new ItemStack(EnderBow, 1), new Object[]
-                {
-                    "GP ", "EI ", "GP ",   'G', Items.gold_ingot, 'P', Items.ender_pearl,  'I', IronBow, 'E',Items.ender_eye
-                });
-        GameRegistry.addRecipe(new ItemStack(EnderBow, 1), new Object[]
-                {
-                    " GP", " EI", " GP",  'G', Items.gold_ingot, 'P', Items.ender_pearl,  'I', IronBow, 'E', Items.ender_eye
-                });
-        GameRegistry.addRecipe(new ItemStack(FrostBow, 1), new Object[]
-                {
-                    " IR", "SER", " IR", 'R', Items.string, 'I', Blocks.ice, 'S', Items.snowball, 'E', IronBow
-                });
-
+        GameRegistry.addRecipe(new ItemStack(StoneBow, 1), new Object[] { //TEST TO SEE IF THE RECIPES WORK
+                                   " Ss", "TBs", " Ss", 'T', Items.stick, 's', Items.string, 'S', Blocks.stone, 'B', Items.bow
+                               });
+        GameRegistry.addRecipe(new ItemStack(StoneBow, 1), new Object[] {
+                                   "sS ", "sBT", "sS ", 'T', Items.stick, 's', Items.string, 'S', Blocks.stone, 'B', Items.bow
+                               });
+        GameRegistry.addRecipe(new ItemStack(IronBow, 1), new Object[] {
+                                   " Is", "IBs", " Is", 's', Items.string, 'I', Items.iron_ingot, 'B', Items.bow
+                               });
+        GameRegistry.addRecipe(new ItemStack(IronBow, 1), new Object[] {
+                                   "sI ", "sBI", "sI ", 's', Items.string, 'I', Items.iron_ingot, 'B', Items.bow
+                               });
+        GameRegistry.addRecipe(new ItemStack(GoldBow, 1), new Object[] {
+                                   " Gs", "GBs", " Gs", 's', Items.string, 'G', Items.gold_ingot, 'B', Items.bow
+                               });
+        GameRegistry.addRecipe(new ItemStack(GoldBow, 1), new Object[] {
+                                   "sG ", "sBG", "sG ", 's', Items.string, 'G', Items.gold_ingot, 'B', Items.bow
+                               });
+        GameRegistry.addRecipe(new ItemStack(DiamondBow, 1), new Object[] {
+                                   " Ds", "IBs", " Ds", 's', Items.string, 'D', Items.diamond, 'I', Items.iron_ingot, 'B', Items.bow
+                               });
+        GameRegistry.addRecipe(new ItemStack(DiamondBow, 1), new Object[] {
+                                   "sD ", "sBI", "sD ", 's', Items.string, 'D', Items.diamond, 'I', Items.iron_ingot, 'B', Items.bow
+                               });
+        GameRegistry.addRecipe(new ItemStack(MultiBow, 1), new Object[] {
+                                   " Bs", "I s", " Bs", 's', Items.string, 'I', Items.iron_ingot, 'B', IronBow
+                               });
+        GameRegistry.addRecipe(new ItemStack(MultiBow, 1), new Object[] {
+                                   "sB ", "s I", "sB ", 's', Items.string, 'I', Items.iron_ingot, 'B', IronBow
+                               });
+        GameRegistry.addRecipe(new ItemStack(FlameBow, 1), new Object[] {
+                                   "NB ", "GI ", "NB ",   'G', Items.gold_ingot, 'B', Items.blaze_rod,  'I', IronBow, 'N', Blocks.netherrack
+                               });
+        GameRegistry.addRecipe(new ItemStack(FlameBow, 1), new Object[] {
+                                   " NB", " GI", " NB",   'G', Items.gold_ingot, 'B', Items.blaze_rod, 'I', IronBow, 'N', Blocks.netherrack
+                               });
+        GameRegistry.addRecipe(new ItemStack(EnderBow, 1), new Object[] {
+                                   "GP ", "EI ", "GP ",   'G', Items.gold_ingot, 'P', Items.ender_pearl,  'I', IronBow, 'E', Items.ender_eye
+                               });
+        GameRegistry.addRecipe(new ItemStack(EnderBow, 1), new Object[] {
+                                   " GP", " EI", " GP",  'G', Items.gold_ingot, 'P', Items.ender_pearl,  'I', IronBow, 'E', Items.ender_eye
+                               });
+        GameRegistry.addRecipe(new ItemStack(FrostBow, 1), new Object[] {
+                                   " IR", "SER", " IR", 'R', Items.string, 'I', Blocks.ice, 'S', Items.snowball, 'E', IronBow
+                               });
         /* I'm not sure how this works. */
         EntityRegistry.registerModEntity(EntityiDiamondhunterFireArrow.class, "iDiamondhunterFireArrow", 1, this, 64, 20, true);
         EntityRegistry.registerModEntity(EntityiDiamondhunterFrostArrow.class, "iDiamondhunterFrostArrow", 2, this, 64, 20, true);
         EntityRegistry.registerModEntity(EntityiDiamondhunterEnderArrow.class, "iDiamondhunterEnderArrow", 3, this, 64, 20, true);
-
     }
 }

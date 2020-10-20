@@ -12,10 +12,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
-public class ItemFlameBow extends MoreAccessibleItemBow
-{
-    public ItemFlameBow()
-    {
+public class ItemFlameBow extends MoreAccessibleItemBow {
+    public ItemFlameBow() {
         super(576);
         super.arrowPowerDivisor = 15F;
         super.damageMultiplier = 2.0D;
@@ -29,36 +27,34 @@ public class ItemFlameBow extends MoreAccessibleItemBow
     @Override
     public void addModifiersToArrows(World world, ItemStack stack, Boolean noPickupFlag, Boolean alwaysCrit) {
         super.addModifiersToArrows(world, stack, noPickupFlag, alwaysCrit);
-
         /* TODO this is a bit sus, I think it's the right original behavior though */
         boolean flameEnchantmentFlag = (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack) > 0);
 
         for (EntityArrow arr : bowShots) {
-
-            if (flameEnchantmentFlag)
-            {
+            if (flameEnchantmentFlag) {
                 arr.setDamage(arr.getDamage() * 1.25D);
             }
 
             arr.setFire(50);
-
         }
     }
 
     @Override
-    public final EnumRarity getRarity(ItemStack par1ItemStack)
-    {
+    public final EnumRarity getRarity(ItemStack par1ItemStack) {
         return EnumRarity.uncommon;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining) {
-        if (usingItem == null) { return itemIcon; }
+        if (usingItem == null) {
+            return itemIcon;
+        }
+
         int ticksInUse = stack.getMaxItemUseDuration() - useRemaining;
 
         if (ticksInUse >= 14) {
-              return iconArray[2];
+            return iconArray[2];
         } else if (ticksInUse > 9) {
             return iconArray[1];
         } else if (ticksInUse > 0) {
