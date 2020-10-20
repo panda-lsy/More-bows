@@ -1,1 +1,1 @@
-Todo: decide approach on upscaling image & compressing efficiently. 
+TODO: decide approach on upscaling image & compressing efficiently.

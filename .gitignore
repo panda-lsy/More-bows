@@ -1,14 +1,23 @@
-# mac os
-.DS_Store
-
 # forge / gradle
 .gradle
-build
-bin
-run
+build/
+classes/
+out/
+run/
 
-# eclipse 
-.settings
+# IDE generated files
 .classpath
+.idea/
 .project
+.settings
+.settings/
+.vscode/
+*.iml
+*.ipr
+*.iws
+*.launch
+bin/
 eclipse
+
+# mac os
+.DS_Store

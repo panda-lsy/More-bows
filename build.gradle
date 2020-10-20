@@ -21,8 +21,9 @@ plugins {
     id 'maven-publish'
 }
 
+// Building for Java 6 should speed up class loading times a tiny amount, due to preverifying classes.
 sourceCompatibility = 1.5
-targetCompatibility = 1.6 //Building for Java 6 should speed up class loading times, due to preverifying classes.
+targetCompatibility = 1.6
 
 apply plugin: 'java'
 apply plugin: 'forge'
@@ -37,16 +38,19 @@ archivesBaseName = project.mod_basename
 def modName = project.mod_name
 def build_release = System.getenv("BUILD_RELEASE") == "true"
 
+// Add snapshot suffix to version if not building a release.
+// To build a release, set the environment variable BUILD_RELEASE to true.
 if (!build_release) {
     version += ("-SNAPSHOT+" + getTimestampSuffix())
 }
 
+// Information for ForgeGradle to configure the Minecraft / Forge version.
 minecraft {
     version = project.minecraft_version + "-" + project.forge_version
     runDir = "run"
 }
 
-// creates a timestamp to be appended to the end of the build
+// Creates a timestamp to be appended to the end of the build.
 def getTimestampSuffix() {
     def date = new Date()
     return date.format('yyyy-MM-dd_HHmmss')
@@ -56,16 +60,18 @@ processResources {
     // This will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
+    inputs.property "modName", project.mod_name
+    inputs.property "archivesBaseName", project.mod_basename
 
     // Replace values in only mcmod.info.
     filesMatching('mcmod.info') {
-        // Replace version and mcversion.
         expand 'version': version, 'mcversion': project.minecraft.version, 'modName': modName, 'archivesBaseName': archivesBaseName
     }
 
+    // Move all access transformers to META-INF.
     rename '(.+_at.cfg)', 'META-INF/$1'
 
-    // Here's a hilarious micro-optimisation for you!
+    // Here's a hilarious micro-optimisation for you: mcmod.info is a JSON file, and JSON files can be minified!
     doLast {
         fileTree(dir: outputs.files.asPath, include: "**/mcmod.info").each {
             File file -> file.text = JsonOutput.toJson(new JsonSlurper().parse(file))
@@ -73,43 +79,43 @@ processResources {
     }
 }
 
-task processSource(type: Sync) { // TODO: Remove this
+// Hack to add variables to source code on build. TODO: Remove this
+task processSource(type: Sync) {
+    // This will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+    inputs.property "modName", project.mod_name
+    inputs.property "archivesBaseName", project.mod_basename
+
     from(sourceSets.main.java) {
-        // only process this file
         filesMatching('iDiamondhunter/morebowsmod/MoreBowsMod.java') {
-            // replace build variables
             expand 'version': version, 'mcversion': project.minecraft.version, 'modName': modName, 'archivesBaseName': archivesBaseName
         }
     }
+
     into "$buildDir/src"
 }
 
+// Ensures that the encoding of source files is set to UTF-8, see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
 tasks.withType(JavaCompile) {
-    // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
     options.encoding = "UTF-8"
 }
 
+// Use the processed source with replaced build variables. TODO: Remove this.
 compileJava {
-    //use the processed source with replaced build variables
     source = processSource.outputs
 }
 
-// properties that instruct gradle on how to create the .jar outputs
+// Adds the access transformer to the manifest and names the .jar.
 jar {
     baseName = "${project.mod_basename}"
 
-    // don't put in the version.properties file if it exists, and definitely leave out the MCP
-    // (i.e. Minecraft) sources
-    exclude 'mcp'
-    exclude 'version.properties'
-
-    // add access transformer to manifest
     manifest {
         attributes 'FMLAT': 'iDiamondhunterMoreBows_at.cfg'
     }
 }
 
-// This task creates a .jar file containing the javadoc for your project
+// This task creates a .jar file containing the javadoc for the code of this mod.
 task javadocJar(type: Jar, dependsOn: 'javadoc') {
     classifier "javadoc"
     from javadoc.outputs
