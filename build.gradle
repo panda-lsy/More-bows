@@ -68,9 +68,6 @@ processResources {
         expand 'version': version, 'mcversion': project.minecraft.version, 'modName': modName, 'archivesBaseName': archivesBaseName
     }
 
-    // Move all access transformers to META-INF.
-    rename '(.+_at.cfg)', 'META-INF/$1'
-
     // Here's a hilarious micro-optimisation for you: mcmod.info is a JSON file, and JSON files can be minified!
     doLast {
         fileTree(dir: outputs.files.asPath, include: "**/mcmod.info").each {

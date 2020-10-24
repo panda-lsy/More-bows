@@ -21,6 +21,8 @@ public class EntityiDiamondhunterFrostArrow extends EntityArrow implements IProj
     //final static int iceID = GameData.getBlockRegistry().getId(Blocks.ice);
 
     private boolean isThisActuallyCriticalThough = false;
+    private boolean isThisActuallyInGround = false;
+    private int countedTicksInGround = 0;
 
     public EntityiDiamondhunterFrostArrow(World world) {
         super(world);
@@ -90,8 +92,18 @@ public class EntityiDiamondhunterFrostArrow extends EntityArrow implements IProj
     public void onUpdate() {
         super.onUpdate();
 
-        if (this.inGround) { //TODO: Redo this by counting ticks & remove access widener.
-            if (this.ticksInGround <= 2) {
+        // Hack to determine when the arrow has hit the ground. inGround is a private field.
+        // Access transformers can be used for this, but they're are annoying to deal with and they aren't always safe.
+        // However, instead we can take advantage of the fact that arrowShake is always set to 7 after an arrow has hit the ground.
+        // isThisActuallyInGround is used to store this information.
+        if (this.arrowShake == 7) {
+            isThisActuallyInGround = true;
+        }
+
+        if (this.isThisActuallyInGround) {
+            this.countedTicksInGround++;
+
+            if (this.countedTicksInGround <= 2) {
                 this.worldObj.spawnParticle("snowballpoof", this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
             }
 
@@ -101,13 +113,13 @@ public class EntityiDiamondhunterFrostArrow extends EntityArrow implements IProj
              * Block.getIdFromBlock(Blocks.ice), 3); }
              */
 
-            if (this.ticksInGround <= 30) {
+            if (this.countedTicksInGround <= 30) {
                 this.worldObj.spawnParticle("splash", this.posX, this.posY - 0.3D, this.posZ, 0.0D, 0.0D, 0.0D);
             }
 
             //if (this.ticksInGround >= 64 && this.ticksInGround <= 65) //Why was this the original logic?
             /** Responsible for adding snow layers on top the block the arrow hits, or "freezing" the water it's in by setting the block to ice. */
-            if (this.ticksInGround == 64) {
+            if (this.countedTicksInGround == 64) {
                 //test = this.worldObj.getBlock((int) this.posX, (int) this.posY, (int) this.posZ);
                 final int tempThingX = MathHelper.floor_double(this.posX);
                 final int tempThingY = MathHelper.floor_double(this.posY);
@@ -130,6 +142,9 @@ public class EntityiDiamondhunterFrostArrow extends EntityArrow implements IProj
                     this.worldObj.setBlock(tempThingX, tempThingY, tempThingZ, Blocks.ice); //good enough for science
                     //this.worldObj.setBlock(tempThingX, tempThingY, tempThingZ, Blocks.water, -1, 2); //TODO figure out if it's possible to freeze water by setting metadata. the original mod suggests that it is, but I'm probably reading the code wrong.
                 }
+
+                // It's actually still in the ground but we just don't care anymore.
+                isThisActuallyInGround = false;
             }
         } else if (this.isThisActuallyCriticalThough && !this.worldObj.isRemote) { //TODO: Replace with sided proxy, make sure you're actually just supposed to spawn particles on server
 
