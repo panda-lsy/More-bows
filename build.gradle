@@ -103,13 +103,9 @@ compileJava {
     source = processSource.outputs
 }
 
-// Adds the access transformer to the manifest and names the .jar.
+// Names the .jar.
 jar {
     baseName = "${project.mod_basename}"
-
-    manifest {
-        attributes 'FMLAT': 'iDiamondhunterMoreBows_at.cfg'
-    }
 }
 
 // This task creates a .jar file containing the javadoc for the code of this mod.
