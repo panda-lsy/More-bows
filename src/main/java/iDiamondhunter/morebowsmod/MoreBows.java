@@ -8,8 +8,11 @@ import cpw.mods.fml.common.Mod.Instance;
 //import cpw.mods.fml.common.SidedProxy;
 //import iDiamondhunter.morebowsmod.proxy.*;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLMissingMappingsEvent;
+import cpw.mods.fml.common.event.FMLMissingMappingsEvent.MissingMapping;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.EntityRegistry;
+import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
 import iDiamondhunter.morebowsmod.bows.DiamondBow;
 import iDiamondhunter.morebowsmod.bows.EnderBow;
@@ -20,20 +23,18 @@ import iDiamondhunter.morebowsmod.bows.IronBow;
 import iDiamondhunter.morebowsmod.bows.MultiBow;
 import iDiamondhunter.morebowsmod.bows.StoneBow;
 import iDiamondhunter.morebowsmod.entities.EnderArrow;
-import iDiamondhunter.morebowsmod.entities.FrostArrow;
 import iDiamondhunter.morebowsmod.entities.FireArrow;
+import iDiamondhunter.morebowsmod.entities.FrostArrow;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-@Mod(modid = MoreBows.MOD_ID, name = MoreBows.MOD_NAME, version = MoreBows.MOD_VERSION)
+@Mod(modid = MoreBows.MOD_ID, useMetadata = true)
 public class MoreBows {
-    public static final String MOD_ID = "${archivesBaseName}";
-    public static final String MOD_NAME = "${modName}";
-    public static final String MOD_VERSION = "${version}";
+    public static final String MOD_ID = "MoreBows";
 
-    @Instance("${archivesBaseName}")
+    @Instance(MOD_ID)
     public static MoreBows instance;
 
     public static Logger modLog;
@@ -50,7 +51,7 @@ public class MoreBows {
     public final static String FrostBowName = "FrostBow";
 
     /* This is super janky, rethink. */
-    private final static String modSeperator = "morebowsmod:";
+    private final static String modSeperator = "morebows:";
 
     public final static Item DiamondBow = new DiamondBow().setUnlocalizedName(DiamondBowName).setTextureName(modSeperator + DiamondBowName);
     public final static Item GoldBow = new GoldBow().setUnlocalizedName(GoldBowName).setTextureName(modSeperator + GoldBowName);
@@ -70,6 +71,30 @@ public class MoreBows {
     @EventHandler
     public void init(FMLInitializationEvent event) {
         registerItems();
+    }
+
+    @EventHandler
+    public void fmlMissingMappingsEvent(FMLMissingMappingsEvent event) {
+        for (final MissingMapping mapping : event.getAll()) {
+            // Get the old name & mod ID of the item
+            final String oldID = mapping.name.substring(0, mapping.name.indexOf(':'));
+            final String oldName = mapping.name.substring(mapping.name.indexOf(':') + 1);
+
+            // Attempt to migrate items from old IDs
+            if (oldID.equals("iDiamondhunterMoreBows") /* Earlier builds of this 1.7.10 port. */ || oldID.equals("More Bows mod by iDiamondhunter") /* ID of iDiamondhunter's ports. */ || oldID.equals("${archivesBaseName}") /* Mistakes happen sometimes! */) {
+                if (mapping.type == GameRegistry.Type.ITEM) {
+                    final String remappedName = MOD_ID + ":" + oldName;
+                    final Item remappedItem = GameData.getItemRegistry().getObject(remappedName);
+
+                    if (remappedItem != null) {
+                        modLog.info("ID remap: " + mapping.name + " > " + remappedName);
+                        mapping.remap(remappedItem);
+                    } else {
+                        modLog.error("ID remap failed: no match for " + mapping.name);
+                    }
+                }
+            }
+        }
     }
 
     private void registerItems() {

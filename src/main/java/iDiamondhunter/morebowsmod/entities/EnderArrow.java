@@ -41,7 +41,7 @@ public class EnderArrow extends EntityArrow {
     @SubscribeEvent
     public void onLivingHurtEvent(LivingAttackEvent event) {
         if (this == event.source.getSourceOfDamage()) {
-            event.entity.worldObj.spawnParticle(particle, (event.entity.posX + rand.nextFloat() * event.entity.width * 2.0F) - event.entity.width, event.entity.posY + 0.5D + rand.nextFloat() * event.entity.height, (event.entity.posZ + rand.nextFloat() * event.entity.width * 2.0F) - event.entity.width, rand.nextGaussian() * 0.02D, rand.nextGaussian() * 0.02D, rand.nextGaussian() * 0.02D);
+            event.entity.worldObj.spawnParticle(particle, (event.entity.posX + (rand.nextFloat() * event.entity.width * 2.0F)) - event.entity.width, event.entity.posY + 0.5D + (rand.nextFloat() * event.entity.height), (event.entity.posZ + (rand.nextFloat() * event.entity.width * 2.0F)) - event.entity.width, rand.nextGaussian() * 0.02D, rand.nextGaussian() * 0.02D, rand.nextGaussian() * 0.02D);
         }
     }
 

@@ -21,6 +21,12 @@ plugins {
     id 'maven-publish'
 }
 
+// Reproducible builds! https://docs.gradle.org/4.9/userguide/working_with_files.html#sec:reproducible_archives
+tasks.withType(AbstractArchiveTask) {
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+}
+
 // Building for Java 6 should speed up class loading times a tiny amount, due to preverifying classes.
 sourceCompatibility = 1.5
 targetCompatibility = 1.6
@@ -33,7 +39,6 @@ import groovy.json.JsonOutput
 
 version = project.mod_version
 group = project.mod_group
-archivesBaseName = project.mod_basename
 
 def modName = project.mod_name
 def build_release = System.getenv("BUILD_RELEASE") == "true"
@@ -41,7 +46,7 @@ def build_release = System.getenv("BUILD_RELEASE") == "true"
 // Add snapshot suffix to version if not building a release.
 // To build a release, set the environment variable BUILD_RELEASE to true.
 if (!build_release) {
-    version += ("-SNAPSHOT+" + getTimestampSuffix())
+    version += "-SNAPSHOT"
 }
 
 // Information for ForgeGradle to configure the Minecraft / Forge version.
@@ -50,25 +55,18 @@ minecraft {
     runDir = "run"
 }
 
-// Creates a timestamp to be appended to the end of the build.
-def getTimestampSuffix() {
-    def date = new Date()
-    return date.format('yyyy-MM-dd_HHmmss')
-}
-
 processResources {
     // This will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
     inputs.property "modName", project.mod_name
-    inputs.property "archivesBaseName", project.mod_basename
 
     // Replace values in only mcmod.info.
     filesMatching('mcmod.info') {
-        expand 'version': version, 'mcversion': project.minecraft.version, 'modName': modName, 'archivesBaseName': archivesBaseName
+        expand 'version': version, 'modName': modName, 'mcversion': project.minecraft.version
     }
 
-    // Here's a hilarious micro-optimisation for you: mcmod.info is a JSON file, and JSON files can be minified!
+    // Here's a super unnecessary micro-optimisation: a mcmod.info file is a JSON file, and JSON files can be minified!
     doLast {
         fileTree(dir: outputs.files.asPath, include: "**/mcmod.info").each {
             File file -> file.text = JsonOutput.toJson(new JsonSlurper().parse(file))
@@ -76,36 +74,9 @@ processResources {
     }
 }
 
-// Hack to add variables to source code on build. TODO: Remove this
-task processSource(type: Sync) {
-    // This will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
-    inputs.property "modName", project.mod_name
-    inputs.property "archivesBaseName", project.mod_basename
-
-    from(sourceSets.main.java) {
-        filesMatching('iDiamondhunter/morebowsmod/MoreBows.java') {
-            expand 'version': version, 'mcversion': project.minecraft.version, 'modName': modName, 'archivesBaseName': archivesBaseName
-        }
-    }
-
-    into "$buildDir/src"
-}
-
 // Ensures that the encoding of source files is set to UTF-8, see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
-}
-
-// Use the processed source with replaced build variables. TODO: Remove this.
-compileJava {
-    source = processSource.outputs
-}
-
-// Names the .jar.
-jar {
-    baseName = "${project.mod_basename}"
 }
 
 // This task creates a .jar file containing the javadoc for the code of this mod.
@@ -117,8 +88,7 @@ task javadocJar(type: Jar, dependsOn: 'javadoc') {
 // This task creates a .jar file containing the source code of this mod.
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = "sources"
-    //from processResources.outputs
-    from processSource.outputs // TODO: Remove this
+    from sourceSets.main.allSource
 }
 
 // This task creates a .jar file containing a deobfuscated version of this mod, for other developers to use in a development environment.
@@ -134,11 +104,9 @@ artifacts {
     archives devJar
 }
 
-// This block configures any maven publications you want to make.
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            // Add any other artifacts here that you would like to publish!
             artifact(jar) {
                 builtBy build
             }
@@ -152,10 +120,5 @@ publishing {
                 builtBy javadocJar
             }
         }
-    }
-
-    // This block selects the repositories you want to publish to.
-    repositories {
-        // Add the repositories you want to publish to here.
     }
 }

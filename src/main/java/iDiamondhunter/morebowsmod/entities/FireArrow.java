@@ -41,7 +41,7 @@ public class FireArrow extends EntityArrow {
         if ((this == event.source.getSourceOfDamage()) && event.entity.isBurning()) {
             event.entity.setFire(15);
             /** TODO Replace particle spawning with proxy methods. */
-            event.entity.worldObj.spawnParticle("portal", (event.entity.posX + rand.nextFloat() * event.entity.width * 2.0F) - event.entity.width, event.entity.posY + 0.5D + rand.nextFloat() * event.entity.height, (event.entity.posZ + rand.nextFloat() * event.entity.width * 2.0F) - event.entity.width, rand.nextGaussian() * 0.02D, rand.nextGaussian() * 0.02D, rand.nextGaussian() * 0.02D);
+            event.entity.worldObj.spawnParticle("portal", (event.entity.posX + (rand.nextFloat() * event.entity.width * 2.0F)) - event.entity.width, event.entity.posY + 0.5D + (rand.nextFloat() * event.entity.height), (event.entity.posZ + (rand.nextFloat() * event.entity.width * 2.0F)) - event.entity.width, rand.nextGaussian() * 0.02D, rand.nextGaussian() * 0.02D, rand.nextGaussian() * 0.02D);
         }
     }
 
