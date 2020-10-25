@@ -5,7 +5,7 @@
 
 ### _This port is not finished yet! Stay tuned for progress on it, and feel free to check out the latest dev builds!_
 
-<p align="center"> <img src="https://raw.githubusercontent.com/NeRdTheNed/More-bows/master/src/main/resources/morebowsLogo.jpg" alt="More Bows Logo" title="More Bows!" style='width: 100%; object-fit: contain'/> </p>
+<p align="center"> <img src="https://raw.githubusercontent.com/NeRdTheNed/More-bows/master/src/main/resources/mb.jpg" alt="More Bows Logo" title="More Bows!" style='width: 100%; object-fit: contain'/> </p>
 
 This is a port of the More Bows mod to 1.7.10! This mod was originally created by GaussFire, and then maintained & updated by iDiamondhunter. This port aims to faithfully re-create the original mod, while fixing some bugs & then potentially introducing new mechanics (or re-adding cut ideas!).
 
@@ -20,7 +20,6 @@ Issues / TODO list:
 - ~The bow animations are all the same speed, and don't reflect how fast you're actually drawing the bow.~ Still working on it, not sure if accurate now.
 - The frost arrow renders as a normal arrow instead of a snow cube.
 - Particle effects are hit-or-miss on whether they work due to me not implementing sided proxies yet.
-- Check and update any assets that have mutated too much over the years.
 
 Not technically an issue but should be fixed:
 
@@ -28,6 +27,7 @@ Not technically an issue but should be fixed:
 - The Legia Bow still shoots arrows at weird angles. I'll fix this once the mod is completely ported over.
 - ~Run optipng over all assets. Figure out if anything can be done to the .JPEGs without losing any quality.~ Still working on the mod icon, but mostly done!
 - Find out if there were ever any translations of this mod.
+- Check and update any assets that have mutated too much over the years.
 - More stuff I still need to write down here!
 
 Licence:
