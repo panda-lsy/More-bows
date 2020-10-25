@@ -3,8 +3,8 @@ package iDiamondhunter.morebowsmod.bows;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class ItemStoneBow extends MoreAccessibleItemBow {
-    public ItemStoneBow() {
+public class StoneBow extends CustomBow {
+    public StoneBow() {
         super(484);
         super.arrowPowerDivisor = 17F;
         super.damageMultiplier = 1.15D;

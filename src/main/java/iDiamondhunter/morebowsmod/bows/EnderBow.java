@@ -1,33 +1,24 @@
 package iDiamondhunter.morebowsmod.bows;
 
-import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.world.WorldEvent;
-
 import java.util.Timer;
 import java.util.TimerTask;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-//import cpw.mods.fml.relauncher.Side;
-import iDiamondhunter.morebowsmod.MoreBowsMod;
-import iDiamondhunter.morebowsmod.entities.EntityiDiamondhunterEnderArrow;
+import iDiamondhunter.morebowsmod.entities.EnderArrow;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.item.EnumRarity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 
-public class ItemBowEnder extends MoreAccessibleItemBow {
+public class EnderBow extends CustomBow {
     @Deprecated
     final Timer timer = new Timer();
 
     @Deprecated
     private final static String bonusArrowSounds = "mob.endermen.portal";
 
-    public ItemBowEnder() {
+    public EnderBow() {
         super(384);
         super.arrowPowerDivisor = 22F;
         MinecraftForge.EVENT_BUS.register(this);
@@ -36,12 +27,12 @@ public class ItemBowEnder extends MoreAccessibleItemBow {
     @Override
     public void setArrows(World world, EntityPlayer player) {
         super.bowShots = new EntityArrow[] {
-            new EntityiDiamondhunterEnderArrow(world, player, shotVelocity * 2.0F),
-            new EntityiDiamondhunterEnderArrow(world, player, shotVelocity * 1F),
-            new EntityiDiamondhunterEnderArrow(world, player, shotVelocity * 1.2F),
-            new EntityiDiamondhunterEnderArrow(world, player, shotVelocity * 1.5F),
-            new EntityiDiamondhunterEnderArrow(world, player, shotVelocity * 1.75F),
-            new EntityiDiamondhunterEnderArrow(world, player, shotVelocity * 1.825F)
+            new EnderArrow(world, player, shotVelocity * 2.0F),
+            new EnderArrow(world, player, shotVelocity * 1F),
+            new EnderArrow(world, player, shotVelocity * 1.2F),
+            new EnderArrow(world, player, shotVelocity * 1.5F),
+            new EnderArrow(world, player, shotVelocity * 1.75F),
+            new EnderArrow(world, player, shotVelocity * 1.825F)
         };
         bowShots[1].canBePickedUp = 2;
         bowShots[2].canBePickedUp = 2;
@@ -55,7 +46,6 @@ public class ItemBowEnder extends MoreAccessibleItemBow {
     public void spawnArrows(World world) {
         world.spawnEntityInWorld(bowShots[0]);
         timer.schedule(new MoreArrowsTask(world, bowShots), 3000);
-        //MoreBowsMod.modLog.info("REMOVE AFTER TEST: New timer!"); //debug
     }
 
     /** TODO: Remove this as soon as possible!
@@ -80,11 +70,11 @@ public class ItemBowEnder extends MoreAccessibleItemBow {
             this.world = world;
         }
 
+        @Override
         @Deprecated
         public void run() {
             spawnMoreArrows(world, arrows);
-            //MoreBowsMod.modLog.info("REMOVE AFTER TEST: Cancel timer, spawn arrows!"); //debug
-            this.cancel();
+            cancel();
         }
     }
 
@@ -93,28 +83,27 @@ public class ItemBowEnder extends MoreAccessibleItemBow {
     public void spawnMoreArrows(World world, EntityArrow[] arrows) {
         /* TODO Replace these sounds as well */
         world.spawnEntityInWorld(arrows[1]);
-        world.playSoundAtEntity(arrows[1], bonusArrowSounds, 0.5F, 1F / (itemRand.nextFloat() * 0.4F + 1F) + shotVelocity * 0.4F);
+        world.playSoundAtEntity(arrows[1], bonusArrowSounds, 0.5F, (1F / ((itemRand.nextFloat() * 0.4F) + 1F)) + (shotVelocity * 0.4F));
         world.spawnEntityInWorld(arrows[2]);
         arrows[2].posY++;
         arrows[2].posX -= 1.25;
         arrows[2].posZ += 1.75;
-        world.playSoundAtEntity(arrows[2], defaultShotSound, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + shotVelocity * 0.5F);
+        world.playSoundAtEntity(arrows[2], defaultShotSound, 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
         world.spawnEntityInWorld(arrows[3]);
         arrows[3].posY += 1.45;
         arrows[3].posX -= 2.25;
         arrows[3].posZ -= 0.75;
-        world.playSoundAtEntity(arrows[3], bonusArrowSounds, 0.25F, 1F / (itemRand.nextFloat() * 0.4F + 1F) + shotVelocity * 0.3F);
+        world.playSoundAtEntity(arrows[3], bonusArrowSounds, 0.25F, (1F / ((itemRand.nextFloat() * 0.4F) + 1F)) + (shotVelocity * 0.3F));
         world.spawnEntityInWorld(arrows[4]);
         arrows[4].posY += 2;
         arrows[4].posX += 0.25;
         arrows[4].posZ += 2.5;
-        world.playSoundAtEntity(arrows[4], defaultShotSound, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + shotVelocity * 0.5F);
+        world.playSoundAtEntity(arrows[4], defaultShotSound, 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
         world.spawnEntityInWorld(arrows[5]);
         arrows[5].posY += 1.75;
         arrows[5].posX += 1.75;
         arrows[5].posZ += 1.5;
-        world.playSoundAtEntity(arrows[5], bonusArrowSounds, 0.5F, 1F / (itemRand.nextFloat() * 0.4F + 1F) + shotVelocity * 0.4F);
-        /* Portal 3 confirmed??? */
+        world.playSoundAtEntity(arrows[5], bonusArrowSounds, 0.5F, (1F / ((itemRand.nextFloat() * 0.4F) + 1F)) + (shotVelocity * 0.4F));
     }
 
     @Override

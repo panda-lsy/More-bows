@@ -6,9 +6,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
-public class ItemIronBow extends MoreAccessibleItemBow {
+public class IronBow extends CustomBow {
     /** M i n i m a l i s m */
-    public ItemIronBow() {
+    public IronBow() {
         super(550);
         super.defaultShotVelocityMultiplier = 2.1F;
         super.arrowPowerDivisor = 17F;
@@ -23,7 +23,7 @@ public class ItemIronBow extends MoreAccessibleItemBow {
             return itemIcon;
         }
 
-        int ticksInUse = stack.getMaxItemUseDuration() - useRemaining;
+        final int ticksInUse = stack.getMaxItemUseDuration() - useRemaining;
 
         if (ticksInUse >= 16) {
             return iconArray[2];

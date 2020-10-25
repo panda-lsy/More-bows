@@ -7,8 +7,8 @@ import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
-public class ItemDiamondBow extends MoreAccessibleItemBow {
-    public ItemDiamondBow() {
+public class DiamondBow extends CustomBow {
+    public DiamondBow() {
         super(1016);
         super.defaultShotVelocityMultiplier = 2.2F;
         super.arrowPowerDivisor = 6F;
@@ -18,7 +18,7 @@ public class ItemDiamondBow extends MoreAccessibleItemBow {
 
     @Override
     public final int getMaxItemUseDuration(ItemStack par1ItemStack) {
-        return 36000;
+        return 36000; // TODO Determine why this is 36000
     }
 
     @Override
@@ -34,7 +34,7 @@ public class ItemDiamondBow extends MoreAccessibleItemBow {
             return itemIcon;
         }
 
-        int ticksInUse = stack.getMaxItemUseDuration() - useRemaining;
+        final int ticksInUse = stack.getMaxItemUseDuration() - useRemaining;
 
         if (ticksInUse >= 8) {
             return iconArray[2];

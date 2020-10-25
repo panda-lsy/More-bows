@@ -1,8 +1,8 @@
 item.DiamondBow.name=Crystal Bow
-item.GoldBow.name=Golden Bow
-item.MultiBow.name=Legia Bow
-item.FlameBow.name=Blazing Bow
-item.IronBow.name=Iron Bow
-item.StoneBow.name=Reinforced Bow
 item.EnderBow.name=Ender Bow
+item.FlameBow.name=Blazing Bow
 item.FrostBow.name=Frostbite Bow
+item.GoldBow.name=Golden Bow
+item.IronBow.name=Iron Bow
+item.MultiBow.name=Legia Bow
+item.StoneBow.name=Reinforced Bow

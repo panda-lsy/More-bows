@@ -85,7 +85,7 @@ task processSource(type: Sync) {
     inputs.property "archivesBaseName", project.mod_basename
 
     from(sourceSets.main.java) {
-        filesMatching('iDiamondhunter/morebowsmod/MoreBowsMod.java') {
+        filesMatching('iDiamondhunter/morebowsmod/MoreBows.java') {
             expand 'version': version, 'mcversion': project.minecraft.version, 'modName': modName, 'archivesBaseName': archivesBaseName
         }
     }

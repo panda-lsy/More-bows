@@ -2,22 +2,22 @@ package iDiamondhunter.morebowsmod.bows;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import iDiamondhunter.morebowsmod.entities.EntityiDiamondhunterFrostArrow;
+import iDiamondhunter.morebowsmod.entities.FrostArrow;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
-public class ItemFrostBow extends MoreAccessibleItemBow {
-    public ItemFrostBow() {
+public class FrostBow extends CustomBow {
+    public FrostBow() {
         super(550);
         super.arrowPowerDivisor = 26.0F;
     }
 
     @Override
     public void setArrows(World world, EntityPlayer player) {
-        bowShots = new EntityArrow[] { new EntityiDiamondhunterFrostArrow(world, player, shotVelocity * 2.4F) };
+        bowShots = new EntityArrow[] { new FrostArrow(world, player, shotVelocity * 2.4F) };
     }
 
     /** TODO THIS ISN'T RIGHT, FIND THE RIGHT VALUE */
@@ -28,7 +28,7 @@ public class ItemFrostBow extends MoreAccessibleItemBow {
             return itemIcon;
         }
 
-        int ticksInUse = stack.getMaxItemUseDuration() - useRemaining;
+        final int ticksInUse = stack.getMaxItemUseDuration() - useRemaining;
 
         if (ticksInUse >= 26) {
             return iconArray[2];

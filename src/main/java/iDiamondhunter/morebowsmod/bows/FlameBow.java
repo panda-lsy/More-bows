@@ -2,7 +2,7 @@ package iDiamondhunter.morebowsmod.bows;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import iDiamondhunter.morebowsmod.entities.EntityiDiamondhunterFireArrow;
+import iDiamondhunter.morebowsmod.entities.FireArrow;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,8 +12,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
-public class ItemFlameBow extends MoreAccessibleItemBow {
-    public ItemFlameBow() {
+public class FlameBow extends CustomBow {
+    public FlameBow() {
         super(576);
         super.arrowPowerDivisor = 15F;
         super.damageMultiplier = 2.0D;
@@ -21,16 +21,16 @@ public class ItemFlameBow extends MoreAccessibleItemBow {
 
     @Override
     public void setArrows(World world, EntityPlayer player) {
-        bowShots = new EntityArrow[] { new EntityiDiamondhunterFireArrow(world, player, shotVelocity * 2.0F) };
+        bowShots = new EntityArrow[] { new FireArrow(world, player, shotVelocity * 2.0F) };
     }
 
     @Override
     public void addModifiersToArrows(World world, ItemStack stack, Boolean noPickupFlag, Boolean alwaysCrit) {
         super.addModifiersToArrows(world, stack, noPickupFlag, alwaysCrit);
         /* TODO this is a bit sus, I think it's the right original behavior though */
-        boolean flameEnchantmentFlag = (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack) > 0);
+        final boolean flameEnchantmentFlag = (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack) > 0);
 
-        for (EntityArrow arr : bowShots) {
+        for (final EntityArrow arr : bowShots) {
             if (flameEnchantmentFlag) {
                 arr.setDamage(arr.getDamage() * 1.25D);
             }
@@ -51,7 +51,7 @@ public class ItemFlameBow extends MoreAccessibleItemBow {
             return itemIcon;
         }
 
-        int ticksInUse = stack.getMaxItemUseDuration() - useRemaining;
+        final int ticksInUse = stack.getMaxItemUseDuration() - useRemaining;
 
         if (ticksInUse >= 14) {
             return iconArray[2];

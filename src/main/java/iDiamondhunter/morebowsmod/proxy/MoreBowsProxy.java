@@ -1,6 +1,6 @@
 package iDiamondhunter.morebowsmod.proxy;
 
-public interface iDiamondhunterProxy {
+public interface MoreBowsProxy {
 
     //TODO
 

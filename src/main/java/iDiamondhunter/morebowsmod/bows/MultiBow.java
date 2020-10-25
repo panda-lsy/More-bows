@@ -4,18 +4,18 @@ import java.util.Random;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
-public class ItemMultiBow extends MoreAccessibleItemBow {
+public class MultiBow extends CustomBow {
     private final Random rand = new Random();
     protected boolean thirdArrow = false;
 
-    public ItemMultiBow() {
+    public MultiBow() {
         super(550);
         super.arrowPowerDivisor = 13;
     }
@@ -40,9 +40,9 @@ public class ItemMultiBow extends MoreAccessibleItemBow {
 
         //TODO figure out which is supposed to be changed and to what
         if (bowShots[1].shootingEntity.rotationYaw > 180) {
-            bowShots[1].posX = bowShots[1].posX + bowShots[1].shootingEntity.rotationYaw / 180;
+            bowShots[1].posX = bowShots[1].posX + (bowShots[1].shootingEntity.rotationYaw / 180);
         } else {
-            bowShots[1].posX = bowShots[1].posX + bowShots[1].shootingEntity.rotationYaw / 180;
+            bowShots[1].posX = bowShots[1].posX + (bowShots[1].shootingEntity.rotationYaw / 180);
         }
 
         bowShots[0].setDamage(bowShots[0].getDamage() * 1.5D);
@@ -54,9 +54,9 @@ public class ItemMultiBow extends MoreAccessibleItemBow {
             world.spawnEntityInWorld(bowShots[2]);
 
             if (bowShots[2].shootingEntity.rotationYaw > 180) {
-                bowShots[2].posX = bowShots[2].posX - bowShots[2].shootingEntity.rotationYaw / 180;
+                bowShots[2].posX = bowShots[2].posX - (bowShots[2].shootingEntity.rotationYaw / 180);
             } else {
-                bowShots[2].posX = bowShots[2].posX - bowShots[2].shootingEntity.rotationYaw / 180;
+                bowShots[2].posX = bowShots[2].posX - (bowShots[2].shootingEntity.rotationYaw / 180);
             }
         }
     }
@@ -64,14 +64,14 @@ public class ItemMultiBow extends MoreAccessibleItemBow {
     @Override
     public void playBowNoise(World world, EntityPlayer player) {
         //TODO: Clean this up
-        double xpos = player.posX;
-        double ypos = player.posY;
-        double zpos = player.posZ;
-        world.playSoundAtEntity(player, defaultShotSound, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + shotVelocity * 0.5F);
-        world.playSoundEffect(xpos + player.rotationYaw / 180, ypos, zpos, defaultShotSound, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + shotVelocity * 0.5F);
+        final double xpos = player.posX;
+        final double ypos = player.posY;
+        final double zpos = player.posZ;
+        world.playSoundAtEntity(player, defaultShotSound, 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
+        world.playSoundEffect(xpos + (player.rotationYaw / 180), ypos, zpos, defaultShotSound, 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
 
         if (thirdArrow) {
-            world.playSoundEffect(xpos - player.rotationYaw / 180, ypos, zpos, defaultShotSound, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + shotVelocity * 0.5F);
+            world.playSoundEffect(xpos - (player.rotationYaw / 180), ypos, zpos, defaultShotSound, 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
         }
     }
 
@@ -87,7 +87,7 @@ public class ItemMultiBow extends MoreAccessibleItemBow {
             return itemIcon;
         }
 
-        int ticksInUse = stack.getMaxItemUseDuration() - useRemaining;
+        final int ticksInUse = stack.getMaxItemUseDuration() - useRemaining;
 
         if (ticksInUse >= 12) {
             return iconArray[2];

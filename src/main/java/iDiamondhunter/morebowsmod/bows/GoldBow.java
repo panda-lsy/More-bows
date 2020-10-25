@@ -7,8 +7,8 @@ import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
-public class ItemGoldBow extends MoreAccessibleItemBow {
-    public ItemGoldBow() {
+public class GoldBow extends CustomBow {
+    public GoldBow() {
         super(550);
         super.defaultShotVelocityMultiplier = 2.4F;
         super.arrowPowerDivisor = 5F;
@@ -27,7 +27,7 @@ public class ItemGoldBow extends MoreAccessibleItemBow {
             return itemIcon;
         }
 
-        int ticksInUse = stack.getMaxItemUseDuration() - useRemaining;
+        final int ticksInUse = stack.getMaxItemUseDuration() - useRemaining;
 
         if (ticksInUse >= 8) {
             return iconArray[2];
