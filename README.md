@@ -16,7 +16,7 @@ Other people's ports:
 
 Issues / TODO list:
 
-- ![Ender Bow Icon](https://raw.githubusercontent.com/NeRdTheNed/More-bows/master/src/main/resources/assets/morebowsmod/textures/items/EnderBow1.png) **The ender bow can currently cause ConcurrentModificationExceptions and crash your game!** ![Ender Bow Icon](https://raw.githubusercontent.com/NeRdTheNed/More-bows/master/src/main/resources/assets/morebowsmod/textures/items/EnderBow1.png) This bow really is _still_ in development, so beware of it! (That being said, it doesn't freeze the entire game for 3 seconds anymore.) The ConcurrentModificationExceptions will be fixed when I re-write that code to not use my janky multi-threading, as Minecraft is not a thread-safe game.
+- ![Ender Bow Icon](https://raw.githubusercontent.com/NeRdTheNed/More-bows/master/src/main/resources/assets/morebows/textures/items/EnderBow1.png) **The ender bow can currently cause ConcurrentModificationExceptions and crash your game!** ![Ender Bow Icon](https://raw.githubusercontent.com/NeRdTheNed/More-bows/master/src/main/resources/assets/morebows/textures/items/EnderBow1.png) This bow really is _still_ in development, so beware of it! (That being said, it doesn't freeze the entire game for 3 seconds anymore.) The ConcurrentModificationExceptions will be fixed when I re-write that code to not use my janky multi-threading, as Minecraft is not a thread-safe game.
 - ~The bow animations are all the same speed, and don't reflect how fast you're actually drawing the bow.~ Still working on it, not sure if accurate now.
 - The frost arrow renders as a normal arrow instead of a snow cube.
 - Particle effects are hit-or-miss on whether they work due to me not implementing sided proxies yet.
