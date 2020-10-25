@@ -34,7 +34,7 @@ public class MultiBow extends CustomBow {
 
     /** TODO Fix weird angles on arrows */
     @Override
-    public void spawnArrows(World world) {
+    public void spawnArrows(World world, EntityPlayer shooter) {
         world.spawnEntityInWorld(bowShots[0]);
         world.spawnEntityInWorld(bowShots[1]);
 

@@ -85,7 +85,7 @@ public abstract class CustomBow extends ItemBow {
             }
 
             if (!par2World.isRemote) {
-                spawnArrows(par2World);
+                spawnArrows(par2World, par3EntityPlayer);
             }
         }
     }
@@ -144,7 +144,7 @@ public abstract class CustomBow extends ItemBow {
     }
 
     @Deprecated
-    public void spawnArrows(World world) { //TODO rename later
+    public void spawnArrows(World world, EntityPlayer shooter) { //TODO rename later
 
         //TODO add logic to spawn arrows over time
         for (final EntityArrow arr : bowShots) {

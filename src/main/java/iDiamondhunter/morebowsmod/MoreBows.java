@@ -5,8 +5,7 @@ import org.apache.logging.log4j.Logger;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
-//import cpw.mods.fml.common.SidedProxy;
-//import iDiamondhunter.morebowsmod.proxy.*;
+import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLMissingMappingsEvent;
 import cpw.mods.fml.common.event.FMLMissingMappingsEvent.MissingMapping;
@@ -22,9 +21,11 @@ import iDiamondhunter.morebowsmod.bows.GoldBow;
 import iDiamondhunter.morebowsmod.bows.IronBow;
 import iDiamondhunter.morebowsmod.bows.MultiBow;
 import iDiamondhunter.morebowsmod.bows.StoneBow;
+import iDiamondhunter.morebowsmod.entities.ArrowSpawner;
 import iDiamondhunter.morebowsmod.entities.EnderArrow;
 import iDiamondhunter.morebowsmod.entities.FireArrow;
 import iDiamondhunter.morebowsmod.entities.FrostArrow;
+import iDiamondhunter.morebowsmod.proxy.MoreBowsProxy;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -36,6 +37,10 @@ public class MoreBows {
 
     @Instance(MOD_ID)
     public static MoreBows instance;
+
+    @SidedProxy(clientSide = "iDiamondhunter.morebowsmod.proxy.MoreBowsClientProxy",
+                serverSide = "iDiamondhunter.morebowsmod.proxy.MoreBowsServerProxy")
+    public static MoreBowsProxy proxy;
 
     public static Logger modLog;
 
@@ -71,6 +76,8 @@ public class MoreBows {
     @EventHandler
     public void init(FMLInitializationEvent event) {
         registerItems();
+        registerEntities();
+        proxy.Proxy();
     }
 
     @EventHandler
@@ -135,9 +142,14 @@ public class MoreBows {
                                Items.ender_eye);
         GameRegistry.addRecipe(new ItemStack(FrostBow, 1), " IR", "SER", " IR", 'R', Items.string, 'I', Blocks.ice, 'S',
                                Items.snowball, 'E', IronBow);
-        /* I'm not sure how this works. */
-        EntityRegistry.registerModEntity(FireArrow.class, "MoreBowsFireArrow", 1, this, 64, 20, true);
-        EntityRegistry.registerModEntity(FrostArrow.class, "MoreBowsFrostArrow", 2, this, 64, 20, true);
-        EntityRegistry.registerModEntity(EnderArrow.class, "MoreBowsEnderArrow", 3, this, 64, 20, true);
     }
+
+    private void registerEntities() {
+        /* I'm not sure how this works. */
+        EntityRegistry.registerModEntity(ArrowSpawner.class, "MoreBowsArrowSpawner", 1, this, 64, 20, true);
+        EntityRegistry.registerModEntity(FireArrow.class, "MoreBowsFireArrow", 2, this, 64, 20, true);
+        EntityRegistry.registerModEntity(FrostArrow.class, "MoreBowsFrostArrow", 3, this, 64, 20, true);
+        EntityRegistry.registerModEntity(EnderArrow.class, "MoreBowsEnderArrow", 4, this, 64, 20, true);
+    }
+
 }

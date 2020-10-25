@@ -1,7 +1,9 @@
 package iDiamondhunter.morebowsmod.proxy;
 
-public interface MoreBowsProxy {
+public class MoreBowsProxy {
 
-    //TODO
+    public void Proxy() {
+        // Proxy = very true;
+    }
 
 }
