@@ -146,10 +146,10 @@ public class MoreBows {
 
     private void registerEntities() {
         /* I'm not sure how this works. */
-        EntityRegistry.registerModEntity(ArrowSpawner.class, "MoreBowsArrowSpawner", 1, this, 64, 20, true);
-        EntityRegistry.registerModEntity(FireArrow.class, "MoreBowsFireArrow", 2, this, 64, 20, true);
-        EntityRegistry.registerModEntity(FrostArrow.class, "MoreBowsFrostArrow", 3, this, 64, 20, true);
-        EntityRegistry.registerModEntity(EnderArrow.class, "MoreBowsEnderArrow", 4, this, 64, 20, true);
+        EntityRegistry.registerModEntity(ArrowSpawner.class, "MoreBowsArrowSpawner", 1, this, 64, 20, false);
+        EntityRegistry.registerModEntity(FireArrow.class, "MoreBowsFireArrow", 2, this, 64, 20, false);
+        EntityRegistry.registerModEntity(FrostArrow.class, "MoreBowsFrostArrow", 3, this, 64, 20, false);
+        EntityRegistry.registerModEntity(EnderArrow.class, "MoreBowsEnderArrow", 4, this, 64, 20, false);
     }
 
 }

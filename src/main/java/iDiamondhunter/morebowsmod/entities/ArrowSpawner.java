@@ -37,8 +37,13 @@ public class ArrowSpawner extends Entity {
         posX = living.posX;
         posY = living.posY;
         posZ = living.posZ;
+
+        if (arrows.length != 6) {
+            iDiamondhunter.morebowsmod.MoreBows.modLog.error("ArrowSpawner expects 6 arrows, got " + arrows.length + " instead! It will not spawn any arrows until I implement better methods.");
+            this.setDead();
+        }
+
         this.arrows = arrows;
-        worldObj.spawnEntityInWorld(arrows[0]);
     }
 
     @Override
@@ -58,6 +63,9 @@ public class ArrowSpawner extends Entity {
 
     @Override
     protected void entityInit() {
+        /*noClip = true;
+        preventEntitySpawning = false;
+        isImmuneToFire = true;*/
     }
 
     @Override
@@ -77,6 +85,11 @@ public class ArrowSpawner extends Entity {
     }
 
     @Override
+    public boolean canRenderOnFire() {
+        return false;
+    }
+
+    @Override
     public boolean isEntityInvulnerable() {
         return true;
     }
@@ -88,12 +101,28 @@ public class ArrowSpawner extends Entity {
 
     @Override
     public void onUpdate() {
-        //iDiamondhunter.morebowsmod.MoreBows.modLog.info("cool ticks " + count);
-        if (count == 60) {
-            // Spawn arrows
-            //iDiamondhunter.morebowsmod.MoreBows.modLog.info("ok cool");
-            if (arrows != null) {
-                //iDiamondhunter.morebowsmod.MoreBows.modLog.info(arrows.toString());
+        // Executed first, to prevent weird edge cases
+        if (count > 61) {
+            setDead();
+            return;
+        }
+
+        count++;
+
+        if (!worldObj.isRemote) {
+            if (arrows == null) {
+                iDiamondhunter.morebowsmod.MoreBows.modLog.info("Bonus ender arrows lost! Will fix this soon..."); // debug
+                setDead();
+                return;
+            }
+
+            if (count == 1) {
+                // First arrow
+                worldObj.spawnEntityInWorld(arrows[0]);
+            }
+
+            if (count == 61) {
+                // Second batch of arrows
                 worldObj.spawnEntityInWorld(arrows[1]);
                 worldObj.playSoundAtEntity(arrows[1], bonusArrowSounds, 0.5F, (1F / ((itemRand.nextFloat() * 0.4F) + 1F)) + (power * 0.4F));
                 worldObj.spawnEntityInWorld(arrows[2]);
@@ -116,17 +145,8 @@ public class ArrowSpawner extends Entity {
                 arrows[5].posX += 1.75;
                 arrows[5].posZ += 1.5;
                 worldObj.playSoundAtEntity(arrows[5], bonusArrowSounds, 0.5F, (1F / ((itemRand.nextFloat() * 0.4F) + 1F)) + (power * 0.4F));
-            } else {
-                // TODO This is probably causes issues due to proxy stuff. Figure it out when it's not the middle of the night.
-                //iDiamondhunter.morebowsmod.MoreBows.modLog.info("bummer");
             }
         }
-
-        if (count >= 60) {
-            setDead();
-        }
-
-        count++;
     }
 
     @Override
