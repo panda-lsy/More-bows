@@ -1,7 +1,7 @@
 package iDiamondhunter.morebowsmod.bows;
 
 import iDiamondhunter.morebowsmod.entities.ArrowSpawner;
-import iDiamondhunter.morebowsmod.entities.EnderArrow;
+import iDiamondhunter.morebowsmod.entities.HitArrow;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.EnumRarity;
@@ -20,12 +20,12 @@ public class EnderBow extends CustomBow {
     @Override
     public void setArrows(World world, EntityPlayer player) {
         super.bowShots = new EntityArrow[] {
-            new EnderArrow(world, player, shotVelocity * 2.0F),
-            new EnderArrow(world, player, shotVelocity * 1F),
-            new EnderArrow(world, player, shotVelocity * 1.2F),
-            new EnderArrow(world, player, shotVelocity * 1.5F),
-            new EnderArrow(world, player, shotVelocity * 1.75F),
-            new EnderArrow(world, player, shotVelocity * 1.825F)
+            new HitArrow(world, player, shotVelocity * 2.0F),
+            new HitArrow(world, player, shotVelocity * 1F),
+            new HitArrow(world, player, shotVelocity * 1.2F),
+            new HitArrow(world, player, shotVelocity * 1.5F),
+            new HitArrow(world, player, shotVelocity * 1.75F),
+            new HitArrow(world, player, shotVelocity * 1.825F)
         };
         bowShots[1].canBePickedUp = 2;
         bowShots[2].canBePickedUp = 2;

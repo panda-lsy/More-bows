@@ -18,8 +18,7 @@ import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 
 /** This entire class is a huge hack. I'm ashamed of myself. And yes, this is important to document.
  * TODO: Re-write all of this (or at least re-think most of it). Burn the original.
- *
- * Ideas: Re-write as interface? Actually use the "abstract" part of the class?
+ * Also TODO: Create a workaround for having to override getIcon, getRarity, getMaxItemUseDuration etc.
  *
  **/
 public abstract class CustomBow extends ItemBow {
@@ -61,6 +60,7 @@ public abstract class CustomBow extends ItemBow {
         }
 
         bowCharge = event.charge;
+        // TODO Remove "flag", it isn't used when calling method externally.
         final boolean flag = par3EntityPlayer.capabilities.isCreativeMode || (EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, par1ItemStack) > 0);
 
         if (flag || par3EntityPlayer.inventory.hasItem(Items.arrow)) {
@@ -76,9 +76,9 @@ public abstract class CustomBow extends ItemBow {
             }
 
             setArrows(par2World, par3EntityPlayer);
-            addModifiersToArrows(par2World, par1ItemStack, flag, false);
+            addModifiers(par2World, par1ItemStack, flag, false);
             par1ItemStack.damageItem(1, par3EntityPlayer);
-            playBowNoise(par2World, par3EntityPlayer);
+            playNoise(par2World, par3EntityPlayer);
 
             if (!flag) {
                 par3EntityPlayer.inventory.consumeInventoryItem(Items.arrow);
@@ -91,7 +91,7 @@ public abstract class CustomBow extends ItemBow {
     }
 
     /** TODO: Go through each bow and check if they have custom noises. Also make this better. */
-    public void playBowNoise(World world, EntityPlayer player) {
+    public void playNoise(World world, EntityPlayer player) {
         world.playSoundAtEntity(player, defaultShotSound, 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
     }
 
@@ -102,7 +102,7 @@ public abstract class CustomBow extends ItemBow {
     }
 
     @Deprecated
-    public void addModifiersToArrows(World world, ItemStack stack, Boolean noPickupFlag, Boolean alwaysCrit) { //TODO rename later
+    public void addModifiers(World world, ItemStack stack, Boolean noPickup, Boolean alwaysCrit) { //TODO rename later
         //TODO THIS CODE IS AWFULL FIX IT
         //not just the readability, but also the fact that this is literal garbage to work with
         //when you need to insert an effect into this chain
@@ -133,7 +133,7 @@ public abstract class CustomBow extends ItemBow {
                 arr.setFire(flameBurnTime);
             }
 
-            if (noPickupFlag) {
+            if (noPickup) {
                 arr.canBePickedUp = 2;
             }
 

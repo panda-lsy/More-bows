@@ -25,8 +25,8 @@ public class FlameBow extends CustomBow {
     }
 
     @Override
-    public void addModifiersToArrows(World world, ItemStack stack, Boolean noPickupFlag, Boolean alwaysCrit) {
-        super.addModifiersToArrows(world, stack, noPickupFlag, alwaysCrit);
+    public void addModifiers(World world, ItemStack stack, Boolean noPickupFlag, Boolean alwaysCrit) {
+        super.addModifiers(world, stack, noPickupFlag, alwaysCrit);
         /* TODO this is a bit sus, I think it's the right original behavior though */
         final boolean flameEnchantmentFlag = (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack) > 0);
 

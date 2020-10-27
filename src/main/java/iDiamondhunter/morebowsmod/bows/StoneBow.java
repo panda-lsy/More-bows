@@ -12,8 +12,8 @@ public class StoneBow extends CustomBow {
 
     /** Create a better way to do this with {@code MoreAccessibleItemBow}! */
     @Override
-    public void addModifiersToArrows(World world, ItemStack stack, Boolean noPickupFlag, Boolean alwaysCrit) {
-        super.addModifiersToArrows(world, stack, noPickupFlag, true);
+    public void addModifiers(World world, ItemStack stack, Boolean noPickupFlag, Boolean alwaysCrit) {
+        super.addModifiers(world, stack, noPickupFlag, true);
     }
 
 }

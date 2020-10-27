@@ -22,9 +22,9 @@ import iDiamondhunter.morebowsmod.bows.IronBow;
 import iDiamondhunter.morebowsmod.bows.MultiBow;
 import iDiamondhunter.morebowsmod.bows.StoneBow;
 import iDiamondhunter.morebowsmod.entities.ArrowSpawner;
-import iDiamondhunter.morebowsmod.entities.EnderArrow;
 import iDiamondhunter.morebowsmod.entities.FireArrow;
 import iDiamondhunter.morebowsmod.entities.FrostArrow;
+import iDiamondhunter.morebowsmod.entities.HitArrow;
 import iDiamondhunter.morebowsmod.proxy.MoreBowsProxy;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -38,8 +38,9 @@ public class MoreBows {
     @Instance(MOD_ID)
     public static MoreBows instance;
 
+    /** TODO Remove if not needed */
     @SidedProxy(clientSide = "iDiamondhunter.morebowsmod.proxy.MoreBowsClientProxy",
-                serverSide = "iDiamondhunter.morebowsmod.proxy.MoreBowsServerProxy")
+                serverSide = "iDiamondhunter.morebowsmod.proxy.MoreBowsProxy")
     public static MoreBowsProxy proxy;
 
     public static Logger modLog;
@@ -77,7 +78,7 @@ public class MoreBows {
     public void init(FMLInitializationEvent event) {
         registerItems();
         registerEntities();
-        proxy.Proxy();
+        proxy.register();
     }
 
     @EventHandler
@@ -146,10 +147,10 @@ public class MoreBows {
 
     private void registerEntities() {
         /* I'm not sure how this works. */
-        EntityRegistry.registerModEntity(ArrowSpawner.class, "MoreBowsArrowSpawner", 1, this, 64, 20, false);
-        EntityRegistry.registerModEntity(FireArrow.class, "MoreBowsFireArrow", 2, this, 64, 20, false);
-        EntityRegistry.registerModEntity(FrostArrow.class, "MoreBowsFrostArrow", 3, this, 64, 20, false);
-        EntityRegistry.registerModEntity(EnderArrow.class, "MoreBowsEnderArrow", 4, this, 64, 20, false);
+        EntityRegistry.registerModEntity(ArrowSpawner.class, "ArrowSpawner", 1, this, 64, 20, true);
+        EntityRegistry.registerModEntity(FireArrow.class, "FireArrow", 2, this, 64, 20, true);
+        EntityRegistry.registerModEntity(FrostArrow.class, "FrostArrow", 3, this, 64, 20, true);
+        EntityRegistry.registerModEntity(HitArrow.class, "HitArrow", 4, this, 64, 20, true);
     }
 
 }

@@ -62,7 +62,7 @@ public class MultiBow extends CustomBow {
     }
 
     @Override
-    public void playBowNoise(World world, EntityPlayer player) {
+    public void playNoise(World world, EntityPlayer player) {
         //TODO: Clean this up
         final double xpos = player.posX;
         final double ypos = player.posY;
