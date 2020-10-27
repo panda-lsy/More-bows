@@ -16,18 +16,22 @@ Other people's ports:
 
 Issues / TODO list:
 
-- <s>![Ender Bow Icon](https://raw.githubusercontent.com/NeRdTheNed/More-bows/master/src/main/resources/assets/morebows/textures/items/EnderBow1.png) **The ender bow can currently cause ConcurrentModificationExceptions and crash your game!** ![Ender Bow Icon](https://raw.githubusercontent.com/NeRdTheNed/More-bows/master/src/main/resources/assets/morebows/textures/items/EnderBow1.png) This bow really is _still_ in development, so beware of it! (That being said, it doesn't freeze the entire game for 3 seconds anymore.) The ConcurrentModificationExceptions will be fixed when I re-write that code to not use my janky multi-threading, as Minecraft is not a thread-safe game.</s> A fix has been partially implemented, but it's very WIP! I'll tidy it up and fix all the new bugs...
+- <s>![Ender Bow Icon](https://raw.githubusercontent.com/NeRdTheNed/More-bows/master/src/main/resources/assets/morebows/textures/items/EnderBow1.png) **The ender bow can currently cause ConcurrentModificationExceptions and crash your game!** ![Ender Bow Icon](https://raw.githubusercontent.com/NeRdTheNed/More-bows/master/src/main/resources/assets/morebows/textures/items/EnderBow1.png) This bow really is _still_ in development, so beware of it! (That being said, it doesn't freeze the entire game for 3 seconds anymore.) The ConcurrentModificationExceptions will be fixed when I re-write that code to not use my janky multi-threading, as Minecraft is not a thread-safe game.</s> A fix has been implemented, but it's somewhat WIP! I'll tidy it up and fix all the new bugs...
 - <s>The bow animations are all the same speed, and don't reflect how fast you're actually drawing the bow.</s> Still working on it, not accurate yet.
 - The frost arrow renders as a normal arrow instead of a snow cube.
-- Particle effects are hit-or-miss on whether they work due to me <s>not implementing sided proxies yet</s> being lazy and not adding them to the sided proxies yet.
+- Frost arrows will re-freeze or re-snow bits of the world when reloaded.
+- <s>Particle effects are hit-or-miss on whether they work due to me not implementing sided proxies yet.</s> Fixed, who needs sided proxies when you have server worlds!
+- Arrows will "shoot backwards" when shot at extremely low velocities (shot as soon as possible) from certain bows.
 
 Not technically an issue but should be fixed:
 
-- My code is sort of hacky in a few places. I need to clean it up by re-writing a bunch of classes, <s>and also need to be even hackier in some places to remove the access transformer I've used.</s> These hacks are now implemented! Also - better documentation is needed!
-- The Legia Bow still shoots arrows at weird angles. I'll fix this once the mod is completely ported over.
+- My code is very hacky in a few places. I need to clean it up by re-writing a bunch of classes, <s>and also need to be even hackier in some places to remove the access transformer I've used.</s> Those particular hacks are now implemented! Also - better documentation is needed!
+- The Legia Bow still shoots arrows at weird angles, just like in the original. I'll fix this once the mod is completely ported over.
+- Similarly, ender arrows might not be completely centered.
 - <s>Run optipng over all assets. Figure out if anything can be done to the .JPEGs without losing any quality.</s> Still working on the mod icon, but mostly done! Additionally, make the mod icon transparent.
 - Find out if there were ever any translations of this mod.
-- <s>Check and update any assets that have mutated too much over the years.</s> Partially done. Bow art matches perfectly, including with the earliest versions (1.2.5 V2) of the mod I could find (verified with ImageMagick), still need to verify the frost bow.
+- <s>Check and update any assets that have mutated too much over the years.</s> Partially done. Bow art matches perfectly (except for versions of the mod that accidentally cut off bits of the images), including with the earliest version of the mod I could find (More Bows for 1.2.5 v2, images verified with ImageMagick). I still need to verify the frost bow art with different versions of iDiamondhunter's ports.
+- The README needs some tidying up as well. I should probably switch the image links to relative links.
 - More stuff I still need to write down here!
 
 Licence:
