@@ -1,4 +1,4 @@
-package iDiamondhunter.morebowsmod.entities;
+package iDiamondhunter.morebows.entities;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.EntityLivingBase;
@@ -47,9 +47,9 @@ public class HitArrow extends EntityArrow {
     /* TODO Tidy up and merge more logic if possible */
     @SubscribeEvent
     public void hitListen(LivingAttackEvent event) {
-        //iDiamondhunter.morebowsmod.MoreBows.modLog.error("Test ParticleArrow " + event.entity.worldObj.isRemote + " test " +  this.getClass().getName() + " " + this.toString()); //debug
+        //iDiamondhunter.morebows.MoreBows.modLog.error("Test ParticleArrow " + event.entity.worldObj.isRemote + " test " +  this.getClass().getName() + " " + this.toString()); //debug
         if  (!event.entity.worldObj.isRemote && (checkThis() == event.source.getSourceOfDamage())) {
-            //iDiamondhunter.morebowsmod.MoreBows.modLog.error("Test ParticleArrow " + event.entity.worldObj.isRemote); //debug
+            //iDiamondhunter.morebows.MoreBows.modLog.error("Test ParticleArrow " + event.entity.worldObj.isRemote); //debug
             // TODO Document
             //event.entity.worldObj.spawn
             final WorldServer server = (WorldServer) event.entity.worldObj;

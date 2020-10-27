@@ -1,4 +1,4 @@
-package iDiamondhunter.morebowsmod.entities;
+package iDiamondhunter.morebows.entities;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
@@ -14,9 +14,9 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 public class FrostArrow extends EntityArrow { //TODO re-implement rendering of snowball instead of arrow
 
-    private boolean isThisActuallyCritical = false;
-    private boolean isThisActuallyInGround = false;
-    private int countedTicksInGround = 0;
+    private boolean crit = false;
+    private boolean inGround = false;
+    private int groundTicks = 0;
 
     public FrostArrow(World world) {
         super(world);
@@ -47,8 +47,8 @@ public class FrostArrow extends EntityArrow { //TODO re-implement rendering of s
     /** See {@code getIsCritical()} for an explanation of why this method manually adds crit damage to the attack. */
     @SubscribeEvent
     public void onLivingAttackEvent(LivingAttackEvent event) {
-        if (isThisActuallyCritical && (this == event.source.getSourceOfDamage())) {
-            isThisActuallyCritical = false;
+        if (crit && (this == event.source.getSourceOfDamage())) {
+            crit = false;
             event.setCanceled(true);
             event.entity.attackEntityFrom(event.source, event.ammount);
         }
@@ -56,7 +56,7 @@ public class FrostArrow extends EntityArrow { //TODO re-implement rendering of s
 
     /** See {@code getIsCritical()} for why this kills the arrow after the attack. */
     @SubscribeEvent
-    public void onLivingHurtEvent(LivingHurtEvent event) {
+    public void hitListen(LivingHurtEvent event) {
         if (this == event.source.getSourceOfDamage()) {
             event.entity.setInWeb(); //TODO Replace with slowness effect? This is the original behavior...
         }
@@ -73,15 +73,15 @@ public class FrostArrow extends EntityArrow { //TODO re-implement rendering of s
         // Hack to determine when the arrow has hit the ground. inGround is a private field.
         // Access transformers can be used for this, but they're are annoying to deal with and they aren't always safe.
         // However, instead we can take advantage of the fact that arrowShake is always set to 7 after an arrow has hit the ground.
-        // isThisActuallyInGround is used to store this information.
+        // inGround is used to store this information.
         if (arrowShake == 7) {
-            isThisActuallyInGround = true;
+            inGround = true;
         }
 
-        if (isThisActuallyInGround) {
-            countedTicksInGround++;
+        if (inGround) {
+            groundTicks++;
 
-            if (countedTicksInGround <= 2) {
+            if (groundTicks <= 2) {
                 worldObj.spawnParticle("snowballpoof", posX, posY, posZ, 0.0D, 0.0D, 0.0D);
             }
 
@@ -91,36 +91,36 @@ public class FrostArrow extends EntityArrow { //TODO re-implement rendering of s
              * Block.getIdFromBlock(Blocks.ice), 3); }
              */
 
-            if (countedTicksInGround <= 30) {
+            if (groundTicks <= 30) {
                 worldObj.spawnParticle("splash", posX, posY - 0.3D, posZ, 0.0D, 0.0D, 0.0D);
             }
 
             //if (this.ticksInGround >= 64 && this.ticksInGround <= 65) //Why was this the original logic?
             /** Responsible for adding snow layers on top the block the arrow hits, or "freezing" the water it's in by setting the block to ice. */
-            if (countedTicksInGround == 64) {
-                final int arrowInBlockX = MathHelper.floor_double(posX);
-                final int arrowInBlockY = MathHelper.floor_double(posY);
-                final int arrowInBlockZ = MathHelper.floor_double(posZ);
+            if (groundTicks == 64) {
+                final int arrX = MathHelper.floor_double(posX);
+                final int arrY = MathHelper.floor_double(posY);
+                final int arrZ = MathHelper.floor_double(posZ);
                 /* TODO Verify that this is the right block!
                  * Also, why does this sometimes set multiple blocks? It's the correct behavior of the original mod, but it's concerning... */
-                final Block arrowInBlock = worldObj.getBlock(arrowInBlockX, arrowInBlockY, arrowInBlockZ);
+                final Block arrowInBlock = worldObj.getBlock(arrX, arrY, arrZ);
 
                 //if (Block.isEqualTo(this.field_145790_g, Blocks.snow)) {
                 /* TODO Possibly implement incrementing snow layers. */
                 if (Block.isEqualTo(arrowInBlock, Blocks.air)) {
-                    worldObj.setBlock(arrowInBlockX, arrowInBlockY, arrowInBlockZ, Blocks.snow_layer);
+                    worldObj.setBlock(arrX, arrY, arrZ, Blocks.snow_layer);
                 }
 
                 if (Block.isEqualTo(arrowInBlock, Blocks.water)) {
                     /* TODO Check if the earlier event or this one is the correct one.
                      * Also: bouncy arrow on ice, a bit like stone skimming? Could be cool. */
-                    worldObj.setBlock(arrowInBlockX, arrowInBlockY, arrowInBlockZ, Blocks.ice);
+                    worldObj.setBlock(arrX, arrY, arrZ, Blocks.ice);
                 }
 
                 // It's actually still in the ground but we just don't care anymore.
-                isThisActuallyInGround = false;
+                inGround = false;
             }
-        } else if (isThisActuallyCritical && !worldObj.isRemote) { //TODO: Replace with sided proxy, make sure you're actually just supposed to spawn particles on server
+        } else if (crit && !worldObj.isRemote) { //TODO: Replace with sided proxy, make sure you're actually just supposed to spawn particles on server
             for (int i = 0; i < 4; ++i) {
                 worldObj.spawnParticle("crit", posX + ((motionX * i) / 4.0D), posY + ((motionY * i) / 4.0D), posZ + ((motionZ * i) / 4.0D), -motionX, -motionY + 0.2D, -motionZ);
             }
@@ -130,13 +130,13 @@ public class FrostArrow extends EntityArrow { //TODO re-implement rendering of s
     /** This is not what it looks like! See {@code getIsCritical()} for the explanation. */
     @Override
     public void setIsCritical(boolean crit) {
-        super.setIsCritical(crit);
-        isThisActuallyCritical = true;
+        /* This line of code brings a tear to my eye. It's glorious. */
+        super.setIsCritical(this.crit = crit);
+        //iDiamondhunter.morebows.MoreBows.modLog.info("setIsCritical " + crit);
     }
 
-    /** This doesn't actually return whether the arrow is critical, it will always return false! See the comments in the code for why this awful hack was made. */
+    /** This doesn't actually return whether the arrow is crit, it will always return false! See the comments in the code for why this awful hack was made. */
     @Override
-    @Deprecated
     public boolean getIsCritical() {
         return false;
         /* Obviously, you're just a bad shot :D

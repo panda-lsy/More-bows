@@ -1,4 +1,4 @@
-package iDiamondhunter.morebowsmod.entities;
+package iDiamondhunter.morebows.entities;
 
 import java.util.Random;
 
@@ -13,15 +13,15 @@ import net.minecraft.world.World;
 
 public class ArrowSpawner extends Entity {
 
-    @Deprecated
-    private final static String bonusArrowSounds = "mob.endermen.portal";
-    @Deprecated
-    private final static String defaultShotSound = "random.bow";
+    //@Deprecated
+    //private final static String bonusArrowSounds = "mob.endermen.portal";
+    //@Deprecated
+    //private final static String defaultShotSound = "random.bow";
     private EntityArrow[] arrows;
     private byte existed = 0;
     //private EntityLivingBase creator;
 
-    Random itemRand = new Random();
+    Random rand = new Random();
     private float shotVelocity;
 
     public ArrowSpawner(World world) {
@@ -41,7 +41,8 @@ public class ArrowSpawner extends Entity {
         posZ = living.posZ;
 
         if (arrows.length != 6) {
-            iDiamondhunter.morebowsmod.MoreBows.modLog.error("ArrowSpawner expects 6 arrows, got " + arrows.length + " instead! It will not spawn any arrows until I implement better methods.");
+            // TODO Fix
+            //iDiamondhunter.morebows.MoreBows.modLog.error("ArrowSpawner expects 6 arrows, got " + arrows.length + " instead! It will not spawn any arrows until I implement better methods.");
             setDead();
         }
 
@@ -113,7 +114,7 @@ public class ArrowSpawner extends Entity {
 
         if (!worldObj.isRemote) {
             if (arrows == null) {
-                iDiamondhunter.morebowsmod.MoreBows.modLog.info("Bonus ender arrows lost! Will fix this soon..."); // debug
+                //iDiamondhunter.morebows.MoreBows.modLog.info("Bonus ender arrows lost! Will fix this soon..."); // debug
                 setDead();
                 return;
             }
@@ -126,34 +127,34 @@ public class ArrowSpawner extends Entity {
             if (existed == 61) {
                 // Second batch of arrows
                 worldObj.spawnEntityInWorld(arrows[1]);
-                worldObj.playSoundAtEntity(arrows[1], bonusArrowSounds, 0.5F, (1F / ((itemRand.nextFloat() * 0.4F) + 1F)) + (shotVelocity * 0.4F));
+                worldObj.playSoundAtEntity(arrows[1], "mob.endermen.portal", 0.5F, (1F / ((rand.nextFloat() * 0.4F) + 1F)) + (shotVelocity * 0.4F));
                 worldObj.spawnEntityInWorld(arrows[2]);
                 arrows[2].posY++;
                 arrows[2].posX -= 1.25;
                 arrows[2].posZ += 1.75;
-                worldObj.playSoundAtEntity(arrows[2], defaultShotSound, 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
+                worldObj.playSoundAtEntity(arrows[2], "random.bow", 1.0F, (1.0F / ((rand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
                 worldObj.spawnEntityInWorld(arrows[3]);
                 arrows[3].posY += 1.45;
                 arrows[3].posX -= 2.25;
                 arrows[3].posZ -= 0.75;
-                worldObj.playSoundAtEntity(arrows[3], bonusArrowSounds, 0.25F, (1F / ((itemRand.nextFloat() * 0.4F) + 1F)) + (shotVelocity * 0.3F));
+                worldObj.playSoundAtEntity(arrows[3], "mob.endermen.portal", 0.25F, (1F / ((rand.nextFloat() * 0.4F) + 1F)) + (shotVelocity * 0.3F));
                 worldObj.spawnEntityInWorld(arrows[4]);
                 arrows[4].posY += 2;
                 arrows[4].posX += 0.25;
                 arrows[4].posZ += 2.5;
-                worldObj.playSoundAtEntity(arrows[4], defaultShotSound, 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
+                worldObj.playSoundAtEntity(arrows[4], "random.bow", 1.0F, (1.0F / ((rand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
                 worldObj.spawnEntityInWorld(arrows[5]);
                 arrows[5].posY += 1.75;
                 arrows[5].posX += 1.75;
                 arrows[5].posZ += 1.5;
-                worldObj.playSoundAtEntity(arrows[5], bonusArrowSounds, 0.5F, (1F / ((itemRand.nextFloat() * 0.4F) + 1F)) + (shotVelocity * 0.4F));
+                worldObj.playSoundAtEntity(arrows[5], "mob.endermen.portal", 0.5F, (1F / ((rand.nextFloat() * 0.4F) + 1F)) + (shotVelocity * 0.4F));
             }
         }
     }
 
     @Override
     protected void readEntityFromNBT(NBTTagCompound tag) {
-        //iDiamondhunter.morebowsmod.MoreBows.modLog.info("reading"); //debug
+        //iDiamondhunter.morebows.MoreBows.modLog.info("reading"); //debug
         existed = tag.getByte("existed");
         shotVelocity = tag.getFloat("shotVelocity");
         final int arrowsArmount = tag.getInteger("arrowsAmount");
@@ -163,36 +164,36 @@ public class ArrowSpawner extends Entity {
         for (int i = 0; i < arrowsArmount; i++) {
             final NBTTagCompound arrTag = tag.getCompoundTag("arrows").getCompoundTag("arrow" + i);
             final String arrType = tag.getCompoundTag("arrowsType").getString("arrow" + i);
-            //iDiamondhunter.morebowsmod.MoreBows.modLog.info("arrow[" + i + "] " + arrTag.toString() + " of type " + arrType); //debug
+            //iDiamondhunter.morebows.MoreBows.modLog.info("arrow[" + i + "] " + arrTag.toString() + " of type " + arrType); //debug
             arrows[i] = (EntityArrow) EntityList.createEntityByName(arrType, worldObj);
-            //iDiamondhunter.morebowsmod.MoreBows.modLog.info("arrow[" + i + "] " + arrows[i].toString()); //debug
+            //iDiamondhunter.morebows.MoreBows.modLog.info("arrow[" + i + "] " + arrows[i].toString()); //debug
             arrows[i].readFromNBT(arrTag);
         }
 
-        //iDiamondhunter.morebowsmod.MoreBows.modLog.info("arrows " + arrows.toString() + " zero " + arrows[0].toString() + " one " + arrows[1].toString()); //debug
+        //iDiamondhunter.morebows.MoreBows.modLog.info("arrows " + arrows.toString() + " zero " + arrows[0].toString() + " one " + arrows[1].toString()); //debug
     }
 
     @Override
     protected void writeEntityToNBT(NBTTagCompound tag) {
         final NBTTagCompound arrowsTag = new NBTTagCompound();
-        final NBTTagCompound arrowsTypeTag = new NBTTagCompound();
+        final NBTTagCompound arrowsType = new NBTTagCompound();
 
-        //iDiamondhunter.morebowsmod.MoreBows.modLog.info("writing"); //debug
+        //iDiamondhunter.morebows.MoreBows.modLog.info("writing"); //debug
 
         /** An over engineered system to save an arbitrary amount of entities */
         for (int i = 0; i < arrows.length; i++) {
             final NBTTagCompound arrTag = new NBTTagCompound();
             arrows[i].writeToNBT(arrTag);
-            //iDiamondhunter.morebowsmod.MoreBows.modLog.info("arrow[" + i + "] " + arrTag.toString() + " getEntityString " + EntityList.getEntityString(arrows[i]) + " id " + EntityList.getEntityID(arrows[i])); //debug
+            //iDiamondhunter.morebows.MoreBows.modLog.info("arrow[" + i + "] " + arrTag.toString() + " getEntityString " + EntityList.getEntityString(arrows[i]) + " id " + EntityList.getEntityID(arrows[i])); //debug
             arrowsTag.setTag("arrow" + i, arrTag);
-            arrowsTypeTag.setString("arrow" + i, EntityList.getEntityString(arrows[i]));
+            arrowsType.setString("arrow" + i, EntityList.getEntityString(arrows[i]));
         }
 
-        //iDiamondhunter.morebowsmod.MoreBows.modLog.info("arrows " + arrowsTag.toString()); //debug
+        //iDiamondhunter.morebows.MoreBows.modLog.info("arrows " + arrowsTag.toString()); //debug
         tag.setByte("existed", existed);
         tag.setFloat("shotVelocity", shotVelocity);
         tag.setTag("arrows", arrowsTag);
-        tag.setTag("arrowsType", arrowsTypeTag);
+        tag.setTag("arrowsType", arrowsType);
         tag.setInteger("arrowsAmount", arrows.length);
     }
 

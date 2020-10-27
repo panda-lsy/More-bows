@@ -1,4 +1,4 @@
-package iDiamondhunter.morebowsmod.entities;
+package iDiamondhunter.morebows.entities;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityArrow;

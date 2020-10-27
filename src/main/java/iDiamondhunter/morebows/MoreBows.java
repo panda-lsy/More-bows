@@ -1,4 +1,4 @@
-package iDiamondhunter.morebowsmod;
+package iDiamondhunter.morebows;
 
 import org.apache.logging.log4j.Logger;
 
@@ -7,25 +7,22 @@ import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLMissingMappingsEvent;
-import cpw.mods.fml.common.event.FMLMissingMappingsEvent.MissingMapping;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.EntityRegistry;
-import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.common.registry.GameRegistry;
-import iDiamondhunter.morebowsmod.bows.DiamondBow;
-import iDiamondhunter.morebowsmod.bows.EnderBow;
-import iDiamondhunter.morebowsmod.bows.FlameBow;
-import iDiamondhunter.morebowsmod.bows.FrostBow;
-import iDiamondhunter.morebowsmod.bows.GoldBow;
-import iDiamondhunter.morebowsmod.bows.IronBow;
-import iDiamondhunter.morebowsmod.bows.MultiBow;
-import iDiamondhunter.morebowsmod.bows.StoneBow;
-import iDiamondhunter.morebowsmod.entities.ArrowSpawner;
-import iDiamondhunter.morebowsmod.entities.FireArrow;
-import iDiamondhunter.morebowsmod.entities.FrostArrow;
-import iDiamondhunter.morebowsmod.entities.HitArrow;
-import iDiamondhunter.morebowsmod.proxy.MoreBowsProxy;
+import iDiamondhunter.morebows.bows.DiamondBow;
+import iDiamondhunter.morebows.bows.EnderBow;
+import iDiamondhunter.morebows.bows.FlameBow;
+import iDiamondhunter.morebows.bows.FrostBow;
+import iDiamondhunter.morebows.bows.GoldBow;
+import iDiamondhunter.morebows.bows.IronBow;
+import iDiamondhunter.morebows.bows.MultiBow;
+import iDiamondhunter.morebows.bows.StoneBow;
+import iDiamondhunter.morebows.entities.ArrowSpawner;
+import iDiamondhunter.morebows.entities.FireArrow;
+import iDiamondhunter.morebows.entities.FrostArrow;
+import iDiamondhunter.morebows.entities.HitArrow;
+import iDiamondhunter.morebows.proxy.Common;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -39,9 +36,9 @@ public class MoreBows {
     public static MoreBows instance;
 
     /** TODO Remove if not needed */
-    @SidedProxy(clientSide = "iDiamondhunter.morebowsmod.proxy.MoreBowsClientProxy",
-                serverSide = "iDiamondhunter.morebowsmod.proxy.MoreBowsProxy")
-    public static MoreBowsProxy proxy;
+    @SidedProxy(clientSide = "iDiamondhunter.morebows.proxy.Client",
+                serverSide = "iDiamondhunter.morebows.proxy.Common")
+    public static Common proxy;
 
     public static Logger modLog;
 
@@ -81,29 +78,28 @@ public class MoreBows {
         proxy.register();
     }
 
-    @EventHandler
-    public void fmlMissingMappingsEvent(FMLMissingMappingsEvent event) {
-        for (final MissingMapping mapping : event.getAll()) {
-            // Get the old name & mod ID of the item
-            final String oldID = mapping.name.substring(0, mapping.name.indexOf(':'));
-            final String oldName = mapping.name.substring(mapping.name.indexOf(':') + 1);
-
-            // Attempt to migrate items from old IDs
-            if (oldID.equals("iDiamondhunterMoreBows") /* Earlier builds of this 1.7.10 port. */ || oldID.equals("More Bows mod by iDiamondhunter") /* ID of iDiamondhunter's ports. */ || oldID.equals("${archivesBaseName}") /* Mistakes happen sometimes! */) {
-                if (mapping.type == GameRegistry.Type.ITEM) {
-                    final String remappedName = MOD_ID + ":" + oldName;
-                    final Item remappedItem = GameData.getItemRegistry().getObject(remappedName);
-
-                    if (remappedItem != null) {
-                        modLog.info("ID remap: " + mapping.name + " > " + remappedName);
-                        mapping.remap(remappedItem);
-                    } else {
-                        modLog.error("ID remap failed: no match for " + mapping.name);
-                    }
-                }
-            }
-        }
-    }
+    // This code is completely unneeded, but it's nice enough to keep around for reference purposes.
+    // @EventHandler
+    // public void fmlMissingMappingsEvent(FMLMissingMappingsEvent event) {
+    //     for (final MissingMapping mapping : event.getAll()) {
+    //         // Get the old name & mod ID of the item
+    //         final String oldID = mapping.name.substring(0, mapping.name.indexOf(':'));
+    //         final String oldName = mapping.name.substring(mapping.name.indexOf(':') + 1);
+    //         // Attempt to migrate items from old IDs
+    //         if (oldID.equals("iDiamondhunterMoreBows") /* Earlier builds of this 1.7.10 port. */ || oldID.equals("More Bows mod by iDiamondhunter") /* ID of iDiamondhunter's ports. */ || oldID.equals("${archivesBaseName}") /* Mistakes happen sometimes! */) {
+    //             if (mapping.type == GameRegistry.Type.ITEM) {
+    //                 final String remappedName = MOD_ID + ":" + oldName;
+    //                 final Item remappedItem = GameData.getItemRegistry().getObject(remappedName);
+    //                 if (remappedItem != null) {
+    //                     modLog.info("ID remap: " + mapping.name + " > " + remappedName);
+    //                     mapping.remap(remappedItem);
+    //                 } else {
+    //                     modLog.error("ID remap failed: no match for " + mapping.name);
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 
     private void registerItems() {
         /* TODO check if this is the right way of doing things. */

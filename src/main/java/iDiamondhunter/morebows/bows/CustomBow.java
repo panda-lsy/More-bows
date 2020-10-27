@@ -1,4 +1,4 @@
-package iDiamondhunter.morebowsmod.bows;
+package iDiamondhunter.morebows.bows;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -24,21 +24,21 @@ import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 public abstract class CustomBow extends ItemBow {
     /* TODO better names */
     @SideOnly(Side.CLIENT)
-    protected IIcon[] iconArray;
+    protected IIcon[] icons;
     /** TODO: replace this */
     @Deprecated
-    protected EntityArrow[] bowShots;
+    protected EntityArrow[] arrows;
     /** TODO: replace this */
     @Deprecated
     protected float shotVelocity;
     /* TODO assign defaults in constructor, make final for values that shouldn't be changed */
-    protected float arrowPowerDivisor = 20.0F;
-    protected float defaultShotVelocityMultiplier = 2.0F;
-    protected int flameBurnTime = 100;
-    protected double damageMultiplier = 1;
+    protected float powerDiv = 20.0F;
+    protected float velocityMult = 2.0F;
+    protected int flameTime = 100;
+    protected double damageMult = 1;
     /** TODO why did I add this? */
-    @Deprecated
-    protected final static String defaultShotSound = "random.bow";
+    //@Deprecated
+    //protected final static String shotSound = "random.bow";
 
     /** TODO better parameter order, decide which variables should be set in the constructor (possibly provide a better default one) */
     public CustomBow(int maxDamage) {
@@ -50,21 +50,21 @@ public abstract class CustomBow extends ItemBow {
 
     /** TODO find a cleaner way to implement this, change like all of this. also make better names. */
     @Override
-    public void onPlayerStoppedUsing(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer, int par4) {
-        int bowCharge = getMaxItemUseDuration(par1ItemStack) - par4;
-        final ArrowLooseEvent event = new ArrowLooseEvent(par3EntityPlayer, par1ItemStack, bowCharge);
+    public void onPlayerStoppedUsing(ItemStack stack, World world, EntityPlayer player, int remaining) {
+        int charge = getMaxItemUseDuration(stack) - remaining;
+        final ArrowLooseEvent event = new ArrowLooseEvent(player, stack, charge);
         MinecraftForge.EVENT_BUS.post(event);
 
         if (event.isCanceled()) {
             return;
         }
 
-        bowCharge = event.charge;
+        charge = event.charge;
         // TODO Remove "flag", it isn't used when calling method externally.
-        final boolean flag = par3EntityPlayer.capabilities.isCreativeMode || (EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, par1ItemStack) > 0);
+        final boolean flag = player.capabilities.isCreativeMode || (EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, stack) > 0);
 
-        if (flag || par3EntityPlayer.inventory.hasItem(Items.arrow)) {
-            shotVelocity = bowCharge / arrowPowerDivisor;
+        if (flag || player.inventory.hasItem(Items.arrow)) {
+            shotVelocity = charge / powerDiv;
             shotVelocity = ((shotVelocity * shotVelocity) + (shotVelocity * 2.0F)) / 3.0F;
 
             if (shotVelocity < 0.1D) {
@@ -75,30 +75,30 @@ public abstract class CustomBow extends ItemBow {
                 shotVelocity = 1.0F;
             }
 
-            setArrows(par2World, par3EntityPlayer);
-            addModifiers(par2World, par1ItemStack, flag, false);
-            par1ItemStack.damageItem(1, par3EntityPlayer);
-            playNoise(par2World, par3EntityPlayer);
+            setArrows(world, player);
+            addModifiers(world, stack, flag, false);
+            stack.damageItem(1, player);
+            playNoise(world, player);
 
             if (!flag) {
-                par3EntityPlayer.inventory.consumeInventoryItem(Items.arrow);
+                player.inventory.consumeInventoryItem(Items.arrow);
             }
 
-            if (!par2World.isRemote) {
-                spawnArrows(par2World, par3EntityPlayer);
+            if (!world.isRemote) {
+                spawnArrows(world, player);
             }
         }
     }
 
     /** TODO: Go through each bow and check if they have custom noises. Also make this better. */
     public void playNoise(World world, EntityPlayer player) {
-        world.playSoundAtEntity(player, defaultShotSound, 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
+        world.playSoundAtEntity(player, "random.bow", 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
     }
 
     @Deprecated
     public void setArrows(World world, EntityPlayer player) { //TODO rename later
         //default behavior
-        bowShots = new EntityArrow[] { new EntityArrow(world, player, shotVelocity * defaultShotVelocityMultiplier) };
+        arrows = new EntityArrow[] { new EntityArrow(world, player, shotVelocity * velocityMult) };
     }
 
     @Deprecated
@@ -107,47 +107,44 @@ public abstract class CustomBow extends ItemBow {
         //not just the readability, but also the fact that this is literal garbage to work with
         //when you need to insert an effect into this chain
         //see: ItemFlameBow
-        final boolean shotPowerFlag = (shotVelocity == 1.0F) || alwaysCrit;
+        final boolean crit = (shotVelocity == 1.0F) || alwaysCrit;
         final int k = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, stack);
-        final boolean powerEnchantmentFlag = (k > 0);
+        final boolean powerEnch = (k > 0);
         final int l = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, stack);
-        final boolean punchEnchantmentFlag = (l > 0);
-        final boolean flameEnchantmentFlag = (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack) > 0);
-        final boolean damageMultiplierFlag = (damageMultiplier != 1);
+        final boolean punchEnch = (l > 0);
+        final boolean flameEnch = (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack) > 0);
 
         //default behavior
-        for (final EntityArrow arr : bowShots) {
-            if (shotPowerFlag) {
+        for (final EntityArrow arr : arrows) {
+            if (crit) {
                 arr.setIsCritical(true);
             }
 
-            if (powerEnchantmentFlag) {
+            if (powerEnch) {
                 arr.setDamage(arr.getDamage() + (k * 0.5D) + 0.5D);
             }
 
-            if (punchEnchantmentFlag) {
+            if (punchEnch) {
                 arr.setKnockbackStrength(l);
             }
 
-            if (flameEnchantmentFlag) {
-                arr.setFire(flameBurnTime);
+            if (flameEnch) {
+                arr.setFire(flameTime);
             }
 
             if (noPickup) {
                 arr.canBePickedUp = 2;
             }
 
-            if (damageMultiplierFlag) {
-                arr.setDamage(arr.getDamage() * damageMultiplier);
-            }
+            arr.setDamage(arr.getDamage() * damageMult);
         }
     }
 
     @Deprecated
-    public void spawnArrows(World world, EntityPlayer shooter) { //TODO rename later
+    public void spawnArrows(World world, EntityPlayer player) { //TODO rename later
 
         //TODO add logic to spawn arrows over time
-        for (final EntityArrow arr : bowShots) {
+        for (final EntityArrow arr : arrows) {
             world.spawnEntityInWorld(arr);
         }
     }
@@ -155,14 +152,14 @@ public abstract class CustomBow extends ItemBow {
     //Overrides are used as ItemBow's icon related variables are not visible :(
     @Override
     @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister iconRegistry) {
-        itemIcon = iconRegistry.registerIcon(getIconString() + "1"); //redo with off-by-one error fixed
+    public void registerIcons(IIconRegister iconReg) {
+        itemIcon = iconReg.registerIcon(getIconString() + "1"); //redo with off-by-one error fixed
         //this.iconArray = new IIcon[this.bowPullIconNameArray.length];
-        iconArray = new IIcon[3];
+        icons = new IIcon[3];
 
-        for (int i = 0; i < iconArray.length; ++i) {
+        for (int i = 0; i < icons.length; ++i) {
             //this.iconArray[i] = iconRegistry.registerIcon(this.getIconString() + "_" + this.bowPullIconNameArray[i]);
-            iconArray[i] = iconRegistry.registerIcon(getIconString() + (i + 2)); //awful hack, icons start from 2 here
+            icons[i] = iconReg.registerIcon(getIconString() + (i + 2)); //awful hack, icons start from 2 here
             //this.iconArray[i] = iconRegistry.registerIcon(this.bowPullIconNameArray[i]);
         }
     }
@@ -171,26 +168,26 @@ public abstract class CustomBow extends ItemBow {
     @Deprecated
     @Override
     @SideOnly(Side.CLIENT)
-    public IIcon getItemIconForUseDuration(int index) {
-        return iconArray[index];
+    public IIcon getItemIconForUseDuration(int i) {
+        return icons[i];
     }
 
     /** TODO Replace this system! */
     @Override
     @SideOnly(Side.CLIENT)
-    public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining) {
-        if (usingItem == null) {
+    public IIcon getIcon(ItemStack stack, int u, EntityPlayer p, ItemStack item, int useRem) {
+        if (item == null) {
             return itemIcon;
         }
 
-        final int ticksInUse = stack.getMaxItemUseDuration() - useRemaining;
+        final int ticks = stack.getMaxItemUseDuration() - useRem;
 
-        if (ticksInUse >= 18) {
-            return iconArray[2];
-        } else if (ticksInUse > 13) {
-            return iconArray[1];
-        } else if (ticksInUse > 0) {
-            return iconArray[0];
+        if (ticks >= 18) {
+            return icons[2];
+        } else if (ticks > 13) {
+            return icons[1];
+        } else if (ticks > 0) {
+            return icons[0];
         } else {
             return itemIcon;
         }

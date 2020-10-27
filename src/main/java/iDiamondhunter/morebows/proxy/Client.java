@@ -1,12 +1,12 @@
-package iDiamondhunter.morebowsmod.proxy;
+package iDiamondhunter.morebows.proxy;
 
 import cpw.mods.fml.client.registry.RenderingRegistry;
-import iDiamondhunter.morebowsmod.client.NoRender;
-import iDiamondhunter.morebowsmod.entities.ArrowSpawner;
+import iDiamondhunter.morebows.client.NoRender;
+import iDiamondhunter.morebows.entities.ArrowSpawner;
 
 /** TODO Remove if not needed */
 @Deprecated
-public class MoreBowsClientProxy extends MoreBowsProxy {
+public class Client extends Common {
 
     @Override
     public void register() {

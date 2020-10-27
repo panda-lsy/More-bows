@@ -1,4 +1,4 @@
-package iDiamondhunter.morebowsmod.client;
+package iDiamondhunter.morebows.client;
 
 import net.minecraft.client.renderer.entity.RenderEntity;
 import net.minecraft.entity.Entity;
@@ -6,7 +6,7 @@ import net.minecraft.entity.Entity;
 public class NoRender extends RenderEntity {
 
     @Override
-    public void doRender(Entity var1, double var2, double var3, double var4, float var5, float var6) {
+    public void doRender(Entity n, double e, double r, double d, float y, float o) {
         //don'tRender
     }
 
