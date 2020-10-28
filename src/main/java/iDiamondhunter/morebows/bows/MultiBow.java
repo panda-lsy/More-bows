@@ -2,13 +2,8 @@ package iDiamondhunter.morebows.bows;
 
 import java.util.Random;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 public class MultiBow extends CustomBow {
@@ -16,8 +11,21 @@ public class MultiBow extends CustomBow {
     protected boolean thirdArrow = false;
 
     public MultiBow() {
-        super(550);
-        super.powerDiv = 13;
+        super(550, (byte) 0, new byte[] {12, 7}, 13F);
+    }
+
+    @Override
+    public void playNoise(World world, EntityPlayer player) {
+        //TODO: Clean this up
+        final double xpos = player.posX;
+        final double ypos = player.posY;
+        final double zpos = player.posZ;
+        world.playSoundAtEntity(player, "random.bow", 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
+        world.playSoundEffect(xpos + (player.rotationYaw / 180), ypos, zpos, "random.bow", 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
+
+        if (thirdArrow) {
+            world.playSoundEffect(xpos - (player.rotationYaw / 180), ypos, zpos, "random.bow", 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
+        }
     }
 
     /** TODO Decide if the player only gets one arrow back or consumes the amount that they shoot. */
@@ -59,45 +67,11 @@ public class MultiBow extends CustomBow {
                 arrows[2].posX = arrows[2].posX - (arrows[2].shootingEntity.rotationYaw / 180);
             }
         }
-    }
 
-    @Override
-    public void playNoise(World world, EntityPlayer player) {
-        //TODO: Clean this up
-        final double xpos = player.posX;
-        final double ypos = player.posY;
-        final double zpos = player.posZ;
-        world.playSoundAtEntity(player, "random.bow", 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
-        world.playSoundEffect(xpos + (player.rotationYaw / 180), ypos, zpos, "random.bow", 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
-
-        if (thirdArrow) {
-            world.playSoundEffect(xpos - (player.rotationYaw / 180), ypos, zpos, "random.bow", 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
-        }
-    }
-
-    @Override
-    public final EnumRarity getRarity(ItemStack par1ItemStack) {
-        return EnumRarity.rare;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(ItemStack stack, int u, EntityPlayer p, ItemStack item, int useRem) {
-        if (item == null) {
-            return itemIcon;
-        }
-
-        final int ticks = stack.getMaxItemUseDuration() - useRem;
-
-        if (ticks >= 12) {
-            return icons[2];
-        } else if (ticks > 7) {
-            return icons[1];
-        } else if (ticks > 0) {
-            return icons[0];
-        } else {
-            return itemIcon;
-        }
+        //iDiamondhunter.morebows.MoreBows.modLog.error("Arrows");
+        //iDiamondhunter.morebows.MoreBows.modLog.error("Test arrows[0]: rot yaw " + arrows[0].shootingEntity.rotationYaw + " divided rot yaw " + (arrows[0].shootingEntity.rotationYaw / 180) + " pos x " + arrows[0].posX); //debug
+        //iDiamondhunter.morebows.MoreBows.modLog.error("Test arrows[1]: rot yaw " + arrows[1].shootingEntity.rotationYaw + " divided rot yaw " + (arrows[1].shootingEntity.rotationYaw / 180) + " pos x " + arrows[1].posX); //debug
+        //iDiamondhunter.morebows.MoreBows.modLog.error("Test arrows[2]: rot yaw " + arrows[2].shootingEntity.rotationYaw + " divided rot yaw " + (arrows[2].shootingEntity.rotationYaw / 180) + " pos x " + arrows[2].posX); //debug
     }
 
 }

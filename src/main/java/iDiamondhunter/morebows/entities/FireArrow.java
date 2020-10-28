@@ -1,7 +1,6 @@
 package iDiamondhunter.morebows.entities;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -10,23 +9,22 @@ public class FireArrow extends HitArrow {
 
     public FireArrow(World world) {
         super(world);
+        self = this;
     }
 
     public FireArrow(World world, double var1, double var2, double var3) {
         super(world, var1, var2, var3);
+        self = this;
     }
 
     public FireArrow(World world, EntityLivingBase living1, EntityLivingBase living2, float var1, float var2) {
         super(world, living1, living2, var1, var2);
+        self = this;
     }
 
     public FireArrow(World world, EntityLivingBase living, float var) {
         super(world, living, var);
-    }
-
-    @Override
-    protected EntityArrow checkThis() {
-        return this;
+        self = this;
     }
 
     @Override

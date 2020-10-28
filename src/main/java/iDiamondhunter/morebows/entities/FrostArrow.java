@@ -15,8 +15,8 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 public class FrostArrow extends EntityArrow { //TODO re-implement rendering of snowball instead of arrow
 
     private boolean crit = false;
-    private boolean inGround = false;
     private int groundTicks = 0;
+    private boolean inGround = false;
 
     public FrostArrow(World world) {
         super(world);
@@ -38,20 +38,27 @@ public class FrostArrow extends EntityArrow { //TODO re-implement rendering of s
         MinecraftForge.EVENT_BUS.register(this);
     }
 
+    /** This doesn't actually return whether the arrow is crit, it will always return false! See the comments in the code for why this awful hack was made. */
     @Override
-    public void setDead() {
-        MinecraftForge.EVENT_BUS.unregister(this);
-        super.setDead();
-    }
-
-    /** See {@code getIsCritical()} for an explanation of why this method manually adds crit damage to the attack. */
-    @SubscribeEvent
-    public void onLivingAttackEvent(LivingAttackEvent event) {
-        if (crit && (this == event.source.getSourceOfDamage())) {
-            crit = false;
-            event.setCanceled(true);
-            event.entity.attackEntityFrom(event.source, event.ammount);
-        }
+    public boolean getIsCritical() {
+        return false;
+        /* Obviously, you're just a bad shot :D
+         *
+         * This is an awful hack to prevent the vanilla crit particles from displaying.
+         * The vanilla code to display the arrow particle trail is buried deep inside onUpdate,
+         * and the only other options I have are to:
+         * - intercept the particles with packets,
+         * - intercept the particles with events (not feasible from what I can tell),
+         * - ASM it out,
+         * - or perform some ridiculous wrapping around the World to intercept the method to spawn particles.
+         *
+         * Instead of doing that, I just prevent anything from ever knowing that it's crited,
+         * and instead I wrap around the event when the arrow attacks something. See onLivingAttackEvent() for the details,
+         * but the TLDR is that I cancel the attack and start a new one with the crit taken into account.
+         * This allows the entity to take the crit into account when deciding if it's damaged or not.
+         *
+         * This is probably the lesser of these evils.
+         */
     }
 
     /** See {@code getIsCritical()} for why this kills the arrow after the attack. */
@@ -63,6 +70,16 @@ public class FrostArrow extends EntityArrow { //TODO re-implement rendering of s
 
         if (!(event.entity instanceof EntityEnderman)) { //TODO Verify that this is the right behavior
             setDead();
+        }
+    }
+
+    /** See {@code getIsCritical()} for an explanation of why this method manually adds crit damage to the attack. */
+    @SubscribeEvent
+    public void onLivingAttackEvent(LivingAttackEvent event) {
+        if (crit && (this == event.source.getSourceOfDamage())) {
+            crit = false;
+            event.setCanceled(true);
+            event.entity.attackEntityFrom(event.source, event.ammount);
         }
     }
 
@@ -103,15 +120,15 @@ public class FrostArrow extends EntityArrow { //TODO re-implement rendering of s
                 final int arrZ = MathHelper.floor_double(posZ);
                 /* TODO Verify that this is the right block!
                  * Also, why does this sometimes set multiple blocks? It's the correct behavior of the original mod, but it's concerning... */
-                final Block arrowInBlock = worldObj.getBlock(arrX, arrY, arrZ);
+                final Block inBlock = worldObj.getBlock(arrX, arrY, arrZ);
 
                 //if (Block.isEqualTo(this.field_145790_g, Blocks.snow)) {
                 /* TODO Possibly implement incrementing snow layers. */
-                if (Block.isEqualTo(arrowInBlock, Blocks.air)) {
+                if (Block.isEqualTo(inBlock, Blocks.air)) {
                     worldObj.setBlock(arrX, arrY, arrZ, Blocks.snow_layer);
                 }
 
-                if (Block.isEqualTo(arrowInBlock, Blocks.water)) {
+                if (Block.isEqualTo(inBlock, Blocks.water)) {
                     /* TODO Check if the earlier event or this one is the correct one.
                      * Also: bouncy arrow on ice, a bit like stone skimming? Could be cool. */
                     worldObj.setBlock(arrX, arrY, arrZ, Blocks.ice);
@@ -127,34 +144,17 @@ public class FrostArrow extends EntityArrow { //TODO re-implement rendering of s
         }
     }
 
+    @Override
+    public void setDead() {
+        MinecraftForge.EVENT_BUS.unregister(this);
+        super.setDead();
+    }
+
     /** This is not what it looks like! See {@code getIsCritical()} for the explanation. */
     @Override
     public void setIsCritical(boolean crit) {
         /* This line of code brings a tear to my eye. It's glorious. */
         super.setIsCritical(this.crit = crit);
         //iDiamondhunter.morebows.MoreBows.modLog.info("setIsCritical " + crit);
-    }
-
-    /** This doesn't actually return whether the arrow is crit, it will always return false! See the comments in the code for why this awful hack was made. */
-    @Override
-    public boolean getIsCritical() {
-        return false;
-        /* Obviously, you're just a bad shot :D
-         *
-         * This is an awful hack to prevent the vanilla crit particles from displaying.
-         * The vanilla code to display the arrow particle trail is buried deep inside onUpdate,
-         * and the only other options I have are to:
-         * - intercept the particles with packets,
-         * - intercept the particles with events (not feasible from what I can tell),
-         * - ASM it out,
-         * - or perform some ridiculous wrapping around the World to intercept the method to spawn particles.
-         *
-         * Instead of doing that, I just prevent anything from ever knowing that it's crited,
-         * and instead I wrap around the event when the arrow attacks something. See onLivingAttackEvent() for the details,
-         * but the TLDR is that I cancel the attack and start a new one with the crit taken into account.
-         * This allows the entity to take the crit into account when deciding if it's damaged or not.
-         *
-         * This is probably the lesser of these evils.
-         */
     }
 }

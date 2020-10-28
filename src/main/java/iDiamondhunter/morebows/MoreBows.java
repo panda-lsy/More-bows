@@ -10,14 +10,11 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
-import iDiamondhunter.morebows.bows.DiamondBow;
+import iDiamondhunter.morebows.bows.CustomBow;
 import iDiamondhunter.morebows.bows.EnderBow;
 import iDiamondhunter.morebows.bows.FlameBow;
 import iDiamondhunter.morebows.bows.FrostBow;
-import iDiamondhunter.morebows.bows.GoldBow;
-import iDiamondhunter.morebows.bows.IronBow;
 import iDiamondhunter.morebows.bows.MultiBow;
-import iDiamondhunter.morebows.bows.StoneBow;
 import iDiamondhunter.morebows.entities.ArrowSpawner;
 import iDiamondhunter.morebows.entities.FireArrow;
 import iDiamondhunter.morebows.entities.FrostArrow;
@@ -40,6 +37,7 @@ public class MoreBows {
                 serverSide = "iDiamondhunter.morebows.proxy.Common")
     public static Common proxy;
 
+    /** TODO Remove before release? */
     public static Logger modLog;
 
     /* TODO: Make proxies, re-evaluate how & where stuff should be declared & initialized. */
@@ -56,26 +54,27 @@ public class MoreBows {
     /* This is super janky, rethink. */
     private final static String modSeperator = "morebows:";
 
-    public final static Item DiamondBow = new DiamondBow().setUnlocalizedName(DiamondBowName).setTextureName(modSeperator + DiamondBowName);
-    public final static Item GoldBow = new GoldBow().setUnlocalizedName(GoldBowName).setTextureName(modSeperator + GoldBowName);
+    public final static Item DiamondBow = new CustomBow(1016, (byte) 0, new byte[] {8, 4}, 2.2F, 6F, 140, 2.25, 36000).setUnlocalizedName(DiamondBowName).setTextureName(modSeperator + DiamondBowName);
+    public final static Item GoldBow = new CustomBow(550, (byte) 0, new byte[] {8, 4}, 2.4F, 5F, 100, 1.5D).setUnlocalizedName(GoldBowName).setTextureName(modSeperator + GoldBowName);
     public final static Item EnderBow = new EnderBow().setUnlocalizedName(EnderBowName).setTextureName(modSeperator + EnderBowName);
-    public final static Item StoneBow = new StoneBow().setUnlocalizedName(StoneBowName).setTextureName(modSeperator + StoneBowName);
-    public final static Item IronBow = new IronBow().setUnlocalizedName(IronBowName).setTextureName(modSeperator + IronBowName);
+    public final static Item StoneBow = new CustomBow(484, (byte) 0, null, 17F, 1.15D, true).setUnlocalizedName(StoneBowName).setTextureName(modSeperator + StoneBowName);
+    public final static Item IronBow = new CustomBow(550, (byte) 0, new byte[] {16, 11}, 2.1F, 17F, 105, 1.5D).setUnlocalizedName(IronBowName).setTextureName(modSeperator + IronBowName);
     public final static Item MultiBow = new MultiBow().setUnlocalizedName(MultiBowName).setTextureName(modSeperator + MultiBowName);
     public final static Item FlameBow = new FlameBow().setUnlocalizedName(FlameBowName).setTextureName(modSeperator + FlameBowName);
     public final static Item FrostBow = new FrostBow().setUnlocalizedName(FrostBowName).setTextureName(modSeperator + FrostBowName);
-
-    @EventHandler
-    public void preInit(FMLPreInitializationEvent event) {
-        modLog = event.getModLog();
-        modLog.info("Too many bows, or not enough?");
-    }
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
         registerItems();
         registerEntities();
         proxy.register();
+    }
+
+    /** TODO Remove before release? */
+    @EventHandler
+    public void preInit(FMLPreInitializationEvent event) {
+        modLog = event.getModLog();
+        modLog.info("Too many bows, or not enough?");
     }
 
     // This code is completely unneeded, but it's nice enough to keep around for reference purposes.
@@ -101,8 +100,17 @@ public class MoreBows {
     //     }
     // }
 
+    private void registerEntities() {
+        /* I'm not sure how this works. */
+        EntityRegistry.registerModEntity(ArrowSpawner.class, "ArrowSpawner", 1, this, 64, 20, true);
+        EntityRegistry.registerModEntity(FireArrow.class, "FireArrow", 2, this, 64, 20, true);
+        EntityRegistry.registerModEntity(FrostArrow.class, "FrostArrow", 3, this, 64, 20, true);
+        EntityRegistry.registerModEntity(HitArrow.class, "HitArrow", 4, this, 64, 20, true);
+    }
+
     private void registerItems() {
         /* TODO check if this is the right way of doing things. */
+        /** Item registry */
         GameRegistry.registerItem(DiamondBow, DiamondBowName);
         GameRegistry.registerItem(GoldBow, GoldBowName);
         GameRegistry.registerItem(EnderBow, EnderBowName);
@@ -111,6 +119,7 @@ public class MoreBows {
         GameRegistry.registerItem(MultiBow, MultiBowName);
         GameRegistry.registerItem(FlameBow, FlameBowName);
         GameRegistry.registerItem(FrostBow, FrostBowName);
+        /** Recipes */
         GameRegistry.addRecipe(new ItemStack(StoneBow, 1), " Ss", "TBs", " Ss", 'T', Items.stick, 's', Items.string, 'S',
                                Blocks.stone, 'B', Items.bow);
         GameRegistry.addRecipe(new ItemStack(StoneBow, 1), "sS ", "sBT", "sS ", 'T', Items.stick, 's', Items.string, 'S',
@@ -139,14 +148,6 @@ public class MoreBows {
                                Items.ender_eye);
         GameRegistry.addRecipe(new ItemStack(FrostBow, 1), " IR", "SER", " IR", 'R', Items.string, 'I', Blocks.ice, 'S',
                                Items.snowball, 'E', IronBow);
-    }
-
-    private void registerEntities() {
-        /* I'm not sure how this works. */
-        EntityRegistry.registerModEntity(ArrowSpawner.class, "ArrowSpawner", 1, this, 64, 20, true);
-        EntityRegistry.registerModEntity(FireArrow.class, "FireArrow", 2, this, 64, 20, true);
-        EntityRegistry.registerModEntity(FrostArrow.class, "FrostArrow", 3, this, 64, 20, true);
-        EntityRegistry.registerModEntity(HitArrow.class, "HitArrow", 4, this, 64, 20, true);
     }
 
 }

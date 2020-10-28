@@ -11,44 +11,38 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 public class HitArrow extends EntityArrow {
 
     /* TODO remove if not needed */
-    @Deprecated
     protected String particle = "portal";
+    protected EntityArrow self;
 
     public HitArrow(World world) {
         super(world);
+        self = this;
         MinecraftForge.EVENT_BUS.register(this);
     }
 
     public HitArrow(World world, double var1, double var2, double var3) {
         super(world, var1, var2, var3);
+        self = this;
         MinecraftForge.EVENT_BUS.register(this);
     }
 
     public HitArrow(World world, EntityLivingBase living1, EntityLivingBase living2, float var1, float var2) {
         super(world, living1, living2, var1, var2);
+        self = this;
         MinecraftForge.EVENT_BUS.register(this);
     }
 
     public HitArrow(World world, EntityLivingBase living, float var) {
         super(world, living, var);
+        self = this;
         MinecraftForge.EVENT_BUS.register(this);
-    }
-
-    @Override
-    public void setDead() {
-        MinecraftForge.EVENT_BUS.unregister(this);
-        super.setDead();
-    }
-
-    protected EntityArrow checkThis() {
-        return this;
     }
 
     /* TODO Tidy up and merge more logic if possible */
     @SubscribeEvent
     public void hitListen(LivingAttackEvent event) {
         //iDiamondhunter.morebows.MoreBows.modLog.error("Test ParticleArrow " + event.entity.worldObj.isRemote + " test " +  this.getClass().getName() + " " + this.toString()); //debug
-        if  (!event.entity.worldObj.isRemote && (checkThis() == event.source.getSourceOfDamage())) {
+        if  (!event.entity.worldObj.isRemote && (self == event.source.getSourceOfDamage())) {
             //iDiamondhunter.morebows.MoreBows.modLog.error("Test ParticleArrow " + event.entity.worldObj.isRemote); //debug
             // TODO Document
             //event.entity.worldObj.spawn
@@ -73,6 +67,12 @@ public class HitArrow extends EntityArrow {
         // original event.entity.worldObj.spawnParticle(particle, (event.entity.posX + (rand.nextFloat() * event.entity.width * 2.0F)) - event.entity.width, event.entity.posY + 0.5D + (rand.nextFloat() * event.entity.height), (event.entity.posZ + (rand.nextFloat() * event.entity.width * 2.0F)) - event.entity.width, rand.nextGaussian() * 0.02D, rand.nextGaussian() * 0.02D, rand.nextGaussian() * 0.02D);
         //server.func_147487_a(particle, (event.entity.posX + (rand.nextFloat() * event.entity.width * 2.0F)) - event.entity.width, event.entity.posY + 0.5D + (rand.nextFloat() * event.entity.height), (event.entity.posZ + (rand.nextFloat() * event.entity.width * 2.0F)) - event.entity.width, numPart /* Number of particles? */, rand.nextGaussian() * 0.02D, rand.nextGaussian() * 0.02D, rand.nextGaussian() * 0.02D, vel /* Velocity? Not sure... */);
         server.func_147487_a(particle, (event.entity.posX + (rand.nextFloat() * event.entity.width * 2.0F)) - event.entity.width, event.entity.posY + 0.5D + (rand.nextFloat() * event.entity.height), (event.entity.posZ + (rand.nextFloat() * event.entity.width * 2.0F)) - event.entity.width, numPart /* Number of particles? */, 0, 0, 0, vel /* Velocity? Not sure... */);
+    }
+
+    @Override
+    public void setDead() {
+        MinecraftForge.EVENT_BUS.unregister(this);
+        super.setDead();
     }
 
 }

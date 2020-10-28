@@ -6,7 +6,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -32,13 +31,13 @@ public class ArrowSpawner extends Entity {
         //this.setDead();
     }
 
-    public ArrowSpawner(World world, EntityLivingBase living /* TODO replace with something better */, float shotVelocity, EntityArrow[] arrows) {
+    public ArrowSpawner(World world, double posX, double posY, double posZ, float shotVelocity, EntityArrow[] arrows) {
         this(world);
         //creator = living;
         this.shotVelocity = shotVelocity;
-        posX = living.posX;
-        posY = living.posY;
-        posZ = living.posZ;
+        this.posX = posX;
+        this.posY = posY;
+        this.posZ = posZ;
 
         if (arrows.length != 6) {
             // TODO Fix
@@ -56,6 +55,11 @@ public class ArrowSpawner extends Entity {
 
     @Override
     public boolean canBeCollidedWith() {
+        return false;
+    }
+
+    @Override
+    public boolean canRenderOnFire() {
         return false;
     }
 
@@ -84,11 +88,6 @@ public class ArrowSpawner extends Entity {
 
     @Override
     public boolean isBurning() {
-        return false;
-    }
-
-    @Override
-    public boolean canRenderOnFire() {
         return false;
     }
 

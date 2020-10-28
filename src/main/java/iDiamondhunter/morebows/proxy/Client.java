@@ -5,7 +5,6 @@ import iDiamondhunter.morebows.client.NoRender;
 import iDiamondhunter.morebows.entities.ArrowSpawner;
 
 /** TODO Remove if not needed */
-@Deprecated
 public class Client extends Common {
 
     @Override
