@@ -93,6 +93,7 @@ public class FrostArrow extends EntityArrow { //TODO re-implement rendering of s
         // inGround is used to store this information.
         if (arrowShake == 7) {
             inGround = true;
+            canBePickedUp = 0;
         }
 
         if (inGround) {
@@ -136,6 +137,7 @@ public class FrostArrow extends EntityArrow { //TODO re-implement rendering of s
 
                 // It's actually still in the ground but we just don't care anymore.
                 inGround = false;
+                setDead();
             }
         } else if (crit && !worldObj.isRemote) { //TODO: Replace with sided proxy, make sure you're actually just supposed to spawn particles on server
             for (int i = 0; i < 4; ++i) {
