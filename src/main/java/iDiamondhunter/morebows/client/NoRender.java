@@ -3,6 +3,7 @@ package iDiamondhunter.morebows.client;
 import net.minecraft.client.renderer.entity.RenderEntity;
 import net.minecraft.entity.Entity;
 
+/* TODO Remove if possible */
 public class NoRender extends RenderEntity {
 
     @Override

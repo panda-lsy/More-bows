@@ -1,6 +1,6 @@
 package iDiamondhunter.morebows.bows;
 
-import iDiamondhunter.morebows.entities.FireArrow;
+import iDiamondhunter.morebows.entities.CustomArrow;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,9 +28,10 @@ public class FlameBow extends CustomBow {
         }
     }
 
+    /* TODO Remove somehow */
     @Override
     public void setArrows(World world, EntityPlayer player) {
-        arrows = new EntityArrow[] { new FireArrow(world, player, shotVelocity * 2.0F) };
+        arrows = new EntityArrow[] { new CustomArrow(world, player, shotVelocity * 2.0F, true) };
     }
 
 }

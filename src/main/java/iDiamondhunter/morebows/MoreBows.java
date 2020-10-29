@@ -16,14 +16,14 @@ import iDiamondhunter.morebows.bows.FlameBow;
 import iDiamondhunter.morebows.bows.FrostBow;
 import iDiamondhunter.morebows.bows.MultiBow;
 import iDiamondhunter.morebows.entities.ArrowSpawner;
-import iDiamondhunter.morebows.entities.FireArrow;
+import iDiamondhunter.morebows.entities.CustomArrow;
 import iDiamondhunter.morebows.entities.FrostArrow;
-import iDiamondhunter.morebows.entities.HitArrow;
 import iDiamondhunter.morebows.proxy.Common;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 
 @Mod(modid = MoreBows.MOD_ID, useMetadata = true)
 public class MoreBows {
@@ -40,7 +40,7 @@ public class MoreBows {
     /** TODO Remove before release? */
     public static Logger modLog;
 
-    /* TODO: Make proxies, re-evaluate how & where stuff should be declared & initialized. */
+    /* TODO: Re-evaluate how & where stuff should be declared & initialized. */
 
     public final static String DiamondBowName = "DiamondBow";
     public final static String GoldBowName = "GoldBow";
@@ -51,7 +51,7 @@ public class MoreBows {
     public final static String FlameBowName = "FlameBow";
     public final static String FrostBowName = "FrostBow";
 
-    /* This is super janky, rethink. */
+    /* This is super janky. */
     private final static String modSeperator = "morebows:";
 
     public final static Item DiamondBow = new CustomBow(1016, (byte) 0, new byte[] {8, 4}, 2.2F, 6F, 140, 2.25, 36000).setUnlocalizedName(DiamondBowName).setTextureName(modSeperator + DiamondBowName);
@@ -68,6 +68,7 @@ public class MoreBows {
         registerItems();
         registerEntities();
         proxy.register();
+        MinecraftForge.EVENT_BUS.register(new Util());
     }
 
     /** TODO Remove before release? */
@@ -103,9 +104,8 @@ public class MoreBows {
     private void registerEntities() {
         /* I'm not sure how this works. */
         EntityRegistry.registerModEntity(ArrowSpawner.class, "ArrowSpawner", 1, this, 64, 20, true);
-        EntityRegistry.registerModEntity(FireArrow.class, "FireArrow", 2, this, 64, 20, true);
+        EntityRegistry.registerModEntity(CustomArrow.class, "CustomArrow", 2, this, 64, 20, true);
         EntityRegistry.registerModEntity(FrostArrow.class, "FrostArrow", 3, this, 64, 20, true);
-        EntityRegistry.registerModEntity(HitArrow.class, "HitArrow", 4, this, 64, 20, true);
     }
 
     private void registerItems() {

@@ -26,19 +26,19 @@ public class CustomBow extends ItemBow {
     /* TODO: replace some of this, potentially move assignments to constructors, better names */
     private boolean alwaysCrit = false;
     protected EntityArrow[] arrows;
-    protected double damageMult = 1D;
-    protected int flameTime = 100;
+    private double damageMult = 1D;
+    private int flameTime = 100;
     @SideOnly(Side.CLIENT)
-    protected IIcon[] icons;
-    byte[] iconTimes = new byte[] {18, 13};
+    private IIcon[] icons;
+    public final byte[] iconTimes;
     private int maxUse = 72000;
-    protected float powerDiv = 20.0F;
+    private float powerDiv = 20.0F;
     private final EnumRarity rarity;
     /** TODO Remove this */
     protected float shotVelocity;
-    protected float velocityMult = 2.0F;
+    private float velocityMult = 2.0F;
 
-    /** TODO better parameter order, decide which variables should be set in the constructor (possibly provide a better default one) */
+    /** The "base" CustomBow initualiser. TODO better parameter order, decide which variables should be set in the constructor (possibly provide a better default one) */
     public CustomBow(int maxDamage, byte rarity, byte[] iconTimes) {
         maxStackSize = 1;
         setMaxDamage(maxDamage);
@@ -47,6 +47,8 @@ public class CustomBow extends ItemBow {
 
         if (iconTimes !=  null) {
             this.iconTimes = iconTimes;
+        } else {
+            this.iconTimes = new byte[] {18, 13};
         }
 
         EnumRarity detRare;
@@ -68,22 +70,28 @@ public class CustomBow extends ItemBow {
         this.rarity = detRare;
     }
 
+
+    // TODO Probably remove some of these
+    /* The most common contractor */
     public CustomBow(int maxDamage, byte rarity, byte[] iconTimes, float powerDiv) {
         this(maxDamage, rarity, iconTimes);
         this.powerDiv = powerDiv;
     }
 
+    /* Specialty method for use in constructing the fire bow */
     public CustomBow(int maxDamage, byte rarity, byte[] iconTimes, float powerDiv, double damageMult) {
         this(maxDamage, rarity, iconTimes);
         this.powerDiv = powerDiv;
         this.damageMult = damageMult;
     }
 
+    /* Specialty method for use in constructing the stone bow */
     public CustomBow(int maxDamage, byte rarity, byte[] iconTimes, float powerDiv, double damageMult, boolean alwaysCrit) {
         this(maxDamage, rarity, iconTimes, powerDiv, damageMult);
         this.alwaysCrit = alwaysCrit;
     }
 
+    /* Specialty method for use in constructing the gold and iron bows */
     public CustomBow(int maxDamage, byte rarity, byte[] iconTimes, float velocityMult, float powerDiv, int flameTime, double damageMult) {
         this(maxDamage, rarity, iconTimes);
         this.velocityMult = velocityMult;
@@ -92,6 +100,7 @@ public class CustomBow extends ItemBow {
         this.damageMult = damageMult;
     }
 
+    /* Specialty method for use in constructing the diamond bow */
     public CustomBow(int maxDamage, byte rarity, byte[] iconTimes, float velocityMult, float powerDiv, int flameTime, double damageMult, int maxUse) {
         this(maxDamage, rarity, iconTimes, velocityMult, powerDiv, flameTime, damageMult);
         this.maxUse = maxUse;
