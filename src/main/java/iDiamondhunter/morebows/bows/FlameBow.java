@@ -10,7 +10,7 @@ import net.minecraft.world.World;
 
 public class FlameBow extends CustomBow {
     public FlameBow() {
-        super(576, (byte) 0, new byte[] {14, 9}, 15F, 2.0D);
+        super(576, (byte) 1, new byte[] {14, 9}, 15F, 2.0D);
     }
 
     @Override

@@ -11,7 +11,7 @@ public class MultiBow extends CustomBow {
     protected boolean thirdArrow = false;
 
     public MultiBow() {
-        super(550, (byte) 0, new byte[] {12, 7}, 13F);
+        super(550, (byte) 2, new byte[] {12, 7}, 13F);
     }
 
     @Override

@@ -54,17 +54,21 @@ public class CustomBow extends ItemBow {
         EnumRarity detRare;
 
         switch (rarity) {
-        case 0:
+        case (byte) 1:
             detRare = EnumRarity.uncommon;
+            break;
 
-        case 1:
+        case (byte) 2:
             detRare = EnumRarity.rare;
+            break;
 
-        case 2:
+        case (byte) 3:
             detRare = EnumRarity.epic;
+            break;
 
         default:
             detRare = EnumRarity.common;
+            break;
         }
 
         this.rarity = detRare;

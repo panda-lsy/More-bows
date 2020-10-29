@@ -1,8 +1,8 @@
 package iDiamondhunter.morebows.bows;
 
-import iDiamondhunter.morebows.Util;
 import iDiamondhunter.morebows.entities.ArrowSpawner;
 import iDiamondhunter.morebows.entities.CustomArrow;
+import iDiamondhunter.morebows.proxy.Common;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
@@ -14,7 +14,7 @@ import net.minecraftforge.common.MinecraftForge;
 public class EnderBow extends CustomBow {
 
     public EnderBow() {
-        super(384, (byte) 0, null, 22F);
+        super(384, (byte) 3, null, 22F);
         MinecraftForge.EVENT_BUS.register(this);
     }
 
@@ -22,7 +22,7 @@ public class EnderBow extends CustomBow {
     @Override
     public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
         if  (!entityLiving.worldObj.isRemote) {
-            Util.spawnParticle((WorldServer) entityLiving.worldObj, entityLiving, "portal");
+            Common.spawnParticle((WorldServer) entityLiving.worldObj, entityLiving, "portal");
         }
 
         return false;
