@@ -1,36 +1,32 @@
 package iDiamondhunter.morebows.bows;
 
+import iDiamondhunter.morebows.MoreBows;
 import iDiamondhunter.morebows.entities.ArrowSpawner;
 import iDiamondhunter.morebows.entities.CustomArrow;
-import iDiamondhunter.morebows.proxy.Common;
+import iDiamondhunter.morebows.entities.CustomArrow.EnumArrowType;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.MinecraftForge;
 
 public class EnderBow extends CustomBow {
 
     public EnderBow() {
-        super(384, (byte) 3, null, 22F);
-        MinecraftForge.EVENT_BUS.register(this);
+        super(384, EnumRarity.epic, null, 22F, 1D, false, EnumArrowType.base);
     }
 
     /** TODO Document */
     @Override
     public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
-        if  (!entityLiving.worldObj.isRemote) {
-            Common.spawnParticle((WorldServer) entityLiving.worldObj, entityLiving, "portal");
-        }
-
+        MoreBows.spawnParticle(entityLiving.worldObj, entityLiving, "portal");
         return false;
     }
 
     @Override
-    public void setArrows(World world, EntityPlayer player) {
-        super.arrows = new EntityArrow[] {
+    public EntityArrow[] setArrows(World world, EntityPlayer player, float shotVelocity) {
+        final EntityArrow[] arrs = new EntityArrow[] {
             new CustomArrow(world, player, shotVelocity * 2.0F),
             new CustomArrow(world, player, shotVelocity * 1F),
             new CustomArrow(world, player, shotVelocity * 1.2F),
@@ -38,17 +34,17 @@ public class EnderBow extends CustomBow {
             new CustomArrow(world, player, shotVelocity * 1.75F),
             new CustomArrow(world, player, shotVelocity * 1.825F)
         };
-        arrows[1].canBePickedUp = 2;
-        arrows[2].canBePickedUp = 2;
-        arrows[3].canBePickedUp = 2;
-        arrows[4].canBePickedUp = 2;
-        arrows[5].canBePickedUp = 2;
+        arrs[1].canBePickedUp = 2;
+        arrs[2].canBePickedUp = 2;
+        arrs[3].canBePickedUp = 2;
+        arrs[4].canBePickedUp = 2;
+        arrs[5].canBePickedUp = 2;
+        return arrs;
     }
 
-    /** TODO Decide if the player only gets one arrow back or consumes the amount that they shoot, replace TimerTask with tick counting (see {@code MoreArrowsTask}). */
     @Override
-    public void spawnArrows(World world, EntityPlayer player) {
-        world.spawnEntityInWorld(new ArrowSpawner(world, player.posX, player.posY, player.posZ, shotVelocity, arrows));
+    protected void spawnArrows(World world, EntityPlayer player, float shotVelocity, EntityArrow[] arrs) {
+        world.spawnEntityInWorld(new ArrowSpawner(world, player.posX, player.posY, player.posZ, shotVelocity, arrs));
     }
 
 }

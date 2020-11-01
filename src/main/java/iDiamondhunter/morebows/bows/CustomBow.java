@@ -2,6 +2,8 @@ package iDiamondhunter.morebows.bows;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import iDiamondhunter.morebows.entities.CustomArrow;
+import iDiamondhunter.morebows.entities.CustomArrow.EnumArrowType;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
@@ -23,27 +25,35 @@ import net.minecraftforge.event.entity.player.ArrowLooseEvent;
  *
  **/
 public class CustomBow extends ItemBow {
-    /* TODO: replace some of this, potentially move assignments to constructors, better names */
-    private boolean alwaysCrit = false;
-    protected EntityArrow[] arrows;
-    private double damageMult = 1D;
-    private int flameTime = 100;
+
+    private final boolean alwaysCrit;
+    private final double damageMult;
+    private final int flameTime;
+    private final int maxUse;
+    private final float powerDiv;
+    private final EnumRarity rarity;
+    private final EnumArrowType arrowType;
+    private final float velocityMult;
+
+    private EntityArrow[] arrows;
+
     @SideOnly(Side.CLIENT)
     private IIcon[] icons;
     public final byte[] iconTimes;
-    private int maxUse = 72000;
-    private float powerDiv = 20.0F;
-    private final EnumRarity rarity;
-    /** TODO Remove this */
-    protected float shotVelocity;
-    private float velocityMult = 2.0F;
 
-    /** The "base" CustomBow initualiser. TODO better parameter order, decide which variables should be set in the constructor (possibly provide a better default one) */
-    public CustomBow(int maxDamage, byte rarity, byte[] iconTimes) {
+    private final static int defaultFlameTime = 100;
+    private final static int defaultMaxUse = 72000;
+    private final static float defaultPowerDiv = 20.0F;
+    private final static float defaultVelocityMult = 2.0F;
+    private final static EnumArrowType defaultArrowType = EnumArrowType.notmb;
+
+    public CustomBow(int maxDamage, EnumRarity rarity, byte[] iconTimes, float velocityMult, float powerDiv, int flameTime, double damageMult, int maxUse, boolean alwaysCrit, EnumArrowType arrowType) {
+        //super();
         maxStackSize = 1;
         setMaxDamage(maxDamage);
         bFull3D = true;
         setCreativeTab(CreativeTabs.tabCombat);
+        this.alwaysCrit = alwaysCrit;
 
         if (iconTimes !=  null) {
             this.iconTimes = iconTimes;
@@ -51,90 +61,75 @@ public class CustomBow extends ItemBow {
             this.iconTimes = new byte[] {18, 13};
         }
 
-        EnumRarity detRare;
-
-        switch (rarity) {
-        case (byte) 1:
-            detRare = EnumRarity.uncommon;
-            break;
-
-        case (byte) 2:
-            detRare = EnumRarity.rare;
-            break;
-
-        case (byte) 3:
-            detRare = EnumRarity.epic;
-            break;
-
-        default:
-            detRare = EnumRarity.common;
-            break;
-        }
-
-        this.rarity = detRare;
-    }
-
-
-    // TODO Probably remove some of these
-    /* The most common contractor */
-    public CustomBow(int maxDamage, byte rarity, byte[] iconTimes, float powerDiv) {
-        this(maxDamage, rarity, iconTimes);
+        setMaxDamage(maxDamage);
+        this.rarity = rarity;
         this.powerDiv = powerDiv;
-    }
-
-    /* Specialty method for use in constructing the fire bow */
-    public CustomBow(int maxDamage, byte rarity, byte[] iconTimes, float powerDiv, double damageMult) {
-        this(maxDamage, rarity, iconTimes);
-        this.powerDiv = powerDiv;
-        this.damageMult = damageMult;
-    }
-
-    /* Specialty method for use in constructing the stone bow */
-    public CustomBow(int maxDamage, byte rarity, byte[] iconTimes, float powerDiv, double damageMult, boolean alwaysCrit) {
-        this(maxDamage, rarity, iconTimes, powerDiv, damageMult);
-        this.alwaysCrit = alwaysCrit;
-    }
-
-    /* Specialty method for use in constructing the gold and iron bows */
-    public CustomBow(int maxDamage, byte rarity, byte[] iconTimes, float velocityMult, float powerDiv, int flameTime, double damageMult) {
-        this(maxDamage, rarity, iconTimes);
         this.velocityMult = velocityMult;
-        this.powerDiv = powerDiv;
         this.flameTime = flameTime;
         this.damageMult = damageMult;
+        this.maxUse = maxUse;
+        this.arrowType = arrowType;
     }
 
-    /* Specialty method for use in constructing the diamond bow */
-    public CustomBow(int maxDamage, byte rarity, byte[] iconTimes, float velocityMult, float powerDiv, int flameTime, double damageMult, int maxUse) {
-        this(maxDamage, rarity, iconTimes, velocityMult, powerDiv, flameTime, damageMult);
-        this.maxUse = maxUse;
+    /* TODO Remove as many of these as possible */
+    public CustomBow(int maxDamage, EnumRarity rarity, byte[] iconTimes) {
+        this(maxDamage, rarity, iconTimes, defaultVelocityMult, defaultPowerDiv, defaultFlameTime, 1, defaultMaxUse, false, defaultArrowType);
+    }
+
+    public CustomBow(int maxDamage, EnumRarity rarity, byte[] iconTimes, float velocityMult, float powerDiv) {
+        this(maxDamage, rarity, iconTimes, velocityMult, powerDiv, defaultFlameTime, 1, defaultMaxUse, false, defaultArrowType);
+    }
+
+    public CustomBow(int maxDamage, EnumRarity rarity, byte[] iconTimes, float powerDiv, double damageMult, final boolean isCrit) {
+        this(maxDamage, rarity, iconTimes, defaultVelocityMult, powerDiv, defaultFlameTime, damageMult, defaultMaxUse, isCrit, defaultArrowType);
+    }
+
+    public CustomBow(int maxDamage, EnumRarity rarity, byte[] iconTimes, float powerDiv, double damageMult, final boolean isCrit, EnumArrowType arrowType) {
+        this(maxDamage, rarity, iconTimes, defaultVelocityMult, powerDiv, defaultFlameTime, damageMult, defaultMaxUse, isCrit, arrowType);
+    }
+
+    public CustomBow(int maxDamage, EnumRarity rarity, byte[] iconTimes, float velocityMult, float powerDiv, int flameTime) {
+        this(maxDamage, rarity, iconTimes, velocityMult, powerDiv, flameTime, 1, defaultMaxUse, false, defaultArrowType);
+    }
+
+    public CustomBow(int maxDamage, EnumRarity rarity, byte[] iconTimes, float velocityMult, float powerDiv, int flameTime, double damageMult) {
+        this(maxDamage, rarity, iconTimes, velocityMult, powerDiv, flameTime, damageMult, defaultMaxUse, false, defaultArrowType);
+    }
+
+    public CustomBow(int maxDamage, EnumRarity rarity, byte[] iconTimes, float velocityMult, float powerDiv, int flameTime, double damageMult, int maxUse) {
+        this(maxDamage, rarity, iconTimes, velocityMult, powerDiv, flameTime, damageMult, maxUse, false, defaultArrowType);
+    }
+
+    public CustomBow(int maxDamage, EnumRarity rarity, byte[] iconTimes, float velocityMult, float powerDiv, int flameTime, double damageMult, int maxUse, EnumArrowType arrowType) {
+        this(maxDamage, rarity, iconTimes, velocityMult, powerDiv, flameTime, damageMult, maxUse, false, arrowType);
     }
 
     /** TODO: replace this */
-    public void addModifiers(World world, ItemStack stack, Boolean noPickup) { //TODO rename later
+    public EntityArrow[] addModifiers(EntityArrow[] arrs, final ItemStack stack, final boolean noPickup, final boolean isCrit) { //TODO rename later
         //TODO THIS CODE IS AWFULL FIX IT
         //not just the readability, but also the fact that this is literal garbage to work with
         //when you need to insert an effect into this chain
         //see: ItemFlameBow
-        final boolean crit = (shotVelocity == 1.0F) || alwaysCrit;
-        final int k = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, stack);
-        final boolean powerEnch = (k > 0);
-        final int l = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, stack);
-        final boolean punchEnch = (l > 0);
+        final boolean crit = isCrit || alwaysCrit;
+        final int powerEnchResult = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, stack);
+        final boolean powerEnch = (powerEnchResult > 0);
+        final int knockback = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, stack);
+        final boolean punchEnch = (knockback > 0);
         final boolean flameEnch = (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack) > 0);
+        final boolean shouldMulti = (damageMult != 1);
 
         //default behavior
-        for (final EntityArrow arr : arrows) {
+        for (final EntityArrow arr : arrs) {
             if (crit) {
                 arr.setIsCritical(true);
             }
 
             if (powerEnch) {
-                arr.setDamage(arr.getDamage() + (k * 0.5D) + 0.5D);
+                arr.setDamage(arr.getDamage() + (powerEnchResult * 0.5D) + 0.5D);
             }
 
             if (punchEnch) {
-                arr.setKnockbackStrength(l);
+                arr.setKnockbackStrength(knockback);
             }
 
             if (flameEnch) {
@@ -145,8 +140,12 @@ public class CustomBow extends ItemBow {
                 arr.canBePickedUp = 2;
             }
 
-            arr.setDamage(arr.getDamage() * damageMult);
+            if (shouldMulti) {
+                arr.setDamage(arr.getDamage() * damageMult);
+            }
         }
+
+        return arrs;
     }
 
     /** TODO This is still a bit janky. Remove this message when you're certain this is a good way to do it. */
@@ -183,20 +182,18 @@ public class CustomBow extends ItemBow {
     /** TODO find a cleaner way to implement this, change like all of this. also make better names. */
     @Override
     public void onPlayerStoppedUsing(ItemStack stack, World world, EntityPlayer player, int remaining) {
-        int charge = getMaxItemUseDuration(stack) - remaining;
-        final ArrowLooseEvent event = new ArrowLooseEvent(player, stack, charge);
+        final int initCharge = getMaxItemUseDuration(stack) - remaining;
+        final ArrowLooseEvent event = new ArrowLooseEvent(player, stack, initCharge);
         MinecraftForge.EVENT_BUS.post(event);
 
         if (event.isCanceled()) {
             return;
         }
 
-        charge = event.charge;
-        // TODO Remove "flag", it isn't used when calling method externally.
-        final boolean flag = player.capabilities.isCreativeMode || (EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, stack) > 0);
+        final boolean allwaysShoots = player.capabilities.isCreativeMode || (EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, stack) > 0);
 
-        if (flag || player.inventory.hasItem(Items.arrow)) {
-            shotVelocity = charge / powerDiv;
+        if (allwaysShoots || player.inventory.hasItem(Items.arrow)) {
+            float shotVelocity = event.charge / powerDiv;
             shotVelocity = ((shotVelocity * shotVelocity) + (shotVelocity * 2.0F)) / 3.0F;
 
             if (shotVelocity < 0.1D) {
@@ -207,23 +204,22 @@ public class CustomBow extends ItemBow {
                 shotVelocity = 1.0F;
             }
 
-            setArrows(world, player);
-            addModifiers(world, stack, flag);
+            final boolean shouldCrit = (shotVelocity == 1.0F);
+            arrows = addModifiers(setArrows(world, player, shotVelocity), stack, allwaysShoots, shouldCrit);
             stack.damageItem(1, player);
-            playNoise(world, player);
+            playNoise(world, player, shotVelocity);
 
-            if (!flag) {
+            if (!allwaysShoots) {
                 player.inventory.consumeInventoryItem(Items.arrow);
             }
 
             if (!world.isRemote) {
-                spawnArrows(world, player);
+                spawnArrows(world, player, shotVelocity, arrows);
             }
         }
     }
 
-    /** TODO: Go through each bow and check if they have custom noises. Also make this better. */
-    public void playNoise(World world, EntityPlayer player) {
+    protected void playNoise(World world, EntityPlayer player, float shotVelocity) {
         world.playSoundAtEntity(player, "random.bow", 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
     }
 
@@ -242,17 +238,16 @@ public class CustomBow extends ItemBow {
         }
     }
 
-    /** TODO: replace this */
-    public void setArrows(World world, EntityPlayer player) { //TODO rename later
-        //default behavior
-        arrows = new EntityArrow[] { new EntityArrow(world, player, shotVelocity * velocityMult) };
+    public EntityArrow[] setArrows(World world, EntityPlayer player, float shotVelocity) { //TODO rename later
+        if (arrowType == EnumArrowType.notmb) {
+            return new EntityArrow[] { new EntityArrow(world, player, shotVelocity * velocityMult) };
+        } else {
+            return new EntityArrow[] { new CustomArrow(world, player, shotVelocity * velocityMult, arrowType) };
+        }
     }
 
-    /** TODO: replace this */
-    public void spawnArrows(World world, EntityPlayer player) { //TODO rename later
-
-        //TODO add logic to spawn arrows over time
-        for (final EntityArrow arr : arrows) {
+    protected void spawnArrows(World world, EntityPlayer player, float shotVelocity, EntityArrow[] arrs) {
+        for (final EntityArrow arr : arrs) {
             world.spawnEntityInWorld(arr);
         }
     }

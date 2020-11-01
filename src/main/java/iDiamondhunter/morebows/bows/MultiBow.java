@@ -4,18 +4,19 @@ import java.util.Random;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.world.World;
 
 public class MultiBow extends CustomBow {
-    private final Random rand = new Random();
-    protected boolean thirdArrow = false;
+    private static final Random rand = new Random();
+    private boolean thirdArrow = false;
 
     public MultiBow() {
-        super(550, (byte) 2, new byte[] {12, 7}, 13F);
+        super(550, EnumRarity.rare, new byte[] {12, 7}, 13F, 1D, false);
     }
 
     @Override
-    public void playNoise(World world, EntityPlayer player) {
+    protected void playNoise(World world, EntityPlayer player, float shotVelocity) {
         //TODO: Clean this up
         final double xpos = player.posX;
         final double ypos = player.posY;
@@ -28,43 +29,43 @@ public class MultiBow extends CustomBow {
         }
     }
 
-    /** TODO Decide if the player only gets one arrow back or consumes the amount that they shoot. */
     @Override
-    public void setArrows(World world, EntityPlayer player) {
-        arrows = new EntityArrow[] {
+    public EntityArrow[] setArrows(World world, EntityPlayer player, float shotVelocity) {
+        final EntityArrow[] arrs = new EntityArrow[] {
             new EntityArrow(world, player, shotVelocity * 2.0F),
             new EntityArrow(world, player, shotVelocity * 1.65F),
             new EntityArrow(world, player, shotVelocity * 1.275F)
         };
-        arrows[1].canBePickedUp = 0;
-        arrows[2].canBePickedUp = 0;
+        arrs[1].canBePickedUp = 0;
+        arrs[2].canBePickedUp = 0;
+        return arrs;
     }
 
     /** TODO Fix weird angles on arrows */
     @Override
-    public void spawnArrows(World world, EntityPlayer shooter) {
-        world.spawnEntityInWorld(arrows[0]);
-        world.spawnEntityInWorld(arrows[1]);
+    protected void spawnArrows(World world, EntityPlayer player, float shotVelocity, EntityArrow[] arrs) {
+        world.spawnEntityInWorld(arrs[0]);
+        world.spawnEntityInWorld(arrs[1]);
 
         //TODO figure out which is supposed to be changed and to what
-        if (arrows[1].shootingEntity.rotationYaw > 180) {
-            arrows[1].posX = arrows[1].posX + (arrows[1].shootingEntity.rotationYaw / 180);
+        if (arrs[1].shootingEntity.rotationYaw > 180) {
+            arrs[1].posX = arrs[1].posX + (arrs[1].shootingEntity.rotationYaw / 180);
         } else {
-            arrows[1].posX = arrows[1].posX + (arrows[1].shootingEntity.rotationYaw / 180);
+            arrs[1].posX = arrs[1].posX + (arrs[1].shootingEntity.rotationYaw / 180);
         }
 
-        arrows[0].setDamage(arrows[0].getDamage() * 1.5D);
-        arrows[1].setDamage(arrows[1].getDamage() * 1.3D);
-        arrows[2].setDamage(arrows[2].getDamage() * 1.15D);
+        arrs[0].setDamage(arrs[0].getDamage() * 1.5D);
+        arrs[1].setDamage(arrs[1].getDamage() * 1.3D);
+        arrs[2].setDamage(arrs[2].getDamage() * 1.15D);
         thirdArrow = (rand.nextInt(4) == 0);
 
         if (thirdArrow) {
-            world.spawnEntityInWorld(arrows[2]);
+            world.spawnEntityInWorld(arrs[2]);
 
-            if (arrows[2].shootingEntity.rotationYaw > 180) {
-                arrows[2].posX = arrows[2].posX - (arrows[2].shootingEntity.rotationYaw / 180);
+            if (arrs[2].shootingEntity.rotationYaw > 180) {
+                arrs[2].posX = arrs[2].posX - (arrs[2].shootingEntity.rotationYaw / 180);
             } else {
-                arrows[2].posX = arrows[2].posX - (arrows[2].shootingEntity.rotationYaw / 180);
+                arrs[2].posX = arrs[2].posX - (arrs[2].shootingEntity.rotationYaw / 180);
             }
         }
 

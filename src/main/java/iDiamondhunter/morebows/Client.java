@@ -1,17 +1,15 @@
-package iDiamondhunter.morebows.proxy;
+package iDiamondhunter.morebows;
 
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import iDiamondhunter.morebows.bows.CustomBow;
 import iDiamondhunter.morebows.client.NoRender;
 import iDiamondhunter.morebows.entities.ArrowSpawner;
-import iDiamondhunter.morebows.entities.FrostArrow;
 import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.init.Items;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 
-/** TODO Remove if not needed */
-public class Client extends Common {
+public class Client extends MoreBows {
 
     @SubscribeEvent
     public void FOVUpdate(FOVUpdateEvent event) {
@@ -31,9 +29,10 @@ public class Client extends Common {
     }
 
     @Override
-    public void register() {
+    protected void registerEntities() {
+        super.registerEntities();
         RenderingRegistry.registerEntityRenderingHandler(ArrowSpawner.class, new NoRender());
-        RenderingRegistry.registerEntityRenderingHandler(FrostArrow.class, new RenderSnowball(Items.snowball));
+        //RenderingRegistry.registerEntityRenderingHandler(FrostArrow.class, new RenderSnowball(Items.snowball));
     }
 
 }
