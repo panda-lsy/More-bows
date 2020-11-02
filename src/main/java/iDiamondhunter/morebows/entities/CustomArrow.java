@@ -1,7 +1,6 @@
 package iDiamondhunter.morebows.entities;
 
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
-import iDiamondhunter.morebows.MoreBows;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
@@ -13,13 +12,11 @@ import net.minecraft.world.World;
 
 public class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnData {
 
-    public enum EnumArrowType {
-
-        notmb, base, fire, frost;
-
+    public enum ArrowType {
+        NOT_CUSTOM, BASE, FIRE, FROST;
     }
     //* TODO Attempt to merge FrostArrow with this if possible (need to create custom renderer for the "snowball") */
-    private EnumArrowType type = EnumArrowType.base;
+    private ArrowType type = ArrowType.BASE;
     private boolean crit = false;
 
     private byte inTicks = -1;
@@ -41,10 +38,10 @@ public class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnDa
         super(world, living, var);
     }
 
-    public CustomArrow(World world, EntityLivingBase living, float var, EnumArrowType type) {
+    public CustomArrow(World world, EntityLivingBase living, float var, ArrowType type) {
         this(world, living, var);
 
-        if ((this.type = type) == EnumArrowType.notmb /* This should never happen, notmb is only used as a reference point. */) {
+        if ((this.type = type) == ArrowType.NOT_CUSTOM /* This should never happen, NOT_CUSTOM is only used as a reference point. */) {
             setDead();
         }
     }
@@ -53,9 +50,17 @@ public class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnDa
         return crit;
     }
 
+    /*public boolean isBurning() {
+        if (type == ArrowType.FIRE) {
+            return true;
+        } else {
+            return super.isBurning();
+        }
+    }*/
+
     @Override
     public boolean getIsCritical() {
-        if (type == EnumArrowType.frost) {
+        if (type == ArrowType.FROST) {
             //System.out.println("getIsCritical false " + type);
             return false;
             /* Obviously, you're just a bad shot :D
@@ -81,7 +86,7 @@ public class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnDa
         }
     }
 
-    public final EnumArrowType getType() {
+    public final ArrowType getType() {
         return type;
     }
 
@@ -89,7 +94,7 @@ public class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnDa
     public void onUpdate() {
         super.onUpdate();
 
-        if (type == EnumArrowType.frost) {
+        if (type == ArrowType.FROST) {
             // Hack to determine when the arrow has hit the ground. inGround is a private field.
             // Access transformers can be used for this, but they're are annoying to deal with and they aren't always safe.
             // However, instead we can take advantage of the fact that arrowShake is always set to 7 after an arrow has hit the ground.
@@ -144,14 +149,20 @@ public class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnDa
             } else if (crit) {
                 //System.out.println(getEntityId() + " very crit");
                 for (int i = 0; i < 4; ++i) {
-                    //this.worldObj.spawnParticle("splash", this.posX + this.motionX * (double)i / 4.0D, this.posY + this.motionY * (double)i / 4.0D, this.posZ + this.motionZ * (double)i / 4.0D, -this.motionX, -this.motionY + 0.2D, -this.motionZ);
-                    MoreBows.spawnParticle(worldObj, this, "splash");
+                    worldObj.spawnParticle("splash", posX + ((motionX * i) / 4.0D), posY + ((motionY * i) / 4.0D), posZ + ((motionZ * i) / 4.0D), -motionX, -motionY + 0.2D, -motionZ);
+                    //MoreBows.trySpawnParticle(worldObj, this, "splash", ParicleDisplacement.TRAIL, 0);
                 }
 
                 //MoreBows.spawnParticle(this.worldObj, this, "splash", 4);
             }
         }
 
+        // else if (crit && type == ArrowType.FIRE) {
+        //    if (((ticksExisted + 1) % 2) == 0) {
+        //    	  System.out.println("ticks existed " + this.ticksExisted);
+        //        worldObj.spawnParticle("flame", posX /* + (motionX / 4.0D) */, posY /* + (motionY / 4.0D) */, posZ /* + (motionZ / 4.0D) */, (-motionX / ((8 * rand.nextGaussian() + 4))), ((-motionY + 0.2D) / ((2 * rand.nextGaussian() + 2))), (-motionZ / ((4 * rand.nextGaussian() + 4))));
+        //    }
+        //}
         //else if (crit && !worldObj.isRemote) { //TODO: Replace with sided proxy, make sure you're actually just supposed to spawn particles on server
         //    for (int i = 0; i < 4; ++i) {
         //        worldObj.spawnParticle("crit", posX + ((motionX * i) / 4.0D), posY + ((motionY * i) / 4.0D), posZ + ((motionZ * i) / 4.0D), -motionX, -motionY + 0.2D, -motionZ);
@@ -163,15 +174,16 @@ public class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnDa
     public void readEntityFromNBT(NBTTagCompound tag) {
         super.readEntityFromNBT(tag);
         inTicks = tag.getByte("inTicks");
-        //EnumArrowType.valueOf(arg0)
-        //EnumArrowType[] allTypes = EnumArrowType.values();
+        //ArrowType.valueOf(arg0)
+        //ArrowType[] allTypes = ArrowType.values();
         //type = allTypes[tag.getByte("type")];
-        //type = EnumArrowType.valueOf(tag.getString("type"));
+        //type = ArrowType.valueOf(tag.getString("type"));
 
-        if ((type = EnumArrowType.valueOf(tag.getString("type"))) == EnumArrowType.notmb /* This should never happen, notmb is only used as a reference point. */) {
+        if ((type = ArrowType.valueOf(tag.getString("type"))) == ArrowType.NOT_CUSTOM /* This should never happen, NOT_CUSTOM is only used as a reference point. */) {
             setDead();
         }
 
+        crit = tag.getBoolean("crit");
         //System.out.println("load from nbt " + type.name());
     }
 
@@ -180,9 +192,10 @@ public class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnDa
         //int nameLength = additionalData.readInt();
         //byte[] typeBytes = additionalData.readBytes(nameLength).array();
         //String typeName = StringUtils.newStringIso8859_1(typeBytes);
-        //type = EnumArrowType.valueOf(typeName);
+        //type = ArrowType.valueOf(typeName);
         //System.out.println("readSpawnData - Recive " + typeBytes + " \nName is " + typeName);
-        type = EnumArrowType.values()[additionalData.readInt()];
+        type = ArrowType.values()[additionalData.readInt()];
+        crit = additionalData.readBoolean();
     }
 
     @Override
@@ -197,6 +210,7 @@ public class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnDa
         super.writeEntityToNBT(tag);
         tag.setByte("inTicks", inTicks);
         tag.setString("type", type.name());
+        tag.setBoolean("crit", crit);
     }
 
     @Override
@@ -207,6 +221,7 @@ public class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnDa
         //buffer.writeBytes(typeBytes);
         //System.out.println("writeSpawnData - Send " + typeBytes);
         buffer.writeInt(type.ordinal());
+        buffer.writeBoolean(crit);
     }
 
 }

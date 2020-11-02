@@ -3,7 +3,7 @@ package iDiamondhunter.morebows.bows;
 import iDiamondhunter.morebows.MoreBows;
 import iDiamondhunter.morebows.entities.ArrowSpawner;
 import iDiamondhunter.morebows.entities.CustomArrow;
-import iDiamondhunter.morebows.entities.CustomArrow.EnumArrowType;
+import iDiamondhunter.morebows.entities.CustomArrow.ArrowType;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
@@ -14,13 +14,13 @@ import net.minecraft.world.World;
 public class EnderBow extends CustomBow {
 
     public EnderBow() {
-        super(384, EnumRarity.epic, null, 22F, 1D, false, EnumArrowType.base);
+        super(384, EnumRarity.epic, (byte[]) null, 22F, 1D, ArrowType.BASE);
     }
 
     /** TODO Document */
     @Override
     public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
-        MoreBows.spawnParticle(entityLiving.worldObj, entityLiving, "portal");
+        MoreBows.trySpawnParticle(entityLiving.worldObj, entityLiving, "portal", true, 1);
         return false;
     }
 

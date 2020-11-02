@@ -2,6 +2,7 @@ package iDiamondhunter.morebows.bows;
 
 import java.util.Random;
 
+import iDiamondhunter.morebows.entities.CustomArrow.ArrowType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.EnumRarity;
@@ -12,7 +13,7 @@ public class MultiBow extends CustomBow {
     private boolean thirdArrow = false;
 
     public MultiBow() {
-        super(550, EnumRarity.rare, new byte[] {12, 7}, 13F, 1D, false);
+        super(550, EnumRarity.rare, new byte[] {12, 7}, 13F, 1D, ArrowType.BASE);
     }
 
     @Override
