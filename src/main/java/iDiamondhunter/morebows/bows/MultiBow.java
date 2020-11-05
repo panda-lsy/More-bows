@@ -16,6 +16,7 @@ public class MultiBow extends CustomBow {
         super(550, EnumRarity.rare, new byte[] {12, 7}, 13F, 1D, ArrowType.BASE);
     }
 
+    /** Plays the noises at each arrow */
     @Override
     protected void playNoise(World world, EntityPlayer player, float shotVelocity) {
         //TODO: Clean this up
@@ -30,6 +31,7 @@ public class MultiBow extends CustomBow {
         }
     }
 
+    /* Creates the multiple arrows of the bow. TODO Replace this */
     @Override
     public EntityArrow[] setArrows(World world, EntityPlayer player, float shotVelocity) {
         final EntityArrow[] arrs = new EntityArrow[] {
@@ -42,7 +44,7 @@ public class MultiBow extends CustomBow {
         return arrs;
     }
 
-    /** TODO Fix weird angles on arrows */
+    /* Spawns the multiple arrows of the bow. TODO Replace this, fix weird angles on arrows */
     @Override
     protected void spawnArrows(World world, EntityPlayer player, float shotVelocity, EntityArrow[] arrs) {
         world.spawnEntityInWorld(arrs[0]);
@@ -69,11 +71,6 @@ public class MultiBow extends CustomBow {
                 arrs[2].posX = arrs[2].posX - (arrs[2].shootingEntity.rotationYaw / 180);
             }
         }
-
-        //iDiamondhunter.morebows.MoreBows.modLog.error("Arrows");
-        //iDiamondhunter.morebows.MoreBows.modLog.error("Test arrows[0]: rot yaw " + arrows[0].shootingEntity.rotationYaw + " divided rot yaw " + (arrows[0].shootingEntity.rotationYaw / 180) + " pos x " + arrows[0].posX); //debug
-        //iDiamondhunter.morebows.MoreBows.modLog.error("Test arrows[1]: rot yaw " + arrows[1].shootingEntity.rotationYaw + " divided rot yaw " + (arrows[1].shootingEntity.rotationYaw / 180) + " pos x " + arrows[1].posX); //debug
-        //iDiamondhunter.morebows.MoreBows.modLog.error("Test arrows[2]: rot yaw " + arrows[2].shootingEntity.rotationYaw + " divided rot yaw " + (arrows[2].shootingEntity.rotationYaw / 180) + " pos x " + arrows[2].posX); //debug
     }
 
 }

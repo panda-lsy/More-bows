@@ -10,15 +10,11 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
+/* This entity is responsible for storing and spawning the time delayed "bonus" arrows of the ender bow. TODO Cleanup, more documentation */
 public class ArrowSpawner extends Entity {
 
-    //@Deprecated
-    //private final static String bonusArrowSounds = "mob.endermen.portal";
-    //@Deprecated
-    //private final static String defaultShotSound = "random.bow";
     private EntityArrow[] arrows;
     private byte existed = 0;
-    //private EntityLivingBase creator;
 
     Random rand = new Random();
     private float shotVelocity;
@@ -28,12 +24,10 @@ public class ArrowSpawner extends Entity {
         noClip = true;
         preventEntitySpawning = false;
         isImmuneToFire = true;
-        //this.setDead();
     }
 
     public ArrowSpawner(World world, double posX, double posY, double posZ, float shotVelocity, EntityArrow[] arrows) {
         this(world);
-        //creator = living;
         this.shotVelocity = shotVelocity;
         this.posX = posX;
         this.posY = posY;
@@ -41,7 +35,7 @@ public class ArrowSpawner extends Entity {
 
         if (arrows.length != 6) {
             // TODO Fix
-            //iDiamondhunter.morebows.MoreBows.modLog.error("ArrowSpawner expects 6 arrows, got " + arrows.length + " instead! It will not spawn any arrows until I implement better methods.");
+            //System.out.println("ArrowSpawner expects 6 arrows, got " + arrows.length + " instead! It will not spawn any arrows until I implement better methods."); // debug
             setDead();
         }
 
@@ -113,7 +107,7 @@ public class ArrowSpawner extends Entity {
 
         if (!worldObj.isRemote) {
             if (arrows == null) {
-                //iDiamondhunter.morebows.MoreBows.modLog.info("Bonus ender arrows lost! Will fix this soon..."); // debug
+                //System.out.println("Bonus ender arrows lost! Will fix this soon..."); // debug
                 setDead();
                 return;
             }
@@ -124,7 +118,7 @@ public class ArrowSpawner extends Entity {
             }
 
             if (existed == 61) {
-                // Second batch of arrows
+                // Second batch of arrows TODO Check if accurate to older versions of the mod
                 worldObj.spawnEntityInWorld(arrows[1]);
                 worldObj.playSoundAtEntity(arrows[1], "mob.endermen.portal", 0.5F, (1F / ((rand.nextFloat() * 0.4F) + 1F)) + (shotVelocity * 0.4F));
                 worldObj.spawnEntityInWorld(arrows[2]);
@@ -151,11 +145,13 @@ public class ArrowSpawner extends Entity {
         }
     }
 
+    /** This method reads the entity specific data from saved NBT data, including the stored arrows. TODO Better documentation */
     @Override
     protected void readEntityFromNBT(NBTTagCompound tag) {
-        //iDiamondhunter.morebows.MoreBows.modLog.info("reading"); //debug
+        // Variables related to this entity
         existed = tag.getByte("existed");
         shotVelocity = tag.getFloat("shotVelocity");
+        // Variables related to the arrows stored by this entity
         final int arrowsArmount = tag.getInteger("arrowsAmount");
         arrows = new EntityArrow[arrowsArmount];
 
@@ -163,37 +159,41 @@ public class ArrowSpawner extends Entity {
         for (int i = 0; i < arrowsArmount; i++) {
             final NBTTagCompound arrTag = tag.getCompoundTag("arrows").getCompoundTag("arrow" + i);
             final String arrType = tag.getCompoundTag("arrowsType").getString("arrow" + i);
-            //iDiamondhunter.morebows.MoreBows.modLog.info("arrow[" + i + "] " + arrTag.toString() + " of type " + arrType); //debug
-            arrows[i] = (EntityArrow) EntityList.createEntityByName(arrType, worldObj);
-            //iDiamondhunter.morebows.MoreBows.modLog.info("arrow[" + i + "] " + arrows[i].toString()); //debug
-            arrows[i].readFromNBT(arrTag);
-        }
 
-        //iDiamondhunter.morebows.MoreBows.modLog.info("arrows " + arrows.toString() + " zero " + arrows[0].toString() + " one " + arrows[1].toString()); //debug
+            try {
+                // Attempt to spawn in the specified entity while assuming that the data saved is completely valid
+                arrows[i] = (EntityArrow) EntityList.createEntityByName(arrType, worldObj);
+                arrows[i].readFromNBT(arrTag);
+            } catch (final Exception e) {
+                // This can fail in numerous ways, so it's probably for the best just to create a new arrow.
+                e.printStackTrace();
+                arrows[i] = new EntityArrow(worldObj);
+            }
+        }
     }
 
+    /** This method saves the entity specific data to NBT data, including the stored arrows. TODO Better documentation */
     @Override
     protected void writeEntityToNBT(NBTTagCompound tag) {
+        // Variables related to this entity
+        tag.setByte("existed", existed);
+        tag.setFloat("shotVelocity", shotVelocity);
+        // Variables related to the arrows stored by this entity
+        tag.setInteger("arrowsAmount", arrows.length);
         final NBTTagCompound arrowsTag = new NBTTagCompound();
         final NBTTagCompound arrowsType = new NBTTagCompound();
-
-        //iDiamondhunter.morebows.MoreBows.modLog.info("writing"); //debug
 
         /** An over engineered system to save an arbitrary amount of entities */
         for (int i = 0; i < arrows.length; i++) {
             final NBTTagCompound arrTag = new NBTTagCompound();
             arrows[i].writeToNBT(arrTag);
-            //iDiamondhunter.morebows.MoreBows.modLog.info("arrow[" + i + "] " + arrTag.toString() + " getEntityString " + EntityList.getEntityString(arrows[i]) + " id " + EntityList.getEntityID(arrows[i])); //debug
             arrowsTag.setTag("arrow" + i, arrTag);
             arrowsType.setString("arrow" + i, EntityList.getEntityString(arrows[i]));
         }
 
-        //iDiamondhunter.morebows.MoreBows.modLog.info("arrows " + arrowsTag.toString()); //debug
-        tag.setByte("existed", existed);
-        tag.setFloat("shotVelocity", shotVelocity);
+        // These values are then saved with these tags
         tag.setTag("arrows", arrowsTag);
         tag.setTag("arrowsType", arrowsType);
-        tag.setInteger("arrowsAmount", arrows.length);
     }
 
 }

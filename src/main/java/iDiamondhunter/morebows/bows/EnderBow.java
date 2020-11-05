@@ -14,16 +14,17 @@ import net.minecraft.world.World;
 public class EnderBow extends CustomBow {
 
     public EnderBow() {
-        super(384, EnumRarity.epic, (byte[]) null, 22F, 1D, ArrowType.BASE);
+        super(215, EnumRarity.epic, new byte[] {19, 10}, 22F, 1D, ArrowType.BASE);
     }
 
-    /** TODO Document */
+    /** This method creates particles when left clicking with an ender bow. */
     @Override
     public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
         MoreBows.trySpawnParticle(entityLiving.worldObj, entityLiving, "portal", true, 1);
         return false;
     }
 
+    /* Creates the multiple ender arrows to use with the ArrowSpawner TODO Replace this */
     @Override
     public EntityArrow[] setArrows(World world, EntityPlayer player, float shotVelocity) {
         final EntityArrow[] arrs = new EntityArrow[] {

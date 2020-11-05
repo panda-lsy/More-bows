@@ -26,8 +26,9 @@ import net.minecraftforge.event.entity.player.ArrowLooseEvent;
  **/
 public class CustomBow extends ItemBow {
 
+    /* Default values for bow construction */
     private static final EnumRarity defaultRarity = EnumRarity.common;
-    private static final byte[] defaultIconTimes = {};
+    private static final byte[] defaultIconTimes = {18, 13};
     private static final double defaultDamageMult = 1D;
     private static final int defaultFlameTime = 100;
     private static final int defaultMaxDamage = 384;
@@ -35,33 +36,40 @@ public class CustomBow extends ItemBow {
     private static final float defaultVelocityMult = 2.0F;
     private static final ArrowType defaultArrowType = ArrowType.NOT_CUSTOM;
 
+    /* Bow instance variables */
     private final double damageMult;
     private final int flameTime;
     private final float powerDiv;
     private final EnumRarity rarity;
     private final ArrowType arrowType;
     private final float velocityMult;
+
+    /* Arrows to shoot for a given release of the bow. TODO Replace this. */
     private EntityArrow[] arrows;
 
+    /* Icon related variables */
     @SideOnly(Side.CLIENT)
     private IIcon[] icons;
-    public final byte[] iconTimes;
+    public final byte[] iconTimes; // TODO This is not a great solution, and could be considered a "magic number" in some ways.
 
     /* TODO Remove as many constructors as possible */
 
-    /* Reference method for each default option. This bow should be roughly the same as the vanilla bow. */
-    public CustomBow() {
+    /* Reference constructor with each default option. This bow should be roughly the same as the vanilla bow. */
+    /*public CustomBow() {
         this(defaultMaxDamage, defaultRarity, defaultIconTimes, defaultVelocityMult, defaultPowerDiv, defaultFlameTime, defaultDamageMult, defaultArrowType);
-    }
+    }*/
 
+    /** A constructor that is useful for a number of bows, as they only use these parameters. */
     public CustomBow(int maxDamage, EnumRarity rarity, byte[] iconTimes, float powerDiv, double damageMult, ArrowType arrowType) {
         this(maxDamage, rarity, iconTimes, defaultVelocityMult, powerDiv, defaultFlameTime, damageMult, arrowType);
     }
 
+    /** A constructor that can use every customization, minus a bow having a custom arrow. */
     public CustomBow(int maxDamage, EnumRarity rarity, byte[] iconTimes, float velocityMult, float powerDiv, int flameTime, double damageMult) {
         this(maxDamage, rarity, iconTimes, velocityMult, powerDiv, flameTime, damageMult, defaultArrowType);
     }
 
+    /** A constructor that can use every customization. */
     public CustomBow(int maxDamage, EnumRarity rarity, byte[] iconTimes, float velocityMult, float powerDiv, int flameTime, double damageMult, ArrowType arrowType) {
         //super();
         maxStackSize = 1;
@@ -72,7 +80,7 @@ public class CustomBow extends ItemBow {
         if (iconTimes !=  null) {
             this.iconTimes = iconTimes;
         } else {
-            this.iconTimes = new byte[] {18, 13};
+            this.iconTimes = defaultIconTimes;
         }
 
         setMaxDamage(maxDamage);
@@ -84,20 +92,18 @@ public class CustomBow extends ItemBow {
         this.arrowType = arrowType;
     }
 
-    /** TODO: replace this */
-    public EntityArrow[] addModifiers(EntityArrow[] arrs, final ItemStack stack, final boolean noPickup, final boolean isCrit) { //TODO rename later
-        //TODO THIS CODE IS AWFULL FIX IT
-        //not just the readability, but also the fact that this is literal garbage to work with
-        //when you need to insert an effect into this chain
-        //see: ItemFlameBow
+    /** This method handles adding or changing the properties of the arrow, based on a variety of factors including enchantments the bow has etc.
+     *  This is largely based on vanilla, with specific additions for this mod.
+     *  TODO: possibly replace this */
+    public EntityArrow[] addModifiers(EntityArrow[] arrs, final ItemStack stack, final boolean noPickup, final boolean isCrit) {
         final int powerEnchResult = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, stack);
         final boolean powerEnch = (powerEnchResult > 0);
         final int knockback = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, stack);
         final boolean punchEnch = (knockback > 0);
         final boolean flameEnch = (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack) > 0);
+        final boolean isFireArr = (arrowType == ArrowType.FIRE);
         final boolean shouldMulti = (damageMult != 1);
 
-        //default behavior
         for (final EntityArrow arr : arrs) {
             if (isCrit) { /* setIsCritical calls dataWatcher methods, avoid this unless needed with the check. */
                 arr.setIsCritical(true);
@@ -113,6 +119,14 @@ public class CustomBow extends ItemBow {
 
             if (flameEnch) {
                 arr.setFire(flameTime);
+
+                if (isFireArr) {
+                    arr.setDamage(arr.getDamage() * 1.25D); // TODO: Verify
+                }
+            }
+
+            if (isFireArr) {
+                arr.setFire(50); // TODO: Verify. I'm pretty sure the original mod did this.
             }
 
             if (noPickup) {
@@ -127,7 +141,7 @@ public class CustomBow extends ItemBow {
         return arrs;
     }
 
-    /** TODO This is still a bit janky. Remove this message when you're certain this is a good way to do it. */
+    /** This returns the bow sprite for a given duration of drawing the bow back. TODO This is still a bit janky. Remove this message when you're certain this is a good way to do it. */
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(ItemStack stack, int u, EntityPlayer p, ItemStack i, int useRem) {
@@ -153,7 +167,7 @@ public class CustomBow extends ItemBow {
         return rarity;
     }
 
-    /** TODO find a cleaner way to implement this, change like all of this. also make better names. */
+    /** This handles the process of shooting an arrow, with methods for specific parts of this process. These were intended to be overridden when needed, but this has been changed a bit since. TODO Cleanup. */
     @Override
     public void onPlayerStoppedUsing(ItemStack stack, World world, EntityPlayer player, int remaining) {
         final int initCharge = getMaxItemUseDuration(stack) - remaining;
@@ -193,11 +207,12 @@ public class CustomBow extends ItemBow {
         }
     }
 
+    /** This method plays the bow releasing noise for a given release of the bow. TODO Remove this. */
     protected void playNoise(World world, EntityPlayer player, float shotVelocity) {
         world.playSoundAtEntity(player, "random.bow", 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
     }
 
-    /* Overrides are used as ItemBow's icon related variables are not visible :( */
+    /** This method registers the icons of a given bow. Overrides are used as ItemBow's icon related variables are not visible :( */
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister iconReg) {
@@ -212,6 +227,7 @@ public class CustomBow extends ItemBow {
         }
     }
 
+    /** This method creates the arrows for a given release of the bow. TODO Remove this. */
     public EntityArrow[] setArrows(World world, EntityPlayer player, float shotVelocity) { //TODO rename later
         if (arrowType == ArrowType.NOT_CUSTOM) {
             return new EntityArrow[] { new EntityArrow(world, player, shotVelocity * velocityMult) };
@@ -220,6 +236,7 @@ public class CustomBow extends ItemBow {
         }
     }
 
+    /** This method spawns the arrows for a given release of the bow. TODO Remove this. */
     protected void spawnArrows(World world, EntityPlayer player, float shotVelocity, EntityArrow[] arrs) {
         for (final EntityArrow arr : arrs) {
             world.spawnEntityInWorld(arr);

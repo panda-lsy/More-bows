@@ -29,28 +29,25 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
-/* TODO: Document. */
+/* If you're reading this, I'm very sorry you have to deal with my code. */
 @Mod(modid = MoreBows.MOD_ID, useMetadata = true)
 public class MoreBows {
-    /* TODO: Document. */
+    /* Mod specific reusable values */
     public static final String MOD_ID = "MoreBows";
     private static final String modSeperator = "morebows:";
-    //private static final boolean isDev = true;
 
     private static Random rand = new Random();
 
-    /* TODO: Document. */
+    /* Mod instance */
     @Instance(MOD_ID)
     public static MoreBows inst;
 
-    /* TODO: Document. This is super janky. */
+    /* Mod proxy. TODO This is super janky, see if it's possible to remove this */
     @SidedProxy(clientSide = "iDiamondhunter.morebows.Client",
                 serverSide = "iDiamondhunter.morebows.MoreBows")
     public static MoreBows proxy;
 
-    //private final static float defaultPowerDiv = 20.0F;
-
-    /* TODO: Re-evaluate how & where stuff should be declared & initialized. */
+    /* Names of bows. TODO: Re-evaluate how & where stuff should be declared & initialized. */
     public final static String DiamondBowName = "DiamondBow";
     public final static String GoldBowName = "GoldBow";
     public final static String EnderBowName = "EnderBow";
@@ -59,29 +56,29 @@ public class MoreBows {
     public final static String MultiBowName = "MultiBow";
     public final static String FlameBowName = "FlameBow";
     public final static String FrostBowName = "FrostBow";
-    //public final static String zzz_DevBowName = "DevBow";
 
     private static final ArrowType defaultArrowType = ArrowType.NOT_CUSTOM;
 
-    /* This is super janky. */
+    /* Bow items. TODO: This is super janky. */
     public final static Item DiamondBow = new CustomBow(1016, EnumRarity.rare, new byte[] {8, 4}, 2.2F, 6F, 140, 2.25D).setUnlocalizedName(DiamondBowName).setTextureName(modSeperator + DiamondBowName);
-    public final static Item GoldBow = new CustomBow(550, EnumRarity.uncommon, new byte[] {8, 4}, 2.4F, 5F, 100, 1.5D).setUnlocalizedName(GoldBowName).setTextureName(modSeperator + GoldBowName);
+    public final static Item GoldBow = new CustomBow(68, EnumRarity.uncommon, new byte[] {8, 4}, 2.4F, 5F, 100, 1.5D).setUnlocalizedName(GoldBowName).setTextureName(modSeperator + GoldBowName);
     public final static Item EnderBow = new EnderBow().setUnlocalizedName(EnderBowName).setTextureName(modSeperator + EnderBowName);
     public final static Item StoneBow = new CustomBow(484, EnumRarity.common, (byte[]) null, 17F, 1.15D, defaultArrowType).setUnlocalizedName(StoneBowName).setTextureName(modSeperator + StoneBowName);
     public final static Item IronBow = new CustomBow(550, EnumRarity.common, new byte[] {16, 11}, 2.1F, 17F, 105, 1.5D).setUnlocalizedName(IronBowName).setTextureName(modSeperator + IronBowName);
     public final static Item MultiBow = new MultiBow().setUnlocalizedName(MultiBowName).setTextureName(modSeperator + MultiBowName);
     public final static Item FlameBow = new CustomBow(576, EnumRarity.uncommon, new byte[] {14, 9}, 15F, 2.0D, ArrowType.FIRE).setUnlocalizedName(FlameBowName).setTextureName(modSeperator + FlameBowName);
     public final static Item FrostBow = new CustomBow(550, EnumRarity.common, new byte[] {26, 13}, 26.0F, 1D, ArrowType.FROST).setUnlocalizedName(FrostBowName).setTextureName(modSeperator + FrostBowName);
-    //public final static Item zzz_DevBow = new CustomBow().setUnlocalizedName(zzz_DevBowName).setTextureName(modSeperator + StoneBowName);
 
-    /* TODO: Document. */
+    /** Calls the server world specific method to spawn a particle on the server. This particle will be sent to connected clients.
+     *  The parameter randDisp can be set, which sets the particles position to somewhere random close to the entity.
+     *  TODO Cleanup and re-evaluate, document better.
+     */
     private static void spawnParticle(WorldServer server, Entity entity, String particle, boolean randDisp, double velocity) {
         final int numPart = 1;
         final double xDisp;
         final double yDisp;
         final double zDisp;
 
-        //final double vel = 0;
         if (randDisp) {
             xDisp = (rand.nextFloat() * entity.width * 2.0F) - entity.width;
             yDisp = 0.5D + (rand.nextFloat() * entity.height);
@@ -95,7 +92,9 @@ public class MoreBows {
         server.func_147487_a(particle, entity.posX, entity.posY, entity.posZ, numPart, xDisp, yDisp, zDisp, velocity);
     }
 
-    /* TODO: Document. */
+    /** Effectively a helper method for spawnParticle.
+     *  TODO Cleanup and re-evaluate, document better.
+     */
     public static boolean trySpawnParticle(World world, Entity entity, String particle, boolean randDisp, double velocity) {
         if (!world.isRemote) {
             final WorldServer server = (WorldServer) world;
@@ -106,11 +105,10 @@ public class MoreBows {
         }
     }
 
-    /*public static boolean trySpawnParticle(World world, Entity entity, String particle) {
-        return trySpawnParticle(world, entity, particle, ParicleDisplacement.CENTER, 0);
-    }*/
-
-    /* TODO: Document. */
+    /** Handles particle effects on custom arrows hitting an entity, and adds critical damage to frost arrows.
+     *  Frost arrows always return false when normal methods to get if they're critical are called. This is to hide the vanilla particle trail, so it can create its own custom one.
+     *  TODO Cleanup, document better.
+     */
     @SubscribeEvent
     public void arrAttack(LivingAttackEvent event) {
         if  (!event.entity.worldObj.isRemote && (event.source.getSourceOfDamage() instanceof CustomArrow)) {
@@ -121,7 +119,6 @@ public class MoreBows {
             final int numPart;
             final double velocity;
             final boolean randDisp;
-            //final ParicleDisplacement motion;
 
             switch (type) {
             case BASE:
@@ -129,15 +126,18 @@ public class MoreBows {
                 numPart = 3;
                 randDisp = true;
                 velocity = 1;
-                //motion = ParicleDisplacement.RANDOM;
                 break;
 
             case FIRE:
-                particle = "flame";
+                if (arr.isBurning()) {
+                    particle = "flame";
+                } else {
+                    particle = "smoke";
+                }
+
                 numPart = 5;
                 randDisp = true;
                 velocity = 0.05;
-                //motion = ParicleDisplacement.RANDOM;
                 break;
 
             case FROST:
@@ -145,7 +145,6 @@ public class MoreBows {
                 numPart = 1;
                 randDisp = false;
                 velocity = 0.01;
-                //motion = ParicleDisplacement.CENTER;
                 break;
 
             default:
@@ -153,7 +152,6 @@ public class MoreBows {
                 numPart = 1;
                 randDisp = false;
                 velocity = 1;
-                //motion = ParicleDisplacement.CENTER;
                 break;
             }
 
@@ -172,14 +170,17 @@ public class MoreBows {
         }
     }
 
-    /* TODO: Document. */
+    /** Handles custom effects from the frost arrow.
+     *  TODO Cleanup?
+     */
     @SubscribeEvent
     public void arrHit(LivingHurtEvent event) {
         if (event.source.getSourceOfDamage() instanceof CustomArrow) {
             final CustomArrow arr = (CustomArrow) event.source.getSourceOfDamage();
 
             if (arr.getType() == ArrowType.FROST) {
-                event.entity.setInWeb(); //TODO Replace with slowness effect? This is the original behavior...
+                event.entity.setInWeb(); // TODO Replace with slowness effect? This is the original behavior...
+                //event.entity.extinguish(); // Potentially would be nice to have? Not in the original mod, just though it seemed right.
 
                 if (!(event.entity instanceof EntityEnderman)) { //TODO Verify that this is the right behavior
                     event.source.getSourceOfDamage().setDead();
@@ -212,10 +213,6 @@ public class MoreBows {
         GameRegistry.registerItem(MultiBow, MultiBowName);
         GameRegistry.registerItem(FlameBow, FlameBowName);
         GameRegistry.registerItem(FrostBow, FrostBowName);
-        // Test bow, don't leave this in for releases
-        //if (isDev) {
-        //    GameRegistry.registerItem(zzz_DevBow, zzz_DevBowName);
-        //}
         /** Recipes */
         GameRegistry.addRecipe(new ItemStack(StoneBow, 1), " Ss", "TBs", " Ss", 'T', Items.stick, 's', Items.string, 'S', Blocks.stone, 'B', Items.bow);
         GameRegistry.addRecipe(new ItemStack(StoneBow, 1), "sS ", "sBT", "sS ", 'T', Items.stick, 's', Items.string, 'S', Blocks.stone, 'B', Items.bow);

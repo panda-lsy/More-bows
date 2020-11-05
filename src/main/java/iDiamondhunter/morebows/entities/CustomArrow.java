@@ -10,40 +10,44 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
+/* This entity is a custom arrow. A large portion of logic around these arrows is handled in the MoreBows class with SubscribeEvents. TODO Better documentation. Re add custom arrow renderer for frost arrows. Weird rotation issues seem to be happening with the fire & frost arrows, but not the ender arrows. */
 public class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnData {
 
     public enum ArrowType {
         NOT_CUSTOM, BASE, FIRE, FROST;
     }
-    //* TODO Attempt to merge FrostArrow with this if possible (need to create custom renderer for the "snowball") */
-    private ArrowType type = ArrowType.BASE;
-    private boolean crit = false;
 
+    private boolean crit = false;
     private byte inTicks = -1;
+    private ArrowType type = ArrowType.BASE;
 
     // TODO I think I can't remove these constructors, but I'm not sure.
     public CustomArrow(World world) {
         super(world);
     }
 
+    // TODO I think I can't remove these constructors, but I'm not sure.
     public CustomArrow(World world, double var1, double var2, double var3) {
         super(world, var1, var2, var3);
     }
 
+    // TODO I think I can't remove these constructors, but I'm not sure.
     public CustomArrow(World world, EntityLivingBase living1, EntityLivingBase living2, float var1, float var2) {
         super(world, living1, living2, var1, var2);
     }
 
+    // TODO I think I can't remove these constructors, but I'm not sure.
     public CustomArrow(World world, EntityLivingBase living, float var) {
         super(world, living, var);
     }
 
+    // TODO I think I can't remove these constructors, but I'm not sure.
     public CustomArrow(World world, EntityLivingBase living, float var, ArrowType type) {
         this(world, living, var);
-
-        if ((this.type = type) == ArrowType.NOT_CUSTOM /* This should never happen, NOT_CUSTOM is only used as a reference point. */) {
-            setDead();
-        }
+        this.type = type;
+        /* if (type == ArrowType.FROST) { // I'm not sure it makes sense for a frost arrow to be on fire, but I don't think people care about it that much, and the frost bow is a bit under powered as is...
+            this.extinguish();
+        } */
     }
 
     public final boolean getCrit() {
@@ -61,27 +65,25 @@ public class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnDa
     @Override
     public boolean getIsCritical() {
         if (type == ArrowType.FROST) {
-            //System.out.println("getIsCritical false " + type);
             return false;
-            /* Obviously, you're just a bad shot :D
+            /** Obviously, you're just a bad shot :D
              *
-             * This is an awful hack to prevent the vanilla crit particles from displaying.
-             * The vanilla code to display the arrow particle trail is buried deep inside onUpdate,
-             * and the only other options I have are to:
-             * - intercept the particles with packets,
-             * - intercept the particles with events (not feasible from what I can tell),
-             * - ASM it out,
-             * - or perform some ridiculous wrapping around the World to intercept the method to spawn particles.
+             *  This is an awful hack to prevent the vanilla crit particles from displaying.
+             *  The vanilla code to display the arrow particle trail is buried deep inside onUpdate,
+             *  and the only other options I have are to:
+             *  - intercept the particles with packets,
+             *  - intercept the particles with events (not feasible from what I can tell),
+             *  - ASM it out,
+             *  - or perform some ridiculous wrapping around the World to intercept the method to spawn particles.
              *
-             * Instead of doing that, I just prevent anything from ever knowing that it's crited,
-             * and instead I wrap around the event when the arrow attacks something. See onLivingAttackEvent() for the details,
-             * but the TLDR is that I cancel the attack and start a new one with the crit taken into account.
-             * This allows the entity to take the crit into account when deciding if it's damaged or not.
+             *  Instead of doing that, I just prevent anything from ever knowing that it's crited,
+             *  and instead I wrap around the event when the arrow attacks something. See onLivingAttackEvent() for the details,
+             *  but the TLDR is that I cancel the attack and start a new one with the crit taken into account.
+             *  This allows the entity to take the crit into account when deciding if it's damaged or not.
              *
-             * This is probably the lesser of these evils.
+             *  This is probably the lesser of these evils.
              */
         } else {
-            //System.out.println("getIsCritical super " + type);
             return super.getIsCritical();
         }
     }
@@ -95,10 +97,11 @@ public class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnDa
         super.onUpdate();
 
         if (type == ArrowType.FROST) {
-            // Hack to determine when the arrow has hit the ground. inGround is a private field.
-            // Access transformers can be used for this, but they're are annoying to deal with and they aren't always safe.
-            // However, instead we can take advantage of the fact that arrowShake is always set to 7 after an arrow has hit the ground.
-            // inGround is used to store this information.
+            /** Hack to determine when the arrow has hit the ground. inGround is a private field.
+             *  Access transformers can be used for this, but they're are annoying to deal with and they aren't always safe.
+             *  However, instead we can take advantage of the fact that arrowShake is always set to 7 after an arrow has hit the ground.
+             *  inGround is used to store this information.
+             */
             if (arrowShake == 7) {
                 inTicks = 0;
                 canBePickedUp = 0;
@@ -106,7 +109,6 @@ public class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnDa
 
             if (inTicks > -1) {
                 inTicks++;
-                //System.out.println(getEntityId() + " in - inTicks " + inTicks);
 
                 if (inTicks <= 2) {
                     worldObj.spawnParticle("snowballpoof", posX, posY, posZ, 0.0D, 0.0D, 0.0D);
@@ -122,7 +124,6 @@ public class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnDa
                     worldObj.spawnParticle("splash", posX, posY - 0.3D, posZ, 0.0D, 0.0D, 0.0D);
                 }
 
-                //if (this.ticksInGround >= 64 && this.ticksInGround <= 65) //Why was this the original logic?
                 /** Responsible for adding snow layers on top the block the arrow hits, or "freezing" the water it's in by setting the block to ice. */
                 if (inTicks == 64) {
                     final int arrX = MathHelper.floor_double(posX);
@@ -147,16 +148,14 @@ public class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnDa
                     setDead();
                 }
             } else if (crit) {
-                //System.out.println(getEntityId() + " very crit");
                 for (int i = 0; i < 4; ++i) {
+                    // No need for fancy server side particle handling
                     worldObj.spawnParticle("splash", posX + ((motionX * i) / 4.0D), posY + ((motionY * i) / 4.0D), posZ + ((motionZ * i) / 4.0D), -motionX, -motionY + 0.2D, -motionZ);
-                    //MoreBows.trySpawnParticle(worldObj, this, "splash", ParicleDisplacement.TRAIL, 0);
                 }
-
-                //MoreBows.spawnParticle(this.worldObj, this, "splash", 4);
             }
         }
 
+        // TODO Probably remove this
         // else if (crit && type == ArrowType.FIRE) {
         //    if (((ticksExisted + 1) % 2) == 0) {
         //    	  System.out.println("ticks existed " + this.ticksExisted);
@@ -174,54 +173,58 @@ public class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnDa
     public void readEntityFromNBT(NBTTagCompound tag) {
         super.readEntityFromNBT(tag);
         inTicks = tag.getByte("inTicks");
-        //ArrowType.valueOf(arg0)
-        //ArrowType[] allTypes = ArrowType.values();
-        //type = allTypes[tag.getByte("type")];
-        //type = ArrowType.valueOf(tag.getString("type"));
-
-        if ((type = ArrowType.valueOf(tag.getString("type"))) == ArrowType.NOT_CUSTOM /* This should never happen, NOT_CUSTOM is only used as a reference point. */) {
-            setDead();
-        }
-
         crit = tag.getBoolean("crit");
-        //System.out.println("load from nbt " + type.name());
+
+        try {
+            /** It's completely possible that the ArrowType enums might change in the future if needed. */
+            type = ArrowType.valueOf(tag.getString("type"));
+        } catch (final Exception e) {
+            /** If we don't know what the arrow type is, just ignore the issue. */
+            e.printStackTrace();
+            type = ArrowType.NOT_CUSTOM;
+        }
     }
 
     @Override
     public void readSpawnData(ByteBuf additionalData) {
-        //int nameLength = additionalData.readInt();
-        //byte[] typeBytes = additionalData.readBytes(nameLength).array();
-        //String typeName = StringUtils.newStringIso8859_1(typeBytes);
-        //type = ArrowType.valueOf(typeName);
-        //System.out.println("readSpawnData - Recive " + typeBytes + " \nName is " + typeName);
-        type = ArrowType.values()[additionalData.readInt()];
         crit = additionalData.readBoolean();
+
+        try {
+            /** This should really not need error handling, as this data should always be right (the ordinal should be the same between compatible servers and clients), but mistakes happen sometimes. */
+            type = ArrowType.values()[additionalData.readInt()];
+        } catch (final Exception e) {
+            /** Although this is a very strange error, it's probably OK to ignore it. */
+            e.printStackTrace();
+            type = ArrowType.NOT_CUSTOM;
+        }
     }
 
     @Override
     public void setIsCritical(boolean crit) {
-        /* This line of code brings a tear to my eye. It's glorious. */
         super.setIsCritical(this.crit = crit);
-        //iDiamondhunter.morebows.MoreBows.modLog.info("setIsCritical " + crit);
     }
 
     @Override
     public void writeEntityToNBT(NBTTagCompound tag) {
         super.writeEntityToNBT(tag);
         tag.setByte("inTicks", inTicks);
-        tag.setString("type", type.name());
         tag.setBoolean("crit", crit);
+        /** Hopefully saving this by name instead of ordinal should help prevent issues when loading with any changes made to enum order. */
+        tag.setString("type", type.name());
     }
 
     @Override
     public void writeSpawnData(ByteBuf buffer) {
-        //byte[] typeBytes = StringUtils.getBytesIso8859_1(type.name());
-        //int nameLength = typeBytes.length;
-        //buffer.writeInt(nameLength);
-        //buffer.writeBytes(typeBytes);
-        //System.out.println("writeSpawnData - Send " + typeBytes);
-        buffer.writeInt(type.ordinal());
         buffer.writeBoolean(crit);
+        /** Sending the ordinal instead of the enum name should save network overhead. This should be consistent between compatible servers and clients, so it shouldn't have any issues. */
+        buffer.writeInt(type.ordinal());
     }
+
+    /*@Override
+    public void extinguish() { // Might cause weird issues
+        if (type != ArrowType.FIRE) {
+            super.extinguish();
+        }
+    }*/
 
 }
