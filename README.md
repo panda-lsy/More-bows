@@ -3,7 +3,7 @@
 [![Licence badge](https://img.shields.io/github/license/NeRdTheNed/More-bows "Licence")](https://github.com/NeRdTheNed/More-bows/blob/master/LICENSE)
 [![Java SE version compatibility badge](https://img.shields.io/badge/Java%20SE-5-orange?logo=java "Java SE version compatibility")](https://en.wikipedia.org/wiki/Java_version_history#J2SE_5.0)
 
-**_This port is currently in beta, so things might still be incomplete or break! Stay tuned for progress on it, and feel free to check out the latest builds!_**
+**_This port is currently in beta, so things might still be incomplete or not work as intended! Stay tuned for progress on it, and feel free to check out the latest builds!_**
 
 <p align="center"> <img src="https://raw.githubusercontent.com/NeRdTheNed/More-bows/master/src/main/resources/mb.jpg" alt="More Bows Logo" title="More Bows!" style='width: 100%; object-fit: contain'/> </p>
 
@@ -18,7 +18,7 @@ This is a port of the More Bows mod to 1.7.10! This mod was originally created b
 - Blazing Bow ![Blazing Bow Icon](https://raw.githubusercontent.com/NeRdTheNed/More-bows/master/src/main/resources/assets/morebows/textures/items/FlameBow1.png): A bow from the horrible pits of the Nether, the power of fire emanates from the weapon in your hand. With this bow, you can do double the damage of a normal bow, while setting your foes alight!
 - Ender Bow ![Ender Bow Icon](https://raw.githubusercontent.com/NeRdTheNed/More-bows/master/src/main/resources/assets/morebows/textures/items/EnderBow1.png): A mysterious bow with the secrets of the Ender within. Along with having a slow drawback, it will use the Ender's technique to shoot a regular arrow that will not damage anything but, after 3 seconds, will summon 5 more arrows to kill it's opponents.
 - Legia Bow ![Legia Bow Icon](https://raw.githubusercontent.com/NeRdTheNed/More-bows/master/src/main/resources/assets/morebows/textures/items/MultiBow1.png): The final and most overwhelming bow, it delivers fast and many blows to its enemies. Even with two arrows, your draw speed will be faster than the iron bow!
-- Frost Bow ![Frost Bow Icon](https://raw.githubusercontent.com/NeRdTheNed/More-bows/master/src/main/resources/assets/morebows/textures/items/FrostBow1.png): Bonus bow for Christmas! Present for everyone who was supporting (iDiamondhunter) with the mod! This bow makes entities go slowly but its draw speed is awful. It also spawns a snow layer on impact, and freezes water!
+- Frost Bow ![Frost Bow Icon](https://raw.githubusercontent.com/NeRdTheNed/More-bows/master/src/main/resources/assets/morebows/textures/items/FrostBow1.png): Bonus bow for Christmas! Present for everyone who was supporting iDiamondhunter with the mod! This bow makes entities go slowly but its draw speed is awful. It also creates a snow layer on impact, and freezes water!
 
 Descriptions taken from [iDiamondhunter's page for the mod](https://www.minecraftforum.net/forums/mapping-and-modding-java-edition/minecraft-mods/1286765-1-6-2-more-bows-mod).
 

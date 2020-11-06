@@ -31,7 +31,7 @@ public class MultiBow extends CustomBow {
         }
     }
 
-    /* Creates the multiple arrows of the bow. TODO Replace this */
+    /** Creates the multiple arrows of the bow. TODO Replace this */
     @Override
     public EntityArrow[] setArrows(World world, EntityPlayer player, float shotVelocity) {
         final EntityArrow[] arrs = new EntityArrow[] {
@@ -44,7 +44,7 @@ public class MultiBow extends CustomBow {
         return arrs;
     }
 
-    /* Spawns the multiple arrows of the bow. TODO Replace this, fix weird angles on arrows */
+    /** Spawns the multiple arrows of the bow. TODO Replace this, fix weird angles on arrows */
     @Override
     protected void spawnArrows(World world, EntityPlayer player, float shotVelocity, EntityArrow[] arrs) {
         world.spawnEntityInWorld(arrs[0]);

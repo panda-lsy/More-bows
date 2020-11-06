@@ -1,9 +1,9 @@
-package iDiamondhunter.morebows.client;
+package iDiamondhunter.morebows.render;
 
 import net.minecraft.client.renderer.entity.RenderEntity;
 import net.minecraft.entity.Entity;
 
-/* TODO Remove if possible */
+/** Handles not rendering the ArrowSpawner. TODO Remove if possible */
 public class NoRender extends RenderEntity {
 
     @Override

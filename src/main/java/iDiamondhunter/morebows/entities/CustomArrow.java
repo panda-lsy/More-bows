@@ -10,7 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-/* This entity is a custom arrow. A large portion of logic around these arrows is handled in the MoreBows class with SubscribeEvents. TODO Better documentation. Re add custom arrow renderer for frost arrows. Weird rotation issues seem to be happening with the fire & frost arrows, but not the ender arrows. */
+/** This entity is a custom arrow. A large portion of logic around these arrows is handled in the MoreBows class with SubscribeEvents. TODO Better documentation. Re add custom arrow renderer for frost arrows. Weird rotation issues seem to be happening with the fire & frost arrows, but not the ender arrows. */
 public class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnData {
 
     public enum ArrowType {
@@ -41,7 +41,7 @@ public class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnDa
         super(world, living, var);
     }
 
-    // TODO I think I can't remove these constructors, but I'm not sure.
+    /** A constructor that gives the CustomArrow an ArrowType. */
     public CustomArrow(World world, EntityLivingBase living, float var, ArrowType type) {
         this(world, living, var);
         this.type = type;
@@ -50,6 +50,7 @@ public class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnDa
         } */
     }
 
+    /** This actually returns whether an arrow is critical or not. */
     public final boolean getCrit() {
         return crit;
     }
@@ -62,6 +63,7 @@ public class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnDa
         }
     }*/
 
+    /** This may not accurately return whether an arrow is critical or not. This is to hide crit particle trails, when a custom arrow has a custom particle trail. */
     @Override
     public boolean getIsCritical() {
         if (type == ArrowType.FROST) {
@@ -88,6 +90,7 @@ public class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnDa
         }
     }
 
+    /** Returns the ArrowType of this arrow. */
     public final ArrowType getType() {
         return type;
     }

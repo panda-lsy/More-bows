@@ -10,7 +10,7 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
-/* This entity is responsible for storing and spawning the time delayed "bonus" arrows of the ender bow. TODO Cleanup, more documentation */
+/** This entity is responsible for storing and spawning the time delayed "bonus" arrows of the ender bow. TODO Cleanup, more documentation */
 public class ArrowSpawner extends Entity {
 
     private EntityArrow[] arrows;
@@ -32,13 +32,11 @@ public class ArrowSpawner extends Entity {
         this.posX = posX;
         this.posY = posY;
         this.posZ = posZ;
-
-        if (arrows.length != 6) {
+        /*if (arrows.length != 6) {
             // TODO Fix
             //System.out.println("ArrowSpawner expects 6 arrows, got " + arrows.length + " instead! It will not spawn any arrows until I implement better methods."); // debug
             setDead();
-        }
-
+        }*/
         this.arrows = arrows;
     }
 

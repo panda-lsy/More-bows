@@ -24,7 +24,7 @@ public class EnderBow extends CustomBow {
         return false;
     }
 
-    /* Creates the multiple ender arrows to use with the ArrowSpawner TODO Replace this */
+    /** Creates the multiple ender arrows to use with the ArrowSpawner TODO Replace this */
     @Override
     public EntityArrow[] setArrows(World world, EntityPlayer player, float shotVelocity) {
         final EntityArrow[] arrs = new EntityArrow[] {
@@ -43,6 +43,7 @@ public class EnderBow extends CustomBow {
         return arrs;
     }
 
+    /** Spawns the ArrowSpawner, which spawns the multiple arrows of the bow. TODO Replace this */
     @Override
     protected void spawnArrows(World world, EntityPlayer player, float shotVelocity, EntityArrow[] arrs) {
         world.spawnEntityInWorld(new ArrowSpawner(world, player.posX, player.posY, player.posZ, shotVelocity, arrs));
