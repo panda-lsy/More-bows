@@ -10,7 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-/** This entity is a custom arrow. A large portion of logic around these arrows is handled in the MoreBows class with SubscribeEvents. TODO Better documentation. Re add custom arrow renderer for frost arrows. Weird rotation issues seem to be happening with the fire & frost arrows, but not the ender arrows. */
+/** This entity is a custom arrow. A large portion of logic around these arrows is handled in the MoreBows class with SubscribeEvents. TODO Better documentation. Re add custom arrow renderer for frost arrows. Weird rotation issues seem to be happening with the fire and frost arrows, but not the ender arrows. */
 public class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnData {
 
     public enum ArrowType {
