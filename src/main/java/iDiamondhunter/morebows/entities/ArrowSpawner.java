@@ -46,11 +46,6 @@ public class ArrowSpawner extends Entity {
     }
 
     @Override
-    public boolean canBeCollidedWith() {
-        return false;
-    }
-
-    @Override
     public boolean canRenderOnFire() {
         return false;
     }

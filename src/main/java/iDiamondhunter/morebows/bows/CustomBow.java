@@ -11,6 +11,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Items;
+import net.minecraft.item.EnumAction;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
@@ -239,6 +240,12 @@ public class CustomBow extends ItemBow {
         for (final EntityArrow arr : arrs) {
             world.spawnEntityInWorld(arr);
         }
+    }
+
+    /** EnumAction.none is returned, as the bow is rendered by a custom IItemRenderer which effectively applies a tweaked version of EnumAction.bow. */
+    @Override
+    public EnumAction getItemUseAction(ItemStack stack) {
+        return EnumAction.none;
     }
 
 }

@@ -9,8 +9,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.entity.projectile.EntitySnowball;
 
-/** Handles rendering a CustomArrow. If the CustomArrow is of type FROST, it renders as a snowball. If it's not, it renders as an arrow. */
-public class RenderCustomArrow extends RenderEntity {
+/** Handles rendering the entities added by this mod.
+ *  If the entity is a CustomArrow, and the CustomArrow is of type FROST, it renders as a snowball.
+ *  If it's not of type FROST, it renders as an arrow.
+ *  If it's not a CustomArrow, it doesn't render anything! This is deliberately used to not render any ArrowSpawners.
+ */
+public class RenderModEntity extends RenderEntity {
 
     // Not sure if this is a super cused hack, of if it's actually the best way to do this...
     private final static Render arrow = RenderManager.instance.getEntityClassRenderObject(EntityArrow.class);
@@ -18,12 +22,14 @@ public class RenderCustomArrow extends RenderEntity {
 
     @Override
     public void doRender(Entity entity, double a, double b, double c, float d, float e) {
-        final CustomArrow arr = (CustomArrow) entity;
+        if (entity.getClass() == CustomArrow.class) {
+            final CustomArrow arr = (CustomArrow) entity;
 
-        if (arr.getType() == ArrowType.FROST) {
-            snowball.doRender(entity, a, b, c, d, e);
-        } else {
-            arrow.doRender(entity, a, b, c, d, e);
+            if (arr.getType() == ArrowType.FROST) {
+                snowball.doRender(entity, a, b, c, d, e);
+            } else {
+                arrow.doRender(entity, a, b, c, d, e);
+            }
         }
     }
 
