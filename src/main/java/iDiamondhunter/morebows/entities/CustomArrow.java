@@ -10,7 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-/** This entity is a custom arrow. A large portion of logic around these arrows is handled in the MoreBows class with SubscribeEvents. TODO Better documentation. Re add custom arrow renderer for frost arrows. Weird rotation issues seem to be happening with the fire and frost arrows, but not the ender arrows. */
+/** This entity is a custom arrow. A large portion of logic around these arrows is handled in the MoreBows class with SubscribeEvents. TODO Better documentation. Weird rotation issues seem to be happening with the fire and frost arrows, but not the ender arrows. */
 public class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnData {
 
     public enum ArrowType {
@@ -54,14 +54,6 @@ public class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnDa
     public final boolean getCrit() {
         return crit;
     }
-
-    /*public boolean isBurning() {
-        if (type == ArrowType.FIRE) {
-            return true;
-        } else {
-            return super.isBurning();
-        }
-    }*/
 
     /** This may not accurately return whether an arrow is critical or not. This is to hide crit particle trails, when a custom arrow has a custom particle trail. */
     @Override
@@ -157,19 +149,6 @@ public class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnDa
                 }
             }
         }
-
-        // TODO Probably remove this
-        // else if (crit && type == ArrowType.FIRE) {
-        //    if (((ticksExisted + 1) % 2) == 0) {
-        //    	  System.out.println("ticks existed " + this.ticksExisted);
-        //        worldObj.spawnParticle("flame", posX /* + (motionX / 4.0D) */, posY /* + (motionY / 4.0D) */, posZ /* + (motionZ / 4.0D) */, (-motionX / ((8 * rand.nextGaussian() + 4))), ((-motionY + 0.2D) / ((2 * rand.nextGaussian() + 2))), (-motionZ / ((4 * rand.nextGaussian() + 4))));
-        //    }
-        //}
-        //else if (crit && !worldObj.isRemote) { //TODO: Replace with sided proxy, make sure you're actually just supposed to spawn particles on server
-        //    for (int i = 0; i < 4; ++i) {
-        //        worldObj.spawnParticle("crit", posX + ((motionX * i) / 4.0D), posY + ((motionY * i) / 4.0D), posZ + ((motionZ * i) / 4.0D), -motionX, -motionY + 0.2D, -motionZ);
-        //    }
-        //}
     }
 
     @Override
@@ -222,12 +201,5 @@ public class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnDa
         /** Sending the ordinal instead of the enum name should save network overhead. This should be consistent between compatible servers and clients, so it shouldn't have any issues. */
         buffer.writeInt(type.ordinal());
     }
-
-    /*@Override
-    public void extinguish() { // Might cause weird issues
-        if (type != ArrowType.FIRE) {
-            super.extinguish();
-        }
-    }*/
 
 }

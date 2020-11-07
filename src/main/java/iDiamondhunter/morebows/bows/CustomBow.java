@@ -71,10 +71,8 @@ public class CustomBow extends ItemBow {
 
     /** A constructor that can use every customization. */
     public CustomBow(int maxDamage, EnumRarity rarity, byte[] iconTimes, float velocityMult, float powerDiv, int flameTime, double damageMult, ArrowType arrowType) {
-        //super();
         maxStackSize = 1;
         setMaxDamage(maxDamage);
-        bFull3D = true;
         setCreativeTab(CreativeTabs.tabCombat);
 
         if (iconTimes !=  null) {
@@ -242,6 +240,5 @@ public class CustomBow extends ItemBow {
             world.spawnEntityInWorld(arr);
         }
     }
-
 
 }
