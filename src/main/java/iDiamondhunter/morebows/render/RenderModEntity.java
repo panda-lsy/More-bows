@@ -1,6 +1,7 @@
 package iDiamondhunter.morebows.render;
 
-import iDiamondhunter.morebows.ArrowType;
+import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_FROST;
+
 import iDiamondhunter.morebows.entities.CustomArrow;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderEntity;
@@ -25,7 +26,7 @@ public final class RenderModEntity extends RenderEntity {
         if (e.getClass() == CustomArrow.class) {
             final CustomArrow arr = (CustomArrow) e;
 
-            if (arr.getType() == ArrowType.FROST) {
+            if (arr.getType() == ARROW_TYPE_FROST) {
                 snowball.doRender(e, a, b, c, d, f);
             } else {
                 arrow.doRender(e, a, b, c, d, f);

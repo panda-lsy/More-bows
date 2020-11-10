@@ -45,6 +45,12 @@ public class MoreBows {
     @SidedProxy(clientSide = "iDiamondhunter.morebows.Client", serverSide = "iDiamondhunter.morebows.MoreBows")
     private static MoreBows proxy;
 
+    /* Hardcoded magic numbers, because Enums (as they're classes) require a large amount of file space, and I'm targeting 64kb as the compiled .jar size. I'm really sorry for doing this. */
+    public static final byte ARROW_TYPE_NOT_CUSTOM = 0;
+    public static final byte ARROW_TYPE_BASE = 1;
+    public static final byte ARROW_TYPE_FIRE = 2;
+    public static final byte ARROW_TYPE_FROST = 3;
+
     /* Names of bows. TODO: Re-evaluate how & where stuff should be declared & initialized. */
     private static final String DiamondBowName = "DiamondBow";
     private static final String GoldBowName = "GoldBow";
@@ -61,7 +67,7 @@ public class MoreBows {
     private static final int defaultFlameTime = 100;
     //private static final float defaultPowerDiv = 20.0F;
     private static final float defaultVelocityMult = 2.0F;
-    private static final ArrowType defaultArrowType = ArrowType.NOT_CUSTOM;
+    private static final byte defaultArrowType = ARROW_TYPE_NOT_CUSTOM;
 
     /* Bow items. TODO: This is super janky. */
     protected static final Item DiamondBow = new CustomBow(1016, EnumRarity.rare, new byte[] {8, 4}, 2.2F, 6F, 140, 2.25D, defaultArrowType).setUnlocalizedName(DiamondBowName).setTextureName(modSeperator + DiamondBowName);
@@ -70,8 +76,8 @@ public class MoreBows {
     protected static final Item StoneBow = new CustomBow(484, EnumRarity.common, defaultIconTimes, defaultVelocityMult, 17F, defaultFlameTime, 1.15D, defaultArrowType).setUnlocalizedName(StoneBowName).setTextureName(modSeperator + StoneBowName);
     protected static final Item IronBow = new CustomBow(550, EnumRarity.common, new byte[] {16, 11}, 2.1F, 17F, 105, 1.5D, defaultArrowType).setUnlocalizedName(IronBowName).setTextureName(modSeperator + IronBowName);
     protected static final Item MultiBow = new MultiBow().setUnlocalizedName(MultiBowName).setTextureName(modSeperator + MultiBowName);
-    protected static final Item FlameBow = new CustomBow(576, EnumRarity.uncommon, new byte[] {14, 9}, defaultVelocityMult, 15F, defaultFlameTime, 2.0D, ArrowType.FIRE).setUnlocalizedName(FlameBowName).setTextureName(modSeperator + FlameBowName);
-    protected static final Item FrostBow = new CustomBow(550, EnumRarity.common, new byte[] {26, 13}, defaultVelocityMult, 26.0F, defaultFlameTime, defaultDamageMult, ArrowType.FROST).setUnlocalizedName(FrostBowName).setTextureName(modSeperator + FrostBowName);
+    protected static final Item FlameBow = new CustomBow(576, EnumRarity.uncommon, new byte[] {14, 9}, defaultVelocityMult, 15F, defaultFlameTime, 2.0D, ARROW_TYPE_FIRE).setUnlocalizedName(FlameBowName).setTextureName(modSeperator + FlameBowName);
+    protected static final Item FrostBow = new CustomBow(550, EnumRarity.common, new byte[] {26, 13}, defaultVelocityMult, 26.0F, defaultFlameTime, defaultDamageMult, ARROW_TYPE_FROST).setUnlocalizedName(FrostBowName).setTextureName(modSeperator + FrostBowName);
 
     /** Calls the server world specific method to spawn a particle on the server. This particle will be sent to connected clients.
      *  The parameter randDisp can be set, which sets the particles position to somewhere random close to the entity.
@@ -107,21 +113,21 @@ public class MoreBows {
     public final void arrHit(LivingAttackEvent event) {
         if  (!event.entity.worldObj.isRemote && (event.source.getSourceOfDamage() instanceof CustomArrow)) {
             final CustomArrow arr = (CustomArrow) event.source.getSourceOfDamage();
-            final ArrowType type = arr.getType();
+            final byte type = arr.getType();
             final String part;
             final int numPart;
             final double velocity;
             final boolean randDisp;
 
             switch (type) {
-            case BASE:
+            case ARROW_TYPE_BASE:
                 part = "portal";
                 numPart = 3;
                 randDisp = true;
                 velocity = 1;
                 break;
 
-            case FIRE:
+            case ARROW_TYPE_FIRE:
                 if (arr.isBurning()) {
                     part = "flame";
                 } else {
@@ -133,7 +139,7 @@ public class MoreBows {
                 velocity = 0.05;
                 break;
 
-            case FROST:
+            case ARROW_TYPE_FROST:
                 part = "splash";
                 numPart = 1;
                 randDisp = false;
@@ -152,7 +158,7 @@ public class MoreBows {
                 tryParticle(event.entity.worldObj, event.entity, part, randDisp, velocity);
             }
 
-            if ((type == ArrowType.FROST) && arr.getCrit()) {
+            if ((type == ARROW_TYPE_FROST) && arr.getCrit()) {
                 arr.setIsCritical(false);
                 event.setCanceled(true);
                 event.entity.attackEntityFrom(event.source, event.ammount + MoreBows.rand.nextInt((int) ((event.ammount / 2) + 2))); // Manually apply critical damage due to deliberately not exposing if an arrow is critical. See CustomArrow.
@@ -168,7 +174,7 @@ public class MoreBows {
         if (event.source.getSourceOfDamage() instanceof CustomArrow) {
             final CustomArrow arr = (CustomArrow) event.source.getSourceOfDamage();
 
-            if (arr.getType() == ArrowType.FROST) {
+            if (arr.getType() == ARROW_TYPE_FROST) {
                 event.entity.setInWeb(); // TODO Replace with slowness effect? This is the original behavior...
                 //event.entity.extinguish(); // Potentially would be nice to have? Not in the original mod, just though it seemed right.
 

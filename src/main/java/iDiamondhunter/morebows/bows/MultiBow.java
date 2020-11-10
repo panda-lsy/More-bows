@@ -1,6 +1,7 @@
 package iDiamondhunter.morebows.bows;
 
-import iDiamondhunter.morebows.ArrowType;
+import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_NOT_CUSTOM;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.EnumRarity;
@@ -10,7 +11,7 @@ import net.minecraft.world.World;
 public final class MultiBow extends CustomBow {
 
     /* Default values for bow construction */
-    private static final ArrowType defaultArrowType = ArrowType.NOT_CUSTOM;
+    private static final byte defaultArrowType = ARROW_TYPE_NOT_CUSTOM;
     private static final int defaultFlameTime = 100;
     private static final float defaultVelocityMult = 2.0F;
 

@@ -1,13 +1,16 @@
 package iDiamondhunter.morebows.entities;
 
+import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_FROST;
+import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_NOT_CUSTOM;
+
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
-import iDiamondhunter.morebows.ArrowType;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 /** This entity is a custom arrow. A large portion of logic around these arrows is handled in the MoreBows class with SubscribeEvents. TODO Better documentation. Weird rotation issues seem to be happening with the fire and frost arrows, but not the ender arrows. */
@@ -15,7 +18,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
 
     private boolean crit = false;
     private byte inTicks = -1;
-    private ArrowType type = ArrowType.BASE;
+    private byte type = ARROW_TYPE_NOT_CUSTOM;
 
     // TODO I think I can't remove these constructors, but I'm not sure.
     public CustomArrow(World world) {
@@ -38,7 +41,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
     }
 
     /** A constructor that gives the CustomArrow an ArrowType. */
-    public CustomArrow(World world, EntityLivingBase living, float var, ArrowType type) {
+    public CustomArrow(World world, EntityLivingBase living, float var, byte type) {
         this(world, living, var);
         this.type = type;
         /* if (type == ArrowType.FROST) { // I'm not sure it makes sense for a frost arrow to be on fire, but I don't think people care about it that much, and the frost bow is a bit under powered as is...
@@ -54,7 +57,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
     /** This may not accurately return whether an arrow is critical or not. This is to hide crit particle trails, when a custom arrow has a custom particle trail. */
     @Override
     public boolean getIsCritical() {
-        if (type == ArrowType.FROST) {
+        if (type == ARROW_TYPE_FROST) {
             return false;
             /** Obviously, you're just a bad shot :D
              *
@@ -79,7 +82,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
     }
 
     /** Returns the ArrowType of this arrow. */
-    public ArrowType getType() {
+    public byte getType() {
         return type;
     }
 
@@ -87,7 +90,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
     public void onUpdate() {
         super.onUpdate();
 
-        if (type == ArrowType.FROST) {
+        if (type == ARROW_TYPE_FROST) {
             /** Hack to determine when the arrow has hit the ground. inGround is a private field.
              *  Access transformers can be used for this, but they're are annoying to deal with and they aren't always safe.
              *  However, instead we can take advantage of the fact that arrowShake is always set to 7 after an arrow has hit the ground.
@@ -117,10 +120,9 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
 
                 /** Responsible for adding snow layers on top the block the arrow hits, or "freezing" the water it's in by setting the block to ice. */
                 if (inTicks == 64) {
-                    // This is an approximation of MathHelper.floor_double. These casts to double are important, don't remove them!
-                    final int arrX = (int) posX < (double) posX ? (int) posX - 1 : (int) posX;
-                    final int arrY = (int) posY < (double) posY ? (int) posY - 1 : (int) posY;
-                    final int arrZ = (int) posZ < (double) posZ ? (int) posZ - 1 : (int) posZ;
+                    final int arrX = MathHelper.floor_double(posX);
+                    final int arrY = MathHelper.floor_double(posY);
+                    final int arrZ = MathHelper.floor_double(posZ);
                     /* TODO Verify that this is the right block!
                      * Also, why does this sometimes set multiple blocks? It's the correct behavior of the original mod, but it's concerning... */
                     final Block inBlock = worldObj.getBlock(arrX, arrY, arrZ);
@@ -153,29 +155,13 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
         super.readEntityFromNBT(tag);
         inTicks = tag.getByte("inTicks");
         crit = tag.getBoolean("crit");
-
-        try {
-            /** It's completely possible that the ArrowType enums might change in the future if needed. */
-            type = ArrowType.valueOf(tag.getString("type"));
-        } catch (final Exception e) {
-            /** If we don't know what the arrow type is, just ignore the issue. */
-            e.printStackTrace();
-            type = ArrowType.NOT_CUSTOM;
-        }
+        type = tag.getByte("type");
     }
 
     @Override
     public void readSpawnData(ByteBuf data) {
         crit = data.readBoolean();
-
-        try {
-            /** This should really not need error handling, as this data should always be right (the ordinal should be the same between compatible servers and clients), but mistakes happen sometimes. */
-            type = ArrowType.values()[data.readInt()];
-        } catch (final Exception e) {
-            /** Although this is a very strange error, it's probably OK to ignore it. */
-            e.printStackTrace();
-            type = ArrowType.NOT_CUSTOM;
-        }
+        type = data.readByte();
     }
 
     @Override
@@ -188,15 +174,13 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
         super.writeEntityToNBT(tag);
         tag.setByte("inTicks", inTicks);
         tag.setBoolean("crit", crit);
-        /** Hopefully saving this by name instead of ordinal should help prevent issues when loading with any changes made to enum order. */
-        tag.setString("type", type.name());
+        tag.setByte("type", type);
     }
 
     @Override
     public void writeSpawnData(ByteBuf data) {
         data.writeBoolean(crit);
-        /** Sending the ordinal instead of the enum name should save network overhead. This should be consistent between compatible servers and clients, so it shouldn't have any issues. */
-        data.writeInt(type.ordinal());
+        data.writeByte(type);
     }
 
 }

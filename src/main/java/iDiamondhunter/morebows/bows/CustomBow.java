@@ -1,8 +1,10 @@
 package iDiamondhunter.morebows.bows;
 
+import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_FIRE;
+import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_NOT_CUSTOM;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import iDiamondhunter.morebows.ArrowType;
 import iDiamondhunter.morebows.entities.CustomArrow;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -32,7 +34,7 @@ public class CustomBow extends ItemBow {
     private final int flameTime;
     private final float powerDiv;
     private final EnumRarity rarity;
-    private final ArrowType arrowType;
+    private final byte arrowType;
     private final float velocityMult;
 
     /* Icon related variables */
@@ -41,7 +43,7 @@ public class CustomBow extends ItemBow {
     public final byte[] iconTimes; // TODO This is not a great solution, and could be considered a "magic number" in some ways.
 
     /** A constructor that can use every customization. */
-    public CustomBow(int maxDamage, EnumRarity rarity, byte[] iconTimes, float velocityMult, float powerDiv, int flameTime, double damageMult, ArrowType arrowType) {
+    public CustomBow(int maxDamage, EnumRarity rarity, byte[] iconTimes, float velocityMult, float powerDiv, int flameTime, double damageMult, byte arrowType) {
         maxStackSize = 1;
         setMaxDamage(maxDamage);
         setCreativeTab(CreativeTabs.tabCombat);
@@ -121,7 +123,7 @@ public class CustomBow extends ItemBow {
             final int knockback = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, stack);
             final boolean punchEnch = (knockback > 0);
             final boolean flameEnch = (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack) > 0);
-            final boolean isFireArr = (arrowType == ArrowType.FIRE);
+            final boolean isFireArr = (arrowType == ARROW_TYPE_FIRE);
             final boolean shouldMulti = (damageMult != 1);
 
             // Add enchantment effects / other modifiers to each arrow
@@ -195,7 +197,7 @@ public class CustomBow extends ItemBow {
 
     /** This method creates the arrows for a given release of the bow. TODO Remove this. */
     protected EntityArrow[] setArrows(World world, EntityPlayer player, float shotVelocity) { //TODO rename later
-        if (arrowType == ArrowType.NOT_CUSTOM) {
+        if (arrowType == ARROW_TYPE_NOT_CUSTOM) {
             return new EntityArrow[] { new EntityArrow(world, player, shotVelocity * velocityMult) };
         } else {
             return new EntityArrow[] { new CustomArrow(world, player, shotVelocity * velocityMult, arrowType) };

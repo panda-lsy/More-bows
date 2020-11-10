@@ -1,6 +1,7 @@
 package iDiamondhunter.morebows.bows;
 
-import iDiamondhunter.morebows.ArrowType;
+import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_BASE;
+
 import iDiamondhunter.morebows.MoreBows;
 import iDiamondhunter.morebows.entities.ArrowSpawner;
 import iDiamondhunter.morebows.entities.CustomArrow;
@@ -19,7 +20,7 @@ public final class EnderBow extends CustomBow {
     private static final float defaultVelocityMult = 2.0F;
 
     public EnderBow() {
-        super(215, EnumRarity.epic, new byte[] {19, 10}, defaultVelocityMult, 22F, defaultFlameTime, 1D, ArrowType.BASE);
+        super(215, EnumRarity.epic, new byte[] {19, 10}, defaultVelocityMult, 22F, defaultFlameTime, 1D, ARROW_TYPE_BASE);
     }
 
     /** This method creates particles when left clicking with an ender bow. */
