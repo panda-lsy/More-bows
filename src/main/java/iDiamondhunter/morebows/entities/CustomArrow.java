@@ -1,21 +1,17 @@
 package iDiamondhunter.morebows.entities;
 
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import iDiamondhunter.morebows.ArrowType;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 /** This entity is a custom arrow. A large portion of logic around these arrows is handled in the MoreBows class with SubscribeEvents. TODO Better documentation. Weird rotation issues seem to be happening with the fire and frost arrows, but not the ender arrows. */
-public class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnData {
-
-    public enum ArrowType {
-        NOT_CUSTOM, BASE, FIRE, FROST;
-    }
+public final class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnData {
 
     private boolean crit = false;
     private byte inTicks = -1;
@@ -51,7 +47,7 @@ public class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnDa
     }
 
     /** This actually returns whether an arrow is critical or not. */
-    public final boolean getCrit() {
+    public boolean getCrit() {
         return crit;
     }
 
@@ -83,7 +79,7 @@ public class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnDa
     }
 
     /** Returns the ArrowType of this arrow. */
-    public final ArrowType getType() {
+    public ArrowType getType() {
         return type;
     }
 
@@ -121,9 +117,10 @@ public class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnDa
 
                 /** Responsible for adding snow layers on top the block the arrow hits, or "freezing" the water it's in by setting the block to ice. */
                 if (inTicks == 64) {
-                    final int arrX = MathHelper.floor_double(posX);
-                    final int arrY = MathHelper.floor_double(posY);
-                    final int arrZ = MathHelper.floor_double(posZ);
+                    // This is an approximation of MathHelper.floor_double. These casts to double are important, don't remove them!
+                    final int arrX = (int) posX < (double) posX ? (int) posX - 1 : (int) posX;
+                    final int arrY = (int) posY < (double) posY ? (int) posY - 1 : (int) posY;
+                    final int arrZ = (int) posZ < (double) posZ ? (int) posZ - 1 : (int) posZ;
                     /* TODO Verify that this is the right block!
                      * Also, why does this sometimes set multiple blocks? It's the correct behavior of the original mod, but it's concerning... */
                     final Block inBlock = worldObj.getBlock(arrX, arrY, arrZ);
@@ -168,12 +165,12 @@ public class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnDa
     }
 
     @Override
-    public void readSpawnData(ByteBuf additionalData) {
-        crit = additionalData.readBoolean();
+    public void readSpawnData(ByteBuf data) {
+        crit = data.readBoolean();
 
         try {
             /** This should really not need error handling, as this data should always be right (the ordinal should be the same between compatible servers and clients), but mistakes happen sometimes. */
-            type = ArrowType.values()[additionalData.readInt()];
+            type = ArrowType.values()[data.readInt()];
         } catch (final Exception e) {
             /** Although this is a very strange error, it's probably OK to ignore it. */
             e.printStackTrace();
@@ -196,10 +193,10 @@ public class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnDa
     }
 
     @Override
-    public void writeSpawnData(ByteBuf buffer) {
-        buffer.writeBoolean(crit);
+    public void writeSpawnData(ByteBuf data) {
+        data.writeBoolean(crit);
         /** Sending the ordinal instead of the enum name should save network overhead. This should be consistent between compatible servers and clients, so it shouldn't have any issues. */
-        buffer.writeInt(type.ordinal());
+        data.writeInt(type.ordinal());
     }
 
 }

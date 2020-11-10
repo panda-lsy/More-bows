@@ -10,10 +10,34 @@ import iDiamondhunter.morebows.render.RenderModEntity;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
+import net.minecraftforge.client.event.RenderPlayerEvent.Pre;
 
-public class Client extends MoreBows {
+public final class Client extends MoreBows {
 
-    public static float partialTicks = 0;
+    public static float ticks = 0;
+
+    /** Poses the arms of a player to display the "bow aiming" action on drawing back a bow TODO finish documenting */
+    @SubscribeEvent
+    public void bowPose(Pre event) {
+        //final EntityPlayer player = event.entityPlayer;
+
+        //ticks = event.partialRenderTick; //doesn't work :(
+        if ((event.entityPlayer.getItemInUse() != null) && (event.entityPlayer.getItemInUse().getItem() instanceof CustomBow)) {
+            event.renderer.modelArmorChestplate.aimedBow = event.renderer.modelArmor.aimedBow = event.renderer.modelBipedMain.aimedBow = true;
+        }
+    }
+
+    /** Hack to store the amount of ticks to use in bow rendering.
+     * In RenderBow, ticks ticks is needed, but it is never passed to it.
+     * ticks is roughly equivalent to (Minecraft.getMinecraft().entityRenderer.renderEndNanoTime + (long)(1000000000 / Minecraft.getMinecraft().gameSettings.limitFramerate))),
+     * however renderEndNanoTime is a private field.
+     * However, this paticular value is passed through a whole bunch of places.
+     * RenderHandEvent happens to be the closest to rendering items, as it's posted just before any item rendering is done.
+     * TODO try to replace this, better documentation */
+    @SubscribeEvent
+    public void bowTicks(RenderHandEvent event) {
+        ticks = event.partialTicks;
+    }
 
     /** Handles the FOV "zoom in" when drawing a custom bow.
      *  Minecraft is hardcoded to only do this for items which are equal to the bow item, so we have to do it manually. */
@@ -37,12 +61,11 @@ public class Client extends MoreBows {
 
     /** TODO Document */
     @Override
-    protected void registerEntities() {
-        super.registerEntities();
+    protected void register() {
+        super.register();
         /** Registration of custom renderers */
         RenderingRegistry.registerEntityRenderingHandler(ArrowSpawner.class, new RenderModEntity());
         RenderingRegistry.registerEntityRenderingHandler(CustomArrow.class, new RenderModEntity());
-        // TODO Move this to somewhere else or rename method
         MinecraftForgeClient.registerItemRenderer(MoreBows.DiamondBow, new RenderBow());
         MinecraftForgeClient.registerItemRenderer(MoreBows.GoldBow, new RenderBow());
         MinecraftForgeClient.registerItemRenderer(MoreBows.EnderBow, new RenderBow());
@@ -51,29 +74,6 @@ public class Client extends MoreBows {
         MinecraftForgeClient.registerItemRenderer(MoreBows.MultiBow, new RenderBow());
         MinecraftForgeClient.registerItemRenderer(MoreBows.FlameBow, new RenderBow());
         MinecraftForgeClient.registerItemRenderer(MoreBows.FrostBow, new RenderBow());
-    }
-
-    /** Hack to store the amount of partialTicks to use in bow rendering.
-     * In RenderBow, partialTicks ticks is needed, but it is never passed to it.
-     * partialTicks is roughly equivalent to (Minecraft.getMinecraft().entityRenderer.renderEndNanoTime + (long)(1000000000 / Minecraft.getMinecraft().gameSettings.limitFramerate))),
-     * however renderEndNanoTime is a private field.
-     * However, this paticular value is passed through a whole bunch of places.
-     * RenderHandEvent happens to be the closest to rendering items, as it's posted just before any item rendering is done.
-     * TODO try to replace this, better documentation */
-    @SubscribeEvent
-    public void renderFirstPersonCustomBow(RenderHandEvent event) {
-        partialTicks = event.partialTicks;
-    }
-
-    /* does the arms only needed if no EnumAction TODO finish documenting */
-    @SubscribeEvent
-    public void renderThirdPersonCustomBowArms(net.minecraftforge.client.event.RenderPlayerEvent.Pre event) {
-        //final EntityPlayer player = event.entityPlayer;
-
-        //partialTicks = event.partialRenderTick; //doesn't work :(
-        if ((event.entityPlayer.getItemInUse() != null) && (event.entityPlayer.getItemInUse().getItem() instanceof CustomBow)) {
-            event.renderer.modelArmorChestplate.aimedBow = event.renderer.modelArmor.aimedBow = event.renderer.modelBipedMain.aimedBow = true;
-        }
     }
 
 }

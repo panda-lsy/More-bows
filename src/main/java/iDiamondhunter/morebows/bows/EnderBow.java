@@ -1,9 +1,9 @@
 package iDiamondhunter.morebows.bows;
 
+import iDiamondhunter.morebows.ArrowType;
 import iDiamondhunter.morebows.MoreBows;
 import iDiamondhunter.morebows.entities.ArrowSpawner;
 import iDiamondhunter.morebows.entities.CustomArrow;
-import iDiamondhunter.morebows.entities.CustomArrow.ArrowType;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
@@ -11,22 +11,27 @@ import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class EnderBow extends CustomBow {
+/** TODO Merge into CustomBow? */
+public final class EnderBow extends CustomBow {
+
+    /* Default values for bow construction */
+    private static final int defaultFlameTime = 100;
+    private static final float defaultVelocityMult = 2.0F;
 
     public EnderBow() {
-        super(215, EnumRarity.epic, new byte[] {19, 10}, 22F, 1D, ArrowType.BASE);
+        super(215, EnumRarity.epic, new byte[] {19, 10}, defaultVelocityMult, 22F, defaultFlameTime, 1D, ArrowType.BASE);
     }
 
     /** This method creates particles when left clicking with an ender bow. */
     @Override
     public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
-        MoreBows.trySpawnParticle(entityLiving.worldObj, entityLiving, "portal", true, 1);
+        MoreBows.tryParticle(entityLiving.worldObj, entityLiving, "portal", true, 1);
         return false;
     }
 
     /** Creates the multiple ender arrows to use with the ArrowSpawner TODO Replace this */
     @Override
-    public EntityArrow[] setArrows(World world, EntityPlayer player, float shotVelocity) {
+    protected EntityArrow[] setArrows(World world, EntityPlayer player, float shotVelocity) {
         final EntityArrow[] arrs = new EntityArrow[] {
             new CustomArrow(world, player, shotVelocity * 2.0F),
             new CustomArrow(world, player, shotVelocity * 1F),

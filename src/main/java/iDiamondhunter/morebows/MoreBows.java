@@ -15,7 +15,6 @@ import iDiamondhunter.morebows.bows.EnderBow;
 import iDiamondhunter.morebows.bows.MultiBow;
 import iDiamondhunter.morebows.entities.ArrowSpawner;
 import iDiamondhunter.morebows.entities.CustomArrow;
-import iDiamondhunter.morebows.entities.CustomArrow.ArrowType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.init.Blocks;
@@ -30,78 +29,73 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 /* If you're reading this, I'm very sorry you have to deal with my code. */
-@Mod(modid = MoreBows.MOD_ID, useMetadata = true)
+@Mod(modid = MoreBows.MOD_ID, useMetadata = true /* Forge likes to complain if there isn't something assigned to the "version" property when loading. It should get overwritten by the actual version in the mcmod.info file. */)
 public class MoreBows {
     /* Mod specific reusable values */
-    public static final String MOD_ID = "MoreBows";
+    protected static final String MOD_ID = "MoreBows";
     private static final String modSeperator = "morebows:";
 
-    private static Random rand = new Random();
+    private static final Random rand = new Random();
 
     /* Mod instance */
     @Instance(MOD_ID)
-    public static MoreBows inst;
+    private static MoreBows inst;
 
     /* Mod proxy. TODO This is super janky, see if it's possible to remove this */
-    @SidedProxy(clientSide = "iDiamondhunter.morebows.Client",
-                serverSide = "iDiamondhunter.morebows.MoreBows")
-    public static MoreBows proxy;
+    @SidedProxy(clientSide = "iDiamondhunter.morebows.Client", serverSide = "iDiamondhunter.morebows.MoreBows")
+    private static MoreBows proxy;
 
     /* Names of bows. TODO: Re-evaluate how & where stuff should be declared & initialized. */
-    public final static String DiamondBowName = "DiamondBow";
-    public final static String GoldBowName = "GoldBow";
-    public final static String EnderBowName = "EnderBow";
-    public final static String StoneBowName = "StoneBow";
-    public final static String IronBowName = "IronBow";
-    public final static String MultiBowName = "MultiBow";
-    public final static String FlameBowName = "FlameBow";
-    public final static String FrostBowName = "FrostBow";
+    private static final String DiamondBowName = "DiamondBow";
+    private static final String GoldBowName = "GoldBow";
+    private static final String EnderBowName = "EnderBow";
+    private static final String StoneBowName = "StoneBow";
+    private static final String IronBowName = "IronBow";
+    private static final String MultiBowName = "MultiBow";
+    private static final String FlameBowName = "FlameBow";
+    private static final String FrostBowName = "FrostBow";
 
+    /* Default values for bow construction */
+    private static final byte[] defaultIconTimes = {18, 13};
+    private static final double defaultDamageMult = 1D;
+    private static final int defaultFlameTime = 100;
+    //private static final float defaultPowerDiv = 20.0F;
+    private static final float defaultVelocityMult = 2.0F;
     private static final ArrowType defaultArrowType = ArrowType.NOT_CUSTOM;
 
     /* Bow items. TODO: This is super janky. */
-    public final static Item DiamondBow = new CustomBow(1016, EnumRarity.rare, new byte[] {8, 4}, 2.2F, 6F, 140, 2.25D).setUnlocalizedName(DiamondBowName).setTextureName(modSeperator + DiamondBowName);
-    public final static Item GoldBow = new CustomBow(68, EnumRarity.uncommon, new byte[] {8, 4}, 2.4F, 5F, 100, 1.5D).setUnlocalizedName(GoldBowName).setTextureName(modSeperator + GoldBowName);
-    public final static Item EnderBow = new EnderBow().setUnlocalizedName(EnderBowName).setTextureName(modSeperator + EnderBowName);
-    public final static Item StoneBow = new CustomBow(484, EnumRarity.common, (byte[]) null, 17F, 1.15D, defaultArrowType).setUnlocalizedName(StoneBowName).setTextureName(modSeperator + StoneBowName);
-    public final static Item IronBow = new CustomBow(550, EnumRarity.common, new byte[] {16, 11}, 2.1F, 17F, 105, 1.5D).setUnlocalizedName(IronBowName).setTextureName(modSeperator + IronBowName);
-    public final static Item MultiBow = new MultiBow().setUnlocalizedName(MultiBowName).setTextureName(modSeperator + MultiBowName);
-    public final static Item FlameBow = new CustomBow(576, EnumRarity.uncommon, new byte[] {14, 9}, 15F, 2.0D, ArrowType.FIRE).setUnlocalizedName(FlameBowName).setTextureName(modSeperator + FlameBowName);
-    public final static Item FrostBow = new CustomBow(550, EnumRarity.common, new byte[] {26, 13}, 26.0F, 1D, ArrowType.FROST).setUnlocalizedName(FrostBowName).setTextureName(modSeperator + FrostBowName);
+    protected static final Item DiamondBow = new CustomBow(1016, EnumRarity.rare, new byte[] {8, 4}, 2.2F, 6F, 140, 2.25D, defaultArrowType).setUnlocalizedName(DiamondBowName).setTextureName(modSeperator + DiamondBowName);
+    protected static final Item GoldBow = new CustomBow(68, EnumRarity.uncommon, new byte[] {8, 4}, 2.4F, 5F, 100, 1.5D, defaultArrowType).setUnlocalizedName(GoldBowName).setTextureName(modSeperator + GoldBowName);
+    protected static final Item EnderBow = new EnderBow().setUnlocalizedName(EnderBowName).setTextureName(modSeperator + EnderBowName);
+    protected static final Item StoneBow = new CustomBow(484, EnumRarity.common, defaultIconTimes, defaultVelocityMult, 17F, defaultFlameTime, 1.15D, defaultArrowType).setUnlocalizedName(StoneBowName).setTextureName(modSeperator + StoneBowName);
+    protected static final Item IronBow = new CustomBow(550, EnumRarity.common, new byte[] {16, 11}, 2.1F, 17F, 105, 1.5D, defaultArrowType).setUnlocalizedName(IronBowName).setTextureName(modSeperator + IronBowName);
+    protected static final Item MultiBow = new MultiBow().setUnlocalizedName(MultiBowName).setTextureName(modSeperator + MultiBowName);
+    protected static final Item FlameBow = new CustomBow(576, EnumRarity.uncommon, new byte[] {14, 9}, defaultVelocityMult, 15F, defaultFlameTime, 2.0D, ArrowType.FIRE).setUnlocalizedName(FlameBowName).setTextureName(modSeperator + FlameBowName);
+    protected static final Item FrostBow = new CustomBow(550, EnumRarity.common, new byte[] {26, 13}, defaultVelocityMult, 26.0F, defaultFlameTime, defaultDamageMult, ArrowType.FROST).setUnlocalizedName(FrostBowName).setTextureName(modSeperator + FrostBowName);
 
     /** Calls the server world specific method to spawn a particle on the server. This particle will be sent to connected clients.
      *  The parameter randDisp can be set, which sets the particles position to somewhere random close to the entity.
      *  TODO Cleanup and re-evaluate, document better.
      */
-    private static void spawnParticle(WorldServer server, Entity entity, String particle, boolean randDisp, double velocity) {
-        final int numPart = 1;
-        final double xDisp;
-        final double yDisp;
-        final double zDisp;
-
-        if (randDisp) {
-            xDisp = (rand.nextFloat() * entity.width * 2.0F) - entity.width;
-            yDisp = 0.5D + (rand.nextFloat() * entity.height);
-            zDisp = (rand.nextFloat() * entity.width * 2.0F) - entity.width;
-        } else {
-            xDisp = 0;
-            yDisp = 0.5D;
-            zDisp = 0;
-        }
-
-        server.func_147487_a(particle, entity.posX, entity.posY, entity.posZ, numPart, xDisp, yDisp, zDisp, velocity);
-    }
-
-    /** Effectively a helper method for spawnParticle.
-     *  TODO Cleanup and re-evaluate, document better.
-     */
-    public static boolean trySpawnParticle(World world, Entity entity, String particle, boolean randDisp, double velocity) {
+    public static final void tryParticle(World world, Entity entity, String part, boolean randDisp, double velocity) {
         if (!world.isRemote) {
             final WorldServer server = (WorldServer) world;
-            spawnParticle(server, entity, particle, randDisp, velocity);
-            return true;
-        } else {
-            return false;
+            final int numPart = 1;
+            final double xDisp;
+            final double yDisp;
+            final double zDisp;
+
+            if (randDisp) {
+                xDisp = (rand.nextFloat() * entity.width * 2.0F) - entity.width;
+                yDisp = 0.5D + (rand.nextFloat() * entity.height);
+                zDisp = (rand.nextFloat() * entity.width * 2.0F) - entity.width;
+            } else {
+                xDisp = 0;
+                yDisp = 0.5D;
+                zDisp = 0;
+            }
+
+            server.func_147487_a(part, entity.posX, entity.posY, entity.posZ, numPart, xDisp, yDisp, zDisp, velocity);
         }
     }
 
@@ -110,19 +104,18 @@ public class MoreBows {
      *  TODO Cleanup, document better.
      */
     @SubscribeEvent
-    public void arrAttack(LivingAttackEvent event) {
+    public final void arrHit(LivingAttackEvent event) {
         if  (!event.entity.worldObj.isRemote && (event.source.getSourceOfDamage() instanceof CustomArrow)) {
             final CustomArrow arr = (CustomArrow) event.source.getSourceOfDamage();
             final ArrowType type = arr.getType();
-            final WorldServer server = (WorldServer) event.entity.worldObj;
-            final String particle;
+            final String part;
             final int numPart;
             final double velocity;
             final boolean randDisp;
 
             switch (type) {
             case BASE:
-                particle = "portal";
+                part = "portal";
                 numPart = 3;
                 randDisp = true;
                 velocity = 1;
@@ -130,9 +123,9 @@ public class MoreBows {
 
             case FIRE:
                 if (arr.isBurning()) {
-                    particle = "flame";
+                    part = "flame";
                 } else {
-                    particle = "smoke";
+                    part = "smoke";
                 }
 
                 numPart = 5;
@@ -141,14 +134,14 @@ public class MoreBows {
                 break;
 
             case FROST:
-                particle = "splash";
+                part = "splash";
                 numPart = 1;
                 randDisp = false;
                 velocity = 0.01;
                 break;
 
             default:
-                particle = "depthsuspend";
+                part = "depthsuspend";
                 numPart = 1;
                 randDisp = false;
                 velocity = 1;
@@ -156,16 +149,13 @@ public class MoreBows {
             }
 
             for (int i = 0; i < numPart; i++ ) {
-                spawnParticle(server, event.entity, particle, randDisp, velocity);
+                tryParticle(event.entity.worldObj, event.entity, part, randDisp, velocity);
             }
 
-            // TODO Figure out that weird code from the fire arrow.
-            if (type == ArrowType.FIRE) {
-                event.entity.setFire(15);
-            } else if ((type == ArrowType.FROST) && arr.getCrit()) {
+            if ((type == ArrowType.FROST) && arr.getCrit()) {
                 arr.setIsCritical(false);
                 event.setCanceled(true);
-                event.entity.attackEntityFrom(event.source, event.ammount + MoreBows.rand.nextInt((int) ((event.ammount / 2) + 2)));
+                event.entity.attackEntityFrom(event.source, event.ammount + MoreBows.rand.nextInt((int) ((event.ammount / 2) + 2))); // Manually apply critical damage due to deliberately not exposing if an arrow is critical. See CustomArrow.
             }
         }
     }
@@ -174,7 +164,7 @@ public class MoreBows {
      *  TODO Cleanup?
      */
     @SubscribeEvent
-    public void arrHit(LivingHurtEvent event) {
+    public final void arrHurt(LivingHurtEvent event) {
         if (event.source.getSourceOfDamage() instanceof CustomArrow) {
             final CustomArrow arr = (CustomArrow) event.source.getSourceOfDamage();
 
@@ -182,7 +172,7 @@ public class MoreBows {
                 event.entity.setInWeb(); // TODO Replace with slowness effect? This is the original behavior...
                 //event.entity.extinguish(); // Potentially would be nice to have? Not in the original mod, just though it seemed right.
 
-                if (!(event.entity instanceof EntityEnderman)) { //TODO Verify that this is the right behavior
+                if (!(event.entity instanceof EntityEnderman)) { // Vanilla arrows don't get destroyed after they've hit an Enderman
                     event.source.getSourceOfDamage().setDead();
                 }
             }
@@ -190,21 +180,13 @@ public class MoreBows {
     }
 
     @EventHandler
-    public void init(FMLInitializationEvent event) {
-        registerItems();
-        proxy.registerEntities();
+    public final void init(FMLInitializationEvent event) {
+        proxy.register();
         MinecraftForge.EVENT_BUS.register(proxy);
     }
 
-    protected void registerEntities() {
-        /* I'm not sure how this works. */
-        EntityRegistry.registerModEntity(ArrowSpawner.class, "ArrowSpawner", 1, MoreBows.inst, 64, 20, true);
-        EntityRegistry.registerModEntity(CustomArrow.class, "CustomArrow", 2, MoreBows.inst, 64, 20, true);
-    }
-
-    protected void registerItems() {
-        /* TODO check if this is the right way of doing things. */
-        /** Item registry */
+    protected void register() {
+        /* Item registry */
         GameRegistry.registerItem(DiamondBow, DiamondBowName);
         GameRegistry.registerItem(GoldBow, GoldBowName);
         GameRegistry.registerItem(EnderBow, EnderBowName);
@@ -213,7 +195,7 @@ public class MoreBows {
         GameRegistry.registerItem(MultiBow, MultiBowName);
         GameRegistry.registerItem(FlameBow, FlameBowName);
         GameRegistry.registerItem(FrostBow, FrostBowName);
-        /** Recipes */
+        /* Recipes */
         GameRegistry.addRecipe(new ItemStack(StoneBow, 1), " Ss", "TBs", " Ss", 'T', Items.stick, 's', Items.string, 'S', Blocks.stone, 'B', Items.bow);
         GameRegistry.addRecipe(new ItemStack(StoneBow, 1), "sS ", "sBT", "sS ", 'T', Items.stick, 's', Items.string, 'S', Blocks.stone, 'B', Items.bow);
         GameRegistry.addRecipe(new ItemStack(IronBow, 1), " Is", "IBs", " Is", 's', Items.string, 'I', Items.iron_ingot, 'B', Items.bow);
@@ -234,29 +216,9 @@ public class MoreBows {
         GameRegistry.addRecipe(new ItemStack(EnderBow, 1), " PG", " IE", " PG", 'G', Items.gold_ingot, 'P', Items.ender_pearl, 'I', IronBow, 'E', Items.ender_eye);
         GameRegistry.addRecipe(new ItemStack(FrostBow, 1), " IR", "SER", " IR", 'R', Items.string, 'I', Blocks.ice, 'S', Items.snowball, 'E', IronBow);
         GameRegistry.addRecipe(new ItemStack(FrostBow, 1), "RI ", "RES", "RI ", 'R', Items.string, 'I', Blocks.ice, 'S', Items.snowball, 'E', IronBow);
+        /* Entities TODO I'm not sure how this works. */
+        EntityRegistry.registerModEntity(ArrowSpawner.class, "ArrowSpawner", 1, MoreBows.inst, 64, 20, true);
+        EntityRegistry.registerModEntity(CustomArrow.class, "CustomArrow", 2, MoreBows.inst, 64, 20, true);
     }
-
-    // This code is completely unneeded, but it's nice enough to keep around for reference purposes.
-    // @EventHandler
-    // public void fmlMissingMappingsEvent(FMLMissingMappingsEvent event) {
-    //     for (final MissingMapping mapping : event.getAll()) {
-    //         // Get the old name & mod ID of the item
-    //         final String oldID = mapping.name.substring(0, mapping.name.indexOf(':'));
-    //         final String oldName = mapping.name.substring(mapping.name.indexOf(':') + 1);
-    //         // Attempt to migrate items from old IDs
-    //         if (oldID.equals("iDiamondhunterMoreBows") /* Earlier builds of this 1.7.10 port. */ || oldID.equals("More Bows mod by iDiamondhunter") /* ID of iDiamondhunter's ports. */ || oldID.equals("${archivesBaseName}") /* Mistakes happen sometimes! */) {
-    //             if (mapping.type == GameRegistry.Type.ITEM) {
-    //                 final String remappedName = MOD_ID + ":" + oldName;
-    //                 final Item remappedItem = GameData.getItemRegistry().getObject(remappedName);
-    //                 if (remappedItem != null) {
-    //                     modLog.info("ID remap: " + mapping.name + " > " + remappedName);
-    //                     mapping.remap(remappedItem);
-    //                 } else {
-    //                     modLog.error("ID remap failed: no match for " + mapping.name);
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
 
 }

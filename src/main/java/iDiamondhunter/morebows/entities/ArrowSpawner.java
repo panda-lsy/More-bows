@@ -2,8 +2,6 @@ package iDiamondhunter.morebows.entities;
 
 import java.util.Random;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.projectile.EntityArrow;
@@ -11,12 +9,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 /** This entity is responsible for storing and spawning the time delayed "bonus" arrows of the ender bow. TODO Cleanup, more documentation */
-public class ArrowSpawner extends Entity {
+public final class ArrowSpawner extends Entity {
 
+    private static final Random rand = new Random();
     private EntityArrow[] arrows;
     private byte existed = 0;
-
-    Random rand = new Random();
     private float shotVelocity;
 
     public ArrowSpawner(World world) {
@@ -41,16 +38,6 @@ public class ArrowSpawner extends Entity {
     }
 
     @Override
-    public boolean canAttackWithItem() {
-        return false;
-    }
-
-    @Override
-    public boolean canRenderOnFire() {
-        return false;
-    }
-
-    @Override
     protected boolean canTriggerWalking() {
         return false;
     }
@@ -60,12 +47,6 @@ public class ArrowSpawner extends Entity {
         /*noClip = true;
         preventEntitySpawning = false;
         isImmuneToFire = true;*/
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public float getShadowSize() {
-        return 0.0F;
     }
 
     @Override
