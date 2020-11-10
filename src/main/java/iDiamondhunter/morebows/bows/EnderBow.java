@@ -34,12 +34,12 @@ public final class EnderBow extends CustomBow {
     @Override
     protected EntityArrow[] setArrows(World world, EntityPlayer player, float shotVelocity) {
         final EntityArrow[] arrs = new EntityArrow[] {
-            new CustomArrow(world, player, shotVelocity * 2.0F),
-            new CustomArrow(world, player, shotVelocity * 1F),
-            new CustomArrow(world, player, shotVelocity * 1.2F),
-            new CustomArrow(world, player, shotVelocity * 1.5F),
-            new CustomArrow(world, player, shotVelocity * 1.75F),
-            new CustomArrow(world, player, shotVelocity * 1.825F)
+            new CustomArrow(world, player, shotVelocity * 2.0F, ARROW_TYPE_BASE),
+            new CustomArrow(world, player, shotVelocity * 1F, ARROW_TYPE_BASE),
+            new CustomArrow(world, player, shotVelocity * 1.2F, ARROW_TYPE_BASE),
+            new CustomArrow(world, player, shotVelocity * 1.5F, ARROW_TYPE_BASE),
+            new CustomArrow(world, player, shotVelocity * 1.75F, ARROW_TYPE_BASE),
+            new CustomArrow(world, player, shotVelocity * 1.825F, ARROW_TYPE_BASE)
         };
         arrs[1].canBePickedUp = 2;
         arrs[2].canBePickedUp = 2;

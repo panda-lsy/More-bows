@@ -148,9 +148,9 @@ public class MoreBows {
 
             default:
                 part = "depthsuspend";
-                numPart = 1;
-                randDisp = false;
-                velocity = 1;
+                numPart = 20;
+                randDisp = true;
+                velocity = 0;
                 break;
             }
 
