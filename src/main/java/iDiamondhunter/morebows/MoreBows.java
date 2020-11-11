@@ -2,11 +2,13 @@ package iDiamondhunter.morebows;
 
 import java.util.Random;
 
+import cpw.mods.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -25,16 +27,19 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 /* If you're reading this, I'm very sorry you have to deal with my code. */
-@Mod(modid = MoreBows.MOD_ID, useMetadata = true /* Forge likes to complain if there isn't something assigned to the "version" property when loading. It should get overwritten by the actual version in the mcmod.info file. */)
+@Mod(modid = MoreBows.MOD_ID, guiFactory = "iDiamondhunter.morebows.Config", useMetadata = true /* Forge likes to complain if there isn't something assigned to the "version" property when loading. It should get overwritten by the actual version in the mcmod.info file. */)
 public class MoreBows {
     /* Mod specific reusable values */
-    protected static final String MOD_ID = "MoreBows";
+    public static final String MOD_ID = "MoreBows";
     private static final String modSeperator = "morebows:";
 
+    /* TODO put this somewhere else */
     private static final Random rand = new Random();
 
     /* Mod instance */
@@ -44,6 +49,10 @@ public class MoreBows {
     /* Mod proxy. TODO This is super janky, see if it's possible to remove this */
     @SidedProxy(clientSide = "iDiamondhunter.morebows.Client", serverSide = "iDiamondhunter.morebows.MoreBows")
     private static MoreBows proxy;
+
+    /* TODO documentation */
+    public static Configuration config;
+    public static boolean oldArrRender;
 
     /* Hardcoded magic numbers, because Enums (as they're classes) require a large amount of file space, and I'm targeting 64kb as the compiled .jar size. I'm really sorry for doing this. */
     public static final byte ARROW_TYPE_NOT_CUSTOM = 0;
@@ -78,6 +87,18 @@ public class MoreBows {
     protected static final Item MultiBow = new MultiBow().setUnlocalizedName(MultiBowName).setTextureName(modSeperator + MultiBowName);
     protected static final Item FlameBow = new CustomBow(576, EnumRarity.uncommon, new byte[] {14, 9}, defaultVelocityMult, 15F, defaultFlameTime, 2.0D, ARROW_TYPE_FIRE).setUnlocalizedName(FlameBowName).setTextureName(modSeperator + FlameBowName);
     protected static final Item FrostBow = new CustomBow(550, EnumRarity.common, new byte[] {26, 13}, defaultVelocityMult, 26.0F, defaultFlameTime, defaultDamageMult, ARROW_TYPE_FROST).setUnlocalizedName(FrostBowName).setTextureName(modSeperator + FrostBowName);
+
+    /** Syncs the config file TODO documentation */
+    public static void conf() {
+        //config.load();
+        Property prop;
+        prop = config.get(Configuration.CATEGORY_GENERAL, "oldFrostArrowRendering", false);
+        oldArrRender = prop.getBoolean();
+
+        if (config.hasChanged()) {
+            config.save();
+        }
+    }
 
     /** Calls the server world specific method to spawn a particle on the server. This particle will be sent to connected clients.
      *  The parameter randDisp can be set, which sets the particles position to somewhere random close to the entity.
@@ -185,12 +206,26 @@ public class MoreBows {
         }
     }
 
+    /** Initualises mod TODO documentation */
     @EventHandler
-    public final void init(FMLInitializationEvent event) {
+    public final void init(FMLPreInitializationEvent event) {
+        config = new Configuration(event.getSuggestedConfigurationFile());
+        conf();
         proxy.register();
+        /* TODO see if it's possible to only use one of these */
         MinecraftForge.EVENT_BUS.register(proxy);
+        FMLCommonHandler.instance().bus().register(proxy);
     }
 
+    /** Calls conf() to sync the config file when the config file changes TODO documentation */
+    @SubscribeEvent
+    public void onConfigurationChangedEvent(OnConfigChangedEvent event) {
+        if (event.modID.equals(MOD_ID)) {
+            conf();
+        }
+    }
+
+    /** TODO documentation */
     protected void register() {
         /* Item registry */
         GameRegistry.registerItem(DiamondBow, DiamondBowName);

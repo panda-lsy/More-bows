@@ -6,3 +6,5 @@ item.GoldBow.name=Golden Bow
 item.IronBow.name=Iron Bow
 item.MultiBow.name=Legia Bow
 item.StoneBow.name=Reinforced Bow
+oldFrostArrowRendering=Old frost arrow rendering
+oldFrostArrowRendering.tooltip=If this is enabled, frost arrows will render as cubes.
