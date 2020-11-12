@@ -1,5 +1,8 @@
 package iDiamondhunter.morebows;
 
+import java.util.Set;
+
+import cpw.mods.fml.client.IModGuiFactory;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import iDiamondhunter.morebows.bows.CustomBow;
@@ -7,12 +10,14 @@ import iDiamondhunter.morebows.entities.ArrowSpawner;
 import iDiamondhunter.morebows.entities.CustomArrow;
 import iDiamondhunter.morebows.render.RenderBow;
 import iDiamondhunter.morebows.render.RenderModEntity;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent.Pre;
 
-public final class Client extends MoreBows {
+public final class Client extends MoreBows implements IModGuiFactory {
 
     public static float ticks = 0;
 
@@ -59,6 +64,19 @@ public final class Client extends MoreBows {
         }
     }
 
+    @Override
+    public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement element) {
+        return null;
+    }
+
+    @Override
+    public void initialize(Minecraft minecraftInstance) { }
+
+    @Override
+    public Class<? extends GuiScreen> mainConfigGuiClass() {
+        return Config.class;
+    }
+
     /** TODO Document */
     @Override
     protected void register() {
@@ -74,6 +92,11 @@ public final class Client extends MoreBows {
         MinecraftForgeClient.registerItemRenderer(MoreBows.MultiBow, new RenderBow());
         MinecraftForgeClient.registerItemRenderer(MoreBows.FlameBow, new RenderBow());
         MinecraftForgeClient.registerItemRenderer(MoreBows.FrostBow, new RenderBow());
+    }
+
+    @Override
+    public Set<RuntimeOptionCategoryElement> runtimeGuiCategories() {
+        return null;
     }
 
 }
