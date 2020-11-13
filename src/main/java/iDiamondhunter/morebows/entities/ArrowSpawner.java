@@ -13,7 +13,6 @@ public final class ArrowSpawner extends Entity {
 
     private static final Random rand = new Random();
     private EntityArrow[] arrows;
-    private byte existed = 0;
     private float shotVelocity;
 
     public ArrowSpawner(World world) {
@@ -50,16 +49,6 @@ public final class ArrowSpawner extends Entity {
     }
 
     @Override
-    public boolean hitByEntity(Entity var) {
-        return true;
-    }
-
-    @Override
-    public boolean isBurning() {
-        return false;
-    }
-
-    @Override
     public boolean isEntityInvulnerable() {
         return true;
     }
@@ -72,12 +61,10 @@ public final class ArrowSpawner extends Entity {
     @Override
     public void onUpdate() {
         // Executed first, to prevent weird edge cases
-        if (existed > 61) {
+        if (ticksExisted > 61) {
             setDead();
             return;
         }
-
-        existed++;
 
         if (!worldObj.isRemote) {
             if (arrows == null) {
@@ -86,12 +73,12 @@ public final class ArrowSpawner extends Entity {
                 return;
             }
 
-            if (existed == 1) {
+            if (ticksExisted == 1) {
                 // First arrow
                 worldObj.spawnEntityInWorld(arrows[0]);
             }
 
-            if (existed == 61) {
+            if (ticksExisted == 61) {
                 // Second batch of arrows TODO Check if accurate to older versions of the mod
                 worldObj.spawnEntityInWorld(arrows[1]);
                 worldObj.playSoundAtEntity(arrows[1], "mob.endermen.portal", 0.5F, (1F / ((rand.nextFloat() * 0.4F) + 1F)) + (shotVelocity * 0.4F));
@@ -123,7 +110,6 @@ public final class ArrowSpawner extends Entity {
     @Override
     protected void readEntityFromNBT(NBTTagCompound tag) {
         // Variables related to this entity
-        existed = tag.getByte("existed");
         shotVelocity = tag.getFloat("shotVelocity");
         // Variables related to the arrows stored by this entity
         final int arrowsArmount = tag.getInteger("arrowsAmount");
@@ -150,7 +136,6 @@ public final class ArrowSpawner extends Entity {
     @Override
     protected void writeEntityToNBT(NBTTagCompound tag) {
         // Variables related to this entity
-        tag.setByte("existed", existed);
         tag.setFloat("shotVelocity", shotVelocity);
         // Variables related to the arrows stored by this entity
         tag.setInteger("arrowsAmount", arrows.length);

@@ -20,16 +20,14 @@ public final class RenderModEntity extends RenderEntity {
 
     // Not sure if this is a super cused hack, of if it's actually the best way to do this...
     private final static Render arrow = RenderManager.instance.getEntityClassRenderObject(EntityArrow.class);
-    private final static Render snowball = RenderManager.instance.getEntityClassRenderObject(EntitySnowball.class);
+    private final static Render snow = RenderManager.instance.getEntityClassRenderObject(EntitySnowball.class);
 
     @Override
     public void doRender(Entity e, double a, double b, double c, float d, float f) {
         if (e.getClass() == CustomArrow.class) {
-            final CustomArrow arr = (CustomArrow) e;
-
-            if (arr.getType() == ARROW_TYPE_FROST) {
+            if (((CustomArrow) e).getType() == ARROW_TYPE_FROST) {
                 if (!MoreBows.oldArrRender) {
-                    snowball.doRender(e, a, b, c, d, f);
+                    snow.doRender(e, a, b, c, d, f);
                 } else {
                     super.doRender(e, a, b, c, d, f);
                 }

@@ -21,30 +21,30 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
     private byte type = ARROW_TYPE_NOT_CUSTOM;
 
     // TODO I think I can't remove these constructors, but I'm not sure.
-    public CustomArrow(World world) {
-        super(world);
+    public CustomArrow(World a) {
+        super(a);
     }
 
     // TODO I think I can't remove these constructors, but I'm not sure.
-    public CustomArrow(World world, double var1, double var2, double var3) {
-        super(world, var1, var2, var3);
+    public CustomArrow(World a, double b, double c, double d) {
+        super(a, b, c, d);
     }
 
     // TODO I think I can't remove these constructors, but I'm not sure.
-    public CustomArrow(World world, EntityLivingBase living1, EntityLivingBase living2, float var1, float var2) {
-        super(world, living1, living2, var1, var2);
+    public CustomArrow(World a, EntityLivingBase b, EntityLivingBase c, float d, float e) {
+        super(a, b, c, d, e);
     }
 
     // TODO I think I can't remove these constructors, but I'm not sure.
-    public CustomArrow(World world, EntityLivingBase living, float var) {
-        super(world, living, var);
+    public CustomArrow(World a, EntityLivingBase b, float c) {
+        super(a, b, c);
     }
 
     /** A constructor that gives the CustomArrow an ArrowType. */
-    public CustomArrow(World world, EntityLivingBase living, float var, byte type) {
-        this(world, living, var);
+    public CustomArrow(World a, EntityLivingBase b, float c, byte type) {
+        super(a, b, c);
         this.type = type;
-        /* if (type == ArrowType.FROST) { // I'm not sure it makes sense for a frost arrow to be on fire, but I don't think people care about it that much, and the frost bow is a bit under powered as is...
+        /* if (type == ARROW_TYPE_FROST) { // I'm not sure it makes sense for a frost arrow to be on fire, but I don't think people care about it that much, and the frost bow is a bit under powered as is...
             this.extinguish();
         } */
     }
@@ -57,31 +57,27 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
     /** This may not accurately return whether an arrow is critical or not. This is to hide crit particle trails, when a custom arrow has a custom particle trail. */
     @Override
     public boolean getIsCritical() {
-        if (type == ARROW_TYPE_FROST) {
-            return false;
-            /** Obviously, you're just a bad shot :D
-             *
-             *  This is an awful hack to prevent the vanilla crit particles from displaying.
-             *  The vanilla code to display the arrow particle trail is buried deep inside onUpdate,
-             *  and the only other options I have are to:
-             *  - intercept the particles with packets,
-             *  - intercept the particles with events (not feasible from what I can tell),
-             *  - ASM it out,
-             *  - or perform some ridiculous wrapping around the World to intercept the method to spawn particles.
-             *
-             *  Instead of doing that, I just prevent anything from ever knowing that it's crited,
-             *  and instead I wrap around the event when the arrow attacks something. See onLivingAttackEvent() for the details,
-             *  but the TLDR is that I cancel the attack and start a new one with the crit taken into account.
-             *  This allows the entity to take the crit into account when deciding if it's damaged or not.
-             *
-             *  This is probably the lesser of these evils.
-             */
-        } else {
-            return super.getIsCritical();
-        }
+        return type == ARROW_TYPE_FROST ? false : super.getIsCritical();
+        /** Obviously, you're just a bad shot :D
+        *
+        *  This is an awful hack to prevent the vanilla crit particles from displaying for frost arrows.
+        *  The vanilla code to display the arrow particle trail is buried deep inside onUpdate,
+        *  and the only other options I have are to:
+        *  - intercept the particles with packets,
+        *  - intercept the particles with events (not feasible from what I can tell),
+        *  - ASM it out,
+        *  - or perform some ridiculous wrapping around the World to intercept the method to spawn particles.
+        *
+        *  Instead of doing that, I just prevent anything from ever knowing that it's crited,
+        *  and instead I wrap around the event when the arrow attacks something. See onLivingAttackEvent() for the details,
+        *  but the TLDR is that I cancel the attack and start a new one with the crit taken into account.
+        *  This allows the entity to take the crit into account when deciding if it's damaged or not.
+        *
+        *  This is probably the lesser of these evils.
+        */
     }
 
-    /** Returns the ArrowType of this arrow. */
+    /** Returns the ArrowType of an arrow. */
     public byte getType() {
         return type;
     }

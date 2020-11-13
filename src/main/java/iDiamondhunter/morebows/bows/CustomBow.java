@@ -92,8 +92,7 @@ public class CustomBow extends ItemBow {
     /** This handles the process of shooting an arrow, with methods for specific parts of this process. These were intended to be overridden when needed, but this has been changed a bit since. TODO Cleanup. */
     @Override
     public final void onPlayerStoppedUsing(ItemStack stack, World world, EntityPlayer player, int remaining) {
-        final int initCharge = getMaxItemUseDuration(stack) - remaining;
-        final ArrowLooseEvent event = new ArrowLooseEvent(player, stack, initCharge);
+        final ArrowLooseEvent event = new ArrowLooseEvent(player, stack, (getMaxItemUseDuration(stack) - remaining));
         MinecraftForge.EVENT_BUS.post(event);
 
         if (event.isCanceled()) {

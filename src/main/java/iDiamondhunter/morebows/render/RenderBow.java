@@ -1,8 +1,9 @@
 package iDiamondhunter.morebows.render;
 
+import static iDiamondhunter.morebows.Client.partTicks;
+
 import org.lwjgl.opengl.GL11;
 
-import iDiamondhunter.morebows.Client;
 import iDiamondhunter.morebows.bows.CustomBow;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.EntityLivingBase;
@@ -41,9 +42,7 @@ public final class RenderBow implements IItemRenderer {
              * - Making the bow shake when drawn back
              * See ItemRenderer.renderItemInFirstPerson, line 458
              * TODO finish documentation, clean up */
-            final CustomBow bow = (CustomBow) stack.getItem(); // this will always be a CustomBow, as this renderer is only registered for CustomBows
-            final EntityPlayer player = (EntityPlayer) entity; // this will also always be a EntityPlayer, as we're rendering in first person
-            final int useTicks = player.getItemInUseCount();
+            final int useTicks = ((EntityPlayer) entity).getItemInUseCount(); // the entity will always be a EntityPlayer, as we're rendering in first person
 
             /* This code reverses, then re-applies the transformations given to an item when EnumAction.bow is used. TODO this doesn't reverse perfectly, try commenting out the re-applied bow shake to see what I mean, finish documentation */
             if (useTicks > 0) {
@@ -52,10 +51,9 @@ public final class RenderBow implements IItemRenderer {
                 GL11.glRotatef(-12.0F, 0.0F, 1.0F, 0.0F);
                 GL11.glRotatef(-8.0F, 1.0F, 0.0F, 0.0F);
                 GL11.glTranslatef(-0.9F, 0.2F, 0.0F);
-                // sets up some values
-                final float ticks = stack.getMaxItemUseDuration() - ((useTicks - Client.ticks) + 1.0F);
-                // in the normal first person renderer, this is hardcoded to be "float divTicks = ticks / 20.0F". I've used the same code as I did in the custom FOV zoom (see iDiamondhunter.morebows.Client.fov).
-                float divTicks = ticks / (bow.iconTimes[0] * (10 / 9));
+                final float ticks = stack.getMaxItemUseDuration() - ((useTicks - partTicks) + 1.0F);
+                // in the normal first person renderer, this is hardcoded to be "float divTicks = partTicks / 20.0F". I've used the same code as I did in the custom FOV zoom (see iDiamondhunter.morebows.Client.fov).
+                float divTicks = ticks / ((((CustomBow) stack.getItem()).iconTimes[0] * 10) / 9);
                 divTicks = ((divTicks * divTicks) + (divTicks * 2.0F)) / 3.0F;
 
                 if (divTicks > 1.0F) {
@@ -88,7 +86,7 @@ public final class RenderBow implements IItemRenderer {
             /* Handles moving the bow into the right position when rendering an entity.
              * Minecraft is hardcoded to only do this for items which are equal to the bow item, so we have to do it manually. */
             final boolean isWitch = (entity.getClass() == EntityWitch.class); // Checks if the entity we're rendering our bow with is a witch
-            final float scale = 3.0F - (1.0F / 3.0F); // a more precise representation of 1 / 0.375F? 2.625F isn't accurate?
+            //final float scale = 3.0F - (1.0F / 3.0F); // a more precise representation of 1 / 0.375F, or 2.6666667F
 
             if (isWitch) {
                 // Witches are a special case, as they have additional transformations applied to items at the end of rendering.
@@ -101,8 +99,8 @@ public final class RenderBow implements IItemRenderer {
             GL11.glRotatef(-20.0F, 0.0F, 0.0F, 1.0F);
             GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
             GL11.glRotatef(-60.0F, 0.0F, 0.0F, 1.0F);
-            //GL11.glScalef(2.625F, 2.625F, 2.625F);
-            GL11.glScalef(scale, scale, scale); // reverse scale
+            //GL11.glScalef(scale, scale, scale); // reverse scale
+            GL11.glScalef(2.6666667F, 2.6666667F, 2.6666667F); // reverse scale
             GL11.glTranslatef(-0.25F, -0.1875F, 0.1875F);
             // apply bow specific transformations
             GL11.glTranslatef(0.0F, 0.125F, 0.3125F);
@@ -131,7 +129,7 @@ public final class RenderBow implements IItemRenderer {
     }
 
     @Override
-    public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack stack, ItemRendererHelper h) {
+    public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack stack, ItemRendererHelper data) {
         return false;
     }
 

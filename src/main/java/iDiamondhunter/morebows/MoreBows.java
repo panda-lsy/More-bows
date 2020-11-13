@@ -71,12 +71,12 @@ public class MoreBows {
     private static final String FrostBowName = "FrostBow";
 
     /* Default values for bow construction */
-    private static final byte[] defaultIconTimes = {18, 13};
-    private static final double defaultDamageMult = 1D;
-    private static final int defaultFlameTime = 100;
-    //private static final float defaultPowerDiv = 20.0F;
-    private static final float defaultVelocityMult = 2.0F;
-    private static final byte defaultArrowType = ARROW_TYPE_NOT_CUSTOM;
+    public static final byte[] defaultIconTimes = {18, 13};
+    public static final double defaultDamageMult = 1D;
+    public static final int defaultFlameTime = 100;
+    //public static final float defaultPowerDiv = 20.0F;
+    public static final float defaultVelocityMult = 2.0F;
+    public static final byte defaultArrowType = ARROW_TYPE_NOT_CUSTOM;
 
     /* Bow items. TODO: This is super janky. */
     protected static final Item DiamondBow = new CustomBow(1016, EnumRarity.rare, new byte[] {8, 4}, 2.2F, 6F, 140, 2.25D, defaultArrowType).setUnlocalizedName(DiamondBowName).setTextureName(modSeperator + DiamondBowName);
@@ -104,10 +104,10 @@ public class MoreBows {
      *  The parameter randDisp can be set, which sets the particles position to somewhere random close to the entity.
      *  TODO Cleanup and re-evaluate, document better.
      */
-    public static final void tryParticle(World world, Entity entity, String part, boolean randDisp, double velocity) {
+    public static final void tryPart(World world, Entity entity, String part, boolean randDisp, double velocity) {
         if (!world.isRemote) {
             final WorldServer server = (WorldServer) world;
-            final int numPart = 1;
+            //final int amount = 1;
             final double xDisp;
             final double yDisp;
             final double zDisp;
@@ -122,7 +122,7 @@ public class MoreBows {
                 zDisp = 0;
             }
 
-            server.func_147487_a(part, entity.posX, entity.posY, entity.posZ, numPart, xDisp, yDisp, zDisp, velocity);
+            server.func_147487_a(part, entity.posX, entity.posY, entity.posZ, 1, xDisp, yDisp, zDisp, velocity);
         }
     }
 
@@ -136,14 +136,14 @@ public class MoreBows {
             final CustomArrow arr = (CustomArrow) event.source.getSourceOfDamage();
             final byte type = arr.getType();
             final String part;
-            final int numPart;
+            final int amount;
             final double velocity;
             final boolean randDisp;
 
             switch (type) {
             case ARROW_TYPE_BASE:
                 part = "portal";
-                numPart = 3;
+                amount = 3;
                 randDisp = true;
                 velocity = 1;
                 break;
@@ -155,28 +155,28 @@ public class MoreBows {
                     part = "smoke";
                 }
 
-                numPart = 5;
+                amount = 5;
                 randDisp = true;
                 velocity = 0.05;
                 break;
 
             case ARROW_TYPE_FROST:
                 part = "splash";
-                numPart = 1;
+                amount = 1;
                 randDisp = false;
                 velocity = 0.01;
                 break;
 
             default:
                 part = "depthsuspend";
-                numPart = 20;
+                amount = 20;
                 randDisp = true;
                 velocity = 0;
                 break;
             }
 
-            for (int i = 0; i < numPart; i++ ) {
-                tryParticle(event.entity.worldObj, event.entity, part, randDisp, velocity);
+            for (int i = 0; i < amount; i++ ) {
+                tryPart(event.entity.worldObj, event.entity, part, randDisp, velocity);
             }
 
             if ((type == ARROW_TYPE_FROST) && arr.getCrit()) {
@@ -193,9 +193,7 @@ public class MoreBows {
     @SubscribeEvent
     public final void arrHurt(LivingHurtEvent event) {
         if (event.source.getSourceOfDamage() instanceof CustomArrow) {
-            final CustomArrow arr = (CustomArrow) event.source.getSourceOfDamage();
-
-            if (arr.getType() == ARROW_TYPE_FROST) {
+            if (((CustomArrow) event.source.getSourceOfDamage()).getType() == ARROW_TYPE_FROST) {
                 event.entity.setInWeb(); // TODO Replace with slowness effect? This is the original behavior...
                 //event.entity.extinguish(); // Potentially would be nice to have? Not in the original mod, just though it seemed right.
 

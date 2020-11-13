@@ -1,6 +1,8 @@
 package iDiamondhunter.morebows.bows;
 
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_BASE;
+import static iDiamondhunter.morebows.MoreBows.defaultFlameTime;
+import static iDiamondhunter.morebows.MoreBows.defaultVelocityMult;
 
 import iDiamondhunter.morebows.MoreBows;
 import iDiamondhunter.morebows.entities.ArrowSpawner;
@@ -15,10 +17,6 @@ import net.minecraft.world.World;
 /** TODO Merge into CustomBow? */
 public final class EnderBow extends CustomBow {
 
-    /* Default values for bow construction */
-    private static final int defaultFlameTime = 100;
-    private static final float defaultVelocityMult = 2.0F;
-
     public EnderBow() {
         super(215, EnumRarity.epic, new byte[] {19, 10}, defaultVelocityMult, 22F, defaultFlameTime, 1D, ARROW_TYPE_BASE);
     }
@@ -26,7 +24,7 @@ public final class EnderBow extends CustomBow {
     /** This method creates particles when left clicking with an ender bow. */
     @Override
     public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
-        MoreBows.tryParticle(entityLiving.worldObj, entityLiving, "portal", true, 1);
+        MoreBows.tryPart(entityLiving.worldObj, entityLiving, "portal", true, 1);
         return false;
     }
 

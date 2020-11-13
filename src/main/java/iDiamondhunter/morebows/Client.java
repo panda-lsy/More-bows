@@ -19,58 +19,54 @@ import net.minecraftforge.client.event.RenderPlayerEvent.Pre;
 
 public final class Client extends MoreBows implements IModGuiFactory {
 
-    public static float ticks = 0;
+    public static float partTicks = 0;
 
     /** Poses the arms of a player to display the "bow aiming" action on drawing back a bow TODO finish documenting */
     @SubscribeEvent
     public void bowPose(Pre event) {
-        //final EntityPlayer player = event.entityPlayer;
-
-        //ticks = event.partialRenderTick; //doesn't work :(
         if ((event.entityPlayer.getItemInUse() != null) && (event.entityPlayer.getItemInUse().getItem() instanceof CustomBow)) {
             event.renderer.modelArmorChestplate.aimedBow = event.renderer.modelArmor.aimedBow = event.renderer.modelBipedMain.aimedBow = true;
         }
     }
 
-    /** Hack to store the amount of ticks to use in bow rendering.
-     * In RenderBow, ticks ticks is needed, but it is never passed to it.
-     * ticks is roughly equivalent to (Minecraft.getMinecraft().entityRenderer.renderEndNanoTime + (long)(1000000000 / Minecraft.getMinecraft().gameSettings.limitFramerate))),
+    /** Hack to store the amount of partial ticks to use in bow rendering.
+     * In RenderBow, partTicks is needed, but it is never passed to it.
+     * partTicks is roughly equivalent to (Minecraft.getMinecraft().entityRenderer.renderEndNanoTime + (long)(1000000000 / Minecraft.getMinecraft().gameSettings.limitFramerate))),
      * however renderEndNanoTime is a private field.
      * However, this paticular value is passed through a whole bunch of places.
      * RenderHandEvent happens to be the closest to rendering items, as it's posted just before any item rendering is done.
      * TODO try to replace this, better documentation */
     @SubscribeEvent
     public void bowTicks(RenderHandEvent event) {
-        ticks = event.partialTicks;
+        partTicks = event.partialTicks;
     }
 
     /** Handles the FOV "zoom in" when drawing a custom bow.
      *  Minecraft is hardcoded to only do this for items which are equal to the bow item, so we have to do it manually. */
     @SubscribeEvent
-    public void fov(FOVUpdateEvent event) {
+    public void FOV(FOVUpdateEvent event) {
         if ((event.entity.getItemInUse() != null) && (event.entity.getItemInUse().getItem() instanceof CustomBow)) {
             /** See net.minecraft.client.entity.EntityPlayerSP.getFOVMultiplier() */
-            final CustomBow bow = (CustomBow) event.entity.getItemInUse().getItem();
-            float f1 = (float) event.entity.getItemInUseDuration() / (float) (bow.iconTimes[0] * (10 / 9));
+            float f = (float) event.entity.getItemInUseDuration() / (float) ((((CustomBow) event.entity.getItemInUse().getItem()).iconTimes[0] * 10) / 9);
 
             //float f1 = (float) event.entity.getItemInUseDuration() / bow.powerDiv;
-            if (f1 > 1.0F) {
-                f1 = 1.0F;
+            if (f > 1.0F) {
+                f = 1.0F;
             } else {
-                f1 *= f1;
+                f *= f;
             }
 
-            event.newfov *= 1.0F - (f1 * 0.15F);
+            event.newfov *= 1.0F - (f * 0.15F);
         }
     }
 
     @Override
-    public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement element) {
+    public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement a) {
         return null;
     }
 
     @Override
-    public void initialize(Minecraft minecraftInstance) { }
+    public void initialize(Minecraft a) { }
 
     @Override
     public Class<? extends GuiScreen> mainConfigGuiClass() {
