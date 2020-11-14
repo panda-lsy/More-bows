@@ -22,10 +22,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 
-/** This entire class is a huge hack. I'm ashamed of myself. And yes, this is important to document.
- * TODO: Re-write all of this (or at least re-think most of it). Burn the original.
- * Also TODO: Create a workaround for having to override getIcon, getRarity, getMaxItemUseDuration etc.
- *
+/**
+ * This entire class is a huge hack. I'm ashamed of myself. And yes, this is important to document.
+ * TODO: Possibly come up with better ideas for various bits of this class.
  **/
 public class CustomBow extends ItemBow {
 
@@ -40,9 +39,24 @@ public class CustomBow extends ItemBow {
     /* Icon related variables */
     @SideOnly(Side.CLIENT)
     private IIcon[] icons;
-    public final byte[] iconTimes; // TODO This is not a great solution, and could be considered a "magic number" in some ways.
+    /**
+     * The amount of time it takes to switch bow icons when the bow is being drawn back.
+     * TODO This is not a great solution.
+     */
+    public final byte[] iconTimes;
 
-    /** A constructor that can use every customization. */
+    /**
+     * A more customizable bow than the vanilla one.
+     *
+     * @param maxDamage    The maximum damage a bow can do.
+     * @param rarity       The rarity of this bow.
+     * @param iconTimes    The amount of time it takes to switch bow icons when the bow is being drawn back. TODO This is not a great solution.
+     * @param velocityMult The velocity multiplier of this bow. TODO document better.
+     * @param powerDiv     The power divisor of this bow. TODO document better.
+     * @param flameTime    The amount of time an arrow burns for when shot on fire with this bow (usually through the flame enchantment).
+     * @param damageMult   The multiplier to damage done by an arrow shot by this bow.
+     * @param arrowType    The type of arrows this bow shoots.
+     */
     public CustomBow(int maxDamage, EnumRarity rarity, byte[] iconTimes, float velocityMult, float powerDiv, int flameTime, double damageMult, byte arrowType) {
         maxStackSize = 1;
         setMaxDamage(maxDamage);
@@ -89,7 +103,7 @@ public class CustomBow extends ItemBow {
         return rarity;
     }
 
-    /** This handles the process of shooting an arrow, with methods for specific parts of this process. These were intended to be overridden when needed, but this has been changed a bit since. TODO Cleanup. */
+    /** This handles the process of shooting an arrow from this bow. TODO Cleanup, document more */
     @Override
     public final void onPlayerStoppedUsing(ItemStack stack, World world, EntityPlayer player, int remaining) {
         final ArrowLooseEvent event = new ArrowLooseEvent(player, stack, (getMaxItemUseDuration(stack) - remaining));
@@ -174,7 +188,11 @@ public class CustomBow extends ItemBow {
         }
     }
 
-    /** This method plays the bow releasing noise for a given release of the bow. TODO Remove this? */
+    /**
+     * This method plays the bow releasing noise for a given release of the bow. TODO Remove this?
+     *
+     * @param arrs The arrows that a bow is shooting.
+     */
     protected void playNoise(World world, EntityPlayer player, EntityArrow[] arrs, float shotVelocity) {
         world.playSoundAtEntity(player, "random.bow", 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
     }
@@ -183,27 +201,32 @@ public class CustomBow extends ItemBow {
     @Override
     @SideOnly(Side.CLIENT)
     public final void registerIcons(IIconRegister iconReg) {
-        itemIcon = iconReg.registerIcon(getIconString() + "1"); //redo with off-by-one error fixed
-        //this.iconArray = new IIcon[this.bowPullIconNameArray.length];
+        itemIcon = iconReg.registerIcon(getIconString() + "1"); // redo with off-by-one error fixed
+        // this.iconArray = new IIcon[this.bowPullIconNameArray.length];
         icons = new IIcon[3];
 
         for (int i = 0; i < icons.length; ++i) {
-            //this.iconArray[i] = iconRegistry.registerIcon(this.getIconString() + "_" + this.bowPullIconNameArray[i]);
-            icons[i] = iconReg.registerIcon(getIconString() + (i + 2)); //awful hack, icons start from 2 here
-            //this.iconArray[i] = iconRegistry.registerIcon(this.bowPullIconNameArray[i]);
+            // this.iconArray[i] = iconRegistry.registerIcon(this.getIconString() + "_" + this.bowPullIconNameArray[i]);
+            icons[i] = iconReg.registerIcon(getIconString() + (i + 2)); // awful hack, icons start from 2 here
+            // this.iconArray[i] = iconRegistry.registerIcon(this.bowPullIconNameArray[i]);
         }
     }
 
     /** This method creates the arrows for a given release of the bow. TODO Remove this. */
-    protected EntityArrow[] setArrows(World world, EntityPlayer player, float shotVelocity) { //TODO rename later
+    protected EntityArrow[] setArrows(World world, EntityPlayer player, float shotVelocity) { // TODO rename later
         if (arrowType == ARROW_TYPE_NOT_CUSTOM) {
             return new EntityArrow[] { new EntityArrow(world, player, shotVelocity * velocityMult) };
-        } else {
-            return new EntityArrow[] { new CustomArrow(world, player, shotVelocity * velocityMult, arrowType) };
         }
+
+        return new EntityArrow[] { new CustomArrow(world, player, shotVelocity * velocityMult, arrowType) };
     }
 
-    /** This method spawns the arrows for a given release of the bow. TODO Remove this. */
+    /**
+     * This method spawns the arrows for a given release of the bow. TODO Remove this.
+     *
+     * @param player       The player to spawn the arrows at.
+     * @param shotVelocity The velocity of shot arrows.
+     */
     protected void spawnArrows(World world, EntityPlayer player, float shotVelocity, EntityArrow[] arrs) {
         for (final EntityArrow arr : arrs) {
             world.spawnEntityInWorld(arr);

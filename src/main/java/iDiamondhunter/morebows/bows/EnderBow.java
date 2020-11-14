@@ -17,8 +17,11 @@ import net.minecraft.world.World;
 /** TODO Merge into CustomBow? */
 public final class EnderBow extends CustomBow {
 
+    /**
+     * The constructor for the EnderBow calls the super constructor.
+     */
     public EnderBow() {
-        super(215, EnumRarity.epic, new byte[] {19, 10}, defaultVelocityMult, 22F, defaultFlameTime, 1D, ARROW_TYPE_BASE);
+        super(215, EnumRarity.epic, new byte[] { 19, 10 }, defaultVelocityMult, 22F, defaultFlameTime, 1D, ARROW_TYPE_BASE);
     }
 
     /** This method creates particles when left clicking with an ender bow. */

@@ -1,7 +1,5 @@
 package iDiamondhunter.morebows.entities;
 
-import java.util.Random;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.projectile.EntityArrow;
@@ -11,10 +9,12 @@ import net.minecraft.world.World;
 /** This entity is responsible for storing and spawning the time delayed "bonus" arrows of the ender bow. TODO Cleanup, more documentation */
 public final class ArrowSpawner extends Entity {
 
-    private static final Random rand = new Random();
     private EntityArrow[] arrows;
     private float shotVelocity;
 
+    /**
+     * @param world the world to spawn in
+     */
     public ArrowSpawner(World world) {
         super(world);
         noClip = true;
@@ -22,17 +22,30 @@ public final class ArrowSpawner extends Entity {
         isImmuneToFire = true;
     }
 
+    /**
+     * @param world        the world to spawn in
+     * @param posX         the x position.
+     * @param posY         the y position.
+     * @param posZ         the z position.
+     * @param shotVelocity the velocity of the stored arrows.
+     * @param arrows       the stored arrows.
+     */
     public ArrowSpawner(World world, double posX, double posY, double posZ, float shotVelocity, EntityArrow[] arrows) {
         this(world);
         this.shotVelocity = shotVelocity;
         this.posX = posX;
         this.posY = posY;
         this.posZ = posZ;
-        /*if (arrows.length != 6) {
-            // TODO Fix
-            //System.out.println("ArrowSpawner expects 6 arrows, got " + arrows.length + " instead! It will not spawn any arrows until I implement better methods."); // debug
-            setDead();
-        }*/
+        /**
+         * // TODO Fix
+         *
+         * <pre>
+         * if (arrows.length != 6) {
+         *     // System.out.println("ArrowSpawner expects 6 arrows, got " + arrows.length + " instead! It will not spawn any arrows until I implement better methods."); // debug
+         *     setDead();
+         * }
+         * </pre>
+         */
         this.arrows = arrows;
     }
 
@@ -43,9 +56,15 @@ public final class ArrowSpawner extends Entity {
 
     @Override
     protected void entityInit() {
-        /*noClip = true;
-        preventEntitySpawning = false;
-        isImmuneToFire = true;*/
+        /**
+         * // TODO Possibly do this
+         *
+         * <pre>
+         * noClip = true;
+         * preventEntitySpawning = false;
+         * isImmuneToFire = true;
+         * </pre>
+         */
     }
 
     @Override
@@ -68,7 +87,7 @@ public final class ArrowSpawner extends Entity {
 
         if (!worldObj.isRemote) {
             if (arrows == null) {
-                //System.out.println("Bonus ender arrows lost! Will fix this soon..."); // debug
+                // System.out.println("Bonus ender arrows lost! Will fix this soon..."); // debug
                 setDead();
                 return;
             }

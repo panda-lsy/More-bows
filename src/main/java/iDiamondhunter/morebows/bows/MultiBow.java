@@ -12,14 +12,17 @@ import net.minecraft.world.World;
 /** TODO Merge into CustomBow? */
 public final class MultiBow extends CustomBow {
 
+    /**
+     * The constructor for the MultiBow calls the super constructor.
+     */
     public MultiBow() {
-        super(550, EnumRarity.rare, new byte[] {12, 7}, defaultVelocityMult, 13F, defaultFlameTime, 1D, ARROW_TYPE_NOT_CUSTOM);
+        super(550, EnumRarity.rare, new byte[] { 12, 7 }, defaultVelocityMult, 13F, defaultFlameTime, 1D, ARROW_TYPE_NOT_CUSTOM);
     }
 
     /** Plays the noises at each arrow */
     @Override
     protected void playNoise(World world, EntityPlayer player, EntityArrow[] arrs, float shotVelocity) {
-        //TODO: Clean this up
+        // TODO: Clean this up
         final double xpos = player.posX;
         final double ypos = player.posY;
         final double zpos = player.posZ;
@@ -59,23 +62,36 @@ public final class MultiBow extends CustomBow {
     protected void spawnArrows(World world, EntityPlayer player, float shotVelocity, EntityArrow[] arrs) {
         world.spawnEntityInWorld(arrs[0]);
         world.spawnEntityInWorld(arrs[1]);
-        //TODO figure out which is supposed to be changed and to what
-        /*if (arrs[1].shootingEntity.rotationYaw > 180) {
-            arrs[1].posX = arrs[1].posX + (arrs[1].shootingEntity.rotationYaw / 180);
-        } else {
-            arrs[1].posX = arrs[1].posX + (arrs[1].shootingEntity.rotationYaw / 180);
-        }*/
+        /**
+         * This was some code that checked the rotationYaw of the shooting player, but didn't change anything.
+         * TODO figure out which is supposed to be changed and to what
+         *
+         * <pre>
+         * if (arrs[1].shootingEntity.rotationYaw > 180) {
+         *     arrs[1].posX = arrs[1].posX + (arrs[1].shootingEntity.rotationYaw / 180);
+         * } else {
+         *     arrs[1].posX = arrs[1].posX + (arrs[1].shootingEntity.rotationYaw / 180);
+         * }
+         * </pre>
+         */
         arrs[1].posX = arrs[1].posX + (arrs[1].shootingEntity.rotationYaw / 180);
         arrs[0].setDamage(arrs[0].getDamage() * 1.5D);
         arrs[1].setDamage(arrs[1].getDamage() * 1.3D);
 
         if (arrs.length > 2) {
             world.spawnEntityInWorld(arrs[2]);
-            /*if (arrs[2].shootingEntity.rotationYaw > 180) {
-                arrs[2].posX = arrs[2].posX - (arrs[2].shootingEntity.rotationYaw / 180);
-            } else {
-                arrs[2].posX = arrs[2].posX - (arrs[2].shootingEntity.rotationYaw / 180);
-            }*/
+            /**
+             * This was some code that checked the rotationYaw of the shooting player, but didn't change anything.
+             * TODO figure out which is supposed to be changed and to what
+             *
+             * <pre>
+             * if (arrs[2].shootingEntity.rotationYaw > 180) {
+             *     arrs[2].posX = arrs[2].posX - (arrs[2].shootingEntity.rotationYaw / 180);
+             * } else {
+             *     arrs[2].posX = arrs[2].posX - (arrs[2].shootingEntity.rotationYaw / 180);
+             * }
+             * </pre>
+             */
             arrs[2].posX = arrs[2].posX - (arrs[2].shootingEntity.rotationYaw / 180);
             arrs[2].setDamage(arrs[2].getDamage() * 1.15D);
         }

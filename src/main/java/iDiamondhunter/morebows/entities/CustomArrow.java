@@ -20,36 +20,82 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
     private byte inTicks = -1;
     private byte type = ARROW_TYPE_NOT_CUSTOM;
 
-    // TODO I think I can't remove these constructors, but I'm not sure.
+    /**
+     * Don't use this.
+     * TODO I think I can't remove these constructors, but I'm not sure.
+     *
+     * @param a used in super construction
+     */
     public CustomArrow(World a) {
         super(a);
     }
 
-    // TODO I think I can't remove these constructors, but I'm not sure.
+    /**
+     * Don't use this.
+     * TODO I think I can't remove these constructors, but I'm not sure.
+     *
+     * @param a used in super construction
+     * @param b used in super construction
+     * @param c used in super construction
+     * @param d used in super construction
+     */
     public CustomArrow(World a, double b, double c, double d) {
         super(a, b, c, d);
     }
 
-    // TODO I think I can't remove these constructors, but I'm not sure.
+    /**
+     * Don't use this.
+     * TODO I think I can't remove these constructors, but I'm not sure.
+     *
+     * @param a used in super construction
+     * @param b used in super construction
+     * @param c used in super construction
+     * @param d used in super construction
+     * @param e used in super construction
+     */
     public CustomArrow(World a, EntityLivingBase b, EntityLivingBase c, float d, float e) {
         super(a, b, c, d, e);
     }
 
-    // TODO I think I can't remove these constructors, but I'm not sure.
+    /**
+     * Don't use this.
+     * TODO I think I can't remove these constructors, but I'm not sure.
+     *
+     * @param a used in super construction
+     * @param b used in super construction
+     * @param c used in super construction
+     */
     public CustomArrow(World a, EntityLivingBase b, float c) {
         super(a, b, c);
     }
 
-    /** A constructor that gives the CustomArrow an ArrowType. */
+    /**
+     * A constructor that gives the CustomArrow an ArrowType.
+     *
+     * @param a    used in super construction
+     * @param b    used in super construction
+     * @param c    used in super construction
+     * @param type the type of arrow
+     */
     public CustomArrow(World a, EntityLivingBase b, float c, byte type) {
         super(a, b, c);
         this.type = type;
-        /* if (type == ARROW_TYPE_FROST) { // I'm not sure it makes sense for a frost arrow to be on fire, but I don't think people care about it that much, and the frost bow is a bit under powered as is...
-            this.extinguish();
-        } */
+        /**
+         * TODO Possibly implement this
+         *
+         * <pre>
+         * if (type == ARROW_TYPE_FROST) { // I'm not sure it makes sense for a frost arrow to be on fire, but I don't think people care about it that much, and the frost bow is a bit under powered as is...
+         *     this.extinguish();
+         * }
+         * </pre>
+         */
     }
 
-    /** This actually returns whether an arrow is critical or not. */
+    /**
+     * This actually returns whether an arrow is critical or not. See getIsCritical().
+     *
+     * @return whether an arrow is critical or not
+     */
     public boolean getCrit() {
         return crit;
     }
@@ -58,26 +104,24 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
     @Override
     public boolean getIsCritical() {
         return type == ARROW_TYPE_FROST ? false : super.getIsCritical();
-        /** Obviously, you're just a bad shot :D
-        *
-        *  This is an awful hack to prevent the vanilla crit particles from displaying for frost arrows.
-        *  The vanilla code to display the arrow particle trail is buried deep inside onUpdate,
-        *  and the only other options I have are to:
-        *  - intercept the particles with packets,
-        *  - intercept the particles with events (not feasible from what I can tell),
-        *  - ASM it out,
-        *  - or perform some ridiculous wrapping around the World to intercept the method to spawn particles.
-        *
-        *  Instead of doing that, I just prevent anything from ever knowing that it's crited,
-        *  and instead I wrap around the event when the arrow attacks something. See onLivingAttackEvent() for the details,
-        *  but the TLDR is that I cancel the attack and start a new one with the crit taken into account.
-        *  This allows the entity to take the crit into account when deciding if it's damaged or not.
-        *
-        *  This is probably the lesser of these evils.
-        */
+        /**
+         * Obviously, you're just a bad shot :D
+         * This is an awful hack to prevent the vanilla crit particles from displaying for frost arrows.
+         * The vanilla code to display the arrow particle trail is buried deep inside onUpdate,
+         * and the only other options I have are to:
+         * - intercept the particles with packets,
+         * - intercept the particles with events (not feasible from what I can tell),
+         * - ASM it out,
+         * - or perform some ridiculous wrapping around the World to intercept the method to spawn particles.
+         * Instead of doing that, I just prevent anything from ever knowing that it's crited,
+         * and instead I wrap around the event when the arrow attacks something. See onLivingAttackEvent() for the details,
+         * but the TLDR is that I cancel the attack and start a new one with the crit taken into account.
+         * This allows the entity to take the crit into account when deciding if it's damaged or not.
+         * This is probably the lesser of these evils.
+         */
     }
 
-    /** Returns the ArrowType of an arrow. */
+    /** @return the ArrowType of an arrow */
     public byte getType() {
         return type;
     }
@@ -87,10 +131,11 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
         super.onUpdate();
 
         if (type == ARROW_TYPE_FROST) {
-            /** Hack to determine when the arrow has hit the ground. inGround is a private field.
-             *  Access transformers can be used for this, but they're are annoying to deal with and they aren't always safe.
-             *  However, instead we can take advantage of the fact that arrowShake is always set to 7 after an arrow has hit the ground.
-             *  inGround is used to store this information.
+            /**
+             * Hack to determine when the arrow has hit the ground. inGround is a private field.
+             * Access transformers can be used for this, but they're are annoying to deal with and they aren't always safe.
+             * However, instead we can take advantage of the fact that arrowShake is always set to 7 after an arrow has hit the ground.
+             * inGround is used to store this information.
              */
             if (arrowShake == 7) {
                 inTicks = 0;
@@ -104,12 +149,16 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
                     worldObj.spawnParticle("snowballpoof", posX, posY, posZ, 0.0D, 0.0D, 0.0D);
                 }
 
-                /*
+                /**
+                 * Behavior of older versions of More Bows
+                 * TODO Possibly implement this
+                 *
+                 * <pre>
                  * if (Block.isEqualTo(test, Blocks.water)) {
-                 * this.worldObj.setBlockMetadataWithNotify(tempThingX, tempThingY, tempThingZ,
-                 * Block.getIdFromBlock(Blocks.ice), 3); }
+                 *     this.worldObj.setBlockMetadataWithNotify(tempThingX, tempThingY, tempThingZ, Block.getIdFromBlock(Blocks.ice), 3);
+                 * }
+                 * </pre>
                  */
-
                 if (inTicks <= 30) {
                     worldObj.spawnParticle("splash", posX, posY - 0.3D, posZ, 0.0D, 0.0D, 0.0D);
                 }
@@ -119,19 +168,27 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
                     final int arrX = MathHelper.floor_double(posX);
                     final int arrY = MathHelper.floor_double(posY);
                     final int arrZ = MathHelper.floor_double(posZ);
-                    /* TODO Verify that this is the right block!
-                     * Also, why does this sometimes set multiple blocks? It's the correct behavior of the original mod, but it's concerning... */
+                    /*
+                     * TODO Verify that this is the right block!
+                     * Also, why does this sometimes set multiple blocks? It's the correct behavior of the original mod, but it's concerning...
+                     */
                     final Block inBlock = worldObj.getBlock(arrX, arrY, arrZ);
 
-                    //if (Block.isEqualTo(this.field_145790_g, Blocks.snow)) {
-                    /* TODO Possibly implement incrementing snow layers. */
+                    /*
+                     * Possibly unused code?
+                     * if (Block.isEqualTo(this.field_145790_g, Blocks.snow)) {
+                     */
+
+                    /** TODO Possibly implement incrementing snow layers. */
                     if (Block.isEqualTo(inBlock, Blocks.air)) {
                         worldObj.setBlock(arrX, arrY, arrZ, Blocks.snow_layer);
                     }
 
                     if (Block.isEqualTo(inBlock, Blocks.water)) {
-                        /* TODO Check if the earlier event or this one is the correct one.
-                         * Also: bouncy arrow on ice, a bit like stone skimming? Could be cool. */
+                        /*
+                         * TODO Check if the earlier event or this one is the correct one.
+                         * Also: bouncy arrow on ice, a bit like stone skimming? Could be cool.
+                         */
                         worldObj.setBlock(arrX, arrY, arrZ, Blocks.ice);
                     }
 
