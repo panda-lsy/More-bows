@@ -165,14 +165,11 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
 
                 /** Responsible for adding snow layers on top the block the arrow hits, or "freezing" the water it's in by setting the block to ice. */
                 if (inTicks == 64) {
-                    final int arrX = MathHelper.floor_double(posX);
-                    final int arrY = MathHelper.floor_double(posY);
-                    final int arrZ = MathHelper.floor_double(posZ);
                     /*
                      * TODO Verify that this is the right block!
                      * Also, why does this sometimes set multiple blocks? It's the correct behavior of the original mod, but it's concerning...
                      */
-                    final Block inBlock = worldObj.getBlock(arrX, arrY, arrZ);
+                    final Block inBlock = worldObj.getBlock(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ));
 
                     /*
                      * Possibly unused code?
@@ -181,7 +178,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
 
                     /** TODO Possibly implement incrementing snow layers. */
                     if (Block.isEqualTo(inBlock, Blocks.air)) {
-                        worldObj.setBlock(arrX, arrY, arrZ, Blocks.snow_layer);
+                        worldObj.setBlock(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ), Blocks.snow_layer);
                     }
 
                     if (Block.isEqualTo(inBlock, Blocks.water)) {
@@ -189,7 +186,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
                          * TODO Check if the earlier event or this one is the correct one.
                          * Also: bouncy arrow on ice, a bit like stone skimming? Could be cool.
                          */
-                        worldObj.setBlock(arrX, arrY, arrZ, Blocks.ice);
+                        worldObj.setBlock(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ), Blocks.ice);
                     }
 
                     setDead();

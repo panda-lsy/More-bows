@@ -19,7 +19,7 @@ public final class Config extends GuiConfig {
      * This might break in the future, at which point something like this should be implemented:
      *
      * <pre>{@code
-     * private static String[] wantedProperties = new String[] { "oldArrRender" };
+     * private static String[] wantedProperties = new String[] { "oldFrostArrowRendering" };
      *
      * private static List<IConfigElement> getConfigElements() {
      *     final List<IConfigElement> list = new ArrayList<IConfigElement>();

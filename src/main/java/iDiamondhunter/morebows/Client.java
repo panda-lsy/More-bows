@@ -29,7 +29,7 @@ public final class Client extends MoreBows implements IModGuiFactory {
      * Hack used by RenderBow. This value is set to the partialTicks of a RenderHandEvent.
      * This value is needed by RenderBow to render the bow!
      */
-    public static float partTicks = 0;
+    public static float partialTicks = 0;
 
     /**
      * Poses the arms of a player to display the "bow aiming" action on drawing back a bow TODO finish documenting
@@ -45,8 +45,8 @@ public final class Client extends MoreBows implements IModGuiFactory {
 
     /**
      * Hack to store the amount of partial ticks to use in bow rendering.
-     * In RenderBow, partTicks is needed, but it is never passed to it.
-     * partTicks is roughly equivalent to (Minecraft.getMinecraft().entityRenderer.renderEndNanoTime + (long)(1000000000 / Minecraft.getMinecraft().gameSettings.limitFramerate))),
+     * In RenderBow, partialTicks is needed, but it is never passed to it.
+     * partialTicks is roughly equivalent to (Minecraft.getMinecraft().entityRenderer.renderEndNanoTime + (long)(1000000000 / Minecraft.getMinecraft().gameSettings.limitFramerate))),
      * however renderEndNanoTime is a private field.
      * However, this paticular value is passed through a whole bunch of places.
      * RenderHandEvent happens to be the closest to rendering items, as it's posted just before any item rendering is done.
@@ -56,7 +56,7 @@ public final class Client extends MoreBows implements IModGuiFactory {
      */
     @SubscribeEvent
     public void bowTicks(RenderHandEvent event) {
-        partTicks = event.partialTicks;
+        partialTicks = event.partialTicks;
     }
 
     /**

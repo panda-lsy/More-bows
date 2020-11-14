@@ -28,7 +28,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.config.Property;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
@@ -56,7 +55,7 @@ public class MoreBows {
      * MoreBows config setting.
      * If true, render frost arrows as snow cubes. If false, render as snowballs.
      */
-    public static boolean oldArrRender;
+    public static boolean oldFrostArrowRendering;
 
     /*
      * Hardcoded magic numbers, because Enums (as they're classes) require a large amount of file space, and I'm targeting 64kb as the compiled .jar size.
@@ -122,10 +121,7 @@ public class MoreBows {
 
     /** Syncs the config file TODO documentation */
     public static void conf() {
-        // config.load();
-        Property prop;
-        prop = config.get(Configuration.CATEGORY_GENERAL, "oldFrostArrowRendering", false);
-        oldArrRender = prop.getBoolean();
+        oldFrostArrowRendering = config.get(Configuration.CATEGORY_GENERAL, "oldFrostArrowRendering", false).getBoolean();
 
         if (config.hasChanged()) {
             config.save();
@@ -133,7 +129,8 @@ public class MoreBows {
     }
 
     /**
-     * Checks if the provided world is a client or a server. If it is a client world, it doesn't do anything.
+     * This method attempts to spawn a particle on the server world.
+     * It first checks if the provided world is a client or a server. If it is a client world, it doesn't do anything.
      * If it is a server world, it calls the server world specific method to spawn a particle on the server.
      * This particle will be sent to connected clients.
      * The parameter randDisp can be set, which sets the particles position to somewhere random close to the entity.
@@ -252,7 +249,7 @@ public class MoreBows {
     }
 
     /**
-     * Initualises mod TODO documentation
+     * Initializes mod TODO documentation
      *
      * @param event the event
      */

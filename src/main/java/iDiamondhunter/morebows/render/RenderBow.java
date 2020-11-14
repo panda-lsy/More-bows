@@ -1,6 +1,6 @@
 package iDiamondhunter.morebows.render;
 
-import static iDiamondhunter.morebows.Client.partTicks;
+import static iDiamondhunter.morebows.Client.partialTicks;
 
 import org.lwjgl.opengl.GL11;
 
@@ -56,9 +56,9 @@ public final class RenderBow implements IItemRenderer {
                 GL11.glRotatef(-12.0F, 0.0F, 1.0F, 0.0F);
                 GL11.glRotatef(-8.0F, 1.0F, 0.0F, 0.0F);
                 GL11.glTranslatef(-0.9F, 0.2F, 0.0F);
-                final float ticks = stack.getMaxItemUseDuration() - ((useTicks - partTicks) + 1.0F);
+                final float ticks = stack.getMaxItemUseDuration() - ((useTicks - partialTicks) + 1.0F);
                 /**
-                 * In the normal first person renderer, this is hardcoded to be "float divTicks = partTicks / 20.0F".
+                 * In the normal first person renderer, this is hardcoded to be "float divTicks = partialTicks / 20.0F".
                  * I've used the same code as I did in the custom FOV zoom (see iDiamondhunter.morebows.Client.fov).
                  */
                 float divTicks = ticks / ((((CustomBow) stack.getItem()).iconTimes[0] * 10) / 9);

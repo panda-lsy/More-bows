@@ -13,7 +13,7 @@ import net.minecraft.entity.projectile.EntitySnowball;
 
 /**
  * Handles rendering the entities added by this mod.
- * If the entity is a CustomArrow, and the CustomArrow is of type FROST, it renders as a snowball or a default cube depending on the value of MoreBows.oldArrRender.
+ * If the entity is a CustomArrow, and the CustomArrow is of type FROST, it renders as a snowball or a default cube depending on the value of MoreBows.oldFrostArrowRendering.
  * If it's not of type FROST, it renders as an arrow.
  * If it's not a CustomArrow, it doesn't render anything! This is deliberately used to not render any ArrowSpawners.
  */
@@ -27,7 +27,7 @@ public final class RenderModEntity extends RenderEntity {
     public void doRender(Entity e, double a, double b, double c, float d, float f) {
         if (e.getClass() == CustomArrow.class) {
             if (((CustomArrow) e).getType() == ARROW_TYPE_FROST) {
-                if (!MoreBows.oldArrRender) {
+                if (!MoreBows.oldFrostArrowRendering) {
                     snow.doRender(e, a, b, c, d, f);
                 } else {
                     super.doRender(e, a, b, c, d, f);

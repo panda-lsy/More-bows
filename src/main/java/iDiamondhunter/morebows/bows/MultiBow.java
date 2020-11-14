@@ -23,14 +23,11 @@ public final class MultiBow extends CustomBow {
     @Override
     protected void playNoise(World world, EntityPlayer player, EntityArrow[] arrs, float shotVelocity) {
         // TODO: Clean this up
-        final double xpos = player.posX;
-        final double ypos = player.posY;
-        final double zpos = player.posZ;
         world.playSoundAtEntity(player, "random.bow", 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
-        world.playSoundEffect(xpos + (player.rotationYaw / 180), ypos, zpos, "random.bow", 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
+        world.playSoundEffect(player.posX + (player.rotationYaw / 180), player.posY, player.posZ, "random.bow", 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
 
         if (arrs.length > 2) {
-            world.playSoundEffect(xpos - (player.rotationYaw / 180), ypos, zpos, "random.bow", 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
+            world.playSoundEffect(player.posX - (player.rotationYaw / 180), player.posY, player.posZ, "random.bow", 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
         }
     }
 

@@ -130,38 +130,33 @@ public class CustomBow extends ItemBow {
             // Get the arrows to fire
             final EntityArrow[] arrs = setArrows(world, player, shotVelocity);
             // Set up flags for adding enchantment effects / other modifiers
-            final boolean shouldCrit = (shotVelocity == 1.0F);
-            final int powerEnchResult = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, stack);
-            final boolean powerEnch = (powerEnchResult > 0);
+            final int power = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, stack);
             final int knockback = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, stack);
-            final boolean punchEnch = (knockback > 0);
-            final boolean flameEnch = (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack) > 0);
-            final boolean isFireArr = (arrowType == ARROW_TYPE_FIRE);
-            final boolean shouldMulti = (damageMult != 1);
+            final boolean flame = (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack) > 0);
 
             // Add enchantment effects / other modifiers to each arrow
             for (final EntityArrow arr : arrs) {
-                if (shouldCrit) { /* setIsCritical calls dataWatcher methods, avoid this unless needed with the check. */
+                if (shotVelocity == 1.0F) { /* setIsCritical calls dataWatcher methods, avoid this unless needed with the check. */
                     arr.setIsCritical(true);
                 }
 
-                if (powerEnch) {
-                    arr.setDamage(arr.getDamage() + (powerEnchResult * 0.5D) + 0.5D);
+                if (power > 0) {
+                    arr.setDamage(arr.getDamage() + (power * 0.5D) + 0.5D);
                 }
 
-                if (punchEnch) {
+                if (knockback > 0) {
                     arr.setKnockbackStrength(knockback);
                 }
 
-                if (flameEnch) {
+                if (flame) {
                     arr.setFire(flameTime);
 
-                    if (isFireArr) {
+                    if (arrowType == ARROW_TYPE_FIRE) {
                         arr.setDamage(arr.getDamage() * 1.25D); // TODO: Verify
                     }
                 }
 
-                if (isFireArr) {
+                if (arrowType == ARROW_TYPE_FIRE) {
                     arr.setFire(50); // TODO: Verify. I'm pretty sure the original mod did this.
                 }
 
@@ -169,9 +164,7 @@ public class CustomBow extends ItemBow {
                     arr.canBePickedUp = 2;
                 }
 
-                if (shouldMulti) {
-                    arr.setDamage(arr.getDamage() * damageMult);
-                }
+                arr.setDamage(arr.getDamage() * damageMult);
             }
 
             stack.damageItem(1, player);
@@ -190,7 +183,7 @@ public class CustomBow extends ItemBow {
 
     /**
      * This method plays the bow releasing noise for a given release of the bow. TODO Remove this?
-     * 
+     *
      * @param world        The world that the arrows are in.
      * @param player       The player shooting the arrows.
      * @param arrs         The arrows that a bow is shooting.
@@ -217,11 +210,11 @@ public class CustomBow extends ItemBow {
 
     /**
      * This method creates the arrows for a given release of the bow. TODO Remove this.
-     * 
+     *
      * @param world        The world that the arrows are in.
      * @param player       The player shooting the arrows.
      * @param shotVelocity The velocity of the arrows.
-     * 
+     *
      * @return The arrows to shoot.
      */
     protected EntityArrow[] setArrows(World world, EntityPlayer player, float shotVelocity) { // TODO rename later
@@ -234,7 +227,7 @@ public class CustomBow extends ItemBow {
 
     /**
      * This method spawns the arrows for a given release of the bow. TODO Remove this.
-     * 
+     *
      * @param world        The world that the arrows are in.
      * @param player       The player shooting the arrows.
      * @param shotVelocity The velocity of the arrows.
