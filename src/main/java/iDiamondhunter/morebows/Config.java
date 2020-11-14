@@ -18,7 +18,7 @@ public final class Config extends GuiConfig {
      * Returns a new Config with all child elements of whatever's in the default config category.
      * This might break in the future, at which point something like this should be implemented:
      *
-     * <pre>
+     * <pre>{@code
      * private static String[] wantedProperties = new String[] { "oldArrRender" };
      *
      * private static List<IConfigElement> getConfigElements() {
@@ -28,7 +28,7 @@ public final class Config extends GuiConfig {
      *     }
      *     return list;
      * }
-     * </pre>
+     * }</pre>
      *
      * @param g the previous screen.
      */

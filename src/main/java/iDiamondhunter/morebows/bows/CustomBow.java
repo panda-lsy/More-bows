@@ -190,8 +190,11 @@ public class CustomBow extends ItemBow {
 
     /**
      * This method plays the bow releasing noise for a given release of the bow. TODO Remove this?
-     *
-     * @param arrs The arrows that a bow is shooting.
+     * 
+     * @param world        The world that the arrows are in.
+     * @param player       The player shooting the arrows.
+     * @param arrs         The arrows that a bow is shooting.
+     * @param shotVelocity The velocity of the arrows.
      */
     protected void playNoise(World world, EntityPlayer player, EntityArrow[] arrs, float shotVelocity) {
         world.playSoundAtEntity(player, "random.bow", 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
@@ -212,7 +215,15 @@ public class CustomBow extends ItemBow {
         }
     }
 
-    /** This method creates the arrows for a given release of the bow. TODO Remove this. */
+    /**
+     * This method creates the arrows for a given release of the bow. TODO Remove this.
+     * 
+     * @param world        The world that the arrows are in.
+     * @param player       The player shooting the arrows.
+     * @param shotVelocity The velocity of the arrows.
+     * 
+     * @return The arrows to shoot.
+     */
     protected EntityArrow[] setArrows(World world, EntityPlayer player, float shotVelocity) { // TODO rename later
         if (arrowType == ARROW_TYPE_NOT_CUSTOM) {
             return new EntityArrow[] { new EntityArrow(world, player, shotVelocity * velocityMult) };
@@ -223,9 +234,11 @@ public class CustomBow extends ItemBow {
 
     /**
      * This method spawns the arrows for a given release of the bow. TODO Remove this.
-     *
-     * @param player       The player to spawn the arrows at.
-     * @param shotVelocity The velocity of shot arrows.
+     * 
+     * @param world        The world that the arrows are in.
+     * @param player       The player shooting the arrows.
+     * @param shotVelocity The velocity of the arrows.
+     * @param arrs         The arrows to shoot.
      */
     protected void spawnArrows(World world, EntityPlayer player, float shotVelocity, EntityArrow[] arrs) {
         for (final EntityArrow arr : arrs) {
