@@ -6,6 +6,7 @@ import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_NOT_CUSTOM;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
@@ -212,6 +213,15 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
     public void readSpawnData(ByteBuf data) {
         crit = data.readBoolean();
         type = data.readByte();
+        /*
+         * See NetHandlerPlayClient.handleSpawnObject (line 414)
+         * TODO Verify if this is the correct behavior, seems to work from some testing in multiplayer.
+         */
+        final Entity shooter = worldObj.getEntityByID(data.readInt());
+
+        if (shooter instanceof EntityLivingBase) {
+            shootingEntity = shooter;
+        }
     }
 
     @Override
@@ -231,6 +241,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
     public void writeSpawnData(ByteBuf data) {
         data.writeBoolean(crit);
         data.writeByte(type);
+        data.writeInt(shootingEntity != null ? shootingEntity.getEntityId() : -1);
     }
 
 }
