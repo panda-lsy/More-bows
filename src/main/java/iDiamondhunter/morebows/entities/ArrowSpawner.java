@@ -23,6 +23,8 @@ public final class ArrowSpawner extends Entity {
     }
 
     /**
+     * This entity is responsible for storing and spawning the time delayed "bonus" arrows of the ender bow.
+     *
      * @param world        the world to spawn in
      * @param posX         the x position.
      * @param posY         the y position.
@@ -130,19 +132,15 @@ public final class ArrowSpawner extends Entity {
     protected void readEntityFromNBT(NBTTagCompound tag) {
         // Variables related to this entity
         shotVelocity = tag.getFloat("shotVelocity");
-        // Variables related to the arrows stored by this entity
-        final int arrowsArmount = tag.getInteger("arrowsAmount");
-        arrows = new EntityArrow[arrowsArmount];
+        // Arrows stored by this entity
+        arrows = new EntityArrow[tag.getInteger("arrowsAmount")];
 
         /** An over engineered system to load an arbitrary amount of entities */
-        for (int i = 0; i < arrowsArmount; i++) {
-            final NBTTagCompound arrTag = tag.getCompoundTag("arrows").getCompoundTag("arrow" + i);
-            final String arrType = tag.getCompoundTag("arrowsType").getString("arrow" + i);
-
+        for (int i = 0; i < tag.getInteger("arrowsAmount"); i++) {
             try {
                 // Attempt to spawn in the specified entity while assuming that the data saved is completely valid
-                arrows[i] = (EntityArrow) EntityList.createEntityByName(arrType, worldObj);
-                arrows[i].readFromNBT(arrTag);
+                arrows[i] = (EntityArrow) EntityList.createEntityByName(tag.getCompoundTag("arrowsType").getString("arrow" + i), worldObj);
+                arrows[i].readFromNBT(tag.getCompoundTag("arrows").getCompoundTag("arrow" + i));
             } catch (final Exception e) {
                 // This can fail in numerous ways, so it's probably for the best just to create a new arrow.
                 e.printStackTrace();
@@ -158,6 +156,7 @@ public final class ArrowSpawner extends Entity {
         tag.setFloat("shotVelocity", shotVelocity);
         // Variables related to the arrows stored by this entity
         tag.setInteger("arrowsAmount", arrows.length);
+        // Tags to write to during the loop
         final NBTTagCompound arrowsTag = new NBTTagCompound();
         final NBTTagCompound arrowsType = new NBTTagCompound();
 

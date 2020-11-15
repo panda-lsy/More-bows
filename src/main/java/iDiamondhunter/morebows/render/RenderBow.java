@@ -68,7 +68,7 @@ public final class RenderBow implements IItemRenderer {
                     divTicks = 1.0F;
                 }
 
-                final float tickFOV = 1.0F + (divTicks * 0.2F);
+                // final float tickFOV = 1.0F + (divTicks * 0.2F);
 
                 /** Bow animations and transformations */
                 if (divTicks > 0.1F) {
@@ -83,7 +83,8 @@ public final class RenderBow implements IItemRenderer {
                 GL11.glRotatef(-50.0F, 0.0F, 1.0F, 0.0F);
                 GL11.glTranslatef(0.0F, 0.5F, 0.0F);
                 /** Probably relative scaling for FOV reasons */
-                GL11.glScalef(1.0F, 1.0F, tickFOV);
+                // GL11.glScalef(1.0F, 1.0F, tickFOV);
+                GL11.glScalef(1.0F, 1.0F, (1.0F + (divTicks * 0.2F)));
                 /** Does it look like I know what I'm doing to you? */
                 GL11.glTranslatef(0.0F, -0.5F, 0.0F);
                 GL11.glRotatef(50.0F, 0.0F, 1.0F, 0.0F);

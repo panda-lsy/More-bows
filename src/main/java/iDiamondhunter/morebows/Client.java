@@ -71,7 +71,6 @@ public final class Client extends MoreBows implements IModGuiFactory {
             /** See net.minecraft.client.entity.EntityPlayerSP.getFOVMultiplier() */
             float f = (float) event.entity.getItemInUseDuration() / (float) ((((CustomBow) event.entity.getItemInUse().getItem()).iconTimes[0] * 10) / 9);
 
-            // float f1 = (float) event.entity.getItemInUseDuration() / bow.powerDiv;
             if (f > 1.0F) {
                 f = 1.0F;
             } else {

@@ -1,7 +1,5 @@
 package iDiamondhunter.morebows;
 
-import java.util.Random;
-
 import cpw.mods.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
@@ -116,11 +114,8 @@ public class MoreBows {
     protected static final Item FlameBow = new CustomBow(576, EnumRarity.uncommon, new byte[] { 14, 9 }, defaultVelocityMult, 15F, defaultFlameTime, 2.0D, ARROW_TYPE_FIRE).setUnlocalizedName(FlameBowName).setTextureName(modSeperator + FlameBowName);
     protected static final Item FrostBow = new CustomBow(550, EnumRarity.common, new byte[] { 26, 13 }, defaultVelocityMult, 26.0F, defaultFlameTime, defaultDamageMult, ARROW_TYPE_FROST).setUnlocalizedName(FrostBowName).setTextureName(modSeperator + FrostBowName);
 
-    /* TODO put this somewhere else? */
-    private static final Random rand = new Random();
-
     /** Syncs the config file TODO documentation */
-    public static void conf() {
+    private static void conf() {
         oldFrostArrowRendering = config.get(Configuration.CATEGORY_GENERAL, "oldFrostArrowRendering", false).getBoolean();
 
         if (config.hasChanged()) {
@@ -144,23 +139,22 @@ public class MoreBows {
      */
     public static final void tryPart(World world, Entity entity, String part, boolean randDisp, double velocity) {
         if (!world.isRemote) {
-            final WorldServer server = (WorldServer) world;
             // final int amount = 1;
             final double xDisp;
             final double yDisp;
             final double zDisp;
 
             if (randDisp) {
-                xDisp = (rand.nextFloat() * entity.width * 2.0F) - entity.width;
-                yDisp = 0.5D + (rand.nextFloat() * entity.height);
-                zDisp = (rand.nextFloat() * entity.width * 2.0F) - entity.width;
+                xDisp = (world.rand.nextFloat() * entity.width * 2.0F) - entity.width;
+                yDisp = 0.5D + (world.rand.nextFloat() * entity.height);
+                zDisp = (world.rand.nextFloat() * entity.width * 2.0F) - entity.width;
             } else {
                 xDisp = 0;
                 yDisp = 0.5D;
                 zDisp = 0;
             }
 
-            server.func_147487_a(part, entity.posX, entity.posY, entity.posZ, 1, xDisp, yDisp, zDisp, velocity);
+            ((WorldServer) world).func_147487_a(part, entity.posX, entity.posY, entity.posZ, 1, xDisp, yDisp, zDisp, velocity);
         }
     }
 
@@ -223,7 +217,7 @@ public class MoreBows {
             if ((type == ARROW_TYPE_FROST) && arr.getCrit()) {
                 arr.setIsCritical(false);
                 event.setCanceled(true);
-                event.entity.attackEntityFrom(event.source, event.ammount + MoreBows.rand.nextInt((int) ((event.ammount / 2) + 2))); // Manually apply critical damage due to deliberately not exposing if an arrow is critical. See CustomArrow.
+                event.entity.attackEntityFrom(event.source, event.ammount + event.entity.worldObj.rand.nextInt((int) ((event.ammount / 2) + 2))); // Manually apply critical damage due to deliberately not exposing if an arrow is critical. See CustomArrow.
             }
         }
     }
@@ -249,6 +243,18 @@ public class MoreBows {
     }
 
     /**
+     * Calls conf() to sync the config file when the config file changes TODO documentation
+     *
+     * @param event the event
+     */
+    @SubscribeEvent
+    public void confChange(OnConfigChangedEvent event) {
+        if (event.modID.equals(MOD_ID)) {
+            conf();
+        }
+    }
+
+    /**
      * Initializes mod TODO documentation
      *
      * @param event the event
@@ -261,18 +267,6 @@ public class MoreBows {
         // TODO see if it's possible to only use one of these
         MinecraftForge.EVENT_BUS.register(proxy);
         FMLCommonHandler.instance().bus().register(proxy);
-    }
-
-    /**
-     * Calls conf() to sync the config file when the config file changes TODO documentation
-     *
-     * @param event the event
-     */
-    @SubscribeEvent
-    public void onConfigurationChangedEvent(OnConfigChangedEvent event) {
-        if (event.modID.equals(MOD_ID)) {
-            conf();
-        }
     }
 
     /** TODO documentation */

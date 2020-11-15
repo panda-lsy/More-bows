@@ -7,7 +7,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import iDiamondhunter.morebows.entities.CustomArrow;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -58,9 +57,7 @@ public class CustomBow extends ItemBow {
      * @param arrowType    The type of arrows this bow shoots.
      */
     public CustomBow(int maxDamage, EnumRarity rarity, byte[] iconTimes, float velocityMult, float powerDiv, int flameTime, double damageMult, byte arrowType) {
-        maxStackSize = 1;
-        setMaxDamage(maxDamage);
-        setCreativeTab(CreativeTabs.tabCombat);
+        super();
         setMaxDamage(maxDamage);
         this.rarity = rarity;
         this.powerDiv = powerDiv;
@@ -135,7 +132,9 @@ public class CustomBow extends ItemBow {
             final boolean flame = (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack) > 0);
 
             // Add enchantment effects / other modifiers to each arrow
-            for (final EntityArrow arr : arrs) {
+            for (int i = 0; i < arrs.length; ++i) {
+                final EntityArrow arr = arrs[i];
+
                 if (shotVelocity == 1.0F) { /* setIsCritical calls dataWatcher methods, avoid this unless needed with the check. */
                     arr.setIsCritical(true);
                 }
@@ -234,8 +233,8 @@ public class CustomBow extends ItemBow {
      * @param arrs         The arrows to shoot.
      */
     protected void spawnArrows(World world, EntityPlayer player, float shotVelocity, EntityArrow[] arrs) {
-        for (final EntityArrow arr : arrs) {
-            world.spawnEntityInWorld(arr);
+        for (int i = 0; i < arrs.length; ++i) {
+            world.spawnEntityInWorld(arrs[i]);
         }
     }
 
