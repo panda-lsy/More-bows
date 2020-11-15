@@ -95,7 +95,7 @@ public final class CustomBow extends ItemBow {
         }
     }
 
-    /** EnumAction.none is returned, as the bow is rendered by a custom IItemRenderer which effectively applies a tweaked version of EnumAction.bow. See RenderBow. */
+    /** EnumAction.none is returned, as the bow is rendered by a custom IItemRenderer which effectively applies a tweaked version of EnumAction.bow. See ModRenderer. */
     @Override
     public EnumAction getItemUseAction(ItemStack stack) {
         return EnumAction.none;

@@ -1,24 +1,56 @@
-package iDiamondhunter.morebows.render;
+package iDiamondhunter.morebows;
 
 import static iDiamondhunter.morebows.Client.partialTicks;
+import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_FROST;
 
 import org.lwjgl.opengl.GL11;
 
-import iDiamondhunter.morebows.CustomBow;
+import iDiamondhunter.morebows.entities.CustomArrow;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderEntity;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityWitch;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.entity.projectile.EntitySnowball;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.IItemRenderer;
 
 /**
- * This is a custom IItemRenderer, which exists as a result of not being able to modify the bow "draw back" animation speed with standard Minecraft renderers.
+ * This class is comprised of two parts: an entity renderer that handles both ArrowSpawners and CustomArrows, and an IItemRenderer for the CustomBow item.
+ * Entity rendering:
+ * Handles rendering the entities added by this mod.
+ * If the entity is a CustomArrow, and the CustomArrow is of type FROST, it renders as a snowball or a default cube depending on the value of MoreBows.oldFrostArrowRendering.
+ * If it's not of type FROST, it renders as an arrow.
+ * If it's not a CustomArrow, it doesn't render anything! This is deliberately used to not render any ArrowSpawners.
+ * Bow rendering:
+ * A custom IItemRenderer, which exists as a result of not being able to modify the bow "draw back" animation speed with standard Minecraft renderers.
  * It is also responsible for transforming the position of the bow when rendering an Entity that holds a bow.
  * Minecraft normally only applies these transformations when the item matches the bow item. Items of type CustomBow do not match against this.
  */
-public final class RenderBow implements IItemRenderer {
+public final class ModRenderer extends RenderEntity implements IItemRenderer {
+
+    /** Not sure if this is a super cused hack, of if it's actually the best way to do this... */
+    private final static Render arrow = RenderManager.instance.getEntityClassRenderObject(EntityArrow.class);
+    private final static Render snow = RenderManager.instance.getEntityClassRenderObject(EntitySnowball.class);
+
+    @Override
+    public void doRender(Entity e, double a, double b, double c, float d, float f) {
+        if (e.getClass() == CustomArrow.class) {
+            if (((CustomArrow) e).getType() == ARROW_TYPE_FROST) {
+                if (!MoreBows.oldFrostArrowRendering) {
+                    snow.doRender(e, a, b, c, d, f);
+                } else {
+                    super.doRender(e, a, b, c, d, f);
+                }
+            } else {
+                arrow.doRender(e, a, b, c, d, f);
+            }
+        } /** else do nothing */
+    }
 
     @Override
     public boolean handleRenderType(ItemStack stack, ItemRenderType type) {

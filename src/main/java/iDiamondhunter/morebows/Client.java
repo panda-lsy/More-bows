@@ -7,8 +7,6 @@ import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import iDiamondhunter.morebows.entities.ArrowSpawner;
 import iDiamondhunter.morebows.entities.CustomArrow;
-import iDiamondhunter.morebows.render.RenderBow;
-import iDiamondhunter.morebows.render.RenderModEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -25,8 +23,8 @@ import net.minecraftforge.client.event.RenderPlayerEvent.Pre;
 public final class Client extends MoreBows implements IModGuiFactory {
 
     /**
-     * Hack used by RenderBow. This value is set to the partialTicks of a RenderHandEvent.
-     * This value is needed by RenderBow to render the bow!
+     * Hack used by ModRenderer. This value is set to the partialTicks of a RenderHandEvent.
+     * This value is needed by ModRenderer to render the bow!
      */
     public static float partialTicks = 0;
 
@@ -44,7 +42,7 @@ public final class Client extends MoreBows implements IModGuiFactory {
 
     /**
      * Hack to store the amount of partial ticks to use in bow rendering.
-     * In RenderBow, partialTicks is needed, but it is never passed to it.
+     * In ModRenderer, partialTicks is needed, but it is never passed to it.
      * partialTicks is roughly equivalent to (Minecraft.getMinecraft().entityRenderer.renderEndNanoTime + (long)(1000000000 / Minecraft.getMinecraft().gameSettings.limitFramerate))),
      * however renderEndNanoTime is a private field.
      * However, this paticular value is passed through a whole bunch of places.
@@ -100,16 +98,16 @@ public final class Client extends MoreBows implements IModGuiFactory {
     protected void register() {
         super.register();
         /** Registration of custom renderers */
-        RenderingRegistry.registerEntityRenderingHandler(ArrowSpawner.class, new RenderModEntity());
-        RenderingRegistry.registerEntityRenderingHandler(CustomArrow.class, new RenderModEntity());
-        MinecraftForgeClient.registerItemRenderer(MoreBows.DiamondBow, new RenderBow());
-        MinecraftForgeClient.registerItemRenderer(MoreBows.GoldBow, new RenderBow());
-        MinecraftForgeClient.registerItemRenderer(MoreBows.EnderBow, new RenderBow());
-        MinecraftForgeClient.registerItemRenderer(MoreBows.StoneBow, new RenderBow());
-        MinecraftForgeClient.registerItemRenderer(MoreBows.IronBow, new RenderBow());
-        MinecraftForgeClient.registerItemRenderer(MoreBows.MultiBow, new RenderBow());
-        MinecraftForgeClient.registerItemRenderer(MoreBows.FlameBow, new RenderBow());
-        MinecraftForgeClient.registerItemRenderer(MoreBows.FrostBow, new RenderBow());
+        RenderingRegistry.registerEntityRenderingHandler(ArrowSpawner.class, new ModRenderer());
+        RenderingRegistry.registerEntityRenderingHandler(CustomArrow.class, new ModRenderer());
+        MinecraftForgeClient.registerItemRenderer(MoreBows.DiamondBow, new ModRenderer());
+        MinecraftForgeClient.registerItemRenderer(MoreBows.GoldBow, new ModRenderer());
+        MinecraftForgeClient.registerItemRenderer(MoreBows.EnderBow, new ModRenderer());
+        MinecraftForgeClient.registerItemRenderer(MoreBows.StoneBow, new ModRenderer());
+        MinecraftForgeClient.registerItemRenderer(MoreBows.IronBow, new ModRenderer());
+        MinecraftForgeClient.registerItemRenderer(MoreBows.MultiBow, new ModRenderer());
+        MinecraftForgeClient.registerItemRenderer(MoreBows.FlameBow, new ModRenderer());
+        MinecraftForgeClient.registerItemRenderer(MoreBows.FrostBow, new ModRenderer());
     }
 
     @Override
