@@ -5,6 +5,8 @@ name: Java CI with Gradle
 
 on:
   release:
+    branches:
+      - forge-1.7.10
     types:
       - published
 

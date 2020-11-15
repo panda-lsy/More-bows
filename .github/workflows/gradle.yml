@@ -6,10 +6,10 @@ name: Java CI with Gradle
 on:
   push:
     branches:
-      - master
+      - forge-1.7.10
   pull_request:
     branches:
-      - master
+      - forge-1.7.10
 
 jobs:
   build:
