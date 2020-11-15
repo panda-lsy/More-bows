@@ -5,7 +5,6 @@ import java.util.Set;
 import cpw.mods.fml.client.IModGuiFactory;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import iDiamondhunter.morebows.bows.CustomBow;
 import iDiamondhunter.morebows.entities.ArrowSpawner;
 import iDiamondhunter.morebows.entities.CustomArrow;
 import iDiamondhunter.morebows.render.RenderBow;

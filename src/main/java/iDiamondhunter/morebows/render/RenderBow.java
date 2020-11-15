@@ -4,7 +4,7 @@ import static iDiamondhunter.morebows.Client.partialTicks;
 
 import org.lwjgl.opengl.GL11;
 
-import iDiamondhunter.morebows.bows.CustomBow;
+import iDiamondhunter.morebows.CustomBow;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityWitch;
