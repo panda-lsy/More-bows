@@ -1,0 +1,33 @@
+{
+    "authors": [
+        "GaussFire",
+        "iDiamondhunter",
+        "Ninjamight",
+        "NeRd"
+    ],
+    "contact": {
+        "homepage": "https://github.com/NeRdTheNed/More-bows",
+        "sources": "https://github.com/NeRdTheNed/More-bows"
+    },
+    "depends": {
+        "fabric": "*",
+        "fabricloader": ">=0.7.4",
+        "minecraft": "1.16.x"
+    },
+    "description": "A port of the More Bows mod to 1.7.10! This mod was originally created by GaussFire, and maintained + updated by iDiamondhunter. Ported by NeRd!",
+    "entrypoints": {
+        "main": [
+            "iDiamondhunter.morebows.MoreBows"
+        ]
+    },
+    "environment": "*",
+    "icon": "assets/morebows/mb.jpg",
+    "id": "morebows",
+    "license": "CC0-1.0",
+    "mixins": [
+        "morebows.mixins.json"
+    ],
+    "name": "More Bows",
+    "schemaVersion": 1,
+    "version": "${version}"
+}

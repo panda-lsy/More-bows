@@ -3,18 +3,15 @@ package iDiamondhunter.morebows.entities;
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_FROST;
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_NOT_CUSTOM;
 
-import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.MathHelper;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.projectile.ArrowEntity;
+
 import net.minecraft.world.World;
 
 /** This entity is a custom arrow. A large portion of logic around these arrows is handled in the MoreBows class with SubscribeEvents. TODO Better documentation. Weird rotation issues seem to be happening with the fire and frost arrows, but not the ender arrows. */
-public final class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnData {
+public final class CustomArrow extends ArrowEntity {
 
     private boolean crit = false;
     private byte inTicks = -1;
@@ -26,8 +23,8 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
      *
      * @param a used in super construction
      */
-    public CustomArrow(World a) {
-        super(a);
+    public CustomArrow(EntityType<? extends ArrowEntity> entityType, World world) {
+        super(entityType, world);
     }
 
     /**
@@ -53,7 +50,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
      * @param d used in super construction
      * @param e used in super construction
      */
-    public CustomArrow(World a, EntityLivingBase b, EntityLivingBase c, float d, float e) {
+    /*public CustomArrow(World a, EntityLivingBase b, EntityLivingBase c, float d, float e) {
         super(a, b, c, d, e);
     }
 
@@ -65,7 +62,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
      * @param b used in super construction
      * @param c used in super construction
      */
-    public CustomArrow(World a, EntityLivingBase b, float c) {
+    /*public CustomArrow(World a, EntityLivingBase b, float c) {
         super(a, b, c);
     }
 
@@ -77,7 +74,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
      * @param c    used in super construction
      * @param type the type of arrow
      */
-    public CustomArrow(World a, EntityLivingBase b, float c, byte type) {
+    /*public CustomArrow(World a, EntityLivingBase b, float c, byte type) {
         super(a, b, c);
         this.type = type;
         /**
@@ -88,7 +85,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
          *     this.extinguish();
          * }
          * </pre>
-         */
+         *
     }
 
     /**
@@ -101,7 +98,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
     }
 
     /** This may not accurately return whether an arrow is critical or not. This is to hide crit particle trails, when a custom arrow has a custom particle trail. */
-    @Override
+    /*@Override
     public boolean getIsCritical() {
         return type == ARROW_TYPE_FROST ? false : super.getIsCritical();
         /**
@@ -118,15 +115,15 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
          * but the TLDR is that I cancel the attack and start a new one with the crit taken into account.
          * This allows the entity to take the crit into account when deciding if it's damaged or not.
          * This is probably the lesser of these evils.
-         */
+         *
     }
 
-    /** @return the ArrowType of an arrow */
+    /** @return the ArrowType of an arrow
     public byte getType() {
         return type;
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void onUpdate() {
         super.onUpdate();
 
@@ -136,7 +133,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
              * Access transformers can be used for this, but they're are annoying to deal with and they aren't always safe.
              * However, instead we can take advantage of the fact that arrowShake is always set to 7 after an arrow has hit the ground.
              * inGround is used to store this information.
-             */
+             *
             if (arrowShake == 7) {
                 inTicks = 0;
                 canBePickedUp = 0;
@@ -158,17 +155,17 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
                  *     this.worldObj.setBlockMetadataWithNotify(tempThingX, tempThingY, tempThingZ, Block.getIdFromBlock(Blocks.ice), 3);
                  * }
                  * </pre>
-                 */
+                 *
                 if (inTicks <= 30) {
                     worldObj.spawnParticle("splash", posX, posY - 0.3D, posZ, 0.0D, 0.0D, 0.0D);
                 }
 
-                /** Responsible for adding snow layers on top the block the arrow hits, or "freezing" the water it's in by setting the block to ice. */
+                /** Responsible for adding snow layers on top the block the arrow hits, or "freezing" the water it's in by setting the block to ice. *
                 if (inTicks == 64) {
                     /*
                      * TODO Verify that this is the right block!
                      * Also, why does this sometimes set multiple blocks? It's the correct behavior of the original mod, but it's concerning...
-                     */
+                     *
                     final Block inBlock = worldObj.getBlock(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ));
 
                     /*
@@ -176,31 +173,31 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
                      * if (Block.isEqualTo(this.field_145790_g, Blocks.snow)) {
                      */
 
-                    /** TODO Possibly implement incrementing snow layers. */
-                    if (Block.isEqualTo(inBlock, Blocks.air)) {
-                        worldObj.setBlock(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ), Blocks.snow_layer);
-                    }
-
-                    if (Block.isEqualTo(inBlock, Blocks.water)) {
-                        /*
-                         * TODO Check if the earlier event or this one is the correct one.
-                         * Also: bouncy arrow on ice, a bit like stone skimming? Could be cool.
-                         */
-                        worldObj.setBlock(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ), Blocks.ice);
-                    }
-
-                    setDead();
-                }
-            } else if (crit) {
-                for (int i = 0; i < 4; ++i) {
-                    // No need for fancy server side particle handling
-                    worldObj.spawnParticle("splash", posX + ((motionX * i) / 4.0D), posY + ((motionY * i) / 4.0D), posZ + ((motionZ * i) / 4.0D), -motionX, -motionY + 0.2D, -motionZ);
-                }
-            }
-        }
+    /** TODO Possibly implement incrementing snow layers. *
+    if (Block.isEqualTo(inBlock, Blocks.air)) {
+        worldObj.setBlock(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ), Blocks.snow_layer);
     }
 
-    @Override
+    if (Block.isEqualTo(inBlock, Blocks.water)) {
+        /*
+         * TODO Check if the earlier event or this one is the correct one.
+         * Also: bouncy arrow on ice, a bit like stone skimming? Could be cool.
+         *
+        worldObj.setBlock(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ), Blocks.ice);
+    }
+
+    setDead();
+    }
+    } else if (crit) {
+    for (int i = 0; i < 4; ++i) {
+    // No need for fancy server side particle handling
+    worldObj.spawnParticle("splash", posX + ((motionX * i) / 4.0D), posY + ((motionY * i) / 4.0D), posZ + ((motionZ * i) / 4.0D), -motionX, -motionY + 0.2D, -motionZ);
+    }
+    }
+    }
+    }*/
+
+    /*@Override
     public void readEntityFromNBT(NBTTagCompound tag) {
         super.readEntityFromNBT(tag);
         inTicks = tag.getByte("inTicks");
@@ -231,6 +228,6 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
     public void writeSpawnData(ByteBuf data) {
         data.writeBoolean(crit);
         data.writeByte(type);
-    }
+    }*/
 
 }

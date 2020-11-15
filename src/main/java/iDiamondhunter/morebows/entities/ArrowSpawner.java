@@ -1,25 +1,25 @@
 package iDiamondhunter.morebows.entities;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.EntityType;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Packet;
 import net.minecraft.world.World;
 
 /** This entity is responsible for storing and spawning the time delayed "bonus" arrows of the ender bow. TODO Cleanup, more documentation */
 public final class ArrowSpawner extends Entity {
 
-    private EntityArrow[] arrows;
-    private float shotVelocity;
+    //private EntityArrow[] arrows;
+    //private float shotVelocity;
 
     /**
      * @param world the world to spawn in
      */
-    public ArrowSpawner(World world) {
-        super(world);
-        noClip = true;
+    public ArrowSpawner(EntityType<?> type, World world) {
+        super(type, world);
+        /*noClip = true;
         preventEntitySpawning = false;
-        isImmuneToFire = true;
+        isImmuneToFire = true;*/
     }
 
     /**
@@ -30,7 +30,7 @@ public final class ArrowSpawner extends Entity {
      * @param shotVelocity the velocity of the stored arrows.
      * @param arrows       the stored arrows.
      */
-    public ArrowSpawner(World world, double posX, double posY, double posZ, float shotVelocity, EntityArrow[] arrows) {
+    /*public ArrowSpawner(World world, double posX, double posY, double posZ, float shotVelocity, EntityArrow[] arrows) {
         this(world);
         this.shotVelocity = shotVelocity;
         this.posX = posX;
@@ -45,11 +45,11 @@ public final class ArrowSpawner extends Entity {
          *     setDead();
          * }
          * </pre>
-         */
+         *
         this.arrows = arrows;
-    }
+    }*/
 
-    @Override
+    /*@Override
     protected boolean canTriggerWalking() {
         return false;
     }
@@ -64,7 +64,7 @@ public final class ArrowSpawner extends Entity {
          * preventEntitySpawning = false;
          * isImmuneToFire = true;
          * </pre>
-         */
+         *
     }
 
     @Override
@@ -75,9 +75,9 @@ public final class ArrowSpawner extends Entity {
     @Override
     public boolean isInvisible() {
         return true;
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void onUpdate() {
         // Executed first, to prevent weird edge cases
         if (ticksExisted > 61) {
@@ -126,7 +126,7 @@ public final class ArrowSpawner extends Entity {
     }
 
     /** This method reads the entity specific data from saved NBT data, including the stored arrows. TODO Better documentation */
-    @Override
+    /*@Override
     protected void readEntityFromNBT(NBTTagCompound tag) {
         // Variables related to this entity
         shotVelocity = tag.getFloat("shotVelocity");
@@ -134,7 +134,7 @@ public final class ArrowSpawner extends Entity {
         final int arrowsArmount = tag.getInteger("arrowsAmount");
         arrows = new EntityArrow[arrowsArmount];
 
-        /** An over engineered system to load an arbitrary amount of entities */
+        /** An over engineered system to load an arbitrary amount of entities
         for (int i = 0; i < arrowsArmount; i++) {
             final NBTTagCompound arrTag = tag.getCompoundTag("arrows").getCompoundTag("arrow" + i);
             final String arrType = tag.getCompoundTag("arrowsType").getString("arrow" + i);
@@ -152,7 +152,7 @@ public final class ArrowSpawner extends Entity {
     }
 
     /** This method saves the entity specific data to NBT data, including the stored arrows. TODO Better documentation */
-    @Override
+    /*@Override
     protected void writeEntityToNBT(NBTTagCompound tag) {
         // Variables related to this entity
         tag.setFloat("shotVelocity", shotVelocity);
@@ -161,7 +161,7 @@ public final class ArrowSpawner extends Entity {
         final NBTTagCompound arrowsTag = new NBTTagCompound();
         final NBTTagCompound arrowsType = new NBTTagCompound();
 
-        /** An over engineered system to save an arbitrary amount of entities */
+        /** An over engineered system to save an arbitrary amount of entities
         for (int i = 0; i < arrows.length; i++) {
             final NBTTagCompound arrTag = new NBTTagCompound();
             arrows[i].writeToNBT(arrTag);
@@ -172,6 +172,27 @@ public final class ArrowSpawner extends Entity {
         // These values are then saved with these tags
         tag.setTag("arrows", arrowsTag);
         tag.setTag("arrowsType", arrowsType);
+    }*/
+
+    @Override
+    protected void initDataTracker() {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    protected void readCustomDataFromTag(CompoundTag tag) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    protected void writeCustomDataToTag(CompoundTag tag) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public Packet<?> createSpawnPacket() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

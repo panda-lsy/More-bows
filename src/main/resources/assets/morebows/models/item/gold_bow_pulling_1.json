@@ -1,0 +1,6 @@
+{
+    "parent": "morebows:item/gold_bow",
+    "textures": {
+        "layer0": "morebows:item/gold_bow_pulling_1"
+    }
+}

@@ -3,47 +3,55 @@ package iDiamondhunter.morebows.bows;
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_FIRE;
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_NOT_CUSTOM;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
 import iDiamondhunter.morebows.entities.CustomArrow;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.init.Items;
-import net.minecraft.item.EnumAction;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.item.ItemBow;
+import net.minecraft.entity.LivingEntity;
+
+
+import net.minecraft.item.BowItem;
+
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+
+import net.minecraft.util.Rarity;
+import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 
 /**
  * This entire class is a huge hack. I'm ashamed of myself. And yes, this is important to document.
  * TODO: Possibly come up with better ideas for various bits of this class.
  **/
-public class CustomBow extends ItemBow {
+public class CustomBow extends BowItem {
+
+    public CustomBow(Settings settings, float velocityMult, float powerDiv, int flameTime, double damageMult, byte arrowType) {
+        super(settings);
+        this.powerDiv = powerDiv;
+        this.velocityMult = velocityMult;
+        this.flameTime = flameTime;
+        this.damageMult = damageMult;
+        this.arrowType = arrowType;
+        // TODO Auto-generated constructor stub
+    }
+
+    public UseAction getUseAction(ItemStack stack) {
+        //return UseAction.NONE;
+        return super.getUseAction(stack);
+    }
+
+    //AbstractClientPlayerEntity.getSpeed()
 
     /* Bow instance variables */
     private final double damageMult;
     private final int flameTime;
     private final float powerDiv;
-    private final EnumRarity rarity;
+
     private final byte arrowType;
     private final float velocityMult;
 
     /* Icon related variables */
-    @SideOnly(Side.CLIENT)
+    /*@SideOnly(Side.CLIENT)
     private IIcon[] icons;
-    /**
-     * The amount of time it takes to switch bow icons when the bow is being drawn back.
-     * TODO This is not a great solution.
-     */
-    public final byte[] iconTimes;
 
     /**
      * A more customizable bow than the vanilla one.
@@ -57,7 +65,7 @@ public class CustomBow extends ItemBow {
      * @param damageMult   The multiplier to damage done by an arrow shot by this bow.
      * @param arrowType    The type of arrows this bow shoots.
      */
-    public CustomBow(int maxDamage, EnumRarity rarity, byte[] iconTimes, float velocityMult, float powerDiv, int flameTime, double damageMult, byte arrowType) {
+    /*public CustomBow(int maxDamage, EnumRarity rarity, byte[] iconTimes, float velocityMult, float powerDiv, int flameTime, double damageMult, byte arrowType) {
         maxStackSize = 1;
         setMaxDamage(maxDamage);
         setCreativeTab(CreativeTabs.tabCombat);
@@ -69,10 +77,10 @@ public class CustomBow extends ItemBow {
         this.damageMult = damageMult;
         this.arrowType = arrowType;
         this.iconTimes = iconTimes;
-    }
+    }*/
 
     /** This returns the bow sprite for a given duration of drawing the bow back. TODO This is still a bit janky. Remove this message when you're certain this is a good way to do it. */
-    @Override
+    /*@Override
     @SideOnly(Side.CLIENT)
     public final IIcon getIcon(ItemStack stack, int u, EntityPlayer p, ItemStack i, int useRem) {
         if (i == null) {
@@ -90,10 +98,10 @@ public class CustomBow extends ItemBow {
         } else {
             return itemIcon;
         }
-    }
+    }*/
 
     /** EnumAction.none is returned, as the bow is rendered by a custom IItemRenderer which effectively applies a tweaked version of EnumAction.bow. See RenderBow. */
-    @Override
+    /*@Override
     public final EnumAction getItemUseAction(ItemStack stack) {
         return EnumAction.none;
     }
@@ -101,12 +109,13 @@ public class CustomBow extends ItemBow {
     @Override
     public final EnumRarity getRarity(ItemStack item) {
         return rarity;
-    }
+    }*/
 
     /** This handles the process of shooting an arrow from this bow. TODO Cleanup, document more */
     @Override
-    public final void onPlayerStoppedUsing(ItemStack stack, World world, EntityPlayer player, int remaining) {
-        final ArrowLooseEvent event = new ArrowLooseEvent(player, stack, (getMaxItemUseDuration(stack) - remaining));
+    public final void onStoppedUsing(ItemStack stack, World world, LivingEntity player, int remainingUseTicks) {
+        super.onStoppedUsing(stack, world, player, remainingUseTicks);
+        /*final ArrowLooseEvent event = new ArrowLooseEvent(player, stack, (getMaxItemUseDuration(stack) - remaining));
         MinecraftForge.EVENT_BUS.post(event);
 
         if (event.isCanceled()) {
@@ -136,7 +145,7 @@ public class CustomBow extends ItemBow {
 
             // Add enchantment effects / other modifiers to each arrow
             for (final EntityArrow arr : arrs) {
-                if (shotVelocity == 1.0F) { /* setIsCritical calls dataWatcher methods, avoid this unless needed with the check. */
+                if (shotVelocity == 1.0F) { /* setIsCritical calls dataWatcher methods, avoid this unless needed with the check.
                     arr.setIsCritical(true);
                 }
 
@@ -178,7 +187,7 @@ public class CustomBow extends ItemBow {
             if (!world.isRemote) {
                 spawnArrows(world, player, shotVelocity, arrs);
             }
-        }
+        }*/
     }
 
     /**
@@ -189,12 +198,12 @@ public class CustomBow extends ItemBow {
      * @param arrs         The arrows that a bow is shooting.
      * @param shotVelocity The velocity of the arrows.
      */
-    protected void playNoise(World world, EntityPlayer player, EntityArrow[] arrs, float shotVelocity) {
+    /*protected void playNoise(World world, EntityPlayer player, EntityArrow[] arrs, float shotVelocity) {
         world.playSoundAtEntity(player, "random.bow", 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
     }
 
     /** This method registers the icons of a given bow. Overrides are used as ItemBow's icon related variables are not visible :( */
-    @Override
+    /*@Override
     @SideOnly(Side.CLIENT)
     public final void registerIcons(IIconRegister iconReg) {
         itemIcon = iconReg.registerIcon(getIconString() + "1"); // redo with off-by-one error fixed
@@ -217,7 +226,7 @@ public class CustomBow extends ItemBow {
      *
      * @return The arrows to shoot.
      */
-    protected EntityArrow[] setArrows(World world, EntityPlayer player, float shotVelocity) { // TODO rename later
+    /*protected EntityArrow[] setArrows(World world, EntityPlayer player, float shotVelocity) { // TODO rename later
         if (arrowType == ARROW_TYPE_NOT_CUSTOM) {
             return new EntityArrow[] { new EntityArrow(world, player, shotVelocity * velocityMult) };
         }
@@ -233,10 +242,10 @@ public class CustomBow extends ItemBow {
      * @param shotVelocity The velocity of the arrows.
      * @param arrs         The arrows to shoot.
      */
-    protected void spawnArrows(World world, EntityPlayer player, float shotVelocity, EntityArrow[] arrs) {
+    /*protected void spawnArrows(World world, EntityPlayer player, float shotVelocity, EntityArrow[] arrs) {
         for (final EntityArrow arr : arrs) {
             world.spawnEntityInWorld(arr);
         }
-    }
+    }*/
 
 }
