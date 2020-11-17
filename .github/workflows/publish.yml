@@ -1,7 +1,7 @@
 # This workflow will build a Java project with Gradle
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
 
-name: Java CI with Gradle
+name: Java CI with Gradle (Forge 1.7.10 - release)
 
 on:
   release:
@@ -28,6 +28,10 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 8
+    - name: Install advancecomp
+      run: sudo apt-get install advancecomp
+    - name: Install strip-nondeterminism
+      run: sudo apt-get install strip-nondeterminism
     - name: Print Java enviromental variables for debugging purposes.
       run: |
         set | grep JAVA
@@ -43,6 +47,10 @@ jobs:
         dependencies-cache-enabled: false
         configuration-cache-enabled: false
         arguments: SetupCIWorkspace build
+    - name: Run strip-nondeterminism on built .jar files
+      run: strip-nondeterminism build/libs/*.jar
+    - name: Run advzip (-i 99999) on built .jar files
+      run: advzip --shrink-insane --iter 99999 -k -p -z build/libs/*.jar
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
