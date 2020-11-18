@@ -33,14 +33,13 @@ public final class CustomBow extends ItemBow {
     /* Bow instance variables */
     private final byte bowType;
     private final double damageMult;
-    private final int flameTime;
     /**
      * The amount of time it takes to switch bow icons when the bow is being drawn back.
      * TODO This is not a great solution.
      */
     public final byte[] iconTimes;
     private final boolean multiShot;
-    private final float powerDiv;
+    private final int powerDiv;
     private final EnumRarity rarity;
     private final float velocityMult;
 
@@ -54,19 +53,17 @@ public final class CustomBow extends ItemBow {
      * @param maxDamage    The maximum damage a bow can do.
      * @param bowType      The type of arrows this bow shoots. This also influences some of the behaviors of the bow as well.
      * @param damageMult   The multiplier to damage done by an arrow shot by this bow.
-     * @param flameTime    The amount of time an arrow burns for when shot on fire with this bow (usually through the flame enchantment).
      * @param iconTimes    The amount of time it takes to switch bow icons when the bow is being drawn back. TODO This is not a great solution.
      * @param multiShot    A dirty, dirty hack, indicating if this bow shoots multiple arrows or not.
      * @param powerDiv     The power divisor of this bow. TODO document better.
      * @param rarity       The rarity of this bow.
      * @param velocityMult The velocity multiplier of this bow. TODO document better.
      */
-    public CustomBow(int maxDamage, byte bowType, double damageMult, int flameTime, byte[] iconTimes, boolean multiShot, float powerDiv, EnumRarity rarity, float velocityMult) {
+    public CustomBow(int maxDamage, byte bowType, double damageMult, byte[] iconTimes, boolean multiShot, int powerDiv, EnumRarity rarity, float velocityMult) {
         super();
         setMaxDamage(maxDamage);
         this.bowType = bowType;
         this.damageMult = damageMult;
-        this.flameTime = flameTime;
         this.iconTimes = iconTimes;
         this.multiShot = multiShot;
         this.powerDiv = powerDiv;
@@ -203,7 +200,7 @@ public final class CustomBow extends ItemBow {
                 }
 
                 if (flame) {
-                    arr.setFire(flameTime);
+                    arr.setFire(100);
 
                     if (bowType == ARROW_TYPE_FIRE) {
                         arr.setDamage(arr.getDamage() * 1.25D); // TODO: Verify
