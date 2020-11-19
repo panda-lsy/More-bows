@@ -126,7 +126,7 @@ public final class CustomBow extends ItemBow {
         final boolean allwaysShoots = player.capabilities.isCreativeMode || (EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, stack) > 0);
 
         if (allwaysShoots || player.inventory.hasItem(Items.arrow)) {
-            float shotVelocity = event.charge / powerDiv;
+            float shotVelocity = event.charge / (float) powerDiv;
             shotVelocity = ((shotVelocity * shotVelocity) + (shotVelocity * 2.0F)) / 3.0F;
 
             if (shotVelocity < 0.1D) {
