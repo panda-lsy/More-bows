@@ -98,12 +98,6 @@ tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }
 
-// This task creates a .jar file containing the javadoc for the code of this mod.
-task javadocJar(type: Jar, dependsOn: 'javadoc') {
-    classifier "javadoc"
-    from javadoc.outputs
-}
-
 // This task creates a .jar file containing the source code of this mod.
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = "sources"
@@ -176,11 +170,11 @@ jar {
 
 // Creates the listed artifacts on building the mod.
 artifacts {
-    archives javadocJar
     archives sourcesJar
-    archives unmappedJar
     archives optimisedJar
 }
+
+build.finalizedBy(cleanUnmappedJar)
 
 publishing {
     publications {
@@ -190,12 +184,6 @@ publishing {
             }
             artifact(sourcesJar) {
                 builtBy sourcesJar
-            }
-            artifact(unmappedJar) {
-                builtBy unmappedJar
-            }
-            artifact(javadocJar) {
-                builtBy javadocJar
             }
             artifact(optimisedJar) {
                 builtBy remapProguardProperly
