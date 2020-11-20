@@ -41,6 +41,7 @@ sourceCompatibility = null
 targetCompatibility = null
 
 // Defines a Java 6 compatible JDK. This is used to get properties requiring a reference to a JDK (rt.jar etc).
+// Unofficially, the codebase of MoreBows attempts to retain Java 5 compatibility, for ease of backports in the future, but Gradle doesn't support building with Java 5 in toolchains yet. I should make a bug report about it at some point...
 def compiler = javaToolchains.compilerFor {
     languageVersion = JavaLanguageVersion.of(6)
 }

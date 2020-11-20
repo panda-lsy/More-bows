@@ -78,17 +78,14 @@ public final class Client extends MoreBows implements IModGuiFactory {
         }
     }
 
-    @Override
     public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement a) {
         return null;
     }
 
-    @Override
     public void initialize(Minecraft a) {
         // This space left intentionally blank
     }
 
-    @Override
     public Class<? extends GuiScreen> mainConfigGuiClass() {
         return Config.class;
     }
@@ -110,7 +107,6 @@ public final class Client extends MoreBows implements IModGuiFactory {
         MinecraftForgeClient.registerItemRenderer(MoreBows.FrostBow, new ModRenderer());
     }
 
-    @Override
     public Set<RuntimeOptionCategoryElement> runtimeGuiCategories() {
         return null;
     }

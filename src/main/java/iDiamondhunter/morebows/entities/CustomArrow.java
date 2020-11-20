@@ -209,7 +209,6 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
         type = tag.getByte("type");
     }
 
-    @Override
     public void readSpawnData(ByteBuf data) {
         crit = data.readBoolean();
         type = data.readByte();
@@ -237,7 +236,6 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
         tag.setByte("type", type);
     }
 
-    @Override
     public void writeSpawnData(ByteBuf data) {
         data.writeBoolean(crit);
         data.writeByte(type);

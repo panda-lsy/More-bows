@@ -52,7 +52,6 @@ public final class ModRenderer extends RenderEntity implements IItemRenderer {
         } /** else do nothing */
     }
 
-    @Override
     public boolean handleRenderType(ItemStack stack, ItemRenderType type) {
         return (type == ItemRenderType.EQUIPPED) || (type == ItemRenderType.EQUIPPED_FIRST_PERSON);
     }
@@ -64,7 +63,6 @@ public final class ModRenderer extends RenderEntity implements IItemRenderer {
      * - Any entity that holds a bow (moving the bow to the right position in the hands of the Entity)
      * TODO cleanup
      */
-    @Override
     public void renderItem(ItemRenderType type, ItemStack stack, Object... data) {
         final EntityLivingBase entity = (EntityLivingBase) data[1];
         GL11.glPopMatrix();
@@ -174,7 +172,6 @@ public final class ModRenderer extends RenderEntity implements IItemRenderer {
         GL11.glPushMatrix();
     }
 
-    @Override
     public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack stack, ItemRendererHelper data) {
         return false;
     }
