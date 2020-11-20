@@ -115,4 +115,19 @@ public final class Client extends MoreBows implements IModGuiFactory {
         return null;
     }
 
+    /**
+     * TODO Possibly implement something like this but more compatible.
+     *
+     * <pre>
+     * {@code
+     * {@literal @}SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
+     * public void guiChange(GuiOpenEvent event) {
+     *     if (event.gui instanceof GuiIngameModOptions) {
+     *         event.gui = new Config(null);
+     *     }
+     * }
+     * }
+     * </pre>
+     */
+
 }
