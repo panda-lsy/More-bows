@@ -58,15 +58,7 @@ public final class ArrowSpawner extends Entity {
 
     @Override
     protected void entityInit() {
-        /**
-         * // TODO Possibly do this
-         *
-         * <pre>
-         * noClip = true;
-         * preventEntitySpawning = false;
-         * isImmuneToFire = true;
-         * </pre>
-         */
+        // This space left intentionally blank
     }
 
     @Override
@@ -88,12 +80,17 @@ public final class ArrowSpawner extends Entity {
         }
 
         if (!worldObj.isRemote) {
-            if (arrows == null) {
-                // System.out.println("Bonus ender arrows lost! Will fix this soon..."); // debug
-                setDead();
-                return;
-            }
-
+            /**
+             * TODO Better error handling
+             *
+             * <pre>
+             * if (arrows == null) {
+             *     // System.out.println("Bonus ender arrows lost! Will fix this soon..."); // debug
+             *     setDead();
+             *     return;
+             * }
+             * </pre>
+             */
             if (ticksExisted == 1) {
                 // First arrow
                 worldObj.spawnEntityInWorld(arrows[0]);

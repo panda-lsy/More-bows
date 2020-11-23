@@ -25,6 +25,9 @@ Descriptions taken from [iDiamondhunter's page for the mod](https://www.minecraf
 ### Other people's ports:
 - LucidSage's port of the More Bows mod to 1.8 can be found [here](https://github.com/LucidSage/More-bows)!
 
+### Building:
+The Gradle build script resolves dependancies automatically, but it relies on having both a Java 6 compatible JDK installed (which Gradle builds the mod with) _and_ a Java 8 compatible JDK (or higher) installed (which Gradle itself runs on). This can be worked around by changing the Gradle build script to build the mod with a JDK that's compatible with one installed on the computer building this mod, although this could potentially result in slight differences or incompatibilities with truely ancient versions of Java. Note that ProGuard is used to output bytecode compatible with Java 5, so this might be a moot point.
+
 ### Licence:
 As iDiamondhunter ["removed the copyrights" from this mod](https://www.minecraftforum.net/forums/mapping-and-modding-java-edition/minecraft-mods/1286765-1-6-2-more-bows-mod?comment=733), I presume that this mod is free of any known copyright, and that it is in the public domain. Therefore, I will be keeping it licensed as such.
 

@@ -35,7 +35,7 @@ public final class Client extends MoreBows implements IModGuiFactory {
      */
     @SubscribeEvent
     public void bowPose(Pre event) {
-        if ((event.entityPlayer.getItemInUse() != null) && (event.entityPlayer.getItemInUse().getItem() instanceof CustomBow)) {
+        if ((event.entityPlayer.getItemInUse() != null) && (event.entityPlayer.getItemInUse().getItem().getClass() == CustomBow.class)) {
             event.renderer.modelArmorChestplate.aimedBow = event.renderer.modelArmor.aimedBow = event.renderer.modelBipedMain.aimedBow = true;
         }
     }
@@ -64,7 +64,7 @@ public final class Client extends MoreBows implements IModGuiFactory {
      */
     @SubscribeEvent
     public void FOV(FOVUpdateEvent event) {
-        if ((event.entity.getItemInUse() != null) && (event.entity.getItemInUse().getItem() instanceof CustomBow)) {
+        if ((event.entity.getItemInUse() != null) && (event.entity.getItemInUse().getItem().getClass() == CustomBow.class)) {
             /** See net.minecraft.client.entity.EntityPlayerSP.getFOVMultiplier() */
             float f = (float) event.entity.getItemInUseDuration() / (float) ((((CustomBow) event.entity.getItemInUse().getItem()).iconTimes[0] * 10) / 9);
 

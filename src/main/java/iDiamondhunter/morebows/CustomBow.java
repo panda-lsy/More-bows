@@ -72,21 +72,19 @@ public final class CustomBow extends ItemBow {
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(ItemStack stack, int u, EntityPlayer p, ItemStack i, int useRem) {
-        if (i == null) {
-            return itemIcon;
+        if (i != null) {
+            final int ticks = stack.getMaxItemUseDuration() - useRem;
+
+            if (ticks >= iconTimes[0]) {
+                return icons[2];
+            } else if (ticks > iconTimes[1]) {
+                return icons[1];
+            } else if (ticks > 0) {
+                return icons[0];
+            }
         }
 
-        final int ticks = stack.getMaxItemUseDuration() - useRem;
-
-        if (ticks >= iconTimes[0]) {
-            return icons[2];
-        } else if (ticks > iconTimes[1]) {
-            return icons[1];
-        } else if (ticks > 0) {
-            return icons[0];
-        } else {
-            return itemIcon;
-        }
+        return itemIcon;
     }
 
     /** EnumAction.none is returned, as the bow is rendered by a custom IItemRenderer which effectively applies a tweaked version of EnumAction.bow. See ModRenderer. */

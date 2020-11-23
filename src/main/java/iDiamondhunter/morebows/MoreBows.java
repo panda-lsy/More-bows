@@ -160,7 +160,7 @@ public class MoreBows {
      */
     @SubscribeEvent
     public final void arrHit(LivingAttackEvent event) {
-        if (!event.entity.worldObj.isRemote && (event.source.getSourceOfDamage() instanceof CustomArrow)) {
+        if ((!event.entity.worldObj.isRemote) && (event.source.getSourceOfDamage() instanceof CustomArrow)) {
             final CustomArrow arr = (CustomArrow) event.source.getSourceOfDamage();
             final byte type = arr.getType();
             final String part;
@@ -228,7 +228,7 @@ public class MoreBows {
                 event.entity.setInWeb(); // TODO Replace with slowness effect? This is the original behavior...
 
                 // event.entity.extinguish(); // Potentially would be nice to have? Not in the original mod, just though it seemed right.
-                if (!(event.entity instanceof EntityEnderman)) { // Vanilla arrows don't get destroyed after they've hit an Enderman
+                if (event.entity.getClass() != EntityEnderman.class) { // Vanilla arrows don't get destroyed after they've hit an Enderman
                     event.source.getSourceOfDamage().setDead();
                 }
             }

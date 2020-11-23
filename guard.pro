@@ -39,21 +39,17 @@
 -keep,allowoptimization public class iDiamondhunter.morebows.Client
 -keep,allowoptimization public class iDiamondhunter.morebows.MoreBows
 
-# Keep entities having a consistent name internally for Forge
-
--keep,allowoptimization public class iDiamondhunter.morebows.entities.**
-
 # Keep all initialisers, because ProGuard keeps trying to make them private.
 
 -keepclassmembers class * { public <init>(...); }
 
-# Don't put the mod into the default package. That would be bad.
-
--keeppackagenames
-
 # TODO Check if anything else should be kept. Annotations are mandatory, as Forge uses them for reflection.
 
 -keepattributes *Annotation*
+
+# Repackage all classes into iDiamondhunter.morebows
+
+-repackageclasses iDiamondhunter.morebows
 
 # Bonus optimisations
 
@@ -61,7 +57,7 @@
 -mergeinterfacesaggressively
 -overloadaggressively
 
-# TODO Decide if this is a good idea. allowaccessmodification is probably safe. dontpreverify seems to work on modern JVMs, need to do more exhaustive testing.
+# TODO Decide if this is a good idea. allowaccessmodification is probably safe. dontpreverify seems to work on modern JVMs (target needs to be Java 6, lower doesn't matter as preverification doesn't exist yet), need to do more exhaustive testing.
 
 -dontpreverify
 -allowaccessmodification

@@ -46,11 +46,16 @@ def compiler = javaToolchains.compilerFor {
     languageVersion = JavaLanguageVersion.of(6)
 }
 
-// This Java toolchain builds this mod with a Java 6 compatible JDK.
+// Tells Gradle to use the previously defined Java 6 compatible JDK.
 java {
     toolchain {
         compiler
     }
+}
+
+// Tells Gradle to always compile with the previously defined Java 6 compatible JDK.
+tasks.withType(JavaCompile).configureEach {
+    javaCompiler = compiler
 }
 
 import groovy.json.JsonSlurper
