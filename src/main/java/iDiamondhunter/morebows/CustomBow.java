@@ -39,9 +39,8 @@ public final class CustomBow extends ItemBow {
      */
     public final byte[] iconTimes;
     private final boolean multiShot;
-    private final int powerDiv;
+    private final float powerDiv;
     private final EnumRarity rarity;
-    private final float velocityMult;
 
     /* Icon related variables */
     @SideOnly(Side.CLIENT)
@@ -57,9 +56,8 @@ public final class CustomBow extends ItemBow {
      * @param multiShot    A dirty, dirty hack, indicating if this bow shoots multiple arrows or not.
      * @param powerDiv     The power divisor of this bow. TODO document better.
      * @param rarity       The rarity of this bow.
-     * @param velocityMult The velocity multiplier of this bow. TODO document better.
      */
-    public CustomBow(int maxDamage, byte bowType, double damageMult, byte[] iconTimes, boolean multiShot, int powerDiv, EnumRarity rarity, float velocityMult) {
+    public CustomBow(int maxDamage, byte bowType, double damageMult, byte[] iconTimes, boolean multiShot, float powerDiv, EnumRarity rarity) {
         super();
         setMaxDamage(maxDamage);
         this.bowType = bowType;
@@ -68,7 +66,6 @@ public final class CustomBow extends ItemBow {
         this.multiShot = multiShot;
         this.powerDiv = powerDiv;
         this.rarity = rarity;
-        this.velocityMult = velocityMult;
     }
 
     /** This returns the bow sprite for a given duration of drawing the bow back. TODO This is still a bit janky. Remove this message when you're certain this is a good way to do it. */
@@ -126,7 +123,7 @@ public final class CustomBow extends ItemBow {
         final boolean allwaysShoots = player.capabilities.isCreativeMode || (EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, stack) > 0);
 
         if (allwaysShoots || player.inventory.hasItem(Items.arrow)) {
-            float shotVelocity = event.charge / (float) powerDiv;
+            float shotVelocity = event.charge / powerDiv;
             shotVelocity = ((shotVelocity * shotVelocity) + (shotVelocity * 2.0F)) / 3.0F;
 
             if (shotVelocity < 0.1D) {
@@ -173,9 +170,9 @@ public final class CustomBow extends ItemBow {
                     arrs[1].canBePickedUp = 2;
                 }
             } else if (bowType == ARROW_TYPE_NOT_CUSTOM) { // Other bows
-                arrs = new EntityArrow[] { new EntityArrow(world, player, shotVelocity * velocityMult) };
+                arrs = new EntityArrow[] { new EntityArrow(world, player, shotVelocity * 2.0F) };
             } else { // Frost / fire bows
-                arrs = new EntityArrow[] { new CustomArrow(world, player, shotVelocity * velocityMult, bowType) };
+                arrs = new EntityArrow[] { new CustomArrow(world, player, shotVelocity * 2.0F, bowType) };
             }
 
             // Set up flags for adding enchantment effects / other modifiers
@@ -287,7 +284,7 @@ public final class CustomBow extends ItemBow {
         }
     }
 
-    /** This method registers the icons of a given bow. Overrides are used as ItemBow's icon related variables are not visible :( */
+    /** This method registers the icons of a given bow. */
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister iconReg) {

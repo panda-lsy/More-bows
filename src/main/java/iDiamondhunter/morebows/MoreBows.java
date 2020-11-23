@@ -89,25 +89,23 @@ public class MoreBows {
 
     /* Default values for bow construction */
     ///** Default values for bow construction: the default speed at which icons change. */
-    //public static final byte[] defaultIconTimes = { 18, 13 };
+    //private static final byte[] defaultIconTimes = { 18, 13 };
     /** Default values for bow construction: the default damage multiplier. */
-    public static final double defaultDamageMult = 1D;
-    // /** Default values for bow construction: the default power divisor (TODO document better) */
-    // public static final float defaultPowerDiv = 20;
-    /** Default values for bow construction: the default velocity multiplier (TODO document better) */
-    public static final float defaultVelocityMult = 2.0F;
+    private static final double noDamageMult = 1D;
+    /** Default values for bow construction: the default power divisor (TODO document better) */
+    private static final float defaultPowerDiv = 20.0F;
     /** Default values for bow construction: the default type of arrow a bow shoots. */
-    public static final byte defaultArrowType = ARROW_TYPE_NOT_CUSTOM;
+    private static final byte defaultArrowType = ARROW_TYPE_NOT_CUSTOM;
 
     /* Bow items. TODO: This is super janky. */
-    protected static final Item DiamondBow = new CustomBow(1016, defaultArrowType, 2.25D, new byte[] { 8, 4 }, false, 6, EnumRarity.rare, 2.2F).setUnlocalizedName(DiamondBowName).setTextureName(modSeperator + DiamondBowName);
-    protected static final Item GoldBow = new CustomBow(68, defaultArrowType, 1.5D, new byte[] { 8, 4 }, false, 5, EnumRarity.uncommon, 2.4F).setUnlocalizedName(GoldBowName).setTextureName(modSeperator + GoldBowName);
-    protected static final Item EnderBow = new CustomBow(215, ARROW_TYPE_ENDER, 1D, new byte[] { 19, 10 }, true, 22, EnumRarity.epic, defaultVelocityMult).setUnlocalizedName(EnderBowName).setTextureName(modSeperator + EnderBowName);
-    protected static final Item StoneBow = new CustomBow(484, defaultArrowType, 1.15D, new byte[] { 18, 13 }, false, 17, EnumRarity.common, defaultVelocityMult).setUnlocalizedName(StoneBowName).setTextureName(modSeperator + StoneBowName);
-    protected static final Item IronBow = new CustomBow(550, defaultArrowType, 1.5D, new byte[] { 16, 11 }, false, 17, EnumRarity.common, 2.1F).setUnlocalizedName(IronBowName).setTextureName(modSeperator + IronBowName);
-    protected static final Item MultiBow = new CustomBow(550, ARROW_TYPE_NOT_CUSTOM, 1D, new byte[] { 12, 7 }, true, 13, EnumRarity.rare, defaultVelocityMult).setUnlocalizedName(MultiBowName).setTextureName(modSeperator + MultiBowName);
-    protected static final Item FlameBow = new CustomBow(576, ARROW_TYPE_FIRE, 2.0D, new byte[] { 14, 9 }, false, 15, EnumRarity.uncommon, defaultVelocityMult).setUnlocalizedName(FlameBowName).setTextureName(modSeperator + FlameBowName);
-    protected static final Item FrostBow = new CustomBow(550, ARROW_TYPE_FROST, defaultDamageMult, new byte[] { 26, 13 }, false, 26, EnumRarity.common, defaultVelocityMult).setUnlocalizedName(FrostBowName).setTextureName(modSeperator + FrostBowName);
+    protected static final Item DiamondBow = new CustomBow(1016, defaultArrowType, 2.25D, new byte[] { 8, 4 }, false, 6.0F, EnumRarity.rare).setUnlocalizedName(DiamondBowName).setTextureName(modSeperator + DiamondBowName);
+    protected static final Item GoldBow = new CustomBow(68, defaultArrowType, 2.5D, new byte[] { 8, 4 }, false, 6.0F, EnumRarity.uncommon).setUnlocalizedName(GoldBowName).setTextureName(modSeperator + GoldBowName);
+    protected static final Item EnderBow = new CustomBow(215, ARROW_TYPE_ENDER, noDamageMult, new byte[] { 19, 10 }, true, 22.0F, EnumRarity.epic).setUnlocalizedName(EnderBowName).setTextureName(modSeperator + EnderBowName);
+    protected static final Item StoneBow = new CustomBow(484, defaultArrowType, 1.15D, new byte[] { 18, 13 }, false, defaultPowerDiv, EnumRarity.common).setUnlocalizedName(StoneBowName).setTextureName(modSeperator + StoneBowName);
+    protected static final Item IronBow = new CustomBow(550, defaultArrowType, 1.5D, new byte[] { 16, 11 }, false, 17.0F, EnumRarity.common).setUnlocalizedName(IronBowName).setTextureName(modSeperator + IronBowName);
+    protected static final Item MultiBow = new CustomBow(550, ARROW_TYPE_NOT_CUSTOM, noDamageMult, new byte[] { 12, 7 }, true, 13.0F, EnumRarity.rare).setUnlocalizedName(MultiBowName).setTextureName(modSeperator + MultiBowName);
+    protected static final Item FlameBow = new CustomBow(576, ARROW_TYPE_FIRE, 2.0D, new byte[] { 14, 9 }, false, 15.0F, EnumRarity.uncommon).setUnlocalizedName(FlameBowName).setTextureName(modSeperator + FlameBowName);
+    protected static final Item FrostBow = new CustomBow(550, ARROW_TYPE_FROST, noDamageMult, new byte[] { 26, 13 }, false, 26.0F, EnumRarity.common).setUnlocalizedName(FrostBowName).setTextureName(modSeperator + FrostBowName);
 
     /** Syncs the config file TODO documentation */
     private static void conf() {
