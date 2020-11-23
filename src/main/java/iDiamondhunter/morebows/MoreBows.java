@@ -88,8 +88,8 @@ public class MoreBows {
     private static final String FrostBowName = "FrostBow";
 
     /* Default values for bow construction */
-    ///** Default values for bow construction: the default speed at which icons change. */
-    //private static final byte[] defaultIconTimes = { 18, 13 };
+    /// ** Default values for bow construction: the default speed at which icons change. */
+    // private static final byte[] defaultIconTimes = { 18, 13 };
     /** Default values for bow construction: the default damage multiplier. */
     private static final double noDamageMult = 1D;
     /** Default values for bow construction: the default power divisor (TODO document better) */
@@ -108,7 +108,7 @@ public class MoreBows {
     protected static final Item FrostBow = new CustomBow(550, ARROW_TYPE_FROST, noDamageMult, new byte[] { 26, 13 }, false, 26.0F, EnumRarity.common).setUnlocalizedName(FrostBowName).setTextureName(modSeperator + FrostBowName);
 
     /** Syncs the config file TODO documentation */
-    private static void conf() {
+    private static final void conf() {
         oldFrostArrowRendering = config.get(Configuration.CATEGORY_GENERAL, "oldFrostArrowRendering", false).getBoolean();
 
         if (config.hasChanged()) {
@@ -241,7 +241,7 @@ public class MoreBows {
      * @param event the event
      */
     @SubscribeEvent
-    public void confChange(OnConfigChangedEvent event) {
+    public final void confChange(OnConfigChangedEvent event) {
         if (event.modID.equals(MOD_ID)) {
             conf();
         }
