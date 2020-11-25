@@ -141,6 +141,11 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
             if (arrowShake == 7) {
                 inTicks = 0;
                 canBePickedUp = 0;
+
+                /* Shrinks the size of the frost arrow if it's in the ground and the mod is in old rendering mode */
+                if (worldObj.isRemote && iDiamondhunter.morebows.MoreBows.oldFrostArrowRendering) {
+                    setSize(0.1F, 0.1F);
+                }
             }
 
             if (inTicks > -1) {
@@ -189,7 +194,9 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
                          */
                         worldObj.setBlock(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ), Blocks.ice);
                     }
+                }
 
+                if (inTicks >= 64) {
                     setDead();
                 }
             } else if (crit) {
@@ -211,6 +218,13 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
 
     public void readSpawnData(ByteBuf data) {
         crit = data.readBoolean();
+        inTicks = data.readByte();
+
+        /* Shrinks the size of the frost arrow if it's in the ground and the mod is in old rendering mode */
+        if ((inTicks != -1) && worldObj.isRemote && iDiamondhunter.morebows.MoreBows.oldFrostArrowRendering) {
+            setSize(0.1F, 0.1F);
+        }
+
         type = data.readByte();
         /*
          * See NetHandlerPlayClient.handleSpawnObject (line 414)
@@ -238,6 +252,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
 
     public void writeSpawnData(ByteBuf data) {
         data.writeBoolean(crit);
+        data.writeByte(inTicks);
         data.writeByte(type);
         data.writeInt(shootingEntity != null ? shootingEntity.getEntityId() : -1);
     }
