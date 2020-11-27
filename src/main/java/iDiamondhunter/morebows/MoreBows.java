@@ -162,13 +162,12 @@ public class MoreBows {
     public final void arrHit(LivingAttackEvent event) {
         if ((!event.entity.worldObj.isRemote) && (event.source.getSourceOfDamage() instanceof CustomArrow)) {
             final CustomArrow arr = (CustomArrow) event.source.getSourceOfDamage();
-            final byte type = arr.getType();
             final String part;
             final int amount;
             final double velocity;
             final boolean randDisp;
 
-            switch (type) {
+            switch (arr.type) {
             case ARROW_TYPE_ENDER:
                 part = "portal";
                 amount = 3;
@@ -207,7 +206,7 @@ public class MoreBows {
                 tryPart(event.entity.worldObj, event.entity, part, randDisp, velocity);
             }
 
-            if ((type == ARROW_TYPE_FROST) && arr.getCrit()) {
+            if ((arr.type == ARROW_TYPE_FROST) && arr.crit) {
                 arr.setIsCritical(false);
                 event.setCanceled(true);
                 event.entity.attackEntityFrom(event.source, event.ammount + event.entity.worldObj.rand.nextInt((int) ((event.ammount / 2) + 2))); // Manually apply critical damage due to deliberately not exposing if an arrow is critical. See CustomArrow.
@@ -223,14 +222,12 @@ public class MoreBows {
      */
     @SubscribeEvent
     public final void arrHurt(LivingHurtEvent event) {
-        if (event.source.getSourceOfDamage() instanceof CustomArrow) {
-            if (((CustomArrow) event.source.getSourceOfDamage()).getType() == ARROW_TYPE_FROST) {
-                event.entity.setInWeb(); // TODO Replace with slowness effect? This is the original behavior...
+        if ((event.source.getSourceOfDamage() instanceof CustomArrow) && (((CustomArrow) event.source.getSourceOfDamage()).type == ARROW_TYPE_FROST)) {
+            event.entity.setInWeb(); // TODO Replace with slowness effect? This is the original behavior...
 
-                // event.entity.extinguish(); // Potentially would be nice to have? Not in the original mod, just though it seemed right.
-                if (event.entity.getClass() != EntityEnderman.class) { // Vanilla arrows don't get destroyed after they've hit an Enderman
-                    event.source.getSourceOfDamage().setDead();
-                }
+            // event.entity.extinguish(); // Potentially would be nice to have? Not in the original mod, just though it seemed right.
+            if (!(event.entity instanceof EntityEnderman)) { // Vanilla arrows don't get destroyed after they've hit an Enderman
+                event.source.getSourceOfDamage().setDead();
             }
         }
     }

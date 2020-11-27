@@ -10,6 +10,7 @@ import net.minecraftforge.common.config.ConfigElement;
 
 /**
  * A class that extends GuiConfig, because the Forge team likes to complicate things.
+ * Why this wasn't an anonymous inner class is beyond me.
  * TODO see if this can be removed.
  */
 public final class Config extends GuiConfig {

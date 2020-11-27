@@ -36,12 +36,12 @@
 
 # These two classes are referred to in String constants inside of annotations. TODO see above (around -adaptclassstrings).
 
--keep,allowoptimization public class iDiamondhunter.morebows.Client
--keep,allowoptimization public class iDiamondhunter.morebows.MoreBows
+-keepnames,allowoptimization public class iDiamondhunter.morebows.Client
+-keepnames,allowoptimization public class iDiamondhunter.morebows.MoreBows
 
 # Keep all initialisers, because ProGuard keeps trying to make them private.
 
--keepclassmembers class * { public <init>(...); }
+-keepclassmembers,allowobfuscation class * { public <init>(...); }
 
 # TODO Check if anything else should be kept. Annotations are mandatory, as Forge uses them for reflection.
 
@@ -66,3 +66,4 @@
 
 -printusage
 -whyareyoukeeping class iDiamondhunter.**
+#-printconfiguration proguardDebug.txt

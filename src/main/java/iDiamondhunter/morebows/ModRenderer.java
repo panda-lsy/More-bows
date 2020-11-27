@@ -39,8 +39,8 @@ public final class ModRenderer extends RenderEntity implements IItemRenderer {
 
     @Override
     public void doRender(Entity e, double a, double b, double c, float d, float f) {
-        if (e.getClass() == CustomArrow.class) {
-            if (((CustomArrow) e).getType() == ARROW_TYPE_FROST) {
+        if (e instanceof CustomArrow) {
+            if (((CustomArrow) e).type == ARROW_TYPE_FROST) {
                 if (!MoreBows.oldFrostArrowRendering) {
                     snow.doRender(e, a, b, c, d, f);
                 } else {
@@ -86,12 +86,12 @@ public final class ModRenderer extends RenderEntity implements IItemRenderer {
                 GL11.glRotatef(-12.0F, 0.0F, 1.0F, 0.0F);
                 GL11.glRotatef(-8.0F, 1.0F, 0.0F, 0.0F);
                 GL11.glTranslatef(-0.9F, 0.2F, 0.0F);
-                final float ticks = stack.getMaxItemUseDuration() - ((useTicks - partialTicks) + 1.0F);
+                final float ticks = 72000 /** Maximum use duration for a bow */ - ((useTicks - partialTicks) + 1.0F);
                 /**
-                 * In the normal first person renderer, this is hardcoded to be "float divTicks = partialTicks / 20.0F".
-                 * I've used the same code as I did in the custom FOV zoom (see iDiamondhunter.morebows.Client.fov).
+                 * In the normal first person renderer, this is hardcoded to be "float divTicks = ticks / 20.0F".
+                 * See iDiamondhunter.morebows.Client.fov for why this is used instead.
                  */
-                float divTicks = ticks / ((((CustomBow) stack.getItem()).iconTimes[0] * 10) / 9);
+                float divTicks = ticks / (((CustomBow) stack.getItem()).iconTimes[0] * 1.1F);
                 divTicks = ((divTicks * divTicks) + (divTicks * 2.0F)) / 3.0F;
 
                 if (divTicks > 1.0F) {
@@ -126,7 +126,7 @@ public final class ModRenderer extends RenderEntity implements IItemRenderer {
              * Minecraft is hardcoded to only do this for items which are equal to the bow item, so we have to do it manually.
              */
             /* Checks if the entity we're rendering our bow with is a witch */
-            final boolean isWitch = (entity.getClass() == EntityWitch.class);
+            final boolean isWitch = (entity instanceof EntityWitch);
 
             // final float scale = 3.0F - (1.0F / 3.0F); // a more precise representation of 1 / 0.375F, or 2.6666667F
             if (isWitch) {

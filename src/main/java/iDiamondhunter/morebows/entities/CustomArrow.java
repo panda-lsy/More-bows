@@ -17,9 +17,12 @@ import net.minecraft.world.World;
 /** This entity is a custom arrow. A large portion of logic around these arrows is handled in the MoreBows class with SubscribeEvents. TODO Better documentation. Weird rotation issues seem to be happening with the fire and frost arrows, but not the ender arrows. */
 public final class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnData {
 
-    private boolean crit = false;
+    /** Whether this arrow is actually critical or not. */
+    public boolean crit = false;
+    /** How many ticks this arrow has been in the ground for. -1 is used to indicate that the arrow has not yet hit the ground. */
     private byte inTicks = -1;
-    private byte type = ARROW_TYPE_NOT_CUSTOM;
+    /** The type of this arrow. In an ideal world, this would be final, but this is not an ideal world. See readSpawnData. */
+    public byte type = ARROW_TYPE_NOT_CUSTOM;
 
     /**
      * Don't use this.
@@ -92,15 +95,6 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
          */
     }
 
-    /**
-     * This actually returns whether an arrow is critical or not. See getIsCritical().
-     *
-     * @return whether an arrow is critical or not
-     */
-    public boolean getCrit() {
-        return crit;
-    }
-
     /** This may not accurately return whether an arrow is critical or not. This is to hide crit particle trails, when a custom arrow has a custom particle trail. */
     @Override
     public boolean getIsCritical() {
@@ -120,11 +114,6 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
          * This allows the entity to take the crit into account when deciding if it's damaged or not.
          * This is probably the lesser of these evils.
          */
-    }
-
-    /** @return the ArrowType of an arrow */
-    public byte getType() {
-        return type;
     }
 
     @Override
@@ -175,7 +164,10 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
                      * TODO Verify that this is the right block!
                      * Also, why does this sometimes set multiple blocks? It's the correct behavior of the original mod, but it's concerning...
                      */
-                    final Block inBlock = worldObj.getBlock(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ));
+                    final int floorPosX = MathHelper.floor_double(posX);
+                    final int floorPosY = MathHelper.floor_double(posY);
+                    final int floorPosZ = MathHelper.floor_double(posZ);
+                    final Block inBlock = worldObj.getBlock(floorPosX, floorPosY, floorPosZ);
 
                     /*
                      * Possibly unused code?
@@ -183,16 +175,16 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
                      */
 
                     /** TODO Possibly implement incrementing snow layers. */
-                    if (Block.isEqualTo(inBlock, Blocks.air)) {
-                        worldObj.setBlock(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ), Blocks.snow_layer);
+                    if (inBlock == Blocks.air) {
+                        worldObj.setBlock(floorPosX, floorPosY, floorPosZ, Blocks.snow_layer);
                     }
 
-                    if (Block.isEqualTo(inBlock, Blocks.water)) {
+                    if (inBlock == Blocks.water) {
                         /*
                          * TODO Check if the earlier event or this one is the correct one.
                          * Also: bouncy arrow on ice, a bit like stone skimming? Could be cool.
                          */
-                        worldObj.setBlock(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ), Blocks.ice);
+                        worldObj.setBlock(floorPosX, floorPosY, floorPosZ, Blocks.ice);
                     }
                 }
 
@@ -201,7 +193,6 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
                 }
             } else if (crit) {
                 for (int i = 0; i < 4; ++i) {
-                    // No need for fancy server side particle handling
                     worldObj.spawnParticle("splash", posX + ((motionX * i) / 4.0D), posY + ((motionY * i) / 4.0D), posZ + ((motionZ * i) / 4.0D), -motionX, -motionY + 0.2D, -motionZ);
                 }
             }

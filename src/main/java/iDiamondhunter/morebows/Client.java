@@ -5,13 +5,13 @@ import java.util.Set;
 import cpw.mods.fml.client.IModGuiFactory;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.RenderTickEvent;
 import iDiamondhunter.morebows.entities.ArrowSpawner;
 import iDiamondhunter.morebows.entities.CustomArrow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.FOVUpdateEvent;
-import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent.Pre;
 
 /**
@@ -35,25 +35,20 @@ public final class Client extends MoreBows implements IModGuiFactory {
      */
     @SubscribeEvent
     public void bowPose(Pre event) {
-        if ((event.entityPlayer.getItemInUse() != null) && (event.entityPlayer.getItemInUse().getItem().getClass() == CustomBow.class)) {
+        if ((event.entityPlayer.getItemInUse() != null) && (event.entityPlayer.getItemInUse().getItem() instanceof CustomBow)) {
             event.renderer.modelArmorChestplate.aimedBow = event.renderer.modelArmor.aimedBow = event.renderer.modelBipedMain.aimedBow = true;
         }
     }
 
     /**
-     * Hack to store the amount of partial ticks to use in bow rendering.
-     * In ModRenderer, partialTicks is needed, but it is never passed to it.
-     * partialTicks is roughly equivalent to (Minecraft.getMinecraft().entityRenderer.renderEndNanoTime + (long)(1000000000 / Minecraft.getMinecraft().gameSettings.limitFramerate))),
-     * however renderEndNanoTime is a private field.
-     * However, this paticular value is passed through a whole bunch of places.
-     * RenderHandEvent happens to be the closest to rendering items, as it's posted just before any item rendering is done.
-     * TODO try to replace this, better documentation
+     * Hack to store the amount of partial rendering ticks at the start of each RenderTickEvent.
+     * This is later used in ModRenderer when rendering a CustomBow.
      *
      * @param event the event
      */
     @SubscribeEvent
-    public void bowTicks(RenderHandEvent event) {
-        partialTicks = event.partialTicks;
+    public void bowTicks(RenderTickEvent event) {
+        partialTicks = event.renderTickTime;
     }
 
     /**
@@ -64,9 +59,13 @@ public final class Client extends MoreBows implements IModGuiFactory {
      */
     @SubscribeEvent
     public void FOV(FOVUpdateEvent event) {
-        if ((event.entity.getItemInUse() != null) && (event.entity.getItemInUse().getItem().getClass() == CustomBow.class)) {
-            /** See net.minecraft.client.entity.EntityPlayerSP.getFOVMultiplier() */
-            float f = (float) event.entity.getItemInUseDuration() / (float) ((((CustomBow) event.entity.getItemInUse().getItem()).iconTimes[0] * 10) / 9);
+        if ((event.entity.getItemInUse() != null) && (event.entity.getItemInUse().getItem() instanceof CustomBow)) {
+            /**
+             * In net.minecraft.client.entity.EntityPlayerSP.getFOVMultiplier(), this operation is event.entity.getItemInUseDuration() / 20.0F.
+             * In an attempt to roughly maintain the same ratio of this divisor (20) to the amount of ticks it takes for the vanilla ItemBow icons to finish changing (18),
+             * the amount of ticks it takes for the CustomBow's icons to finish changing is multiplied by 1.1 (20 / 18) and is used instead.
+             */
+            float f = (72000 /** Maximum use duration for a bow */ - event.entity.getItemInUseCount()) / (((CustomBow) event.entity.getItemInUse().getItem()).iconTimes[0] * 1.1F);
 
             if (f > 1.0F) {
                 f = 1.0F;
@@ -83,9 +82,10 @@ public final class Client extends MoreBows implements IModGuiFactory {
     }
 
     public void initialize(Minecraft a) {
-        // This space left intentionally blank
+        /* This space left intentionally blank */
     }
 
+    /** If you know why mainConfigGuiClass wasn't designed to use an anonymous inner class, please let me know :( */
     public Class<? extends GuiScreen> mainConfigGuiClass() {
         return Config.class;
     }

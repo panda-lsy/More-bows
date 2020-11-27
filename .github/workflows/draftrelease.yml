@@ -1,14 +1,12 @@
 # This workflow will build a Java project with Gradle
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
 
-name: Java CI with Gradle (Forge 1.7.10 - release)
+name: Java CI with Gradle (Forge 1.7.10 - draft release)
 
 on:
-  release:
-    branches:
-      - forge-1.7.10
-    types:
-      - published
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags: 'v*1.7.10' # Push events to matching v*+1.7.10
 
 jobs:
   build:
@@ -50,9 +48,20 @@ jobs:
     - name: Run strip-nondeterminism on built .jar files
       run: strip-nondeterminism build/libs/*.jar
     - name: Run advzip (-i 99999) on built .jar files
-      run: advzip --shrink-insane --iter 99999 -k -p -z build/libs/*.jar
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v2
+      run: advzip --shrink-insane -kzi 99999 -p build/libs/*.jar
+    - name: Draft release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        name: Package
-        path: build/libs
+        tag_name: ${{ github.ref }}
+        release_name: Draft release ${{ github.ref }}
+        body: Replace this text with the description of this release!
+        draft: true
+        prerelease: false
+    - name: Upload draft release assets
+      uses: shogo82148/actions-upload-release-asset@v1
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: build/libs/*.jar

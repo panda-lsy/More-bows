@@ -71,20 +71,17 @@ public final class CustomBow extends ItemBow {
     /** This returns the bow sprite for a given duration of drawing the bow back. TODO This is still a bit janky. Remove this message when you're certain this is a good way to do it. */
     @Override
     @SideOnly(Side.CLIENT)
-    public IIcon getIcon(ItemStack stack, int u, EntityPlayer p, ItemStack i, int useRem) {
-        if (i != null) {
-            final int ticks = stack.getMaxItemUseDuration() - useRem;
-
-            if (ticks >= iconTimes[0]) {
-                return icons[2];
-            } else if (ticks > iconTimes[1]) {
-                return icons[1];
-            } else if (ticks > 0) {
-                return icons[0];
-            }
+    public IIcon getIcon(ItemStack stack, int i, EntityPlayer player, ItemStack useItem, int useRem) {
+        /* TODO Cleanup */
+        if (useRem == 0) {
+            return itemIcon;
+        } else if ((useRem = 72000 /** Maximum use duration for all bows */ - useRem) >= iconTimes[0]) {
+            return icons[2];
+        } else if (useRem > iconTimes[1]) {
+            return icons[1];
         }
 
-        return itemIcon;
+        return icons[0];
     }
 
     /** EnumAction.none is returned, as the bow is rendered by a custom IItemRenderer which effectively applies a tweaked version of EnumAction.bow. See ModRenderer. */
@@ -94,15 +91,15 @@ public final class CustomBow extends ItemBow {
     }
 
     @Override
-    public EnumRarity getRarity(ItemStack item) {
+    public EnumRarity getRarity(ItemStack stack) {
         return rarity;
     }
 
     /** This method creates particles when left clicking with an ender bow. */
     @Override
-    public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
+    public boolean onEntitySwing(EntityLivingBase player, ItemStack stack) {
         if (bowType == ARROW_TYPE_ENDER) {
-            MoreBows.tryPart(entityLiving.worldObj, entityLiving, "portal", true, 1);
+            MoreBows.tryPart(player.worldObj, player, "portal", true, 1);
         }
 
         return false;
@@ -110,32 +107,36 @@ public final class CustomBow extends ItemBow {
 
     /** This handles the process of shooting an arrow from this bow. TODO Cleanup, document more */
     @Override
-    public void onPlayerStoppedUsing(ItemStack stack, World world, EntityPlayer player, int remaining) {
-        final ArrowLooseEvent event = new ArrowLooseEvent(player, stack, (getMaxItemUseDuration(stack) - remaining));
+    public void onPlayerStoppedUsing(ItemStack stack, World world, EntityPlayer player, int useRem) {
+        final ArrowLooseEvent event = new ArrowLooseEvent(player, stack, (72000 /** Maximum use duration for all bows */ - useRem));
         MinecraftForge.EVENT_BUS.post(event);
 
         if (event.isCanceled()) {
             return;
         }
 
+        /** Flag to indicate that the player is in Creative mode or has infinity on this bow */
         final boolean allwaysShoots = player.capabilities.isCreativeMode || (EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, stack) > 0);
 
         if (allwaysShoots || player.inventory.hasItem(Items.arrow)) {
             float shotVelocity = event.charge / powerDiv;
             shotVelocity = ((shotVelocity * shotVelocity) + (shotVelocity * 2.0F)) / 3.0F;
 
-            if (shotVelocity < 0.1D) {
+            if (shotVelocity < 0.1F) {
                 return;
             }
 
-            if (shotVelocity > 1.0F) {
+            boolean isCrit = false;
+
+            if (shotVelocity >= 1.0F) {
                 shotVelocity = 1.0F;
+                isCrit = true;
             }
 
             final EntityArrow[] arrs;
 
             // Create the arrows to fire
-            if (multiShot) {
+            if (multiShot) { // Bows that shoot multiple arrows
                 if (bowType == ARROW_TYPE_ENDER) { // Ender bow
                     arrs = new EntityArrow[] {
                         new CustomArrow(world, player, shotVelocity * 2.0F, ARROW_TYPE_ENDER),
@@ -167,9 +168,9 @@ public final class CustomBow extends ItemBow {
 
                     arrs[1].canBePickedUp = 2;
                 }
-            } else if (bowType == ARROW_TYPE_NOT_CUSTOM) { // Other bows
+            } else if (bowType == ARROW_TYPE_NOT_CUSTOM) { // "Standard" style bows that do not shoot multiple arrows or have a custom arrow type. Note to self: this is after the multi-arrow bows due to the multi bow having arrows of a normal type.
                 arrs = new EntityArrow[] { new EntityArrow(world, player, shotVelocity * 2.0F) };
-            } else { // Frost / fire bows
+            } else { // Bows that shoot only one custom arrow, currently only frost / fire bows
                 arrs = new EntityArrow[] { new CustomArrow(world, player, shotVelocity * 2.0F, bowType) };
             }
 
@@ -182,7 +183,7 @@ public final class CustomBow extends ItemBow {
             for (int i = 0; i < arrs.length; ++i) {
                 final EntityArrow arr = arrs[i];
 
-                if (shotVelocity == 1.0F) { /* setIsCritical calls dataWatcher methods, avoid this unless needed with the check. */
+                if (isCrit) { /* setIsCritical calls dataWatcher methods, avoid calling it unless needed. */
                     arr.setIsCritical(true);
                 }
 
