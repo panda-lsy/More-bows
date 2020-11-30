@@ -13,7 +13,6 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import iDiamondhunter.morebows.entities.ArrowSpawner;
 import iDiamondhunter.morebows.entities.CustomArrow;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumRarity;
@@ -151,8 +150,7 @@ public class MoreBows {
     }
 
     /**
-     * Handles particle effects on custom arrows hitting an entity, and adds critical damage to frost arrows.
-     * Frost arrows always return false when getIsCritical is called. This is to hide the vanilla particle trail, so it can create its own custom one.
+     * Creates the particle effects when a custom arrow hits an entity.
      *
      * @param event the event
      */
@@ -203,12 +201,6 @@ public class MoreBows {
             for (int i = 0; i < amount; i++) {
                 tryPart(event.entity.worldObj, event.entity, part, randDisp, velocity);
             }
-
-            if ((arr.type == ARROW_TYPE_FROST) && arr.crit) {
-                arr.setIsCritical(false);
-                event.setCanceled(true);
-                event.entity.attackEntityFrom(event.source, event.ammount + event.entity.worldObj.rand.nextInt((int) ((event.ammount / 2) + 2))); // Manually apply critical damage due to deliberately not exposing if an arrow is critical. See CustomArrow.
-            }
         }
     }
 
@@ -221,11 +213,6 @@ public class MoreBows {
     public final void arrHurt(LivingHurtEvent event) {
         if ((event.source.getSourceOfDamage() instanceof CustomArrow) && (((CustomArrow) event.source.getSourceOfDamage()).type == ARROW_TYPE_FROST)) {
             event.entity.setInWeb(); // TODO Replace with slowness effect? This is the original behavior...
-
-            // event.entity.extinguish(); // TODO Potentially would be nice to have? Not in the original mod, just though it seemed right.
-            if (!(event.entity instanceof EntityEnderman)) { // Vanilla arrows don't get destroyed after they've hit an Enderman
-                event.source.getSourceOfDamage().setDead();
-            }
         }
     }
 

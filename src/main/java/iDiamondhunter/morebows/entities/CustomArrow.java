@@ -4,6 +4,8 @@ import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_FROST;
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_NOT_CUSTOM;
 
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -17,8 +19,6 @@ import net.minecraft.world.World;
 /** This entity is a custom arrow. A large portion of logic around these arrows is handled in the MoreBows class with SubscribeEvents. */
 public final class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnData {
 
-    /** Whether this arrow is actually critical or not. */
-    public boolean crit = false;
     /** How many ticks this arrow has been in the ground for. -1 is used to indicate that the arrow has not yet hit the ground. */
     private byte inTicks = -1;
     /** The type of this arrow. In an ideal world, this would be final, but this is not an ideal world. See readSpawnData. */
@@ -97,22 +97,15 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
 
     /** This may not accurately return whether an arrow is critical or not. This is to hide crit particle trails, when a custom arrow has a custom particle trail. */
     @Override
+    @SideOnly(Side.CLIENT)
     public boolean getIsCritical() {
         return type == ARROW_TYPE_FROST ? false : super.getIsCritical();
         /**
          * Obviously, you're just a bad shot :D
-         * This is an awful hack to prevent the vanilla crit particles from displaying for frost arrows.
+         * This is a hack to prevent the vanilla crit particles from displaying for frost arrows, so that they can have a custom particle trail.
          * The vanilla code to display the arrow particle trail is buried deep inside onUpdate,
-         * and the only other options I have are to:
-         * - intercept the particles with packets,
-         * - intercept the particles with events (not feasible from what I can tell),
-         * - ASM it out,
-         * - or perform some ridiculous wrapping around the World to intercept the method to spawn particles.
-         * Instead of doing that, I just prevent anything from ever knowing that it's crited,
-         * and instead I wrap around the event when the arrow attacks something. See onLivingAttackEvent() for the details,
-         * but the TLDR is that I cancel the attack and start a new one with the crit taken into account.
-         * This allows the entity to take the crit into account when deciding if it's damaged or not.
-         * This is probably the lesser of these evils.
+         * but the easiest way to get around this is just to pretend that the arrow isn't critical.
+         * I've made this only effect client-side logic, which means that things like critical hits still function.
          */
     }
 
@@ -191,7 +184,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
                 if (inTicks >= 64) {
                     setDead();
                 }
-            } else if (crit) {
+            } else if (super.getIsCritical()) {
                 for (int i = 0; i < 4; ++i) {
                     worldObj.spawnParticle("splash", posX + ((motionX * i) / 4.0D), posY + ((motionY * i) / 4.0D), posZ + ((motionZ * i) / 4.0D), -motionX, -motionY + 0.2D, -motionZ);
                 }
@@ -203,12 +196,10 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
     public void readEntityFromNBT(NBTTagCompound tag) {
         super.readEntityFromNBT(tag);
         inTicks = tag.getByte("inTicks");
-        crit = tag.getBoolean("crit");
         type = tag.getByte("type");
     }
 
     public void readSpawnData(ByteBuf data) {
-        crit = data.readBoolean();
         inTicks = data.readByte();
 
         /* Shrinks the size of the frost arrow if it's in the ground and the mod is in old rendering mode */
@@ -226,20 +217,13 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
     }
 
     @Override
-    public void setIsCritical(boolean crit) {
-        super.setIsCritical(this.crit = crit);
-    }
-
-    @Override
     public void writeEntityToNBT(NBTTagCompound tag) {
         super.writeEntityToNBT(tag);
         tag.setByte("inTicks", inTicks);
-        tag.setBoolean("crit", crit);
         tag.setByte("type", type);
     }
 
     public void writeSpawnData(ByteBuf data) {
-        data.writeBoolean(crit);
         data.writeByte(inTicks);
         data.writeByte(type);
         data.writeInt(shootingEntity != null ? shootingEntity.getEntityId() : -1);
