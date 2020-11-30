@@ -67,11 +67,6 @@ public final class ArrowSpawner extends Entity {
     }
 
     @Override
-    public boolean isInvisible() {
-        return true;
-    }
-
-    @Override
     public void onUpdate() {
         // Executed first, to prevent weird edge cases
         if (ticksExisted > 61) {
@@ -80,23 +75,24 @@ public final class ArrowSpawner extends Entity {
         }
 
         if (!worldObj.isRemote) {
-            /**
-             * TODO Better error handling
-             *
-             * <pre>
-             * if (arrows == null) {
-             *     // System.out.println("Bonus ender arrows lost! Will fix this soon..."); // debug
-             *     setDead();
-             *     return;
-             * }
-             * </pre>
-             */
             if (ticksExisted == 1) {
+                /** Check that the arrows exist before accessing them. */
+                if ((arrows == null) || (arrows.length != 6)) {
+                    setDead();
+                    return;
+                }
+
                 // First arrow
                 worldObj.spawnEntityInWorld(arrows[0]);
             }
 
             if (ticksExisted == 61) {
+                /** Check that the arrows exist before accessing them. */
+                if ((arrows == null) || (arrows.length != 6)) {
+                    setDead();
+                    return;
+                }
+
                 // Second batch of arrows TODO Check if accurate to older versions of the mod
                 worldObj.spawnEntityInWorld(arrows[1]);
                 worldObj.playSoundAtEntity(arrows[1], "mob.endermen.portal", 0.5F, (1F / ((rand.nextFloat() * 0.4F) + 1F)) + (shotVelocity * 0.4F));

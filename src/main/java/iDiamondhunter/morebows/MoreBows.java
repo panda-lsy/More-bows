@@ -289,7 +289,7 @@ public class MoreBows {
         GameRegistry.addRecipe(new ItemStack(FrostBow, 1), " DC", "ABC", " DC", 'C', Items.string, 'D', Blocks.ice, 'A', Items.snowball, 'B', IronBow);
         GameRegistry.addRecipe(new ItemStack(FrostBow, 1), "CD ", "CBA", "CD ", 'C', Items.string, 'D', Blocks.ice, 'A', Items.snowball, 'B', IronBow);
         /* Entities */
-        EntityRegistry.registerModEntity(ArrowSpawner.class, "ArrowSpawner", 1, MoreBows.inst, 64, 20, true);
+        EntityRegistry.registerModEntity(ArrowSpawner.class, "ArrowSpawner", 1, MoreBows.inst, /** As the player can never see an ArrowSpawner and all of the logic for it is handled server-side, there's no reason to send any tracking updates. */ -1, Integer.MAX_VALUE, false);
         EntityRegistry.registerModEntity(CustomArrow.class, "CustomArrow", 2, MoreBows.inst, 64, 20, true);
     }
 

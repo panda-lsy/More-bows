@@ -9,7 +9,6 @@ import cpw.mods.fml.client.config.GuiConfig;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.RenderTickEvent;
-import iDiamondhunter.morebows.entities.ArrowSpawner;
 import iDiamondhunter.morebows.entities.CustomArrow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -130,7 +129,6 @@ public final class Client extends MoreBows implements IModGuiFactory {
     protected void register() {
         super.register();
         /** Registration of custom renderers */
-        RenderingRegistry.registerEntityRenderingHandler(ArrowSpawner.class, new ModRenderer());
         RenderingRegistry.registerEntityRenderingHandler(CustomArrow.class, new ModRenderer());
         MinecraftForgeClient.registerItemRenderer(MoreBows.DiamondBow, new ModRenderer());
         MinecraftForgeClient.registerItemRenderer(MoreBows.GoldBow, new ModRenderer());

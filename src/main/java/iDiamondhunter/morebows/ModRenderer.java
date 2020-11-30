@@ -21,12 +21,10 @@ import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.IItemRenderer;
 
 /**
- * This class is comprised of two parts: an entity renderer that handles both ArrowSpawners and CustomArrows, and an IItemRenderer for the CustomBow item.
- * Entity rendering:
- * Handles rendering the entities added by this mod.
- * If the entity is a CustomArrow, and the CustomArrow is of type FROST, it renders as a snowball or a default cube depending on the value of MoreBows.oldFrostArrowRendering.
+ * This class is comprised of two parts: an entity renderer that renders CustomArrow Entities, and an IItemRenderer for the CustomBow item.
+ * CustomArrow rendering:
+ * If the CustomArrow is of type FROST, it renders as a snowball, or a default Entity cube depending on the value of MoreBows.oldFrostArrowRendering.
  * If it's not of type FROST, it renders as an arrow.
- * If it's not a CustomArrow, it doesn't render anything! This is deliberately used to not render any ArrowSpawners.
  * Bow rendering:
  * A custom IItemRenderer, which exists as a result of not being able to modify the bow "draw back" animation speed with standard Minecraft renderers.
  * It is also responsible for transforming the position of the bow when rendering an Entity that holds a bow.
@@ -40,17 +38,15 @@ public final class ModRenderer extends RenderEntity implements IItemRenderer {
 
     @Override
     public void doRender(Entity e, double a, double b, double c, float d, float f) {
-        if (e instanceof CustomArrow) {
-            if (((CustomArrow) e).type == ARROW_TYPE_FROST) {
-                if (!MoreBows.oldFrostArrowRendering) {
-                    snow.doRender(e, a, b, c, d, f);
-                } else {
-                    super.doRender(e, a, b, c, d, f);
-                }
+        if (((CustomArrow) e).type == ARROW_TYPE_FROST) {
+            if (!MoreBows.oldFrostArrowRendering) {
+                snow.doRender(e, a, b, c, d, f);
             } else {
-                arrow.doRender(e, a, b, c, d, f);
+                super.doRender(e, a, b, c, d, f);
             }
-        } /** else do nothing */
+        } else {
+            arrow.doRender(e, a, b, c, d, f);
+        }
     }
 
     public boolean handleRenderType(ItemStack stack, ItemRenderType type) {
