@@ -16,7 +16,7 @@
 #-adaptresourcefilenames
 #-adaptresourcefilecontents
 
-# Keep anything that overrides a super method, or is an event handler.
+# Keep all methods that overrides a super method, or methods that are an event handler.
 
 -keepclassmembers,allowobfuscation class * {
     @java.lang.Override,cpw.mods.fml.common.eventhandler.SubscribeEvent,cpw.mods.fml.common.Mod$EventHandler <methods>;
@@ -24,14 +24,15 @@
 
 # Keep all classes with public methods
 
--keep,allowobfuscation,allowoptimization public class * {
+-keepclasseswithmembers,allowobfuscation public class * {
     public <methods>;
 }
 
 # ProGuard really wants to remove the mod instance and sided proxies. This stops it from doing that.
 
 -keepclassmembers,allowobfuscation class * {
-    private static iDiamondhunter.morebows.MoreBows *;
+    private static iDiamondhunter.morebows.MoreBows inst;
+    private static iDiamondhunter.morebows.MoreBows proxy;
 }
 
 # These two classes are referred to in String constants inside of annotations. TODO see above (around -adaptclassstrings).
@@ -41,7 +42,7 @@
 
 # Keep all initialisers, because ProGuard keeps trying to make them private.
 
--keepclassmembers,allowobfuscation class * { public <init>(...); }
+-keepclassmembers class * { public <init>(...); }
 
 # TODO Check if anything else should be kept. Annotations are mandatory, as Forge uses them for reflection.
 
