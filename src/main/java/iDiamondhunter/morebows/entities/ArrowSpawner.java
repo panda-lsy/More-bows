@@ -6,7 +6,7 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
-/** This entity is responsible for storing and spawning the time delayed "bonus" arrows of the ender bow. TODO Cleanup, more documentation */
+/** This entity is responsible for storing and spawning the time delayed "bonus" arrows of the ender bow. */
 public final class ArrowSpawner extends Entity {
 
     private EntityArrow[] arrows;
@@ -39,7 +39,7 @@ public final class ArrowSpawner extends Entity {
         this.posY = posY;
         this.posZ = posZ;
         /**
-         * // TODO Fix
+         * TODO Better error handling
          *
          * <pre>
          * if (arrows.length != 6) {
@@ -124,48 +124,49 @@ public final class ArrowSpawner extends Entity {
         }
     }
 
-    /** This method reads the entity specific data from saved NBT data, including the stored arrows. TODO Better documentation */
+    /** This method reads the entity specific data from saved NBT data, including the stored arrows. */
     @Override
     protected void readEntityFromNBT(NBTTagCompound tag) {
-        // Variables related to this entity
         shotVelocity = tag.getFloat("shotVelocity");
-        // Arrows stored by this entity
         arrows = new EntityArrow[tag.getInteger("arrowsAmount")];
 
-        /** An over engineered system to load an arbitrary amount of entities */
+        /** An over engineered system to load an arbitrary amount of entities. */
         for (int i = 0; i < tag.getInteger("arrowsAmount"); i++) {
             try {
-                // Attempt to spawn in the specified entity while assuming that the data saved is completely valid
+                /** Assuming the data from the written NBT tag is valid, arrows[i] is set to an arrow created by calling createEntityByName with the saved entityString. */
                 arrows[i] = (EntityArrow) EntityList.createEntityByName(tag.getCompoundTag("arrowsType").getString("arrow" + i), worldObj);
+                /** This arrow then reads the saved NBT data from its arrow NBT tag. */
                 arrows[i].readFromNBT(tag.getCompoundTag("arrows").getCompoundTag("arrow" + i));
             } catch (final Exception e) {
-                // This can fail in numerous ways, so it's probably for the best just to create a new arrow.
                 e.printStackTrace();
+                /** If the data isn't valid, a new EntityArrow is created to avoid null objects. */
                 arrows[i] = new EntityArrow(worldObj);
             }
         }
     }
 
-    /** This method saves the entity specific data to NBT data, including the stored arrows. TODO Better documentation */
+    /** This method saves the entity specific data to NBT data, including the stored arrows. */
     @Override
     protected void writeEntityToNBT(NBTTagCompound tag) {
-        // Variables related to this entity
         tag.setFloat("shotVelocity", shotVelocity);
-        // Variables related to the arrows stored by this entity
         tag.setInteger("arrowsAmount", arrows.length);
-        // Tags to write to during the loop
+        /** This compound tag will contain the saved NBT data from each arrow in the "arrows" array. */
         final NBTTagCompound arrowsTag = new NBTTagCompound();
+        /** This compound tag will contain the entityString of each arrow in the "arrows" array. */
         final NBTTagCompound arrowsType = new NBTTagCompound();
 
-        /** An over engineered system to save an arbitrary amount of entities */
+        /** An over engineered system to save an arbitrary amount of entities. */
         for (int i = 0; i < arrows.length; i++) {
+            /** This is a temporary NBT tag variable, to store the NBT data for arrows[i]. */
             final NBTTagCompound arrTag = new NBTTagCompound();
             arrows[i].writeToNBT(arrTag);
+            /** The NBT for arrows[i] is then stored as a sub tag of the compound tag arrowsTag. */
             arrowsTag.setTag("arrow" + i, arrTag);
+            /** The entityString of arrows[i] is stored as a sub tag of the compound tag arrowsType. */
             arrowsType.setString("arrow" + i, EntityList.getEntityString(arrows[i]));
         }
 
-        // These values are then saved with these tags
+        /** These tags are then saved. */
         tag.setTag("arrows", arrowsTag);
         tag.setTag("arrowsType", arrowsType);
     }

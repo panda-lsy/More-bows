@@ -14,7 +14,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-/** This entity is a custom arrow. A large portion of logic around these arrows is handled in the MoreBows class with SubscribeEvents. TODO Better documentation. Weird rotation issues seem to be happening with the fire and frost arrows, but not the ender arrows. */
+/** This entity is a custom arrow. A large portion of logic around these arrows is handled in the MoreBows class with SubscribeEvents. */
 public final class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnData {
 
     /** Whether this arrow is actually critical or not. */
@@ -217,10 +217,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
         }
 
         type = data.readByte();
-        /*
-         * See NetHandlerPlayClient.handleSpawnObject (line 414)
-         * TODO Verify if this is the correct behavior, seems to work from some testing in multiplayer.
-         */
+        /** See NetHandlerPlayClient.handleSpawnObject (line 414). */
         final Entity shooter = worldObj.getEntityByID(data.readInt());
 
         if (shooter instanceof EntityLivingBase) {

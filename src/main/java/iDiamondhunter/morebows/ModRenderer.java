@@ -62,7 +62,6 @@ public final class ModRenderer extends RenderEntity implements IItemRenderer {
      * This handles two cases:
      * - First person player rendering ("draw back" animation, bow shake, perspective transformation etc)
      * - Any entity that holds a bow (moving the bow to the right position in the hands of the Entity)
-     * TODO cleanup
      */
     public void renderItem(ItemRenderType type, ItemStack stack, Object... data) {
         final EntityLivingBase entity = (EntityLivingBase) data[1];
@@ -75,12 +74,11 @@ public final class ModRenderer extends RenderEntity implements IItemRenderer {
              * - Applying some sort of rotation / transformation to match this to the FOV
              * - Making the bow shake when drawn back
              * See ItemRenderer.renderItemInFirstPerson, line 458
-             * TODO finish documentation, clean up
              */
             /* The entity will always be a EntityPlayer, as we're rendering in first person */
             final int useTicks = ((EntityPlayer) entity).getItemInUseCount();
 
-            /** This code reverses, then re-applies the transformations given to an item when EnumAction.bow is used. TODO this doesn't reverse perfectly, try commenting out the re-applied bow shake to see what I mean, finish documentation */
+            /** This code reverses the effects of the normal item transformations, then applies the transformations given to an item when EnumAction.bow is used. */
             if (useTicks > 0) {
                 /** Reveres the normal item transformations, to move the bow back to where it started so we can apply our own tranformations. */
                 GL11.glRotatef(-18.0F, 0.0F, 0.0F, 1.0F);

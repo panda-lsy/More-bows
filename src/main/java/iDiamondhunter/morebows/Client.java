@@ -65,7 +65,7 @@ public final class Client extends MoreBows implements IModGuiFactory {
     public static float partialTicks = 0;
 
     /**
-     * Poses the arms of a player to display the "bow aiming" action on drawing back a bow TODO finish documenting
+     * Poses the arms of a player when drawing back a CustomBow, displaying the "bow aiming" animation.
      *
      * @param event the event
      */
@@ -126,7 +126,6 @@ public final class Client extends MoreBows implements IModGuiFactory {
         return Config.class;
     }
 
-    /** TODO Document */
     @Override
     protected void register() {
         super.register();

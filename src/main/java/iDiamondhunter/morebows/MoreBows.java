@@ -27,7 +27,7 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 /** If you're reading this, I'm very sorry you have to deal with my code. */
-@Mod(modid = MoreBows.MOD_ID, guiFactory = "iDiamondhunter.morebows.Client", useMetadata = true /* Note: Forge likes to complain if there isn't something assigned to the "version" property when loading. It should get overwritten by the actual version in the mcmod.info file. */)
+@Mod(modid = MoreBows.MOD_ID, guiFactory = "iDiamondhunter.morebows.Client" /* Note: Forge likes to complain if there isn't something assigned to the "version" property when loading. It should get overwritten by the actual version in the mcmod.info file. */)
 public class MoreBows {
 
     /** The mod ID of More Bows */
@@ -80,7 +80,7 @@ public class MoreBows {
     /** The maximum amount of time (in ticks) that a bow can be used for. */
     public static final int bowMaxUseDuration = 72000;
 
-    /* Names of bows. TODO: Re-evaluate how & where stuff should be declared & initialized. */
+    /* Names of bows. */
     private static final String DiamondBowName = "DiamondBow";
     private static final String GoldBowName = "GoldBow";
     private static final String EnderBowName = "EnderBow";
@@ -100,7 +100,7 @@ public class MoreBows {
     /** Default values for bow construction: the default type of arrow a bow shoots. */
     private static final byte defaultArrowType = ARROW_TYPE_NOT_CUSTOM;
 
-    /* Bow items. TODO: This is super janky. */
+    /* Bow items. */
     protected static final Item DiamondBow = new CustomBow(1016, defaultArrowType, 2.25D, new byte[] { 8, 4 }, false, 6.0F, EnumRarity.rare).setUnlocalizedName(DiamondBowName).setTextureName(modSeperator + DiamondBowName);
     protected static final Item GoldBow = new CustomBow(68, defaultArrowType, 2.5D, new byte[] { 8, 4 }, false, 6.0F, EnumRarity.uncommon).setUnlocalizedName(GoldBowName).setTextureName(modSeperator + GoldBowName);
     protected static final Item EnderBow = new CustomBow(215, ARROW_TYPE_ENDER, noDamageMult, new byte[] { 19, 10 }, true, 22.0F, EnumRarity.epic).setUnlocalizedName(EnderBowName).setTextureName(modSeperator + EnderBowName);
@@ -110,13 +110,10 @@ public class MoreBows {
     protected static final Item FlameBow = new CustomBow(576, ARROW_TYPE_FIRE, 2.0D, new byte[] { 14, 9 }, false, 15.0F, EnumRarity.uncommon).setUnlocalizedName(FlameBowName).setTextureName(modSeperator + FlameBowName);
     protected static final Item FrostBow = new CustomBow(550, ARROW_TYPE_FROST, noDamageMult, new byte[] { 26, 13 }, false, 26.0F, EnumRarity.common).setUnlocalizedName(FrostBowName).setTextureName(modSeperator + FrostBowName);
 
-    /** Syncs the config file TODO documentation */
+    /** This method syncs the config file with the Configuration, as well as syncing any config related variables. */
     private static final void conf() {
         oldFrostArrowRendering = config.get(Configuration.CATEGORY_GENERAL, "oldFrostArrowRendering", false).getBoolean();
-
-        if (config.hasChanged()) {
-            config.save();
-        }
+        config.save();
     }
 
     /**
@@ -125,7 +122,6 @@ public class MoreBows {
      * If it is a server world, it calls the server world specific method to spawn a particle on the server.
      * This particle will be sent to connected clients.
      * The parameter randDisp can be set, which sets the particles position to somewhere random close to the entity.
-     * TODO Cleanup and re-evaluate, document better.
      *
      * @param world    The world to attempt to spawn a particle in.
      * @param entity   The entity to spawn the particle at.
@@ -156,8 +152,7 @@ public class MoreBows {
 
     /**
      * Handles particle effects on custom arrows hitting an entity, and adds critical damage to frost arrows.
-     * Frost arrows always return false when normal methods to get if they're critical are called. This is to hide the vanilla particle trail, so it can create its own custom one.
-     * TODO Cleanup, document better.
+     * Frost arrows always return false when getIsCritical is called. This is to hide the vanilla particle trail, so it can create its own custom one.
      *
      * @param event the event
      */
@@ -219,7 +214,6 @@ public class MoreBows {
 
     /**
      * Handles custom effects from the frost arrow.
-     * TODO Cleanup?
      *
      * @param event the event
      */
@@ -228,7 +222,7 @@ public class MoreBows {
         if ((event.source.getSourceOfDamage() instanceof CustomArrow) && (((CustomArrow) event.source.getSourceOfDamage()).type == ARROW_TYPE_FROST)) {
             event.entity.setInWeb(); // TODO Replace with slowness effect? This is the original behavior...
 
-            // event.entity.extinguish(); // Potentially would be nice to have? Not in the original mod, just though it seemed right.
+            // event.entity.extinguish(); // TODO Potentially would be nice to have? Not in the original mod, just though it seemed right.
             if (!(event.entity instanceof EntityEnderman)) { // Vanilla arrows don't get destroyed after they've hit an Enderman
                 event.source.getSourceOfDamage().setDead();
             }
@@ -236,7 +230,7 @@ public class MoreBows {
     }
 
     /**
-     * Calls conf() to sync the config file when the config file changes TODO documentation
+     * Calls conf() when the Configuration changes.
      *
      * @param event the event
      */
@@ -248,7 +242,7 @@ public class MoreBows {
     }
 
     /**
-     * Initializes mod TODO documentation
+     * This method handles setting up the mod.
      *
      * @param event the event
      */
@@ -262,7 +256,7 @@ public class MoreBows {
         FMLCommonHandler.instance().bus().register(proxy);
     }
 
-    /** TODO documentation */
+    /** This method registers all mod content for a given side. Server side, it registers items, recipes, and entities. Client side, it also registers custom renderers. */
     protected void register() {
         /* Item registry */
         GameRegistry.registerItem(DiamondBow, DiamondBowName);
@@ -294,7 +288,7 @@ public class MoreBows {
         GameRegistry.addRecipe(new ItemStack(EnderBow, 1), " DC", " BA", " DC", 'C', Items.gold_ingot, 'D', Items.ender_pearl, 'B', IronBow, 'A', Items.ender_eye);
         GameRegistry.addRecipe(new ItemStack(FrostBow, 1), " DC", "ABC", " DC", 'C', Items.string, 'D', Blocks.ice, 'A', Items.snowball, 'B', IronBow);
         GameRegistry.addRecipe(new ItemStack(FrostBow, 1), "CD ", "CBA", "CD ", 'C', Items.string, 'D', Blocks.ice, 'A', Items.snowball, 'B', IronBow);
-        /* Entities TODO I'm not sure how this works. */
+        /* Entities */
         EntityRegistry.registerModEntity(ArrowSpawner.class, "ArrowSpawner", 1, MoreBows.inst, 64, 20, true);
         EntityRegistry.registerModEntity(CustomArrow.class, "CustomArrow", 2, MoreBows.inst, 64, 20, true);
     }
