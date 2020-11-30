@@ -65,7 +65,7 @@ public final class Client extends MoreBows implements IModGuiFactory {
              * In an attempt to roughly maintain the same ratio of this divisor (20) to the amount of ticks it takes for the vanilla ItemBow icons to finish changing (18),
              * the amount of ticks it takes for the CustomBow's icons to finish changing is multiplied by 1.1 (20 / 18) and is used instead.
              */
-            float f = (72000 /** Maximum use duration for a bow */ - event.entity.getItemInUseCount()) / (((CustomBow) event.entity.getItemInUse().getItem()).iconTimes[0] * 1.1F);
+            float f = (bowMaxUseDuration - event.entity.getItemInUseCount()) / (((CustomBow) event.entity.getItemInUse().getItem()).iconTimes[0] * 1.1F);
 
             if (f > 1.0F) {
                 f = 1.0F;

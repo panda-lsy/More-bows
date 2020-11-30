@@ -77,6 +77,9 @@ public class MoreBows {
      */
     public static final byte ARROW_TYPE_FROST = 3;
 
+    /** The maximum amount of time (in ticks) that a bow can be used for. */
+    public static final int bowMaxUseDuration = 72000;
+
     /* Names of bows. TODO: Re-evaluate how & where stuff should be declared & initialized. */
     private static final String DiamondBowName = "DiamondBow";
     private static final String GoldBowName = "GoldBow";

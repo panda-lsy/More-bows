@@ -3,6 +3,7 @@ package iDiamondhunter.morebows;
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_ENDER;
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_FIRE;
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_NOT_CUSTOM;
+import static iDiamondhunter.morebows.MoreBows.bowMaxUseDuration;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -75,7 +76,7 @@ public final class CustomBow extends ItemBow {
         /* TODO Cleanup */
         if (useRem == 0) {
             return itemIcon;
-        } else if ((useRem = 72000 /** Maximum use duration for all bows */ - useRem) >= iconTimes[0]) {
+        } else if ((useRem = bowMaxUseDuration - useRem) >= iconTimes[0]) {
             return icons[2];
         } else if (useRem > iconTimes[1]) {
             return icons[1];
@@ -108,7 +109,7 @@ public final class CustomBow extends ItemBow {
     /** This handles the process of shooting an arrow from this bow. TODO Cleanup, document more */
     @Override
     public void onPlayerStoppedUsing(ItemStack stack, World world, EntityPlayer player, int useRem) {
-        final ArrowLooseEvent event = new ArrowLooseEvent(player, stack, (72000 /** Maximum use duration for all bows */ - useRem));
+        final ArrowLooseEvent event = new ArrowLooseEvent(player, stack, (bowMaxUseDuration - useRem));
         MinecraftForge.EVENT_BUS.post(event);
 
         if (event.isCanceled()) {
