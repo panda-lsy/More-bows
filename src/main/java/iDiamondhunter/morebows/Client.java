@@ -1,8 +1,11 @@
 package iDiamondhunter.morebows;
 
+import static net.minecraftforge.common.config.Configuration.CATEGORY_GENERAL;
+
 import java.util.Set;
 
 import cpw.mods.fml.client.IModGuiFactory;
+import cpw.mods.fml.client.config.GuiConfig;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.RenderTickEvent;
@@ -13,6 +16,8 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent.Pre;
+import net.minecraftforge.common.config.ConfigCategory;
+import net.minecraftforge.common.config.ConfigElement;
 
 /**
  * Handles almost all general client side only code. Client is also the client proxy.
@@ -21,6 +26,37 @@ import net.minecraftforge.client.event.RenderPlayerEvent.Pre;
  * - Even implements IModGuiFactory
  */
 public final class Client extends MoreBows implements IModGuiFactory {
+
+    /**
+     * A class that extends GuiConfig, because the Forge team likes to complicate things.
+     * Why this wasn't an anonymous inner class is beyond me.
+     * TODO see if this can be removed.
+     */
+    public static final class Config extends GuiConfig {
+        /**
+         * Returns a new Config with all child elements of whatever's in the default config category.
+         * This might break in the future, at which point something like this should be implemented:
+         *
+         * <pre>
+         * {@code
+         * private static String[] wantedProperties = new String[] { "oldFrostArrowRendering" };
+         *
+         * private static List<IConfigElement> getConfigElements() {
+         *     final List<IConfigElement> list = new ArrayList<IConfigElement>();
+         *     for (final String propName : wantedProperties) {
+         *         list.add(new ConfigElement<Boolean>(MoreBows.config.get(Configuration.CATEGORY_GENERAL, propName, false)));
+         *     }
+         *     return list;
+         * }
+         * }
+         * </pre>
+         *
+         * @param g the previous screen.
+         */
+        public Config(GuiScreen g) {
+            super(g, new ConfigElement<ConfigCategory>(MoreBows.config.getCategory(CATEGORY_GENERAL)).getChildElements(), MOD_ID, false, false, /* GuiConfig.getAbridgedConfigPath(MoreBows.config.toString()) */ MOD_ID);
+        }
+    }
 
     /**
      * Hack used by ModRenderer. This value is set to the partialTicks of a RenderHandEvent.
