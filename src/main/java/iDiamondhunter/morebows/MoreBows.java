@@ -13,6 +13,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import iDiamondhunter.morebows.entities.ArrowSpawner;
 import iDiamondhunter.morebows.entities.CustomArrow;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumRarity;
@@ -218,6 +219,10 @@ public class MoreBows {
     public final void arrHurt(LivingHurtEvent event) {
         if ((event.source.getSourceOfDamage() instanceof CustomArrow) && (((CustomArrow) event.source.getSourceOfDamage()).type == ARROW_TYPE_FROST)) {
             if (frostArrowsShouldBeCold) {
+                if (event.entityLiving instanceof EntityBlaze) {
+                    event.ammount *= 3;
+                }
+
                 event.entity.extinguish();
             }
 
