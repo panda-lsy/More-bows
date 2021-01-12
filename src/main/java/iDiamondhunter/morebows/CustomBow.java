@@ -59,7 +59,6 @@ public final class CustomBow extends ItemBow {
      * @param rarity     The rarity of this bow.
      */
     public CustomBow(int maxDamage, byte bowType, double damageMult, byte[] iconTimes, boolean multiShot, float powerDiv, EnumRarity rarity) {
-        super();
         setMaxDamage(maxDamage);
         this.bowType = bowType;
         this.damageMult = damageMult;
