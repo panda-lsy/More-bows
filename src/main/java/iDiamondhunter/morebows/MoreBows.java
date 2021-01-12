@@ -18,6 +18,8 @@ import net.minecraft.init.Items;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
@@ -45,10 +47,11 @@ public class MoreBows {
 
     /** MoreBows config */
     public static Configuration config;
-    /**
-     * MoreBows config setting.
-     * If true, render frost arrows as snow cubes. If false, render as snowballs.
-     */
+    /** MoreBows config setting: If true, frost arrows extinguish fire from Entities that are on fire. If false, frost arrows can be on fire. */
+    public static boolean frostArrowsShouldBeCold;
+    /** MoreBows config setting: If true, frost arrows slow Entities down by pretending to have set them in a web for one tick. If false, frost arrows apply the slowness potion effect on hit. */
+    public static boolean oldFrostArrowMobSlowdown;
+    /** MoreBows config setting: If true, render frost arrows as snow cubes. If false, render as snowballs. */
     public static boolean oldFrostArrowRendering;
 
     /*
@@ -111,6 +114,8 @@ public class MoreBows {
 
     /** This method syncs the config file with the Configuration, as well as syncing any config related variables. */
     private static final void conf() {
+        frostArrowsShouldBeCold = config.get(Configuration.CATEGORY_GENERAL, "frostArrowsShouldBeCold", true).getBoolean();
+        oldFrostArrowMobSlowdown = config.get(Configuration.CATEGORY_GENERAL, "oldFrostArrowMobSlowdown", false).getBoolean();
         oldFrostArrowRendering = config.get(Configuration.CATEGORY_GENERAL, "oldFrostArrowRendering", false).getBoolean();
         config.save();
     }
@@ -212,7 +217,15 @@ public class MoreBows {
     @SubscribeEvent
     public final void arrHurt(LivingHurtEvent event) {
         if ((event.source.getSourceOfDamage() instanceof CustomArrow) && (((CustomArrow) event.source.getSourceOfDamage()).type == ARROW_TYPE_FROST)) {
-            event.entity.setInWeb(); // TODO Replace with slowness effect? This is the original behavior...
+            if (frostArrowsShouldBeCold) {
+                event.entity.extinguish();
+            }
+
+            if (!oldFrostArrowMobSlowdown) {
+                event.entityLiving.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 300, 2));
+            } else {
+                event.entity.setInWeb();
+            }
         }
     }
 

@@ -2,6 +2,8 @@ package iDiamondhunter.morebows.entities;
 
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_FROST;
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_NOT_CUSTOM;
+import static iDiamondhunter.morebows.MoreBows.frostArrowsShouldBeCold;
+import static iDiamondhunter.morebows.MoreBows.oldFrostArrowRendering;
 
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import cpw.mods.fml.relauncher.Side;
@@ -19,6 +21,8 @@ import net.minecraft.world.World;
 /** This entity is a custom arrow. A large portion of logic around these arrows is handled in the MoreBows class with SubscribeEvents. */
 public final class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnData {
 
+    /** If this is the first time this arrow has hit a block. */
+    private boolean firstBlockHit = true;
     /** How many ticks this arrow has been in the ground for. -1 is used to indicate that the arrow has not yet hit the ground. */
     private byte inTicks = -1;
     /** The type of this arrow. In an ideal world, this would be final, but this is not an ideal world. See readSpawnData. */
@@ -84,15 +88,6 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
     public CustomArrow(World a, EntityLivingBase b, float c, byte type) {
         super(a, b, c);
         this.type = type;
-        /**
-         * TODO Possibly implement this
-         *
-         * <pre>
-         * if (type == ARROW_TYPE_FROST) { // I'm not sure it makes sense for a frost arrow to be on fire, but I don't think people care about it that much, and the frost bow is a bit under powered as is...
-         *     this.extinguish();
-         * }
-         * </pre>
-         */
     }
 
     /** This may not accurately return whether an arrow is critical or not. This is to hide crit particle trails, when a custom arrow has a custom particle trail. */
@@ -114,24 +109,32 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
         super.onUpdate();
 
         if (type == ARROW_TYPE_FROST) {
+            if ((ticksExisted == 1) && frostArrowsShouldBeCold) {
+                isImmuneToFire = true;
+                extinguish();
+            }
+
             /**
              * Hack to determine when the arrow has hit the ground. inGround is a private field.
              * Access transformers can be used for this, but they're are annoying to deal with and they aren't always safe.
              * However, instead we can take advantage of the fact that arrowShake is always set to 7 after an arrow has hit the ground.
-             * inGround is used to store this information.
+             * inTicks is used to store this information.
              */
             if (arrowShake == 7) {
                 inTicks = 0;
                 canBePickedUp = 0;
-
-                /* Shrinks the size of the frost arrow if it's in the ground and the mod is in old rendering mode */
-                if (worldObj.isRemote && iDiamondhunter.morebows.MoreBows.oldFrostArrowRendering) {
-                    setSize(0.1F, 0.1F);
-                }
             }
 
             if (inTicks > -1) {
                 inTicks++;
+
+                /** Shrinks the size of the frost arrow if it's in the ground and the mod is in old rendering mode */
+                if (firstBlockHit && worldObj.isRemote && oldFrostArrowRendering) {
+                    setSize(0.1F, 0.1F);
+                    /** For some reason, this prevents the arrow from displaying in the wrong position after the size is set. TODO Figure out why this works. */
+                    setPosition(posX, posY, posZ);
+                    firstBlockHit = false;
+                }
 
                 if (inTicks <= 2) {
                     worldObj.spawnParticle("snowballpoof", posX, posY, posZ, 0.0D, 0.0D, 0.0D);
@@ -201,12 +204,6 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
 
     public void readSpawnData(ByteBuf data) {
         inTicks = data.readByte();
-
-        /* Shrinks the size of the frost arrow if it's in the ground and the mod is in old rendering mode */
-        if ((inTicks != -1) && worldObj.isRemote && iDiamondhunter.morebows.MoreBows.oldFrostArrowRendering) {
-            setSize(0.1F, 0.1F);
-        }
-
         type = data.readByte();
         /** See NetHandlerPlayClient.handleSpawnObject (line 414). */
         final Entity shooter = worldObj.getEntityByID(data.readInt());
