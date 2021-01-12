@@ -17,6 +17,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 /** This entity is a custom arrow. A large portion of logic around these arrows is handled in the MoreBows class with SubscribeEvents. */
 public final class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnData {
@@ -156,26 +157,27 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
 
                 /** Responsible for adding snow layers on top the block the arrow hits, or "freezing" the water it's in by setting the block to ice. */
                 if (inTicks == 64) {
-                    /*
-                     * TODO Verify that this is the right block!
-                     * Also, why does this sometimes set multiple blocks? It's the correct behavior of the original mod, but it's concerning...
-                     */
                     final int floorPosX = MathHelper.floor_double(posX);
                     final int floorPosY = MathHelper.floor_double(posY);
                     final int floorPosZ = MathHelper.floor_double(posZ);
                     final Block inBlock = worldObj.getBlock(floorPosX, floorPosY, floorPosZ);
 
                     /*
-                     * Possibly unused code?
-                     * if (Block.isEqualTo(this.field_145790_g, Blocks.snow)) {
+                     * If this arrow is inside an air block, and there is a block underneath it with a solid surface, place a snow layer on top of that block.
+                     * If this arrow is inside a snow layer, and a mob isn't colliding with the snow layer, increment the snow layer.
+                     * If this arrow is inside water, replace the water with ice.
                      */
 
-                    /** TODO Possibly implement incrementing snow layers. */
-                    if (inBlock == Blocks.air) {
+                    if ((inBlock == Blocks.air) && worldObj.getBlock(floorPosX, floorPosY - 1, floorPosZ).isSideSolid(worldObj, floorPosX, floorPosY - 1, floorPosZ, ForgeDirection.UP)) {
                         worldObj.setBlock(floorPosX, floorPosY, floorPosZ, Blocks.snow_layer);
-                    }
+                    } else if (inBlock == Blocks.snow_layer) {
+                        final int layerMeta = worldObj.getBlockMetadata(floorPosX, floorPosY, floorPosZ);
+                        final int currentSnowLevel = layerMeta & 7;
 
-                    if (inBlock == Blocks.water) {
+                        if ((currentSnowLevel <= 6) && worldObj.checkNoEntityCollision(inBlock.getCollisionBoundingBoxFromPool(worldObj, floorPosX, floorPosY, floorPosZ))) {
+                            worldObj.setBlockMetadataWithNotify(floorPosX, floorPosY, floorPosZ, (currentSnowLevel + 1) | (layerMeta & -8), 2);
+                        }
+                    } else if (inBlock == Blocks.water) {
                         /*
                          * TODO Check if the earlier event or this one is the correct one.
                          * Also: bouncy arrow on ice, a bit like stone skimming? Could be cool.
