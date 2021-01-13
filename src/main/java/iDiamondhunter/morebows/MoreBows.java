@@ -27,6 +27,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
 /** If you're reading this, I'm very sorry you have to deal with my code. */
@@ -115,29 +116,14 @@ public class MoreBows {
     protected static final Item StoneBow = new CustomBow(484, defaultArrowType, 1.15D, new byte[] { 18, 13 }, false, defaultPowerDiv, EnumRarity.common).setUnlocalizedName(StoneBowName).setTextureName(modSeperator + StoneBowName);
 
     /* Recipes. */
-    private static final ShapedOreRecipe DiamondBowRecipe = new ShapedOreRecipe(new ItemStack(DiamondBow, 1), " DC", "ABC", " DC", 'C', Items.string, 'D', Items.diamond, 'A', Items.iron_ingot, 'B', Items.bow);
-    private static final ShapedOreRecipe EnderBowRecipe = new ShapedOreRecipe(new ItemStack(EnderBow, 1), "CD ", "AB ", "CD ", 'C', Items.gold_ingot, 'D', Items.ender_pearl, 'B', IronBow, 'A', Items.ender_eye);
-    private static final ShapedOreRecipe EnderBowShiftedRecipe = new ShapedOreRecipe(new ItemStack(EnderBow, 1), " CD", " AB", " CD", 'C', Items.gold_ingot, 'D', Items.ender_pearl, 'B', IronBow, 'A', Items.ender_eye);
-    private static final ShapedOreRecipe FlameBowRecipe = new ShapedOreRecipe(new ItemStack(FlameBow, 1), "CD ", "AB ", "CD ", 'A', Items.gold_ingot, 'D', Items.blaze_rod, 'B', IronBow, 'C', Blocks.netherrack);
-    private static final ShapedOreRecipe FlameBowShiftedRecipe = new ShapedOreRecipe(new ItemStack(FlameBow, 1), " CD", " AB", " CD", 'A', Items.gold_ingot, 'D', Items.blaze_rod, 'B', IronBow, 'C', Blocks.netherrack);
-    private static final ShapedOreRecipe FrostBowRecipe = new ShapedOreRecipe(new ItemStack(FrostBow, 1), " DC", "ABC", " DC", 'C', Items.string, 'D', Blocks.ice, 'A', Items.snowball, 'B', IronBow);
-    private static final ShapedOreRecipe GoldBowRecipe = new ShapedOreRecipe(new ItemStack(GoldBow, 1), " AC", "ABC", " AC", 'C', Items.string, 'A', Items.gold_ingot, 'B', Items.bow);
-    private static final ShapedOreRecipe IronBowRecipe = new ShapedOreRecipe(new ItemStack(IronBow, 1), " AC", "ABC", " AC", 'C', Items.string, 'A', Items.iron_ingot, 'B', Items.bow);
-    private static final ShapedOreRecipe MultiBowRecipe = new ShapedOreRecipe(new ItemStack(MultiBow, 1), " BC", "A C", " BC", 'C', Items.string, 'A', Items.iron_ingot, 'B', IronBow);
-    private static final ShapedOreRecipe StoneBowRecipe = new ShapedOreRecipe(new ItemStack(StoneBow, 1), " DC", "ABC", " DC", 'A', Items.stick, 'C', Items.string, 'D', Blocks.stone, 'B', Items.bow);
-
-    static {
-        DiamondBowRecipe.setMirrored(true);
-        EnderBowRecipe.setMirrored(true);
-        EnderBowShiftedRecipe.setMirrored(true);
-        FlameBowRecipe.setMirrored(true);
-        FlameBowShiftedRecipe.setMirrored(true);
-        FrostBowRecipe.setMirrored(true);
-        GoldBowRecipe.setMirrored(true);
-        IronBowRecipe.setMirrored(true);
-        MultiBowRecipe.setMirrored(true);
-        StoneBowRecipe.setMirrored(true);
-    }
+    private static final ShapedOreRecipe DiamondBowRecipe = new ShapedOreRecipe(new ItemStack(DiamondBow, 1), " DC", "ABC", " DC", 'C', "string", 'D', "gemDiamond", 'A', "ingotIron", 'B', "bow");
+    private static final ShapedOreRecipe EnderBowRecipe = new ShapedOreRecipe(new ItemStack(EnderBow, 1), "CD", "AB", "CD", 'C', "ingotGold", 'D', "pearlEnder", 'B', "bowIron", 'A', "pearlEnderEye");
+    private static final ShapedOreRecipe FlameBowRecipe = new ShapedOreRecipe(new ItemStack(FlameBow, 1), "CD", "AB", "CD", 'A', "ingotGold", 'D', "rodBlaze", 'B', "bowIron", 'C', "netherrack");
+    private static final ShapedOreRecipe FrostBowRecipe = new ShapedOreRecipe(new ItemStack(FrostBow, 1), " DC", "ABC", " DC", 'C', "string", 'D', "ice", 'A', "snowball", 'B', "bowIron");
+    private static final ShapedOreRecipe GoldBowRecipe = new ShapedOreRecipe(new ItemStack(GoldBow, 1), " AC", "ABC", " AC", 'C', "string", 'A', "ingotGold", 'B', "bow");
+    private static final ShapedOreRecipe IronBowRecipe = new ShapedOreRecipe(new ItemStack(IronBow, 1), " AC", "ABC", " AC", 'C', "string", 'A', "ingotIron", 'B', "bow");
+    private static final ShapedOreRecipe MultiBowRecipe = new ShapedOreRecipe(new ItemStack(MultiBow, 1), " BC", "A C", " BC", 'C', "string", 'A', "ingotIron", 'B', "bowIron");
+    private static final ShapedOreRecipe StoneBowRecipe = new ShapedOreRecipe(new ItemStack(StoneBow, 1), " DC", "ABC", " DC", 'A', "stickWood", 'C', "string", 'D', "stone", 'B', "bow");
 
     /** This method syncs the config file with the Configuration, as well as syncing any config related variables. */
     private static final void conf() {
@@ -301,14 +287,33 @@ public class MoreBows {
         /* Recipe registry */
         GameRegistry.addRecipe(DiamondBowRecipe);
         GameRegistry.addRecipe(EnderBowRecipe);
-        GameRegistry.addRecipe(EnderBowShiftedRecipe);
         GameRegistry.addRecipe(FlameBowRecipe);
-        GameRegistry.addRecipe(FlameBowShiftedRecipe);
         GameRegistry.addRecipe(FrostBowRecipe);
         GameRegistry.addRecipe(GoldBowRecipe);
         GameRegistry.addRecipe(IronBowRecipe);
         GameRegistry.addRecipe(MultiBowRecipe);
         GameRegistry.addRecipe(StoneBowRecipe);
+        /* Hack-ish - Registers groups of items to the OreDictionary that Forge doesn't by default. I'm pretty sure that nothing bad happens if other mods duplicate entries to it. */
+        OreDictionary.registerOre("bow", new ItemStack(DiamondBow));
+        OreDictionary.registerOre("bow", new ItemStack(EnderBow));
+        OreDictionary.registerOre("bow", new ItemStack(FlameBow));
+        OreDictionary.registerOre("bow", new ItemStack(FrostBow));
+        OreDictionary.registerOre("bow", new ItemStack(GoldBow));
+        OreDictionary.registerOre("bow", new ItemStack(IronBow));
+        OreDictionary.registerOre("bow", new ItemStack(Items.bow));
+        OreDictionary.registerOre("bow", new ItemStack(MultiBow));
+        OreDictionary.registerOre("bow", new ItemStack(StoneBow));
+        OreDictionary.registerOre("bowDiamond", new ItemStack(DiamondBow));
+        OreDictionary.registerOre("bowGold", new ItemStack(GoldBow));
+        OreDictionary.registerOre("bowIron", new ItemStack(IronBow));
+        OreDictionary.registerOre("ice", new ItemStack(Blocks.ice));
+        OreDictionary.registerOre("ice", new ItemStack(Blocks.packed_ice));
+        OreDictionary.registerOre("netherrack", new ItemStack(Blocks.netherrack));
+        OreDictionary.registerOre("pearlEnder", new ItemStack(Items.ender_pearl));
+        OreDictionary.registerOre("pearlEnderEye", new ItemStack(Items.ender_eye));
+        OreDictionary.registerOre("rodBlaze", new ItemStack(Items.blaze_rod));
+        OreDictionary.registerOre("snowball", new ItemStack(Items.snowball));
+        OreDictionary.registerOre("string", new ItemStack(Items.string));
         /* Entities */
         EntityRegistry.registerModEntity(ArrowSpawner.class, "ArrowSpawner", 1, MoreBows.inst, /** As the player can never see an ArrowSpawner and all of the logic for it is handled server-side, there's no reason to send any tracking updates. */ -1, Integer.MAX_VALUE, false);
         EntityRegistry.registerModEntity(CustomArrow.class, "CustomArrow", 2, MoreBows.inst, 64, 20, true);
