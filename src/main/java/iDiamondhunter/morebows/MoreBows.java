@@ -115,16 +115,6 @@ public class MoreBows {
     protected static final Item MultiBow = new CustomBow(550, ARROW_TYPE_NOT_CUSTOM, noDamageMult, new byte[] { 12, 7 }, true, 13.0F, EnumRarity.rare).setUnlocalizedName(MultiBowName).setTextureName(modSeperator + MultiBowName);
     protected static final Item StoneBow = new CustomBow(484, defaultArrowType, 1.15D, new byte[] { 18, 13 }, false, defaultPowerDiv, EnumRarity.common).setUnlocalizedName(StoneBowName).setTextureName(modSeperator + StoneBowName);
 
-    /* Recipes. */
-    private static final ShapedOreRecipe DiamondBowRecipe = new ShapedOreRecipe(new ItemStack(DiamondBow, 1), " DC", "ABC", " DC", 'C', "string", 'D', "gemDiamond", 'A', "ingotIron", 'B', "bow");
-    private static final ShapedOreRecipe EnderBowRecipe = new ShapedOreRecipe(new ItemStack(EnderBow, 1), "CD", "AB", "CD", 'C', "ingotGold", 'D', "pearlEnder", 'B', "bowIron", 'A', "pearlEnderEye");
-    private static final ShapedOreRecipe FlameBowRecipe = new ShapedOreRecipe(new ItemStack(FlameBow, 1), "CD", "AB", "CD", 'A', "ingotGold", 'D', "rodBlaze", 'B', "bowIron", 'C', "netherrack");
-    private static final ShapedOreRecipe FrostBowRecipe = new ShapedOreRecipe(new ItemStack(FrostBow, 1), " DC", "ABC", " DC", 'C', "string", 'D', "ice", 'A', "snowball", 'B', "bowIron");
-    private static final ShapedOreRecipe GoldBowRecipe = new ShapedOreRecipe(new ItemStack(GoldBow, 1), " AC", "ABC", " AC", 'C', "string", 'A', "ingotGold", 'B', "bow");
-    private static final ShapedOreRecipe IronBowRecipe = new ShapedOreRecipe(new ItemStack(IronBow, 1), " AC", "ABC", " AC", 'C', "string", 'A', "ingotIron", 'B', "bow");
-    private static final ShapedOreRecipe MultiBowRecipe = new ShapedOreRecipe(new ItemStack(MultiBow, 1), " BC", "A C", " BC", 'C', "string", 'A', "ingotIron", 'B', "bowIron");
-    private static final ShapedOreRecipe StoneBowRecipe = new ShapedOreRecipe(new ItemStack(StoneBow, 1), " DC", "ABC", " DC", 'A', "stickWood", 'C', "string", 'D', "stone", 'B', "bow");
-
     /** This method syncs the config file with the Configuration, as well as syncing any config related variables. */
     private static final void conf() {
         frostArrowsShouldBeCold = config.get(Configuration.CATEGORY_GENERAL, "frostArrowsShouldBeCold", true).getBoolean();
@@ -285,14 +275,14 @@ public class MoreBows {
         GameRegistry.registerItem(MultiBow, MultiBowName);
         GameRegistry.registerItem(StoneBow, StoneBowName);
         /* Recipe registry */
-        GameRegistry.addRecipe(DiamondBowRecipe);
-        GameRegistry.addRecipe(EnderBowRecipe);
-        GameRegistry.addRecipe(FlameBowRecipe);
-        GameRegistry.addRecipe(FrostBowRecipe);
-        GameRegistry.addRecipe(GoldBowRecipe);
-        GameRegistry.addRecipe(IronBowRecipe);
-        GameRegistry.addRecipe(MultiBowRecipe);
-        GameRegistry.addRecipe(StoneBowRecipe);
+        GameRegistry.addRecipe(new ShapedOreRecipe(DiamondBow, " DC", "ABC", " DC", 'C', "string", 'D', "gemDiamond", 'A', "ingotIron", 'B', "bow"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(EnderBow, "CD", "AB", "CD", 'C', "ingotGold", 'D', "pearlEnder", 'B', "bowIron", 'A', "pearlEnderEye"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(FlameBow, "CD", "AB", "CD", 'A', "ingotGold", 'D', "rodBlaze", 'B', "bowIron", 'C', "netherrack"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(FrostBow, " DC", "ABC", " DC", 'C', "string", 'D', "ice", 'A', "snowball", 'B', "bowIron"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(GoldBow, " AC", "ABC", " AC", 'C', "string", 'A', "ingotGold", 'B', "bow"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(IronBow, " AC", "ABC", " AC", 'C', "string", 'A', "ingotIron", 'B', "bow"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(MultiBow, " DC", "A C", " DC", 'C', "string", 'A', "ingotIron", 'D', "bowIron"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(StoneBow, " DC", "ABC", " DC", 'A', "stickWood", 'C', "string", 'D', "stone", 'B', "bow"));
         /* Hack-ish - Registers groups of items to the OreDictionary that Forge doesn't by default. I'm pretty sure that nothing bad happens if other mods duplicate entries to it. */
         OreDictionary.registerOre("bow", new ItemStack(DiamondBow));
         OreDictionary.registerOre("bow", new ItemStack(EnderBow));
