@@ -27,6 +27,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 
 /** If you're reading this, I'm very sorry you have to deal with my code. */
 @Mod(modid = MoreBows.MOD_ID, guiFactory = "iDiamondhunter.morebows.Client" /* Note: Forge likes to complain if there isn't something assigned to the "version" property when loading. It should get overwritten by the actual version in the mcmod.info file. */)
@@ -85,13 +86,13 @@ public class MoreBows {
 
     /* Names of bows. */
     private static final String DiamondBowName = "DiamondBow";
-    private static final String GoldBowName = "GoldBow";
     private static final String EnderBowName = "EnderBow";
-    private static final String StoneBowName = "StoneBow";
-    private static final String IronBowName = "IronBow";
-    private static final String MultiBowName = "MultiBow";
     private static final String FlameBowName = "FlameBow";
     private static final String FrostBowName = "FrostBow";
+    private static final String GoldBowName = "GoldBow";
+    private static final String IronBowName = "IronBow";
+    private static final String MultiBowName = "MultiBow";
+    private static final String StoneBowName = "StoneBow";
 
     /* Default values for bow construction */
     /// ** Default values for bow construction: the default speed at which icons change. */
@@ -105,13 +106,38 @@ public class MoreBows {
 
     /* Bow items. */
     protected static final Item DiamondBow = new CustomBow(1016, defaultArrowType, 2.25D, new byte[] { 8, 4 }, false, 6.0F, EnumRarity.rare).setUnlocalizedName(DiamondBowName).setTextureName(modSeperator + DiamondBowName);
-    protected static final Item GoldBow = new CustomBow(68, defaultArrowType, 2.5D, new byte[] { 8, 4 }, false, 6.0F, EnumRarity.uncommon).setUnlocalizedName(GoldBowName).setTextureName(modSeperator + GoldBowName);
     protected static final Item EnderBow = new CustomBow(215, ARROW_TYPE_ENDER, noDamageMult, new byte[] { 19, 10 }, true, 22.0F, EnumRarity.epic).setUnlocalizedName(EnderBowName).setTextureName(modSeperator + EnderBowName);
-    protected static final Item StoneBow = new CustomBow(484, defaultArrowType, 1.15D, new byte[] { 18, 13 }, false, defaultPowerDiv, EnumRarity.common).setUnlocalizedName(StoneBowName).setTextureName(modSeperator + StoneBowName);
-    protected static final Item IronBow = new CustomBow(550, defaultArrowType, 1.5D, new byte[] { 16, 11 }, false, 17.0F, EnumRarity.common).setUnlocalizedName(IronBowName).setTextureName(modSeperator + IronBowName);
-    protected static final Item MultiBow = new CustomBow(550, ARROW_TYPE_NOT_CUSTOM, noDamageMult, new byte[] { 12, 7 }, true, 13.0F, EnumRarity.rare).setUnlocalizedName(MultiBowName).setTextureName(modSeperator + MultiBowName);
     protected static final Item FlameBow = new CustomBow(576, ARROW_TYPE_FIRE, 2.0D, new byte[] { 14, 9 }, false, 15.0F, EnumRarity.uncommon).setUnlocalizedName(FlameBowName).setTextureName(modSeperator + FlameBowName);
     protected static final Item FrostBow = new CustomBow(550, ARROW_TYPE_FROST, noDamageMult, new byte[] { 26, 13 }, false, 26.0F, EnumRarity.common).setUnlocalizedName(FrostBowName).setTextureName(modSeperator + FrostBowName);
+    protected static final Item GoldBow = new CustomBow(68, defaultArrowType, 2.5D, new byte[] { 8, 4 }, false, 6.0F, EnumRarity.uncommon).setUnlocalizedName(GoldBowName).setTextureName(modSeperator + GoldBowName);
+    protected static final Item IronBow = new CustomBow(550, defaultArrowType, 1.5D, new byte[] { 16, 11 }, false, 17.0F, EnumRarity.common).setUnlocalizedName(IronBowName).setTextureName(modSeperator + IronBowName);
+    protected static final Item MultiBow = new CustomBow(550, ARROW_TYPE_NOT_CUSTOM, noDamageMult, new byte[] { 12, 7 }, true, 13.0F, EnumRarity.rare).setUnlocalizedName(MultiBowName).setTextureName(modSeperator + MultiBowName);
+    protected static final Item StoneBow = new CustomBow(484, defaultArrowType, 1.15D, new byte[] { 18, 13 }, false, defaultPowerDiv, EnumRarity.common).setUnlocalizedName(StoneBowName).setTextureName(modSeperator + StoneBowName);
+
+    /* Recipes. */
+    private static final ShapedOreRecipe DiamondBowRecipe = new ShapedOreRecipe(new ItemStack(DiamondBow, 1), " DC", "ABC", " DC", 'C', Items.string, 'D', Items.diamond, 'A', Items.iron_ingot, 'B', Items.bow);
+    private static final ShapedOreRecipe EnderBowRecipe = new ShapedOreRecipe(new ItemStack(EnderBow, 1), "CD ", "AB ", "CD ", 'C', Items.gold_ingot, 'D', Items.ender_pearl, 'B', IronBow, 'A', Items.ender_eye);
+    private static final ShapedOreRecipe EnderBowShiftedRecipe = new ShapedOreRecipe(new ItemStack(EnderBow, 1), " CD", " AB", " CD", 'C', Items.gold_ingot, 'D', Items.ender_pearl, 'B', IronBow, 'A', Items.ender_eye);
+    private static final ShapedOreRecipe FlameBowRecipe = new ShapedOreRecipe(new ItemStack(FlameBow, 1), "CD ", "AB ", "CD ", 'A', Items.gold_ingot, 'D', Items.blaze_rod, 'B', IronBow, 'C', Blocks.netherrack);
+    private static final ShapedOreRecipe FlameBowShiftedRecipe = new ShapedOreRecipe(new ItemStack(FlameBow, 1), " CD", " AB", " CD", 'A', Items.gold_ingot, 'D', Items.blaze_rod, 'B', IronBow, 'C', Blocks.netherrack);
+    private static final ShapedOreRecipe FrostBowRecipe = new ShapedOreRecipe(new ItemStack(FrostBow, 1), " DC", "ABC", " DC", 'C', Items.string, 'D', Blocks.ice, 'A', Items.snowball, 'B', IronBow);
+    private static final ShapedOreRecipe GoldBowRecipe = new ShapedOreRecipe(new ItemStack(GoldBow, 1), " AC", "ABC", " AC", 'C', Items.string, 'A', Items.gold_ingot, 'B', Items.bow);
+    private static final ShapedOreRecipe IronBowRecipe = new ShapedOreRecipe(new ItemStack(IronBow, 1), " AC", "ABC", " AC", 'C', Items.string, 'A', Items.iron_ingot, 'B', Items.bow);
+    private static final ShapedOreRecipe MultiBowRecipe = new ShapedOreRecipe(new ItemStack(MultiBow, 1), " BC", "A C", " BC", 'C', Items.string, 'A', Items.iron_ingot, 'B', IronBow);
+    private static final ShapedOreRecipe StoneBowRecipe = new ShapedOreRecipe(new ItemStack(StoneBow, 1), " DC", "ABC", " DC", 'A', Items.stick, 'C', Items.string, 'D', Blocks.stone, 'B', Items.bow);
+
+    static {
+        DiamondBowRecipe.setMirrored(true);
+        EnderBowRecipe.setMirrored(true);
+        EnderBowShiftedRecipe.setMirrored(true);
+        FlameBowRecipe.setMirrored(true);
+        FlameBowShiftedRecipe.setMirrored(true);
+        FrostBowRecipe.setMirrored(true);
+        GoldBowRecipe.setMirrored(true);
+        IronBowRecipe.setMirrored(true);
+        MultiBowRecipe.setMirrored(true);
+        StoneBowRecipe.setMirrored(true);
+    }
 
     /** This method syncs the config file with the Configuration, as well as syncing any config related variables. */
     private static final void conf() {
@@ -265,34 +291,24 @@ public class MoreBows {
     protected void register() {
         /* Item registry */
         GameRegistry.registerItem(DiamondBow, DiamondBowName);
-        GameRegistry.registerItem(GoldBow, GoldBowName);
         GameRegistry.registerItem(EnderBow, EnderBowName);
-        GameRegistry.registerItem(StoneBow, StoneBowName);
-        GameRegistry.registerItem(IronBow, IronBowName);
-        GameRegistry.registerItem(MultiBow, MultiBowName);
         GameRegistry.registerItem(FlameBow, FlameBowName);
         GameRegistry.registerItem(FrostBow, FrostBowName);
-        /* Recipes */
-        GameRegistry.addRecipe(new ItemStack(StoneBow, 1), " DC", "ABC", " DC", 'A', Items.stick, 'C', Items.string, 'D', Blocks.stone, 'B', Items.bow);
-        GameRegistry.addRecipe(new ItemStack(StoneBow, 1), "CD ", "CBA", "CD ", 'A', Items.stick, 'C', Items.string, 'D', Blocks.stone, 'B', Items.bow);
-        GameRegistry.addRecipe(new ItemStack(IronBow, 1), " AC", "ABC", " AC", 'C', Items.string, 'A', Items.iron_ingot, 'B', Items.bow);
-        GameRegistry.addRecipe(new ItemStack(IronBow, 1), "CA ", "CBA", "CA ", 'C', Items.string, 'A', Items.iron_ingot, 'B', Items.bow);
-        GameRegistry.addRecipe(new ItemStack(GoldBow, 1), " AC", "ABC", " AC", 'C', Items.string, 'A', Items.gold_ingot, 'B', Items.bow);
-        GameRegistry.addRecipe(new ItemStack(GoldBow, 1), "CA ", "CBA", "CA ", 'C', Items.string, 'A', Items.gold_ingot, 'B', Items.bow);
-        GameRegistry.addRecipe(new ItemStack(DiamondBow, 1), " DC", "ABC", " DC", 'C', Items.string, 'D', Items.diamond, 'A', Items.iron_ingot, 'B', Items.bow);
-        GameRegistry.addRecipe(new ItemStack(DiamondBow, 1), "CD ", "CBA", "CD ", 'C', Items.string, 'D', Items.diamond, 'A', Items.iron_ingot, 'B', Items.bow);
-        GameRegistry.addRecipe(new ItemStack(MultiBow, 1), " BC", "A C", " BC", 'C', Items.string, 'A', Items.iron_ingot, 'B', IronBow);
-        GameRegistry.addRecipe(new ItemStack(MultiBow, 1), "CB ", "C A", "CB ", 'C', Items.string, 'A', Items.iron_ingot, 'B', IronBow);
-        GameRegistry.addRecipe(new ItemStack(FlameBow, 1), "CD ", "AB ", "CD ", 'A', Items.gold_ingot, 'D', Items.blaze_rod, 'B', IronBow, 'C', Blocks.netherrack);
-        GameRegistry.addRecipe(new ItemStack(FlameBow, 1), " CD", " AB", " CD", 'A', Items.gold_ingot, 'D', Items.blaze_rod, 'B', IronBow, 'C', Blocks.netherrack);
-        GameRegistry.addRecipe(new ItemStack(FlameBow, 1), "DC ", "BA ", "DC ", 'A', Items.gold_ingot, 'D', Items.blaze_rod, 'B', IronBow, 'C', Blocks.netherrack);
-        GameRegistry.addRecipe(new ItemStack(FlameBow, 1), " DC", " BA", " DC", 'A', Items.gold_ingot, 'D', Items.blaze_rod, 'B', IronBow, 'C', Blocks.netherrack);
-        GameRegistry.addRecipe(new ItemStack(EnderBow, 1), "CD ", "AB ", "CD ", 'C', Items.gold_ingot, 'D', Items.ender_pearl, 'B', IronBow, 'A', Items.ender_eye);
-        GameRegistry.addRecipe(new ItemStack(EnderBow, 1), " CD", " AB", " CD", 'C', Items.gold_ingot, 'D', Items.ender_pearl, 'B', IronBow, 'A', Items.ender_eye);
-        GameRegistry.addRecipe(new ItemStack(EnderBow, 1), "DC ", "BA ", "DC ", 'C', Items.gold_ingot, 'D', Items.ender_pearl, 'B', IronBow, 'A', Items.ender_eye);
-        GameRegistry.addRecipe(new ItemStack(EnderBow, 1), " DC", " BA", " DC", 'C', Items.gold_ingot, 'D', Items.ender_pearl, 'B', IronBow, 'A', Items.ender_eye);
-        GameRegistry.addRecipe(new ItemStack(FrostBow, 1), " DC", "ABC", " DC", 'C', Items.string, 'D', Blocks.ice, 'A', Items.snowball, 'B', IronBow);
-        GameRegistry.addRecipe(new ItemStack(FrostBow, 1), "CD ", "CBA", "CD ", 'C', Items.string, 'D', Blocks.ice, 'A', Items.snowball, 'B', IronBow);
+        GameRegistry.registerItem(GoldBow, GoldBowName);
+        GameRegistry.registerItem(IronBow, IronBowName);
+        GameRegistry.registerItem(MultiBow, MultiBowName);
+        GameRegistry.registerItem(StoneBow, StoneBowName);
+        /* Recipe registry */
+        GameRegistry.addRecipe(DiamondBowRecipe);
+        GameRegistry.addRecipe(EnderBowRecipe);
+        GameRegistry.addRecipe(EnderBowShiftedRecipe);
+        GameRegistry.addRecipe(FlameBowRecipe);
+        GameRegistry.addRecipe(FlameBowShiftedRecipe);
+        GameRegistry.addRecipe(FrostBowRecipe);
+        GameRegistry.addRecipe(GoldBowRecipe);
+        GameRegistry.addRecipe(IronBowRecipe);
+        GameRegistry.addRecipe(MultiBowRecipe);
+        GameRegistry.addRecipe(StoneBowRecipe);
         /* Entities */
         EntityRegistry.registerModEntity(ArrowSpawner.class, "ArrowSpawner", 1, MoreBows.inst, /** As the player can never see an ArrowSpawner and all of the logic for it is handled server-side, there's no reason to send any tracking updates. */ -1, Integer.MAX_VALUE, false);
         EntityRegistry.registerModEntity(CustomArrow.class, "CustomArrow", 2, MoreBows.inst, 64, 20, true);
