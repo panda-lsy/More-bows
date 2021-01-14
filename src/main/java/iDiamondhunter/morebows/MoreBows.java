@@ -264,7 +264,7 @@ public class MoreBows {
 
     /** This method registers all mod content for a given side. Server side, it registers items, recipes, and entities. Client side, it also registers custom renderers. */
     protected void register() {
-        /* Item registry */
+        /* Item registration */
         GameRegistry.registerItem(DiamondBow, DiamondBowName);
         GameRegistry.registerItem(EnderBow, EnderBowName);
         GameRegistry.registerItem(FlameBow, FlameBowName);
@@ -273,7 +273,9 @@ public class MoreBows {
         GameRegistry.registerItem(IronBow, IronBowName);
         GameRegistry.registerItem(MultiBow, MultiBowName);
         GameRegistry.registerItem(StoneBow, StoneBowName);
-        /* Recipe registry */
+        /* Hack-ish - Register an OreDictionary'd version of the dispenser recipe, so MoreBows's bows work with it. */
+        GameRegistry.addRecipe(new ShapedOreRecipe(Blocks.dispenser, "AAA", "ABA", "ACA", 'A', "cobblestone", 'B', "bow", 'C', "dustRedstone"));
+        /* Bow recipe registration */
         GameRegistry.addRecipe(new ShapedOreRecipe(DiamondBow, " DC", "ABC", " DC", 'C', "string", 'D', "gemDiamond", 'A', "ingotIron", 'B', "bow"));
         GameRegistry.addRecipe(new ShapedOreRecipe(EnderBow, "CD", "AB", "CD", 'C', "ingotGold", 'D', "pearlEnder", 'B', "bowIron", 'A', "pearlEnderEye"));
         GameRegistry.addRecipe(new ShapedOreRecipe(FlameBow, "CD", "AB", "CD", 'A', "ingotGold", 'D', "rodBlaze", 'B', "bowIron", 'C', "netherrack"));
@@ -303,7 +305,7 @@ public class MoreBows {
         OreDictionary.registerOre("rodBlaze", Items.blaze_rod);
         OreDictionary.registerOre("snowball", Items.snowball);
         OreDictionary.registerOre("string", Items.string);
-        /* Entities */
+        /* Entity registration */
         EntityRegistry.registerModEntity(ArrowSpawner.class, "ArrowSpawner", 1, MoreBows.inst, /** As the player can never see an ArrowSpawner and all of the logic for it is handled server-side, there's no reason to send any tracking updates. */ -1, Integer.MAX_VALUE, false);
         EntityRegistry.registerModEntity(CustomArrow.class, "CustomArrow", 2, MoreBows.inst, 64, 20, true);
     }
