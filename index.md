@@ -5,6 +5,7 @@
 
 <p align="center">
     <picture>
+        <source srcset="images/optimised/MoreBowsLogo.jxl" type="image/jxl">
         <source srcset="images/optimised/MoreBowsLogo.webp" type="image/webp">
         <img src="images/optimised/MoreBowsLogo.png" alt="More Bows Logo" title="More Bows!" style='width: 100%; object-fit: contain'/>
     </picture>
