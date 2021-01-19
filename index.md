@@ -5,9 +5,9 @@
 
 <p align="center">
     <picture>
-        <source srcset="images/optimised/MoreBowsLogo.jxl" type="image/jxl">
-        <source srcset="images/optimised/MoreBowsLogo.webp" type="image/webp">
-        <img src="images/optimised/MoreBowsLogo.png" alt="More Bows Logo" title="More Bows!" style='width: 100%; object-fit: contain'/>
+        <source srcset="images/optimised/MoreBowsLogo/MoreBowsLogo.jxl" type="image/jxl">
+        <source srcset="images/optimised/MoreBowsLogo/MoreBowsLogo.webp" type="image/webp">
+        <img src="images/optimised/MoreBowsLogo/MoreBowsLogo.png" alt="More Bows Logo" title="More Bows!" style='width: 100%; object-fit: contain'/>
     </picture>
 </p>
 
@@ -25,7 +25,7 @@ As iDiamondhunter ["removed the copyrights" from this mod](https://www.minecraft
 
 <p align="center">
     <picture>
-        <source srcset="images/optimised/ScreenshotShootingPigs.webp" type="image/webp">
-        <img src="images/optimised/ScreenshotShootingPigs.png" alt="A screenshot of a player shooting pigs with the Ender bow" title="A mod for 1.7.10 in 2021? When pigs fly..." style='height: 100%; width: 100%; object-fit: contain'/> 
+        <source srcset="images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs.webp" type="image/webp">
+        <img src="images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs.png" alt="A screenshot of a player shooting pigs with the Ender bow" title="A mod for 1.7.10 in 2021? When pigs fly..." style='height: 100%; width: 100%; object-fit: contain'/> 
     </picture>
 </p>
