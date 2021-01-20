@@ -5,7 +5,14 @@
 
 **_This port is nearly finished, but things might still be incomplete or not work as intended! Stay tuned for progress on it, and feel free to check out the latest builds!_**
 
-<p align="center"> <img src="src/main/resources/mb.png" alt="More Bows Logo" title="More Bows!" style='width: 100%; object-fit: contain'/> </p>
+<p align="center">
+    <picture>
+        <source srcset="https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/MoreBowsLogo/MoreBowsLogo-360.jxl 360w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/MoreBowsLogo/MoreBowsLogo-480.jxl 480w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/MoreBowsLogo/MoreBowsLogo.jxl" type="image/jxl">
+        <source srcset="https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/MoreBowsLogo/MoreBowsLogo-360.webp 360w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/MoreBowsLogo/MoreBowsLogo-480.webp 480w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/MoreBowsLogo/MoreBowsLogo.webp" type="image/webp">
+        <source srcset="https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/MoreBowsLogo/MoreBowsLogo-360.png 360w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/MoreBowsLogo/MoreBowsLogo-480.png 480w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/MoreBowsLogo/MoreBowsLogo.png" type="image/png">
+        <img src="https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/MoreBowsLogo/MoreBowsLogo.png" alt="More Bows Logo" title="More Bows!" style='width: 100%; object-fit: contain'/>
+    </picture>
+</p>
 
 This is a port of the More Bows mod to 1.7.10! This mod was originally created by GaussFire, and then maintained & updated by iDiamondhunter. This port aims to faithfully re-create the original mod, while fixing some bugs & potentially introducing new mechanics (or re-adding cut ideas!).
 
@@ -31,6 +38,19 @@ The Gradle build script resolves dependancies automatically, but it relies on ha
 ### Licence:
 As iDiamondhunter ["removed the copyrights" from this mod](https://www.minecraftforum.net/forums/mapping-and-modding-java-edition/minecraft-mods/1286765-1-6-2-more-bows-mod?comment=733), I presume that this mod is free of any known copyright, and that it is in the public domain. Therefore, I will be keeping it licensed as such.
 
-<p align="center"> <img src="docs/images/optimised/1-7-10.png" alt="CurseForge user the_spider_overlord: dangit if only this had a 1.7.10 backport!" title="Did someone say backport???" style='width: 100%; object-fit: contain'/> </p>
+<p align="center">
+    <picture>
+        <source srcset="https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/1-7-10/1-7-10-600.jxl 600w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/1-7-10/1-7-10-768.jxl 768w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/1-7-10/1-7-10-900.jxl 900w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/1-7-10/1-7-10-1024.jxl 1024w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/1-7-10/1-7-10.jxl" type="image/jxl">
+        <source srcset="https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/1-7-10/1-7-10-600.webp 600w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/1-7-10/1-7-10-768.webp 768w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/1-7-10/1-7-10-900.webp 900w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/1-7-10/1-7-10-1024.webp 1024w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/1-7-10/1-7-10.webp" type="image/webp">
+        <source srcset="https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/1-7-10/1-7-10-600.png 600w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/1-7-10/1-7-10-768.png 768w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/1-7-10/1-7-10-900.png 900w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/1-7-10/1-7-10-1024.png 1024w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/1-7-10/1-7-10.png" type="image/png">
+        <img src="https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/1-7-10/1-7-10.png" alt="CurseForge user the_spider_overlord: dangit if only this had a 1.7.10 backport!" title="Did someone say backport???" style='height: 100%; width: 100%; object-fit: contain'/>
+    </picture>
+</p>
 
-<p align="center"> <img src="docs/images/optimised/ScreenshotShootingPigs.png" alt="A mod for 1.7.10 in 2020? When pigs fly..." title="A mod for 1.7.10 in 2020? When pigs fly..." style='height: 100%; width: 100%; object-fit: contain'/> </p>
+<p align="center">
+    <picture>
+        <source srcset="https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-320.webp 320w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-480.webp 480w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-600.webp 600w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-768.webp 768w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-900.webp 900w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-1024.webp 1024w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs.webp" type="image/webp">
+        <source srcset="https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-320.png 320w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-480.png 480w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-600.png 600w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-768.png 768w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-900.png 900w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-1024.png 1024w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs.png" type="image/png">
+        <img src="https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs.png" alt="A screenshot of a player shooting pigs with the Ender bow" title="A mod for 1.7.10 in 2021? When pigs fly..." style='height: 100%; width: 100%; object-fit: contain'/>
+    </picture>
+</p>
