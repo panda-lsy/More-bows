@@ -5,8 +5,9 @@
 
 <p align="center">
     <picture>
-        <source srcset="images/optimised/MoreBowsLogo/MoreBowsLogo.jxl" type="image/jxl">
-        <source srcset="images/optimised/MoreBowsLogo/MoreBowsLogo.webp" type="image/webp">
+        <source srcset="images/optimised/MoreBowsLogo/MoreBowsLogo-360.jxl 360w, images/optimised/MoreBowsLogo/MoreBowsLogo-480.jxl 480w, images/optimised/MoreBowsLogo/MoreBowsLogo.jxl" type="image/jxl">
+        <source srcset="images/optimised/MoreBowsLogo/MoreBowsLogo-360.webp 360w, images/optimised/MoreBowsLogo/MoreBowsLogo-480.webp 480w, images/optimised/MoreBowsLogo/MoreBowsLogo.webp" type="image/webp">
+        <source srcset="images/optimised/MoreBowsLogo/MoreBowsLogo-360.png 360w, images/optimised/MoreBowsLogo/MoreBowsLogo-480.png 480w, images/optimised/MoreBowsLogo/MoreBowsLogo.png" type="image/png">
         <img src="images/optimised/MoreBowsLogo/MoreBowsLogo.png" alt="More Bows Logo" title="More Bows!" style='width: 100%; object-fit: contain'/>
     </picture>
 </p>
@@ -25,7 +26,8 @@ As iDiamondhunter ["removed the copyrights" from this mod](https://www.minecraft
 
 <p align="center">
     <picture>
-        <source srcset="images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs.webp" type="image/webp">
-        <img src="images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs.png" alt="A screenshot of a player shooting pigs with the Ender bow" title="A mod for 1.7.10 in 2021? When pigs fly..." style='height: 100%; width: 100%; object-fit: contain'/> 
+        <source srcset="images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-320.webp 320w, images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-480.webp 480w, images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-600.webp 600w, images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-768.webp 768w, images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-900.webp 900w, images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-1024.webp 1024w, images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs.webp" type="image/webp">
+        <source srcset="images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-320.png 320w, images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-480.png 480w, images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-600.png 600w, images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-768.png 768w, images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-900.png 900w, images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-1024.png 1024w, images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs.png" type="image/png">
+        <img src="images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs.png" alt="A screenshot of a player shooting pigs with the Ender bow" title="A mod for 1.7.10 in 2021? When pigs fly..." style='height: 100%; width: 100%; object-fit: contain'/>
     </picture>
 </p>
