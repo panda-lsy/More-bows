@@ -1,3 +1,6 @@
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="shortcut icon" type="image/png" sizes="16x16" href="favicon.png">
+
 # More Bows: Restrung!
 
 [![Licence badge](https://img.shields.io/github/license/NeRdTheNed/More-bows "Licence")](https://github.com/NeRdTheNed/More-bows/blob/forge-1.7.10/LICENSE)
