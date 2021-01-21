@@ -1,5 +1,5 @@
 <link rel="shortcut icon" href="favicon.ico" />
-<link rel="shortcut icon" type="image/png" sizes="16x16" href="favicon.png">
+<link rel="shortcut icon" type="image/png" href="favicon.png">
 
 # More Bows: Restrung!
 
