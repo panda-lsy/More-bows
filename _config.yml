@@ -1,1 +1,4 @@
 remote_theme: NeRdTheNed/not-so-modern
+title: "More Bows: Restrung!"
+sass:
+    style: compressed
