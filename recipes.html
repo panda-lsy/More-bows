@@ -1,0 +1,13 @@
+---
+layout: default
+---
+
+<h1>More Bows Recipes</h1>
+
+{% assign image_files = site.static_files | where: "isRecipe", true | sort: 'basename' %}
+{% for img in image_files %}
+<picture>
+  <source srcset="{{ img.path | replace_first: ".png", ".webp" }}" type="image/webp">
+  <img title="{{ img.basename }}" src="{{ img.path }}" />
+</picture>
+{% endfor %}

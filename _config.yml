@@ -1,4 +1,10 @@
 remote_theme: NeRdTheNed/not-so-modern
+repository: NeRdTheNed/More-bows
 title: "More Bows: Restrung!"
 sass:
     style: compressed
+defaults:
+  - scope:
+      path: "images/optimised/Recipes/*.png"
+    values:
+      isRecipe: true
