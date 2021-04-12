@@ -243,7 +243,7 @@ public class MoreBows {
      */
     @SubscribeEvent
     public final void confChange(OnConfigChangedEvent event) {
-        if (event.modID.equals(MOD_ID)) {
+        if (MOD_ID.equals(event.modID)) {
             conf();
         }
     }
