@@ -139,6 +139,9 @@ public final class ArrowSpawner extends Entity {
                 arrows[i] = new EntityArrow(worldObj);
             }
         }
+
+        /** Restore the saved amount of ticks that this entity has existed for */
+        ticksExisted = tag.getByte("ticksExisted");
     }
 
     /** This method saves the entity specific data to NBT data, including the stored arrows. */
@@ -165,6 +168,8 @@ public final class ArrowSpawner extends Entity {
         /** These tags are then saved. */
         tag.setTag("arrows", arrowsTag);
         tag.setTag("arrowsType", arrowsType);
+        /** Save the amount of ticks that this entity has existed for */
+        tag.setByte("ticksExisted", (byte) ticksExisted);
     }
 
 }
