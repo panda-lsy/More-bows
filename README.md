@@ -1,9 +1,8 @@
-# More Bows for 1.7.10!
+# More Bows: Restrung!
 
+[![CurseForge downloads badge](https://cf.way2muchnoise.eu/full_466902_downloads.svg "CurseForge downloads")](https://www.curseforge.com/minecraft/mc-mods/more-bows-restrung)
 [![Licence badge](https://img.shields.io/github/license/NeRdTheNed/More-bows "Licence")](https://github.com/NeRdTheNed/More-bows/blob/forge-1.7.10/LICENSE)
 [![Java SE version compatibility badge](https://img.shields.io/badge/Java%20SE-5-orange?logo=java "Java SE version compatibility")](https://en.wikipedia.org/wiki/Java_version_history#J2SE_5.0)
-
-**_This port is nearly finished, but things might still be incomplete or not work as intended! Stay tuned for progress on it, and feel free to check out the latest builds!_**
 
 <p align="center">
     <picture>
@@ -14,7 +13,9 @@
     </picture>
 </p>
 
-This is a port of the More Bows mod to 1.7.10! This mod was originally created by GaussFire, and then maintained & updated by iDiamondhunter. This port aims to faithfully re-create the original mod, while fixing some bugs & potentially introducing new mechanics (or re-adding cut ideas!).
+More Bows: Restrung is a port / continuation of the More Bows mod, which was originally created by GaussFire, and maintained & updated by iDiamondhunter until Risugami's ModLoader was no longer updated. This port aims to faithfully re-create the original mod, while fixing some bugs, introducing some quality-of-life changes, and adding cut ideas.
+
+_This branch of More Bows: Restrung targets Forge for Minecraft 1.7.10!_
 
 ### Original descriptions of each bow (not currently 100% accurate!):
 
@@ -29,14 +30,19 @@ This is a port of the More Bows mod to 1.7.10! This mod was originally created b
 
 Descriptions taken from [iDiamondhunter's page for the mod](https://www.minecraftforum.net/forums/mapping-and-modding-java-edition/minecraft-mods/1286765-1-6-2-more-bows-mod).
 
-### Other people's ports:
-- LucidSage's port of the More Bows mod to 1.8 can be found [here](https://github.com/LucidSage/More-bows)!
-
 ### Building:
+
 The Gradle build script resolves dependancies automatically, but it relies on having both a Java 6 compatible JDK installed (which Gradle builds the mod with) _and_ a Java 8 compatible JDK (or higher) installed (which Gradle itself runs on). This can be worked around by changing the Gradle build script to build the mod with a JDK that's compatible with one installed on the computer building this mod, although this could potentially result in slight differences or incompatibilities with truely ancient versions of Java. Note that ProGuard is used to output bytecode compatible with Java 5, so this might be a moot point.
 
 ### Licence:
+
 As iDiamondhunter ["removed the copyrights" from this mod](https://www.minecraftforum.net/forums/mapping-and-modding-java-edition/minecraft-mods/1286765-1-6-2-more-bows-mod?comment=733), I presume that this mod is free of any known copyright, and that it is in the public domain. Therefore, I will be keeping it licensed as such.
+
+### Other More Bows content:
+
+- GaussFire's original More Bows mod page (for Minecraft 1.2.5 - 1.3.2) can be found [here](https://www.minecraftforum.net/forums/mapping-and-modding-java-edition/minecraft-mods/1285024-1-2-5-1-3-2-more-bows-mod-v2-8-25-12)!
+- iDiamondhunter's More Bows mod page (for Minecraft 1.4.2 - 1.6.2) can be found [here](https://www.minecraftforum.net/forums/mapping-and-modding-java-edition/minecraft-mods/1286765-1-6-2-more-bows-mod)!
+- LucidSage's port of the More Bows mod to 1.8 can be found [here](https://github.com/LucidSage/More-bows)!
 
 <p align="center">
     <picture>
