@@ -72,12 +72,17 @@ public final class CustomBow extends ItemBow {
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(ItemStack stack, int i, EntityPlayer player, ItemStack useItem, int useRem) {
-        /* TODO Cleanup? */
         if (useRem == 0) {
             return itemIcon;
-        } else if ((useRem = bowMaxUseDuration - useRem) >= iconTimes[0]) {
+        }
+
+        useRem = bowMaxUseDuration - useRem;
+
+        if (useRem >= iconTimes[0]) {
             return icons[2];
-        } else if (useRem > iconTimes[1]) {
+        }
+
+        if (useRem > iconTimes[1]) {
             return icons[1];
         }
 
