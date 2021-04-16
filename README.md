@@ -1,6 +1,6 @@
 # More Bows: Restrung!
 
-[![CurseForge downloads badge](https://cf.way2muchnoise.eu/full_466902_downloads.svg "CurseForge downloads")](https://www.curseforge.com/minecraft/mc-mods/more-bows-restrung)
+[![CurseForge downloads badge](http://cf.way2muchnoise.eu/full_466902_downloads.svg "CurseForge downloads")](https://www.curseforge.com/minecraft/mc-mods/more-bows-restrung)
 [![Licence badge](https://img.shields.io/github/license/NeRdTheNed/More-bows "Licence")](https://github.com/NeRdTheNed/More-bows/blob/forge-1.7.10/LICENSE)
 [![Java SE version compatibility badge](https://img.shields.io/badge/Java%20SE-5-orange?logo=java "Java SE version compatibility")](https://en.wikipedia.org/wiki/Java_version_history#J2SE_5.0)
 
