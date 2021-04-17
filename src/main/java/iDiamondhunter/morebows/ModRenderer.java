@@ -32,7 +32,7 @@ import net.minecraftforge.client.IItemRenderer;
  */
 public final class ModRenderer extends RenderEntity implements IItemRenderer {
 
-    /** Not sure if this is a super cused hack, of if it's actually the best way to do this... */
+    /** Not sure if this is a super cursed hack, of if it's actually the best way to do this... */
     private final static Render arrow = RenderManager.instance.getEntityClassRenderObject(EntityArrow.class);
     private final static Render snow = RenderManager.instance.getEntityClassRenderObject(EntitySnowball.class);
 
@@ -76,7 +76,7 @@ public final class ModRenderer extends RenderEntity implements IItemRenderer {
 
             /** This code reverses the effects of the normal item transformations, then applies the transformations given to an item when EnumAction.bow is used. */
             if (useTicks > 0) {
-                /** Reveres the normal item transformations, to move the bow back to where it started so we can apply our own tranformations. */
+                /** Reveres the normal item transformations, to move the bow back to where it started so we can apply our own transformations. */
                 GL11.glRotatef(-18.0F, 0.0F, 0.0F, 1.0F);
                 GL11.glRotatef(-12.0F, 0.0F, 1.0F, 0.0F);
                 GL11.glRotatef(-8.0F, 1.0F, 0.0F, 0.0F);
@@ -101,7 +101,7 @@ public final class ModRenderer extends RenderEntity implements IItemRenderer {
                     GL11.glTranslatef(0.0F, MathHelper.sin((ticks - 0.1F) * 1.3F) * 0.01F * (divTicks - 0.1F), 0.0F);
                 }
 
-                /** Backwards motion ("draw back" animaton) */
+                /** Backwards motion ("draw back" animation) */
                 GL11.glTranslatef(0.0F, 0.0F, divTicks * 0.1F);
                 /** Does... something. */
                 GL11.glRotatef(-335.0F, 0.0F, 0.0F, 1.0F);
@@ -133,7 +133,7 @@ public final class ModRenderer extends RenderEntity implements IItemRenderer {
                 GL11.glRotatef(15.0F, -1.0F, 0.0F, 0.0F);
             }
 
-            /** Reveres the normal item transformations, to move the bow back to where it started so we can apply our own tranformations. */
+            /** Reveres the normal item transformations, to move the bow back to where it started so we can apply our own transformations. */
             GL11.glRotatef(-20.0F, 0.0F, 0.0F, 1.0F);
             GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
             GL11.glRotatef(-60.0F, 0.0F, 0.0F, 1.0F);
