@@ -76,7 +76,7 @@ public final class ModRenderer extends RenderEntity implements IItemRenderer {
 
             /** This code reverses the effects of the normal item transformations, then applies the transformations given to an item when EnumAction.bow is used. */
             if (useTicks > 0) {
-                /** Reveres the normal item transformations, to move the bow back to where it started so we can apply our own transformations. */
+                /** Reverses the normal item transformations, to move the bow back to where it started so we can apply our own transformations. */
                 GL11.glRotatef(-18.0F, 0.0F, 0.0F, 1.0F);
                 GL11.glRotatef(-12.0F, 0.0F, 1.0F, 0.0F);
                 GL11.glRotatef(-8.0F, 1.0F, 0.0F, 0.0F);
@@ -133,7 +133,7 @@ public final class ModRenderer extends RenderEntity implements IItemRenderer {
                 GL11.glRotatef(15.0F, -1.0F, 0.0F, 0.0F);
             }
 
-            /** Reveres the normal item transformations, to move the bow back to where it started so we can apply our own transformations. */
+            /** Reverses the normal item transformations, to move the bow back to where it started so we can apply our own transformations. */
             GL11.glRotatef(-20.0F, 0.0F, 0.0F, 1.0F);
             GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
             GL11.glRotatef(-60.0F, 0.0F, 0.0F, 1.0F);
