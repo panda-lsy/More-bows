@@ -5,7 +5,7 @@ buildscript {
         maven { url = "https://maven.google.com/" }
         maven {
             name = "forge"
-            url = "https://files.minecraftforge.net/maven"
+            url = "https://maven.minecraftforge.net/"
         }
         maven {
             name = "sonatype"
@@ -16,7 +16,7 @@ buildscript {
         classpath ('com.anatawa12.forge:ForgeGradle:1.2-1.0.+') {
             changing = true
         }
-        classpath 'com.guardsquare:proguard-gradle:7.0.1'
+        classpath 'com.guardsquare:proguard-gradle:7.1.1'
     }
 }
 
@@ -34,11 +34,15 @@ tasks.withType(AbstractArchiveTask) {
 apply plugin: 'java'
 apply plugin: 'forge'
 
+// TODO Re-add compilation with the Java 6 toolchain, removed due to build issues
+
+/*
 // To use Java toolchains, sourceCompatibility & targetCompatibility need to be not set.
 // ForgeGradle sets these previously to build some Forge internals, as it targets Gradle 4.X and above.
 // This workaround sets them back to null. As this is a hack, any issues caused by this are my fault.
 sourceCompatibility = null
 targetCompatibility = null
+*/
 
 // Defines a Java 6 compatible JDK. This is used to get properties requiring a reference to a JDK (rt.jar etc).
 // Unofficially, the codebase of MoreBows attempts to retain Java 5 compatibility, for ease of backports in the future, but Gradle doesn't support building with Java 5 in toolchains yet. I should make a bug report about it at some point...
@@ -46,6 +50,7 @@ def compiler = javaToolchains.compilerFor {
     languageVersion = JavaLanguageVersion.of(6)
 }
 
+/*
 // Tells Gradle to use the previously defined Java 6 compatible JDK.
 java {
     toolchain {
@@ -57,6 +62,12 @@ java {
 tasks.withType(JavaCompile).configureEach {
     javaCompiler = compiler
 }
+*/
+
+// TODO Remove once the above is fixed
+
+sourceCompatibility = 5
+targetCompatibility = 5
 
 import groovy.json.JsonSlurper
 import groovy.json.JsonOutput
