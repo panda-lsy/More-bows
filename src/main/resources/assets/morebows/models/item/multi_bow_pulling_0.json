@@ -1,0 +1,6 @@
+{
+    "parent": "morebows:item/multi_bow",
+    "textures": {
+        "layer0": "morebows:items/multi_bow_pulling_0"
+    }
+}

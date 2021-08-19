@@ -1,0 +1,29 @@
+{
+      "parent": "minecraft:item/bow",
+      "textures": {
+          "layer0": "morebows:items/diamond_bow"
+      },
+    "overrides": [
+        {
+            "model": "morebows:item/diamond_bow_pulling_0",
+            "predicate": {
+                "pulling": 1
+            }
+        },
+        {
+            "model": "morebows:item/diamond_bow_pulling_1",
+            "predicate": {
+                "pull": 0.65,
+                "pulling": 1
+            }
+        },
+        {
+            "model": "morebows:item/diamond_bow_pulling_2",
+            "predicate": {
+                "pull": 0.9,
+                "pulling": 1
+            }
+        }
+    ]
+
+}

@@ -1,0 +1,6 @@
+{
+    "parent": "morebows:item/ender_bow",
+    "textures": {
+        "layer0": "morebows:items/ender_bow_pulling_2"
+    }
+}

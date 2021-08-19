@@ -4,19 +4,14 @@ import static net.minecraftforge.common.config.Configuration.CATEGORY_GENERAL;
 
 import java.util.Set;
 
-import cpw.mods.fml.client.IModGuiFactory;
-import cpw.mods.fml.client.config.GuiConfig;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.RenderTickEvent;
-import iDiamondhunter.morebows.entities.CustomArrow;
+//import iDiamondhunter.morebows.entities.CustomArrow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.client.event.FOVUpdateEvent;
-import net.minecraftforge.client.event.RenderPlayerEvent.Pre;
-import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.ConfigElement;
+import net.minecraftforge.fml.client.IModGuiFactory;
+import net.minecraftforge.fml.client.config.GuiConfig;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
 
 /**
  * Handles almost all general client side only code. Client is also the client proxy.
@@ -53,7 +48,7 @@ public final class Client extends MoreBows implements IModGuiFactory {
          * @param g the previous screen.
          */
         public Config(GuiScreen g) {
-            super(g, new ConfigElement<ConfigCategory>(MoreBows.config.getCategory(CATEGORY_GENERAL)).getChildElements(), MOD_ID, false, false, /* GuiConfig.getAbridgedConfigPath(MoreBows.config.toString()) */ MOD_ID);
+            super(g, new ConfigElement(MoreBows.config.getCategory(CATEGORY_GENERAL)).getChildElements(), MOD_ID, false, false, /* GuiConfig.getAbridgedConfigPath(MoreBows.config.toString()) */ MOD_NAME);
         }
     }
 
@@ -68,12 +63,13 @@ public final class Client extends MoreBows implements IModGuiFactory {
      *
      * @param event the event
      */
-    @SubscribeEvent
+    // TODO unimplemented
+    /*@SubscribeEvent
     public void bowPose(Pre event) {
         if ((event.entityPlayer.getItemInUse() != null) && (event.entityPlayer.getItemInUse().getItem() instanceof CustomBow)) {
             event.renderer.modelArmorChestplate.aimedBow = event.renderer.modelArmor.aimedBow = event.renderer.modelBipedMain.aimedBow = true;
         }
-    }
+    }*/
 
     /**
      * Hack to store the amount of partial rendering ticks at the start of each RenderTickEvent.
@@ -92,14 +88,15 @@ public final class Client extends MoreBows implements IModGuiFactory {
      *
      * @param event the event
      */
-    @SubscribeEvent
+    // TODO unimplemented
+    /*@SubscribeEvent
     public void FOV(FOVUpdateEvent event) {
         if ((event.entity.getItemInUse() != null) && (event.entity.getItemInUse().getItem() instanceof CustomBow)) {
             /**
              * In net.minecraft.client.entity.EntityPlayerSP.getFOVMultiplier(), this operation is event.entity.getItemInUseDuration() / 20.0F.
              * In an attempt to roughly maintain the same ratio of this divisor (20) to the amount of ticks it takes for the vanilla ItemBow icons to finish changing (18),
              * the amount of ticks it takes for the CustomBow's icons to finish changing is multiplied by 1.1 (20 / 18) and is used instead.
-             */
+             *
             float f = (bowMaxUseDuration - event.entity.getItemInUseCount()) / (((CustomBow) event.entity.getItemInUse().getItem()).iconTimes[0] * 1.1F);
 
             if (f > 1.0F) {
@@ -110,12 +107,9 @@ public final class Client extends MoreBows implements IModGuiFactory {
 
             event.newfov *= 1.0F - (f * 0.15F);
         }
-    }
+    }*/
 
-    public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement a) {
-        return null;
-    }
-
+    @Override
     public void initialize(Minecraft a) {
         /* This space left intentionally blank */
     }
@@ -125,10 +119,11 @@ public final class Client extends MoreBows implements IModGuiFactory {
         return Config.class;
     }
 
-    @Override
+    // TODO unimplemented
+    /*@Override
     protected void register() {
         super.register();
-        /** Registration of custom renderers */
+        /** Registration of custom renderers
         RenderingRegistry.registerEntityRenderingHandler(CustomArrow.class, new ModRenderer());
         MinecraftForgeClient.registerItemRenderer(MoreBows.DiamondBow, new ModRenderer());
         MinecraftForgeClient.registerItemRenderer(MoreBows.GoldBow, new ModRenderer());
@@ -138,10 +133,21 @@ public final class Client extends MoreBows implements IModGuiFactory {
         MinecraftForgeClient.registerItemRenderer(MoreBows.MultiBow, new ModRenderer());
         MinecraftForgeClient.registerItemRenderer(MoreBows.FlameBow, new ModRenderer());
         MinecraftForgeClient.registerItemRenderer(MoreBows.FrostBow, new ModRenderer());
-    }
+    }*/
 
+    @Override
     public Set<RuntimeOptionCategoryElement> runtimeGuiCategories() {
         return null;
+    }
+
+    @Override
+    public boolean hasConfigGui() {
+        return true;
+    }
+
+    @Override
+    public GuiScreen createConfigGui(GuiScreen parent) {
+        return new Config(parent);
     }
 
     /**

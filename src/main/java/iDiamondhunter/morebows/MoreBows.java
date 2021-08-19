@@ -1,41 +1,30 @@
 package iDiamondhunter.morebows;
 
-import cpw.mods.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.registry.EntityRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
-import iDiamondhunter.morebows.entities.ArrowSpawner;
-import iDiamondhunter.morebows.entities.CustomArrow;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.monster.EntityBlaze;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /** If you're reading this, I'm very sorry you have to deal with my code. */
 @Mod(modid = MoreBows.MOD_ID, guiFactory = "iDiamondhunter.morebows.Client" /* Note: Forge likes to complain if there isn't something assigned to the "version" property when loading. It should get overwritten by the actual version in the mcmod.info file. */)
 public class MoreBows {
 
+    /** The full name of More Bows */
+    public static final String MOD_NAME = "More Bows Restrung";
+
     /** The mod ID of More Bows */
-    public static final String MOD_ID = "MoreBows";
+    public static final String MOD_ID = "morebows";
 
     /** Used for naming items. */
     private static final String modSeperator = "morebows:";
@@ -86,14 +75,14 @@ public class MoreBows {
     public static final int bowMaxUseDuration = 72000;
 
     /* Names of bows. */
-    private static final String DiamondBowName = "DiamondBow";
-    private static final String EnderBowName = "EnderBow";
-    private static final String FlameBowName = "FlameBow";
-    private static final String FrostBowName = "FrostBow";
-    private static final String GoldBowName = "GoldBow";
-    private static final String IronBowName = "IronBow";
-    private static final String MultiBowName = "MultiBow";
-    private static final String StoneBowName = "StoneBow";
+    private static final String DiamondBowName = "diamond_bow";
+    private static final String GoldBowName = "gold_bow";
+    private static final String EnderBowName = "ender_bow";
+    private static final String StoneBowName = "stone_bow";
+    private static final String IronBowName = "iron_bow";
+    private static final String MultiBowName = "multi_bow";
+    private static final String FlameBowName = "flame_bow";
+    private static final String FrostBowName = "frost_bow";
 
     /* Default values for bow construction */
     /// ** Default values for bow construction: the default speed at which icons change. */
@@ -106,14 +95,16 @@ public class MoreBows {
     private static final byte defaultArrowType = ARROW_TYPE_NOT_CUSTOM;
 
     /* Bow items. */
-    protected static final Item DiamondBow = new CustomBow(1016, defaultArrowType, 2.25D, new byte[] { 8, 4 }, false, 6.0F, EnumRarity.rare).setUnlocalizedName(DiamondBowName).setTextureName(modSeperator + DiamondBowName);
-    protected static final Item EnderBow = new CustomBow(215, ARROW_TYPE_ENDER, noDamageMult, new byte[] { 19, 10 }, true, 22.0F, EnumRarity.epic).setUnlocalizedName(EnderBowName).setTextureName(modSeperator + EnderBowName);
-    protected static final Item FlameBow = new CustomBow(576, ARROW_TYPE_FIRE, 2.0D, new byte[] { 14, 9 }, false, 15.0F, EnumRarity.uncommon).setUnlocalizedName(FlameBowName).setTextureName(modSeperator + FlameBowName);
-    protected static final Item FrostBow = new CustomBow(550, ARROW_TYPE_FROST, noDamageMult, new byte[] { 26, 13 }, false, 26.0F, EnumRarity.common).setUnlocalizedName(FrostBowName).setTextureName(modSeperator + FrostBowName);
-    protected static final Item GoldBow = new CustomBow(68, defaultArrowType, 2.5D, new byte[] { 8, 4 }, false, 6.0F, EnumRarity.uncommon).setUnlocalizedName(GoldBowName).setTextureName(modSeperator + GoldBowName);
-    protected static final Item IronBow = new CustomBow(550, defaultArrowType, 1.5D, new byte[] { 16, 11 }, false, 17.0F, EnumRarity.common).setUnlocalizedName(IronBowName).setTextureName(modSeperator + IronBowName);
-    protected static final Item MultiBow = new CustomBow(550, ARROW_TYPE_NOT_CUSTOM, noDamageMult, new byte[] { 12, 7 }, true, 13.0F, EnumRarity.rare).setUnlocalizedName(MultiBowName).setTextureName(modSeperator + MultiBowName);
-    protected static final Item StoneBow = new CustomBow(484, defaultArrowType, 1.15D, new byte[] { 18, 13 }, false, defaultPowerDiv, EnumRarity.common).setUnlocalizedName(StoneBowName).setTextureName(modSeperator + StoneBowName);
+    protected static final Item DiamondBow = new CustomBow(1016, defaultArrowType, 2.25D, new byte[] { 8, 4 }, false, 6.0F, EnumRarity.RARE).setTranslationKey(DiamondBowName).setRegistryName(modSeperator + DiamondBowName);
+    protected static final Item EnderBow = new CustomBow(215, ARROW_TYPE_ENDER, noDamageMult, new byte[] { 19, 10 }, true, 22.0F, EnumRarity.EPIC).setTranslationKey(EnderBowName).setRegistryName(modSeperator + EnderBowName);
+    protected static final Item FlameBow = new CustomBow(576, ARROW_TYPE_FIRE, 2.0D, new byte[] { 14, 9 }, false, 15.0F, EnumRarity.UNCOMMON).setTranslationKey(FlameBowName).setRegistryName(modSeperator + FlameBowName);
+    protected static final Item FrostBow = new CustomBow(550, ARROW_TYPE_FROST, noDamageMult, new byte[] { 26, 13 }, false, 26.0F, EnumRarity.COMMON).setTranslationKey(FrostBowName).setRegistryName(modSeperator + FrostBowName);
+    protected static final Item GoldBow = new CustomBow(68, defaultArrowType, 2.5D, new byte[] { 8, 4 }, false, 6.0F, EnumRarity.UNCOMMON).setTranslationKey(GoldBowName).setRegistryName(modSeperator + GoldBowName);
+    protected static final Item IronBow = new CustomBow(550, defaultArrowType, 1.5D, new byte[] { 16, 11 }, false, 17.0F, EnumRarity.COMMON).setTranslationKey(IronBowName).setRegistryName(modSeperator + IronBowName);
+    protected static final Item MultiBow = new CustomBow(550, ARROW_TYPE_NOT_CUSTOM, noDamageMult, new byte[] { 12, 7 }, true, 13.0F, EnumRarity.RARE).setTranslationKey(MultiBowName).setRegistryName(modSeperator + MultiBowName);
+    protected static final Item StoneBow = new CustomBow(484, defaultArrowType, 1.15D, new byte[] { 18, 13 }, false, defaultPowerDiv, EnumRarity.COMMON).setTranslationKey(StoneBowName).setRegistryName(modSeperator + StoneBowName);
+
+    protected static final Item[] allItems = { DiamondBow, EnderBow, FlameBow, FrostBow, GoldBow, IronBow, MultiBow, StoneBow } ;
 
     /** This method syncs the config file with the Configuration, as well as syncing any config related variables. */
     private static final void conf() {
@@ -136,7 +127,8 @@ public class MoreBows {
      * @param randDisp If this is true, particles will be randomly distributed around the entity.
      * @param velocity The velocity of spawned particles.
      */
-    public static final void tryPart(World world, Entity entity, String part, boolean randDisp, double velocity) {
+    // TODO unimplemented
+    /*public static final void tryPart(World world, Entity entity, String part, boolean randDisp, double velocity) {
         if (!world.isRemote) {
             // final int amount = 1;
             final double xDisp;
@@ -153,16 +145,18 @@ public class MoreBows {
                 zDisp = 0;
             }
 
-            ((WorldServer) world).func_147487_a(part, entity.posX, entity.posY, entity.posZ, 1, xDisp, yDisp, zDisp, velocity);
+            // TODO fix
+            //((WorldServer) world).func_147487_a(part, entity.posX, entity.posY, entity.posZ, 1, xDisp, yDisp, zDisp, velocity);
         }
-    }
+    }*/
 
     /**
      * Creates the particle effects when a custom arrow hits an entity.
      *
      * @param event the event
      */
-    @SubscribeEvent
+    // TODO unimplemented
+    /*@SubscribeEvent
     public final void arrHit(LivingAttackEvent event) {
         if ((!event.entity.worldObj.isRemote) && (event.source.getSourceOfDamage() instanceof CustomArrow)) {
             final CustomArrow arr = (CustomArrow) event.source.getSourceOfDamage();
@@ -210,14 +204,15 @@ public class MoreBows {
                 tryPart(event.entity.worldObj, event.entity, part, randDisp, velocity);
             }
         }
-    }
+    }*/
 
     /**
      * Handles custom effects from the frost arrow.
      *
      * @param event the event
      */
-    @SubscribeEvent
+    // TODO unimplemented
+    /*@SubscribeEvent
     public final void arrHurt(LivingHurtEvent event) {
         if ((event.source.getSourceOfDamage() instanceof CustomArrow) && (((CustomArrow) event.source.getSourceOfDamage()).type == ARROW_TYPE_FROST)) {
             if (frostArrowsShouldBeCold) {
@@ -234,7 +229,7 @@ public class MoreBows {
                 event.entity.setInWeb();
             }
         }
-    }
+    }*/
 
     /**
      * Calls conf() when the Configuration changes.
@@ -243,7 +238,7 @@ public class MoreBows {
      */
     @SubscribeEvent
     public final void confChange(OnConfigChangedEvent event) {
-        if (MOD_ID.equals(event.modID)) {
+        if (MOD_ID.equals(event.getModID())) {
             conf();
         }
     }
@@ -257,36 +252,52 @@ public class MoreBows {
     public final void init(FMLPreInitializationEvent event) {
         config = new Configuration(event.getSuggestedConfigurationFile());
         conf();
-        proxy.register();
-        // TODO see if it's possible to only use one of these
+        // TODO unimplemented
+        //proxy.register();
         MinecraftForge.EVENT_BUS.register(proxy);
-        FMLCommonHandler.instance().bus().register(proxy);
+    }
+
+    // TODO review
+    @SubscribeEvent
+    public void registerBlocks(RegistryEvent.Register<Item> event) {
+        //LogManager.getLogger().error("registerBlocks");;
+        event.getRegistry().registerAll(DiamondBow, EnderBow, FlameBow, FrostBow, GoldBow, IronBow, MultiBow, StoneBow);
+    }
+
+    // TODO review
+    @SubscribeEvent
+    public void registerModels(ModelRegistryEvent event) {
+        //LogManager.getLogger().error("registerModels");;
+        for (final Item item : allItems) {
+            ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
+        }
     }
 
     /** This method registers all mod content for a given side. Server side, it registers items, recipes, and entities. Client side, it also registers custom renderers. */
+    // TODO unimplemented
     protected void register() {
         /* Item registration */
-        GameRegistry.registerItem(DiamondBow, DiamondBowName);
+        /*GameRegistry.registerItem(DiamondBow, DiamondBowName);
         GameRegistry.registerItem(EnderBow, EnderBowName);
         GameRegistry.registerItem(FlameBow, FlameBowName);
         GameRegistry.registerItem(FrostBow, FrostBowName);
         GameRegistry.registerItem(GoldBow, GoldBowName);
         GameRegistry.registerItem(IronBow, IronBowName);
         GameRegistry.registerItem(MultiBow, MultiBowName);
-        GameRegistry.registerItem(StoneBow, StoneBowName);
+        GameRegistry.registerItem(StoneBow, StoneBowName);*/
         /* Hack-ish - Register an OreDictionary'd version of the dispenser recipe, so MoreBows's bows work with it. */
-        GameRegistry.addRecipe(new ShapedOreRecipe(Blocks.dispenser, "AAA", "ABA", "ACA", 'A', "cobblestone", 'B', "bow", 'C', "dustRedstone"));
+        //GameRegistry.addRecipe(new ShapedOreRecipe(Blocks.dispenser, "AAA", "ABA", "ACA", 'A', "cobblestone", 'B', "bow", 'C', "dustRedstone"));
         /* Bow recipe registration */
-        GameRegistry.addRecipe(new ShapedOreRecipe(DiamondBow, " DC", "ABC", " DC", 'C', "string", 'D', "gemDiamond", 'A', "ingotIron", 'B', "bow"));
+        /*GameRegistry.addRecipe(new ShapedOreRecipe(DiamondBow, " DC", "ABC", " DC", 'C', "string", 'D', "gemDiamond", 'A', "ingotIron", 'B', "bow"));
         GameRegistry.addRecipe(new ShapedOreRecipe(EnderBow, "CD", "AB", "CD", 'C', "ingotGold", 'D', "pearlEnder", 'B', "bowIron", 'A', "pearlEnderEye"));
         GameRegistry.addRecipe(new ShapedOreRecipe(FlameBow, "CD", "AB", "CD", 'A', "ingotGold", 'D', "rodBlaze", 'B', "bowIron", 'C', "netherrack"));
         GameRegistry.addRecipe(new ShapedOreRecipe(FrostBow, " DC", "ABC", " DC", 'C', "string", 'D', "ice", 'A', "snowball", 'B', "bowIron"));
         GameRegistry.addRecipe(new ShapedOreRecipe(GoldBow, " AC", "ABC", " AC", 'C', "string", 'A', "ingotGold", 'B', "bow"));
         GameRegistry.addRecipe(new ShapedOreRecipe(IronBow, " AC", "ABC", " AC", 'C', "string", 'A', "ingotIron", 'B', "bow"));
         GameRegistry.addRecipe(new ShapedOreRecipe(MultiBow, " DC", "A C", " DC", 'C', "string", 'A', "ingotIron", 'D', "bowIron"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(StoneBow, " DC", "ABC", " DC", 'A', "stickWood", 'C', "string", 'D', "stone", 'B', "bow"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(StoneBow, " DC", "ABC", " DC", 'A', "stickWood", 'C', "string", 'D', "stone", 'B', "bow"));*/
         /* Hack-ish - Registers groups of items to the OreDictionary that Forge doesn't by default. I'm pretty sure that nothing bad happens if other mods duplicate entries to it. */
-        OreDictionary.registerOre("bow", new ItemStack(DiamondBow, 1, OreDictionary.WILDCARD_VALUE));
+        /*OreDictionary.registerOre("bow", new ItemStack(DiamondBow, 1, OreDictionary.WILDCARD_VALUE));
         OreDictionary.registerOre("bow", new ItemStack(EnderBow, 1, OreDictionary.WILDCARD_VALUE));
         OreDictionary.registerOre("bow", new ItemStack(FlameBow, 1, OreDictionary.WILDCARD_VALUE));
         OreDictionary.registerOre("bow", new ItemStack(FrostBow, 1, OreDictionary.WILDCARD_VALUE));
@@ -305,10 +316,10 @@ public class MoreBows {
         OreDictionary.registerOre("pearlEnderEye", Items.ender_eye);
         OreDictionary.registerOre("rodBlaze", Items.blaze_rod);
         OreDictionary.registerOre("snowball", Items.snowball);
-        OreDictionary.registerOre("string", Items.string);
+        OreDictionary.registerOre("string", Items.string);*/
         /* Entity registration */
-        EntityRegistry.registerModEntity(ArrowSpawner.class, "ArrowSpawner", 1, MoreBows.inst, /** As the player can never see an ArrowSpawner and all of the logic for it is handled server-side, there's no reason to send any tracking updates. */ -1, Integer.MAX_VALUE, false);
-        EntityRegistry.registerModEntity(CustomArrow.class, "CustomArrow", 2, MoreBows.inst, 64, 20, true);
+        //EntityRegistry.registerModEntity(ArrowSpawner.class, "ArrowSpawner", 1, MoreBows.inst, /** As the player can never see an ArrowSpawner and all of the logic for it is handled server-side, there's no reason to send any tracking updates. */ -1, Integer.MAX_VALUE, false);
+        //EntityRegistry.registerModEntity(CustomArrow.class, "CustomArrow", 2, MoreBows.inst, 64, 20, true);*/
     }
 
 }

@@ -1,0 +1,6 @@
+{
+    "parent": "morebows:item/frost_bow",
+    "textures": {
+        "layer0": "morebows:items/frost_bow_pulling_0"
+    }
+}
