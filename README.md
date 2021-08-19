@@ -1,3 +1,5 @@
+# Warning: This port is very WIP, come back later!
+
 # More Bows: Restrung!
 
 [![CurseForge downloads badge](http://cf.way2muchnoise.eu/full_466902_downloads.svg "CurseForge downloads")](https://www.curseforge.com/minecraft/mc-mods/more-bows-restrung)
@@ -15,18 +17,18 @@
 
 More Bows: Restrung is a port / continuation of the More Bows mod, which was originally created by GaussFire, and maintained & updated by iDiamondhunter until Risugami's ModLoader was no longer updated. This port aims to faithfully re-create the original mod, while fixing some bugs, introducing some quality-of-life changes, and adding cut ideas.
 
-_This branch of More Bows: Restrung targets Forge for Minecraft 1.7.10!_
+_This branch of More Bows: Restrung targets Forge for Minecraft 1.12.2!_
 
 ### Original descriptions of each bow (not currently 100% accurate!):
 
-- Reinforced Bow ![Reinforced Bow Icon](src/main/resources/assets/morebows/textures/items/StoneBow1.png): This bow is just like the regular wooden bow, but has more durability.
-- Iron Bow ![Iron Bow Icon](src/main/resources/assets/morebows/textures/items/IronBow1.png): This bow is a step up from the reinforced bow, having slightly more damage and durability, along with a minuscule upgrade of draw speed.
-- Golden Bow ![Golden Bow Icon](src/main/resources/assets/morebows/textures/items/GoldBow1.png): The bow forged of gold: it has a pathetic amount of uses but overall does the most damage. Quick reflexes allow you to shoot at double the speed!
-- Crystal Bow ![Crystal Bow Icon](src/main/resources/assets/morebows/textures/items/DiamondBow1.png): A bow sealed with the power of diamond, not many can survive it's swift and damaging moves. With a diamond base, you don't need to worry about over-pulling, this bow also doubles your draw speed!
-- Blazing Bow ![Blazing Bow Icon](src/main/resources/assets/morebows/textures/items/FlameBow1.png): A bow from the horrible pits of the Nether, the power of fire emanates from the weapon in your hand. With this bow, you can do double the damage of a normal bow, while setting your foes alight!
-- Ender Bow ![Ender Bow Icon](src/main/resources/assets/morebows/textures/items/EnderBow1.png): A mysterious bow with the secrets of the Ender within. Along with having a slow drawback, it will use the Ender's technique to shoot a regular arrow that will not damage anything but, after 3 seconds, will summon 5 more arrows to kill it's opponents.
-- Legia Bow ![Legia Bow Icon](src/main/resources/assets/morebows/textures/items/MultiBow1.png): The final and most overwhelming bow, it delivers fast and many blows to its enemies. Even with two arrows, your draw speed will be faster than the iron bow!
-- Frost Bow ![Frost Bow Icon](src/main/resources/assets/morebows/textures/items/FrostBow1.png): Bonus bow for Christmas! Present for everyone who was supporting iDiamondhunter with the mod! This bow makes entities go slowly but its draw speed is awful. It also creates a snow layer on impact, and freezes water!
+- Reinforced Bow ![Reinforced Bow Icon](src/main/resources/assets/morebows/textures/items/stone_bow.png): This bow is just like the regular wooden bow, but has more durability.
+- Iron Bow ![Iron Bow Icon](src/main/resources/assets/morebows/textures/items/iron_bow.png): This bow is a step up from the reinforced bow, having slightly more damage and durability, along with a minuscule upgrade of draw speed.
+- Golden Bow ![Golden Bow Icon](src/main/resources/assets/morebows/textures/items/gold_bow.png): The bow forged of gold: it has a pathetic amount of uses but overall does the most damage. Quick reflexes allow you to shoot at double the speed!
+- Crystal Bow ![Crystal Bow Icon](src/main/resources/assets/morebows/textures/items/diamond_bow.png): A bow sealed with the power of diamond, not many can survive it's swift and damaging moves. With a diamond base, you don't need to worry about over-pulling, this bow also doubles your draw speed!
+- Blazing Bow ![Blazing Bow Icon](src/main/resources/assets/morebows/textures/items/flame_bow.png): A bow from the horrible pits of the Nether, the power of fire emanates from the weapon in your hand. With this bow, you can do double the damage of a normal bow, while setting your foes alight!
+- Ender Bow ![Ender Bow Icon](src/main/resources/assets/morebows/textures/items/ender_bow.png): A mysterious bow with the secrets of the Ender within. Along with having a slow drawback, it will use the Ender's technique to shoot a regular arrow that will not damage anything but, after 3 seconds, will summon 5 more arrows to kill it's opponents.
+- Legia Bow ![Legia Bow Icon](src/main/resources/assets/morebows/textures/items/multi_bow.png): The final and most overwhelming bow, it delivers fast and many blows to its enemies. Even with two arrows, your draw speed will be faster than the iron bow!
+- Frost Bow ![Frost Bow Icon](src/main/resources/assets/morebows/textures/items/frost_bow.png): Bonus bow for Christmas! Present for everyone who was supporting iDiamondhunter with the mod! This bow makes entities go slowly but its draw speed is awful. It also creates a snow layer on impact, and freezes water!
 
 Descriptions taken from [iDiamondhunter's page for the mod](https://www.minecraftforum.net/forums/mapping-and-modding-java-edition/minecraft-mods/1286765-1-6-2-more-bows-mod).
 
