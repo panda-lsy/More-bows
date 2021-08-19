@@ -34,7 +34,7 @@ jobs:
         wrapper-cache-enabled: false
         dependencies-cache-enabled: false
         configuration-cache-enabled: false
-        arguments: SetupCIWorkspace build
+        arguments: build
     - name: Rezip mod .jar files to remove directory entries
       run: bash removeDirectoryEntries.sh
     - name: Run strip-nondeterminism on built .jar files
