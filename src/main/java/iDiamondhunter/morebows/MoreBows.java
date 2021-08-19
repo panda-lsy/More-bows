@@ -261,7 +261,7 @@ public class MoreBows {
     @SubscribeEvent
     public void registerBlocks(RegistryEvent.Register<Item> event) {
         //LogManager.getLogger().error("registerBlocks");;
-        event.getRegistry().registerAll(DiamondBow, EnderBow, FlameBow, FrostBow, GoldBow, IronBow, MultiBow, StoneBow);
+        event.getRegistry().registerAll(allItems);
     }
 
     // TODO review
@@ -269,7 +269,7 @@ public class MoreBows {
     public void registerModels(ModelRegistryEvent event) {
         //LogManager.getLogger().error("registerModels");;
         for (final Item item : allItems) {
-            ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
+            ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName().toString()));
         }
     }
 
