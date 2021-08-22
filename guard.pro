@@ -8,7 +8,7 @@
 
 # We're a bit oldschool
 
--target 1.5
+-target 1.8
 
 # TODO Figure out how to do this but for annotations
 
@@ -44,9 +44,9 @@
 
 -keepclassmembers class * { public <init>(...); }
 
-# TODO Check if anything else should be kept. Annotations are mandatory, as Forge uses them for reflection.
+# Annotations and generic method signatures are kept, as Forge uses them for reflection.
 
--keepattributes *Annotation*
+-keepattributes *Annotation*,Signature
 
 # Repackage all classes into iDiamondhunter.morebows
 
