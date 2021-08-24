@@ -21,3 +21,6 @@ eclipse
 
 # mac os
 .DS_Store
+
+# pages
+_site/
