@@ -1,4 +1,6 @@
 remote_theme: NeRdTheNed/not-so-modern
+plugins:
+  - jekyll-remote-theme
 repository: NeRdTheNed/More-bows
 title: "More Bows: Restrung!"
 sass:
