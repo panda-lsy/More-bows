@@ -3,8 +3,8 @@
 # More Bows: Restrung!
 
 [![CurseForge downloads badge](http://cf.way2muchnoise.eu/full_466902_downloads.svg "CurseForge downloads")](https://www.curseforge.com/minecraft/mc-mods/more-bows-restrung)
-[![Licence badge](https://img.shields.io/github/license/NeRdTheNed/More-bows "Licence")](https://github.com/NeRdTheNed/More-bows/blob/forge-1.7.10/LICENSE)
-[![Java SE version compatibility badge](https://img.shields.io/badge/Java%20SE-5-orange?logo=java "Java SE version compatibility")](https://en.wikipedia.org/wiki/Java_version_history#J2SE_5.0)
+[![Licence badge](https://img.shields.io/github/license/NeRdTheNed/More-bows "Licence")](https://github.com/NeRdTheNed/More-bows/blob/forge-1.12.2/LICENSE)
+[![Java SE version compatibility badge](https://img.shields.io/badge/Java%20SE-8-orange?logo=java "Java SE version compatibility")](https://en.wikipedia.org/wiki/Java_version_history#Java_8)
 
 <p align="center">
     <picture>
@@ -34,7 +34,7 @@ Descriptions taken from [iDiamondhunter's page for the mod](https://www.minecraf
 
 ### Building:
 
-The Gradle build script resolves dependancies automatically, but it relies on having both a Java 6 compatible JDK installed (which Gradle builds the mod with) _and_ a Java 8 compatible JDK (or higher) installed (which Gradle itself runs on). This can be worked around by changing the Gradle build script to build the mod with a JDK that's compatible with one installed on the computer building this mod, although this could potentially result in slight differences or incompatibilities with truely ancient versions of Java. Note that ProGuard is used to output bytecode compatible with Java 5, so this might be a moot point.
+_This was outdated, so I removed it! Remind me to update this when the port is done..._
 
 ### Licence:
 
@@ -59,6 +59,6 @@ As iDiamondhunter ["removed the copyrights" from this mod](https://www.minecraft
     <picture>
         <source srcset="https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-320.webp 320w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-480.webp 480w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-600.webp 600w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-768.webp 768w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-900.webp 900w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-1024.webp 1024w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs.webp" type="image/webp">
         <source srcset="https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-320.png 320w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-480.png 480w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-600.png 600w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-768.png 768w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-900.png 900w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-1024.png 1024w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs.png" type="image/png">
-        <img src="https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs.png" alt="A screenshot of a player shooting pigs with the Ender bow" title="A mod for 1.7.10 in 2021? When pigs fly..." style='height: 100%; width: 100%; object-fit: contain'/>
+        <img src="https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs.png" alt="A screenshot of a player shooting pigs with the Ender bow" title="A mod for 1.12.2 in 2021? When pigs fly..." style='height: 100%; width: 100%; object-fit: contain'/>
     </picture>
 </p>
