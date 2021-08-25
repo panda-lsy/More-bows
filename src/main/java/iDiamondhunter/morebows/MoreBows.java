@@ -1,8 +1,10 @@
 package iDiamondhunter.morebows;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.init.Items;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
@@ -15,6 +17,7 @@ import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.oredict.OreDictionary;
 
 /** If you're reading this, I'm very sorry you have to deal with my code. */
 @Mod(modid = MoreBows.MOD_ID, guiFactory = "iDiamondhunter.morebows.Client" /* Note: Forge likes to complain if there isn't something assigned to the "version" property when loading. It should get overwritten by the actual version in the mcmod.info file. */)
@@ -259,19 +262,35 @@ public class MoreBows {
 
     // TODO review
     @SubscribeEvent
-    public void registerBlocks(RegistryEvent.Register<Item> event) {
-        //LogManager.getLogger().error("registerBlocks");;
+    public void registerItems(RegistryEvent.Register<Item> event) {
         event.getRegistry().registerAll(allItems);
+
+        // Apparently, you should register to the OreDictionary in this event. I don't make the rules.
+        // TODO create a config setting to use WILDCARD_VALUE or not
+        for (final Item item : allItems) {
+            OreDictionary.registerOre("bow", new ItemStack(item, 1, OreDictionary.WILDCARD_VALUE));
+        }
+
+        // Register the Vanilla bow
+        OreDictionary.registerOre("bow", new ItemStack(Items.BOW, 1, OreDictionary.WILDCARD_VALUE));
+        // Register to hypothetically useful ore names
+        OreDictionary.registerOre("bowDiamond", new ItemStack(DiamondBow, 1, OreDictionary.WILDCARD_VALUE));
+        OreDictionary.registerOre("bowGold", new ItemStack(GoldBow, 1, OreDictionary.WILDCARD_VALUE));
+        OreDictionary.registerOre("bowIron", new ItemStack(IronBow, 1, OreDictionary.WILDCARD_VALUE));
     }
 
     // TODO review
     @SubscribeEvent
     public void registerModels(ModelRegistryEvent event) {
-        //LogManager.getLogger().error("registerModels");;
         for (final Item item : allItems) {
             ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName().toString()));
         }
     }
+
+    // TODO modify recipes involving bows?
+    /*@SubscribeEvent
+    public static void registerRecipes(RegistryEvent.Register<IRecipe> event) {
+    }*/
 
     /** This method registers all mod content for a given side. Server side, it registers items, recipes, and entities. Client side, it also registers custom renderers. */
     // TODO unimplemented

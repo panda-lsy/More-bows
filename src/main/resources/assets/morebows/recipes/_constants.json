@@ -1,0 +1,69 @@
+[{
+  "ingredient": [{
+    "type": "forge:ore_dict",
+    "ore": "bow"
+  }, {
+    "item": "minecraft:bow"
+  }],
+  "name": "BOW"
+}, {
+  "ingredient": [{
+    "type": "forge:ore_dict",
+    "ore": "bowIron"
+  }, {
+    "item": "morebows:iron_bow"
+  }],
+  "name": "IBOW"
+}, {
+  "ingredient": [{
+    "type": "forge:ore_dict",
+    "ore": "ice"
+  }, {
+    "type": "forge:ore_dict",
+    "ore": "blockIce"
+  }, {
+    "item": "minecraft:ice"
+  }, {
+    "item": "minecraft:packed_ice"
+  }],
+  "name": "ICE"
+}, {
+  "ingredient": [{
+    "type": "forge:ore_dict",
+    "ore": "snowball"
+  }, {
+    "type": "forge:ore_dict",
+    "ore": "ballSnow"
+  }, {
+    "item": "minecraft:snowball"
+  }],
+  "name": "BALL"
+}, {
+  "ingredient": [{
+    "type": "forge:ore_dict",
+    "ore": "gemEnderEye"
+  }, {
+    "type": "forge:ore_dict",
+    "ore": "pearlEnderEye"
+  }, {
+    "type": "forge:ore_dict",
+    "ore": "eyeOfEnder"
+  }, {
+    "item": "minecraft:ender_eye"
+  }],
+  "name": "EYE"
+}, {
+  "ingredient": [{
+    "type": "forge:ore_dict",
+    "ore": "rodBlaze"
+  }, {
+    "type": "forge:ore_dict",
+    "ore": "itemBlazeRod"
+  }, {
+    "type": "forge:ore_dict",
+    "ore": "stickBlaze"
+  }, {
+    "item": "minecraft:blaze_rod"
+  }],
+  "name": "ROD"
+}]

@@ -1,0 +1,22 @@
+{
+  "result": {
+    "item": "morebows:gold_bow"
+  },
+  "pattern": [
+    " AC", "ABC", " AC"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": {
+      "type": "forge:ore_dict",
+      "ore": "string"
+    },
+    "A": {
+      "type": "forge:ore_dict",
+      "ore": "ingotGold"
+    },
+    "B": {
+      "item": "#BOW"
+    }
+  }
+}
