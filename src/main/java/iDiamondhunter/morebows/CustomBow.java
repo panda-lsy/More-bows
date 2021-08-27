@@ -23,6 +23,7 @@ import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
@@ -96,16 +97,15 @@ public final class CustomBow extends ItemBow {
         return rarity;
     }
 
-    /** This method creates particles when left clicking with an ender bow. */
-    // TODO unimplemented
-    /*@Override
+    /** This method creates particles when left clicking with an ender bow. TODO probably replace with client-side function */
+    @Override
     public boolean onEntitySwing(EntityLivingBase player, ItemStack stack) {
         if (bowType == ARROW_TYPE_ENDER) {
-            MoreBows.tryPart(player.world, player, "portal", true, 1);
+            MoreBows.tryPart(player.world, player, EnumParticleTypes.PORTAL, true, 1);
         }
 
         return false;
-    }*/
+    }
 
     /** This handles the process of shooting an arrow from this bow. TODO Cleanup, document more */
     @Override

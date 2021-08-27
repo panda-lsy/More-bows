@@ -1,10 +1,14 @@
 package iDiamondhunter.morebows;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.entity.Entity;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
@@ -130,8 +134,7 @@ public class MoreBows {
      * @param randDisp If this is true, particles will be randomly distributed around the entity.
      * @param velocity The velocity of spawned particles.
      */
-    // TODO unimplemented
-    /*public static final void tryPart(World world, Entity entity, String part, boolean randDisp, double velocity) {
+    public static final void tryPart(World world, Entity entity, EnumParticleTypes part, boolean randDisp, double velocity) {
         if (!world.isRemote) {
             // final int amount = 1;
             final double xDisp;
@@ -148,10 +151,9 @@ public class MoreBows {
                 zDisp = 0;
             }
 
-            // TODO fix
-            //((WorldServer) world).func_147487_a(part, entity.posX, entity.posY, entity.posZ, 1, xDisp, yDisp, zDisp, velocity);
+            ((WorldServer) world).spawnParticle(part, entity.posX, entity.posY, entity.posZ, 1, xDisp, yDisp, zDisp, velocity);
         }
-    }*/
+    }
 
     /**
      * Creates the particle effects when a custom arrow hits an entity.
