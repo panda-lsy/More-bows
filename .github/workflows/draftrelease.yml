@@ -28,10 +28,10 @@ jobs:
     - name: Build with Gradle
       env:
         BUILD_RELEASE: ${{ github.event.release.prerelease == false }}
-      uses: eskatos/gradle-command-action@v1
+      uses: gradle/gradle-build-action@v1
       with:
         gradle-version: wrapper
-        wrapper-cache-enabled: false
+        distributions-cache-enabled: false
         dependencies-cache-enabled: false
         configuration-cache-enabled: false
         arguments: build
