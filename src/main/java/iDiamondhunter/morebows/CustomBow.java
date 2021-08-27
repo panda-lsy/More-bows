@@ -44,7 +44,7 @@ public final class CustomBow extends ItemBow {
      */
     //public final byte[] iconTimes;
     private final boolean multiShot;
-    private final float powerDiv;
+    public final float powerDiv;
     private final EnumRarity rarity;
 
     /**
@@ -90,13 +90,6 @@ public final class CustomBow extends ItemBow {
             }
         });
     }
-
-    /** EnumAction.none is returned, as the bow is rendered by a custom IItemRenderer which effectively applies a tweaked version of EnumAction.bow. See ModRenderer. */
-    // TODO unimplemented
-    /*@Override
-    public EnumAction getItemUseAction(ItemStack stack) {
-        return EnumAction.NONE;
-    }*/
 
     @Override
     public EnumRarity getRarity(ItemStack stack) {

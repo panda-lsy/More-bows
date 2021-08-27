@@ -7,11 +7,17 @@ import java.util.Set;
 //import iDiamondhunter.morebows.entities.CustomArrow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumHandSide;
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.client.event.FOVUpdateEvent;
+import net.minecraftforge.client.event.RenderSpecificHandEvent;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.fml.client.IModGuiFactory;
 import net.minecraftforge.fml.client.config.GuiConfig;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
 
 /**
  * Handles almost all general client side only code. Client is also the client proxy.
@@ -53,61 +59,101 @@ public final class Client extends MoreBows implements IModGuiFactory {
     }
 
     /**
-     * Hack used by ModRenderer. This value is set to the partialTicks of a RenderHandEvent.
-     * This value is needed by ModRenderer to render the bow!
-     */
-    public static float partialTicks = 0;
-
-    /**
-     * Poses the arms of a player when drawing back a CustomBow, displaying the "bow aiming" animation.
-     *
-     * @param event the event
-     */
-    // TODO unimplemented
-    /*@SubscribeEvent
-    public void bowPose(Pre event) {
-        if ((event.entityPlayer.getItemInUse() != null) && (event.entityPlayer.getItemInUse().getItem() instanceof CustomBow)) {
-            event.renderer.modelArmorChestplate.aimedBow = event.renderer.modelArmor.aimedBow = event.renderer.modelBipedMain.aimedBow = true;
-        }
-    }*/
-
-    /**
-     * Hack to store the amount of partial rendering ticks at the start of each RenderTickEvent.
-     * This is later used in ModRenderer when rendering a CustomBow.
+     * Handles rendering a CustomBow when drawing it back in first person.
+     * This is necessary to make the bow draw back at the right speed.
+     * This would not be an issue if there was a way to customize rendering for EnumAction.BOW,
+     * but there is seemingly no way to do this.
      *
      * @param event the event
      */
     @SubscribeEvent
-    public void bowTicks(RenderTickEvent event) {
-        partialTicks = event.renderTickTime;
+    public void renderBow(RenderSpecificHandEvent event) {
+        final Minecraft mc = Minecraft.getMinecraft();
+
+        // Only handle rendering if we're in first person and drawing back a CustomBow.
+        if ((mc.gameSettings.thirdPersonView == 0) && mc.player.isHandActive() && (mc.player.getActiveHand() == event.getHand()) && (mc.player.getItemInUseCount() > 0) && (event.getItemStack().getItem() instanceof CustomBow)) {
+            // Cancel rendering so we can render instead
+            event.setCanceled(true);
+            GlStateManager.pushMatrix();
+            // TODO this is silly
+            final boolean rightHanded = (event.getHand() == EnumHand.MAIN_HAND ? mc.player.getPrimaryHand() : mc.player.getPrimaryHand().opposite()) == EnumHandSide.RIGHT;
+            final int handedSide = rightHanded ? 1 : -1;
+            /*
+            // Translate to current hand
+            GlStateManager.translate(handedSide * 0.56F, -0.52F + (event.getEquipProgress() * -0.6F), -0.72F);
+            GlStateManager.translate(handedSide * -0.2785682F, 0.18344387F, 0.15731531F);
+            */
+            // Merged translate calls
+            //GlStateManager.translate(handedSide * (-0.2785682F + 0.56F), -0.52F + (event.getEquipProgress() * -0.6F) + 0.18344387F, -0.72F + 0.15731531F);
+            GlStateManager.translate(handedSide * 0.2814318F, -0.3365561F + (event.getEquipProgress() * -0.6F), -0.5626847F);
+            // Rotate angles
+            GlStateManager.rotate(-13.935F, 1.0F, 0.0F, 0.0F);
+            GlStateManager.rotate(handedSide * 35.3F, 0.0F, 1.0F, 0.0F);
+            GlStateManager.rotate(handedSide * -9.785F, 0.0F, 0.0F, 1.0F);
+            final float ticks = bowMaxUseDuration - ((mc.player.getItemInUseCount() - event.getPartialTicks()) + 1.0F);
+            float divTicks = ticks / ((CustomBow) event.getItemStack().getItem()).powerDiv;
+            divTicks = ((divTicks * divTicks) + (divTicks * 2.0F)) / 3.0F;
+
+            if (divTicks > 1.0F) {
+                divTicks = 1.0F;
+            }
+
+            // Bow animations and transformations
+            if (divTicks > 0.1F) {
+                // Bow shake
+                GlStateManager.translate(0.0F, MathHelper.sin((ticks - 0.1F) * 1.3F) * (divTicks - 0.1F) * 0.004F, 0.0F);
+            }
+
+            // Backwards motion ("draw back" animation)
+            GlStateManager.translate(0.0F, 0.0F, divTicks * 0.04F);
+            // Relative scaling for FOV reasons
+            GlStateManager.scale(1.0F, 1.0F, 1.0F + (divTicks * 0.2F));
+            // Rotate bow based on handedness
+            GlStateManager.rotate(handedSide * 45.0F, 0.0F, -1.0F, 0.0F);
+            // Let Minecraft do the rest of the item rendering
+            mc.getItemRenderer().renderItemSide(mc.player, event.getItemStack(), rightHanded ? ItemCameraTransforms.TransformType.FIRST_PERSON_RIGHT_HAND : ItemCameraTransforms.TransformType.FIRST_PERSON_LEFT_HAND, !rightHanded);
+            GlStateManager.popMatrix();
+        }
     }
 
     /**
      * Handles the FOV "zoom in" when drawing a custom bow.
-     * Minecraft is hardcoded to only do this for items which are equal to the bow item, so we have to do it manually.
      *
      * @param event the event
      */
-    // TODO unimplemented
-    /*@SubscribeEvent
+    @SubscribeEvent
     public void FOV(FOVUpdateEvent event) {
-        if ((event.entity.getItemInUse() != null) && (event.entity.getItemInUse().getItem() instanceof CustomBow)) {
-            /**
-             * In net.minecraft.client.entity.EntityPlayerSP.getFOVMultiplier(), this operation is event.entity.getItemInUseDuration() / 20.0F.
-             * In an attempt to roughly maintain the same ratio of this divisor (20) to the amount of ticks it takes for the vanilla ItemBow icons to finish changing (18),
-             * the amount of ticks it takes for the CustomBow's icons to finish changing is multiplied by 1.1 (20 / 18) and is used instead.
-             *
-            float f = (bowMaxUseDuration - event.entity.getItemInUseCount()) / (((CustomBow) event.entity.getItemInUse().getItem()).iconTimes[0] * 1.1F);
+        if ((event.getEntity().getActiveItemStack() != null) && (event.getEntity().getActiveItemStack().getItem() instanceof CustomBow)) {
+            float finalFov = event.getFov();
+            // First, we have to reverse the standard bow zoom.
+            // Minecraft helpfully applies the standard bow zoom to any item that is an instance of a ItemBow.
+            // However, our CustomBows draw back at different speeds, so the standard zoom is not at the right speed.
+            // To compensate for this, we just calculate the standard bow zoom, and apply it in reverse.
+            float realBow = (bowMaxUseDuration - event.getEntity().getItemInUseCount()) / 20.0F;
 
-            if (f > 1.0F) {
-                f = 1.0F;
+            if (realBow > 1.0F) {
+                realBow = 1.0F;
             } else {
-                f *= f;
+                realBow *= realBow;
             }
 
-            event.newfov *= 1.0F - (f * 0.15F);
+            // Minecraft uses finalFov *= 1.0F - (realBow * 0.15F) to calculate the standard bow zoom.
+            // To reverse this, we just divide it instead.
+            finalFov /= 1.0F - (realBow * 0.15F);
+            // We now calculate and apply our CustomBow zoom.
+            // The only difference between standard bow zoom and CustomBow zoom is that we change the hardcoded value of 20.0F to whatever powerDiv is.
+            float customBow = (bowMaxUseDuration - event.getEntity().getItemInUseCount()) / ((CustomBow) event.getEntity().getActiveItemStack().getItem()).powerDiv;
+
+            if (customBow > 1.0F) {
+                customBow = 1.0F;
+            } else {
+                customBow *= customBow;
+            }
+
+            finalFov *= 1.0F - (customBow * 0.15F);
+            event.setNewfov(finalFov);
         }
-    }*/
+    }
 
     @Override
     public void initialize(Minecraft a) {
