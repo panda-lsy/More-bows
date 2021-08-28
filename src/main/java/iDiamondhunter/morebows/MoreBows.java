@@ -102,14 +102,14 @@ public class MoreBows {
     private static final byte defaultArrowType = ARROW_TYPE_NOT_CUSTOM;
 
     /* Bow items. */
-    protected static final Item DiamondBow = new CustomBow(1016, defaultArrowType, 2.25D, new byte[] { 8, 4 }, false, 6.0F, EnumRarity.RARE).setTranslationKey(DiamondBowName).setRegistryName(modSeperator + DiamondBowName);
-    protected static final Item EnderBow = new CustomBow(215, ARROW_TYPE_ENDER, noDamageMult, new byte[] { 19, 10 }, true, 22.0F, EnumRarity.EPIC).setTranslationKey(EnderBowName).setRegistryName(modSeperator + EnderBowName);
-    protected static final Item FlameBow = new CustomBow(576, ARROW_TYPE_FIRE, 2.0D, new byte[] { 14, 9 }, false, 15.0F, EnumRarity.UNCOMMON).setTranslationKey(FlameBowName).setRegistryName(modSeperator + FlameBowName);
-    protected static final Item FrostBow = new CustomBow(550, ARROW_TYPE_FROST, noDamageMult, new byte[] { 26, 13 }, false, 26.0F, EnumRarity.COMMON).setTranslationKey(FrostBowName).setRegistryName(modSeperator + FrostBowName);
-    protected static final Item GoldBow = new CustomBow(68, defaultArrowType, 2.5D, new byte[] { 8, 4 }, false, 6.0F, EnumRarity.UNCOMMON).setTranslationKey(GoldBowName).setRegistryName(modSeperator + GoldBowName);
-    protected static final Item IronBow = new CustomBow(550, defaultArrowType, 1.5D, new byte[] { 16, 11 }, false, 17.0F, EnumRarity.COMMON).setTranslationKey(IronBowName).setRegistryName(modSeperator + IronBowName);
-    protected static final Item MultiBow = new CustomBow(550, ARROW_TYPE_NOT_CUSTOM, noDamageMult, new byte[] { 12, 7 }, true, 13.0F, EnumRarity.RARE).setTranslationKey(MultiBowName).setRegistryName(modSeperator + MultiBowName);
-    protected static final Item StoneBow = new CustomBow(484, defaultArrowType, 1.15D, new byte[] { 18, 13 }, false, defaultPowerDiv, EnumRarity.COMMON).setTranslationKey(StoneBowName).setRegistryName(modSeperator + StoneBowName);
+    protected static final Item DiamondBow = new CustomBow(1016, defaultArrowType, 2.25D, false, 6.0F, EnumRarity.RARE).setTranslationKey(DiamondBowName).setRegistryName(modSeperator + DiamondBowName);
+    protected static final Item EnderBow = new CustomBow(215, ARROW_TYPE_ENDER, noDamageMult, true, 22.0F, EnumRarity.EPIC).setTranslationKey(EnderBowName).setRegistryName(modSeperator + EnderBowName);
+    protected static final Item FlameBow = new CustomBow(576, ARROW_TYPE_FIRE, 2.0D, false, 15.0F, EnumRarity.UNCOMMON).setTranslationKey(FlameBowName).setRegistryName(modSeperator + FlameBowName);
+    protected static final Item FrostBow = new CustomBow(550, ARROW_TYPE_FROST, noDamageMult, false, 26.0F, EnumRarity.COMMON).setTranslationKey(FrostBowName).setRegistryName(modSeperator + FrostBowName);
+    protected static final Item GoldBow = new CustomBow(68, defaultArrowType, 2.5D, false, 6.0F, EnumRarity.UNCOMMON).setTranslationKey(GoldBowName).setRegistryName(modSeperator + GoldBowName);
+    protected static final Item IronBow = new CustomBow(550, defaultArrowType, 1.5D, false, 17.0F, EnumRarity.COMMON).setTranslationKey(IronBowName).setRegistryName(modSeperator + IronBowName);
+    protected static final Item MultiBow = new CustomBow(550, ARROW_TYPE_NOT_CUSTOM, noDamageMult, true, 13.0F, EnumRarity.RARE).setTranslationKey(MultiBowName).setRegistryName(modSeperator + MultiBowName);
+    protected static final Item StoneBow = new CustomBow(484, defaultArrowType, 1.15D, false, defaultPowerDiv, EnumRarity.COMMON).setTranslationKey(StoneBowName).setRegistryName(modSeperator + StoneBowName);
 
     protected static final Item[] allItems = { DiamondBow, EnderBow, FlameBow, FrostBow, GoldBow, IronBow, MultiBow, StoneBow } ;
 

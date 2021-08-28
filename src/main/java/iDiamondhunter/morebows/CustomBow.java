@@ -9,7 +9,6 @@ import javax.annotation.Nullable;
 
 //import iDiamondhunter.morebows.entities.ArrowSpawner;
 //import iDiamondhunter.morebows.entities.CustomArrow;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -54,24 +53,17 @@ public final class CustomBow extends ItemBow {
      * @param maxDamage  The maximum damage a bow can do.
      * @param bowType    The type of arrows this bow shoots. This also influences some of the behaviors of the bow as well.
      * @param damageMult The multiplier to damage done by an arrow shot by this bow.
-     * @param iconTimes  The amount of time it takes to switch bow icons when the bow is being drawn back. TODO This is not a great solution.
      * @param multiShot  A dirty, dirty hack, indicating if this bow shoots multiple arrows or not.
      * @param powerDiv   The power divisor of this bow. TODO document better.
      * @param rarity     The rarity of this bow.
      */
-    public CustomBow(int maxDamage, byte bowType, double damageMult, byte[] iconTimes, boolean multiShot, float powerDiv, EnumRarity rarity) {
+    public CustomBow(int maxDamage, byte bowType, double damageMult, boolean multiShot, float powerDiv, EnumRarity rarity) {
         setMaxDamage(maxDamage);
         this.bowType = bowType;
         this.damageMult = damageMult;
-        // TODO unimplemented
-        // either convert iconTimes into json predicate (powerDiv / iconTimes[n]) or possibly just speed up predicate?
-        //this.iconTimes = iconTimes;
         this.multiShot = multiShot;
         this.powerDiv = powerDiv;
         this.rarity = rarity;
-        maxStackSize = 1;
-        setMaxDamage(384);
-        setCreativeTab(CreativeTabs.COMBAT);
         addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter() {
             @Override
             @SideOnly(Side.CLIENT)
@@ -81,13 +73,6 @@ public final class CustomBow extends ItemBow {
                 }
 
                 return !(entity.getActiveItemStack().getItem() instanceof CustomBow) ? 0.0F : (bowMaxUseDuration - entity.getItemInUseCount()) / powerDiv;
-            }
-        });
-        addPropertyOverride(new ResourceLocation("pulling"), new IItemPropertyGetter() {
-            @Override
-            @SideOnly(Side.CLIENT)
-            public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
-                return (entityIn != null) && entityIn.isHandActive() && (entityIn.getActiveItemStack() == stack) ? 1.0F : 0.0F;
             }
         });
     }
