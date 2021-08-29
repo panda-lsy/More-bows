@@ -4,11 +4,13 @@ import static net.minecraftforge.common.config.Configuration.CATEGORY_GENERAL;
 
 import java.util.Set;
 
-//import iDiamondhunter.morebows.entities.CustomArrow;
+import iDiamondhunter.morebows.entities.CustomArrow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.math.MathHelper;
@@ -17,6 +19,8 @@ import net.minecraftforge.client.event.RenderSpecificHandEvent;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.fml.client.IModGuiFactory;
 import net.minecraftforge.fml.client.config.GuiConfig;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**
@@ -25,7 +29,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
  * - Client rendering registration
  * - Even implements IModGuiFactory
  */
-public final class Client extends MoreBows implements IModGuiFactory {
+public final class Client extends MoreBows implements IModGuiFactory, IRenderFactory<CustomArrow> {
 
     /**
      * A class that extends GuiConfig, because the Forge team likes to complicate things.
@@ -165,21 +169,12 @@ public final class Client extends MoreBows implements IModGuiFactory {
         return Config.class;
     }
 
-    // TODO unimplemented
-    /*@Override
+    @Override
     protected void register() {
         super.register();
-        /** Registration of custom renderers
-        RenderingRegistry.registerEntityRenderingHandler(CustomArrow.class, new ModRenderer());
-        MinecraftForgeClient.registerItemRenderer(MoreBows.DiamondBow, new ModRenderer());
-        MinecraftForgeClient.registerItemRenderer(MoreBows.GoldBow, new ModRenderer());
-        MinecraftForgeClient.registerItemRenderer(MoreBows.EnderBow, new ModRenderer());
-        MinecraftForgeClient.registerItemRenderer(MoreBows.StoneBow, new ModRenderer());
-        MinecraftForgeClient.registerItemRenderer(MoreBows.IronBow, new ModRenderer());
-        MinecraftForgeClient.registerItemRenderer(MoreBows.MultiBow, new ModRenderer());
-        MinecraftForgeClient.registerItemRenderer(MoreBows.FlameBow, new ModRenderer());
-        MinecraftForgeClient.registerItemRenderer(MoreBows.FrostBow, new ModRenderer());
-    }*/
+        /** Registration of custom renderers */
+        RenderingRegistry.registerEntityRenderingHandler(CustomArrow.class, new Client());
+    }
 
     @Override
     public Set<RuntimeOptionCategoryElement> runtimeGuiCategories() {
@@ -194,6 +189,11 @@ public final class Client extends MoreBows implements IModGuiFactory {
     @Override
     public GuiScreen createConfigGui(GuiScreen parent) {
         return new Config(parent);
+    }
+
+    @Override
+    public Render<CustomArrow> createRenderFor(RenderManager manager) {
+        return new ModRenderer(manager);
     }
 
     /**

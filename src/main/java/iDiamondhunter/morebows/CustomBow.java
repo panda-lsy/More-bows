@@ -7,8 +7,8 @@ import static iDiamondhunter.morebows.MoreBows.bowMaxUseDuration;
 
 import javax.annotation.Nullable;
 
+import iDiamondhunter.morebows.entities.CustomArrow;
 //import iDiamondhunter.morebows.entities.ArrowSpawner;
-//import iDiamondhunter.morebows.entities.CustomArrow;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -138,12 +138,12 @@ public final class CustomBow extends ItemBow {
                 if (multiShot) { // Bows that shoot multiple arrows
                     if (bowType == ARROW_TYPE_ENDER) { // Ender bow
                         arrs = new EntityArrow[] {
-                            arrowHelper(world, player, shotVelocity * 2.0F, ammo, arrow),
-                            arrowHelper(world, player, shotVelocity * 1F, ammo, arrow),
-                            arrowHelper(world, player, shotVelocity * 1.2F, ammo, arrow),
-                            arrowHelper(world, player, shotVelocity * 1.5F, ammo, arrow),
-                            arrowHelper(world, player, shotVelocity * 1.75F, ammo, arrow),
-                            arrowHelper(world, player, shotVelocity * 1.825F, ammo, arrow)
+                            customArrowHelper(world, player, shotVelocity * 2.0F, ammo, arrow),
+                            customArrowHelper(world, player, shotVelocity * 1F, ammo, arrow),
+                            customArrowHelper(world, player, shotVelocity * 1.2F, ammo, arrow),
+                            customArrowHelper(world, player, shotVelocity * 1.5F, ammo, arrow),
+                            customArrowHelper(world, player, shotVelocity * 1.75F, ammo, arrow),
+                            customArrowHelper(world, player, shotVelocity * 1.825F, ammo, arrow)
                         };
                         arrs[1].pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
                         arrs[2].pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
@@ -170,8 +170,7 @@ public final class CustomBow extends ItemBow {
                 } else if (bowType == ARROW_TYPE_NOT_CUSTOM) { // "Standard" style bows that do not shoot multiple arrows or have a custom arrow type. Note to self: this is after the multi-arrow bows due to the multi bow having arrows of a normal type.
                     arrs = new EntityArrow[] { arrowHelper(world, player, shotVelocity * 2.0F, ammo, arrow) };
                 } else { // Bows that shoot only one custom arrow, currently only frost / fire bows
-                    // TODO unimplemented
-                    arrs = new EntityArrow[] { arrowHelper(world, player, shotVelocity * 2.0F, ammo, arrow) };
+                    arrs = new EntityArrow[] { customArrowHelper(world, player, shotVelocity * 2.0F, ammo, arrow) };
                 }
 
                 if (alwaysShoots) {
@@ -300,7 +299,18 @@ public final class CustomBow extends ItemBow {
 
     // TODO review
     private EntityArrow arrowHelper(World world, EntityPlayer player, float velocity, ItemStack ammo, ItemArrow arrow) {
-        EntityArrow entityarrow = arrow.createArrow(world, ammo, player);
+        final EntityArrow entityarrow = arrow.createArrow(world, ammo, player);
+        return arrowHelperHelper(world, player, velocity, ammo, entityarrow);
+    }
+
+    // TODO review
+    private EntityArrow customArrowHelper(World world, EntityPlayer player, float velocity, ItemStack ammo, ItemArrow arrow) {
+        final EntityArrow entityarrow = new CustomArrow(world, player, bowType);
+        return arrowHelperHelper(world, player, velocity, ammo, entityarrow);
+    }
+
+    // TODO review
+    private EntityArrow arrowHelperHelper(World world, EntityPlayer player, float velocity, ItemStack ammo, EntityArrow entityarrow) {
         entityarrow = customizeArrow(entityarrow);
         entityarrow.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, velocity, 1.0F);
         return entityarrow;

@@ -1,5 +1,6 @@
 package iDiamondhunter.morebows;
 
+import iDiamondhunter.morebows.entities.CustomArrow;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Items;
@@ -21,6 +22,8 @@ import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.EntityEntry;
+import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
 import net.minecraftforge.oredict.OreDictionary;
 
 /** If you're reading this, I'm very sorry you have to deal with my code. */
@@ -112,6 +115,9 @@ public class MoreBows {
     protected static final Item StoneBow = new CustomBow(484, defaultArrowType, 1.15D, false, defaultPowerDiv, EnumRarity.COMMON).setTranslationKey(StoneBowName).setRegistryName(modSeperator + StoneBowName);
 
     protected static final Item[] allItems = { DiamondBow, EnderBow, FlameBow, FrostBow, GoldBow, IronBow, MultiBow, StoneBow } ;
+
+    /* TODO description */
+    public static EntityEntry customArrowEntry = EntityEntryBuilder.create().entity(CustomArrow.class).id("custom_arrow", 0).name("Custom arrow").tracker(64, 20, true).build();
 
     /** This method syncs the config file with the Configuration, as well as syncing any config related variables. */
     private static final void conf() {
@@ -257,8 +263,7 @@ public class MoreBows {
     public final void init(FMLPreInitializationEvent event) {
         config = new Configuration(event.getSuggestedConfigurationFile());
         conf();
-        // TODO unimplemented
-        //proxy.register();
+        proxy.register();
         MinecraftForge.EVENT_BUS.register(proxy);
     }
 
@@ -283,6 +288,12 @@ public class MoreBows {
 
     // TODO review
     @SubscribeEvent
+    public void registerEntities(RegistryEvent.Register<EntityEntry> event) {
+        event.getRegistry().register(customArrowEntry);
+    }
+
+    // TODO review
+    @SubscribeEvent
     public void registerModels(ModelRegistryEvent event) {
         for (final Item item : allItems) {
             ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName().toString()));
@@ -294,53 +305,9 @@ public class MoreBows {
     public static void registerRecipes(RegistryEvent.Register<IRecipe> event) {
     }*/
 
-    /** This method registers all mod content for a given side. Server side, it registers items, recipes, and entities. Client side, it also registers custom renderers. */
-    // TODO unimplemented
+    /** This was once used to register anything needed both client side and server side, but it looks like it's not needed for server-side registration anymore. TODO probably remove */
     protected void register() {
-        /* Item registration */
-        /*GameRegistry.registerItem(DiamondBow, DiamondBowName);
-        GameRegistry.registerItem(EnderBow, EnderBowName);
-        GameRegistry.registerItem(FlameBow, FlameBowName);
-        GameRegistry.registerItem(FrostBow, FrostBowName);
-        GameRegistry.registerItem(GoldBow, GoldBowName);
-        GameRegistry.registerItem(IronBow, IronBowName);
-        GameRegistry.registerItem(MultiBow, MultiBowName);
-        GameRegistry.registerItem(StoneBow, StoneBowName);*/
-        /* Hack-ish - Register an OreDictionary'd version of the dispenser recipe, so MoreBows's bows work with it. */
-        //GameRegistry.addRecipe(new ShapedOreRecipe(Blocks.dispenser, "AAA", "ABA", "ACA", 'A', "cobblestone", 'B', "bow", 'C', "dustRedstone"));
-        /* Bow recipe registration */
-        /*GameRegistry.addRecipe(new ShapedOreRecipe(DiamondBow, " DC", "ABC", " DC", 'C', "string", 'D', "gemDiamond", 'A', "ingotIron", 'B', "bow"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(EnderBow, "CD", "AB", "CD", 'C', "ingotGold", 'D', "pearlEnder", 'B', "bowIron", 'A', "pearlEnderEye"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(FlameBow, "CD", "AB", "CD", 'A', "ingotGold", 'D', "rodBlaze", 'B', "bowIron", 'C', "netherrack"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(FrostBow, " DC", "ABC", " DC", 'C', "string", 'D', "ice", 'A', "snowball", 'B', "bowIron"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(GoldBow, " AC", "ABC", " AC", 'C', "string", 'A', "ingotGold", 'B', "bow"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(IronBow, " AC", "ABC", " AC", 'C', "string", 'A', "ingotIron", 'B', "bow"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(MultiBow, " DC", "A C", " DC", 'C', "string", 'A', "ingotIron", 'D', "bowIron"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(StoneBow, " DC", "ABC", " DC", 'A', "stickWood", 'C', "string", 'D', "stone", 'B', "bow"));*/
-        /* Hack-ish - Registers groups of items to the OreDictionary that Forge doesn't by default. I'm pretty sure that nothing bad happens if other mods duplicate entries to it. */
-        /*OreDictionary.registerOre("bow", new ItemStack(DiamondBow, 1, OreDictionary.WILDCARD_VALUE));
-        OreDictionary.registerOre("bow", new ItemStack(EnderBow, 1, OreDictionary.WILDCARD_VALUE));
-        OreDictionary.registerOre("bow", new ItemStack(FlameBow, 1, OreDictionary.WILDCARD_VALUE));
-        OreDictionary.registerOre("bow", new ItemStack(FrostBow, 1, OreDictionary.WILDCARD_VALUE));
-        OreDictionary.registerOre("bow", new ItemStack(GoldBow, 1, OreDictionary.WILDCARD_VALUE));
-        OreDictionary.registerOre("bow", new ItemStack(IronBow, 1, OreDictionary.WILDCARD_VALUE));
-        OreDictionary.registerOre("bow", new ItemStack(Items.bow, 1, OreDictionary.WILDCARD_VALUE));
-        OreDictionary.registerOre("bow", new ItemStack(MultiBow, 1, OreDictionary.WILDCARD_VALUE));
-        OreDictionary.registerOre("bow", new ItemStack(StoneBow, 1, OreDictionary.WILDCARD_VALUE));
-        OreDictionary.registerOre("bowDiamond", new ItemStack(DiamondBow, 1, OreDictionary.WILDCARD_VALUE));
-        OreDictionary.registerOre("bowGold", new ItemStack(GoldBow, 1, OreDictionary.WILDCARD_VALUE));
-        OreDictionary.registerOre("bowIron", new ItemStack(IronBow, 1, OreDictionary.WILDCARD_VALUE));
-        OreDictionary.registerOre("ice", Blocks.ice);
-        OreDictionary.registerOre("ice", Blocks.packed_ice);
-        OreDictionary.registerOre("netherrack", Blocks.netherrack);
-        OreDictionary.registerOre("pearlEnder", Items.ender_pearl);
-        OreDictionary.registerOre("pearlEnderEye", Items.ender_eye);
-        OreDictionary.registerOre("rodBlaze", Items.blaze_rod);
-        OreDictionary.registerOre("snowball", Items.snowball);
-        OreDictionary.registerOre("string", Items.string);*/
-        /* Entity registration */
-        //EntityRegistry.registerModEntity(ArrowSpawner.class, "ArrowSpawner", 1, MoreBows.inst, /** As the player can never see an ArrowSpawner and all of the logic for it is handled server-side, there's no reason to send any tracking updates. */ -1, Integer.MAX_VALUE, false);
-        //EntityRegistry.registerModEntity(CustomArrow.class, "CustomArrow", 2, MoreBows.inst, 64, 20, true);*/
+        // This space left unintentionally blank?
     }
 
 }
