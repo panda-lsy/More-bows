@@ -138,12 +138,12 @@ public final class CustomBow extends ItemBow {
                 if (multiShot) { // Bows that shoot multiple arrows
                     if (bowType == ARROW_TYPE_ENDER) { // Ender bow
                         arrs = new EntityArrow[] {
-                            customArrowHelper(world, player, shotVelocity * 2.0F, ammo, arrow),
-                            customArrowHelper(world, player, shotVelocity * 1F, ammo, arrow),
-                            customArrowHelper(world, player, shotVelocity * 1.2F, ammo, arrow),
-                            customArrowHelper(world, player, shotVelocity * 1.5F, ammo, arrow),
-                            customArrowHelper(world, player, shotVelocity * 1.75F, ammo, arrow),
-                            customArrowHelper(world, player, shotVelocity * 1.825F, ammo, arrow)
+                            possiblyCustomArrowHelper(world, player, shotVelocity * 2.0F, ammo, arrow),
+                            possiblyCustomArrowHelper(world, player, shotVelocity * 1F, ammo, arrow),
+                            possiblyCustomArrowHelper(world, player, shotVelocity * 1.2F, ammo, arrow),
+                            possiblyCustomArrowHelper(world, player, shotVelocity * 1.5F, ammo, arrow),
+                            possiblyCustomArrowHelper(world, player, shotVelocity * 1.75F, ammo, arrow),
+                            possiblyCustomArrowHelper(world, player, shotVelocity * 1.825F, ammo, arrow)
                         };
                         arrs[1].pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
                         arrs[2].pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
@@ -170,7 +170,7 @@ public final class CustomBow extends ItemBow {
                 } else if (bowType == ARROW_TYPE_NOT_CUSTOM) { // "Standard" style bows that do not shoot multiple arrows or have a custom arrow type. Note to self: this is after the multi-arrow bows due to the multi bow having arrows of a normal type.
                     arrs = new EntityArrow[] { arrowHelper(world, player, shotVelocity * 2.0F, ammo, arrow) };
                 } else { // Bows that shoot only one custom arrow, currently only frost / fire bows
-                    arrs = new EntityArrow[] { customArrowHelper(world, player, shotVelocity * 2.0F, ammo, arrow) };
+                    arrs = new EntityArrow[] { possiblyCustomArrowHelper(world, player, shotVelocity * 2.0F, ammo, arrow) };
                 }
 
                 if (alwaysShoots) {
@@ -295,6 +295,15 @@ public final class CustomBow extends ItemBow {
 
             player.addStat(StatList.getObjectUseStats(this));
         }
+    }
+
+    // TODO review
+    private EntityArrow possiblyCustomArrowHelper(World world, EntityPlayer player, float velocity, ItemStack ammo, ItemArrow arrow) {
+        if (arrow == Items.ARROW) {
+            return customArrowHelper(world, player, velocity, ammo, arrow);
+        }
+
+        return arrowHelper(world, player, velocity, ammo, arrow);
     }
 
     // TODO review
