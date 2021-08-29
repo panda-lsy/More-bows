@@ -7,8 +7,8 @@ import static iDiamondhunter.morebows.MoreBows.bowMaxUseDuration;
 
 import javax.annotation.Nullable;
 
+import iDiamondhunter.morebows.entities.ArrowSpawner;
 import iDiamondhunter.morebows.entities.CustomArrow;
-//import iDiamondhunter.morebows.entities.ArrowSpawner;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -216,15 +216,7 @@ public final class CustomBow extends ItemBow {
 
                 if (multiShot) {
                     if (bowType == ARROW_TYPE_ENDER) { // Ender bow
-                        // TODO unimplemented
-                        //world.spawnEntity(new ArrowSpawner(world, player.posX, player.posY, player.posZ, shotVelocity, arrs));
-                        // temporary
-                        world.spawnEntity(arrs[0]);
-                        world.spawnEntity(arrs[1]);
-                        world.spawnEntity(arrs[2]);
-                        world.spawnEntity(arrs[3]);
-                        world.spawnEntity(arrs[4]);
-                        world.spawnEntity(arrs[5]);
+                        world.spawnEntity(new ArrowSpawner(world, player.posX, player.posY, player.posZ, shotVelocity, arrs));
                     } else { // Multi bow
                         world.spawnEntity(arrs[0]);
                         world.spawnEntity(arrs[1]);

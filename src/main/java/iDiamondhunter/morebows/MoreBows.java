@@ -1,5 +1,8 @@
 package iDiamondhunter.morebows;
 
+import org.apache.logging.log4j.Logger;
+
+import iDiamondhunter.morebows.entities.ArrowSpawner;
 import iDiamondhunter.morebows.entities.CustomArrow;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
@@ -46,6 +49,8 @@ public class MoreBows {
     /** Mod proxy. TODO This is super janky, see if it's possible to remove this */
     @SidedProxy(clientSide = "iDiamondhunter.morebows.Client", serverSide = "iDiamondhunter.morebows.MoreBows")
     private static MoreBows proxy;
+
+    public static Logger modLog;
 
     /** MoreBows config */
     public static Configuration config;
@@ -117,7 +122,8 @@ public class MoreBows {
     protected static final Item[] allItems = { DiamondBow, EnderBow, FlameBow, FrostBow, GoldBow, IronBow, MultiBow, StoneBow } ;
 
     /* TODO description */
-    public static EntityEntry customArrowEntry = EntityEntryBuilder.create().entity(CustomArrow.class).id("custom_arrow", 0).name("Custom arrow").tracker(64, 20, true).build();
+    public static final EntityEntry customArrowEntry = EntityEntryBuilder.create().entity(CustomArrow.class).id("custom_arrow", 1).name("Custom arrow").tracker(64, 20, true).build();
+    public static final EntityEntry arrowSpawnerEntry = EntityEntryBuilder.create().entity(ArrowSpawner.class).id("arrow_spawner", 2).name("Arrow spawner").tracker(-1, Integer.MAX_VALUE, false).build();
 
     /** This method syncs the config file with the Configuration, as well as syncing any config related variables. */
     private static final void conf() {
@@ -261,6 +267,7 @@ public class MoreBows {
      */
     @EventHandler
     public final void init(FMLPreInitializationEvent event) {
+        modLog = event.getModLog();
         config = new Configuration(event.getSuggestedConfigurationFile());
         conf();
         proxy.register();
@@ -289,7 +296,7 @@ public class MoreBows {
     // TODO review
     @SubscribeEvent
     public void registerEntities(RegistryEvent.Register<EntityEntry> event) {
-        event.getRegistry().register(customArrowEntry);
+        event.getRegistry().registerAll(customArrowEntry, arrowSpawnerEntry);
     }
 
     // TODO review
