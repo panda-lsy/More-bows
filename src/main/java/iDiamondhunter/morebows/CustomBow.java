@@ -111,6 +111,8 @@ public final class CustomBow extends ItemBow {
                 return;
             }
 
+            // TODO merge with alwaysShoots somehow
+            final boolean infiniteAmmo = player.capabilities.isCreativeMode || ((ammo.getItem() instanceof ItemArrow) && ((ItemArrow) ammo.getItem()).isInfinite(ammo, bow, player));
             final boolean bonusArrow = itemRand.nextInt(4) == 0;
 
             if (!world.isRemote) {
@@ -175,7 +177,7 @@ public final class CustomBow extends ItemBow {
                     arrs = new EntityArrow[] { possiblyCustomArrowHelper(world, player, shotVelocity * (2.0F * 1.5F), ammo, arrow) };
                 }
 
-                if (alwaysShoots) {
+                if (infiniteAmmo) {
                     arrs[0].pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
                 }
 
@@ -274,9 +276,6 @@ public final class CustomBow extends ItemBow {
             } else { // Other bows
                 world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
             }
-
-            // TODO merge somehow
-            final boolean infiniteAmmo = player.capabilities.isCreativeMode || ((ammo.getItem() instanceof ItemArrow) && ((ItemArrow) ammo.getItem()).isInfinite(ammo, bow, player));
 
             if (!infiniteAmmo) {
                 // TODO review
