@@ -111,6 +111,8 @@ public final class CustomBow extends ItemBow {
                 return;
             }
 
+            final boolean bonusArrow = itemRand.nextInt(4) == 0;
+
             if (!world.isRemote) {
                 final boolean isCrit;
 
@@ -124,17 +126,26 @@ public final class CustomBow extends ItemBow {
                 final ItemArrow arrow = (ItemArrow)(ammo.getItem() instanceof ItemArrow ? ammo.getItem() : Items.ARROW);
                 final EntityArrow[] arrs;
 
-                // Create the arrows to fire
-                // TODO arrow velocity defaults have changed. I have not updated these yet.
+                /**
+                 * Create the arrows to fire.
+                 * The velocity multiplier for each arrow is written as a value multiplied by 1.5F.
+                 * This is because this mod was originally for older versions of Minecraft,
+                 * where the vanilla bow had a base velocity multiplier of 2.0F.
+                 * As I still want to maintain and backport changes for the 1.7.10 version of this mod,
+                 * (and because I can't figure out how the velocity multipliers for each CustomBow were chosen),
+                 * I have simply multiplied each velocity multiplier
+                 * to be the equivalent value for a base multiplier of 3.0F instead
+                 * (2.0F * 1.5F == 3.0F).
+                 */
                 if (multiShot) { // Bows that shoot multiple arrows
                     if (bowType == ARROW_TYPE_ENDER) { // Ender bow
                         arrs = new EntityArrow[] {
-                            possiblyCustomArrowHelper(world, player, shotVelocity * 2.0F, ammo, arrow),
-                            possiblyCustomArrowHelper(world, player, shotVelocity * 1F, ammo, arrow),
-                            possiblyCustomArrowHelper(world, player, shotVelocity * 1.2F, ammo, arrow),
-                            possiblyCustomArrowHelper(world, player, shotVelocity * 1.5F, ammo, arrow),
-                            possiblyCustomArrowHelper(world, player, shotVelocity * 1.75F, ammo, arrow),
-                            possiblyCustomArrowHelper(world, player, shotVelocity * 1.825F, ammo, arrow)
+                            possiblyCustomArrowHelper(world, player, shotVelocity * (2.0F * 1.5F), ammo, arrow),
+                            possiblyCustomArrowHelper(world, player, shotVelocity * (1F * 1.5F), ammo, arrow),
+                            possiblyCustomArrowHelper(world, player, shotVelocity * (1.2F * 1.5F), ammo, arrow),
+                            possiblyCustomArrowHelper(world, player, shotVelocity * (1.5F * 1.5F), ammo, arrow),
+                            possiblyCustomArrowHelper(world, player, shotVelocity * (1.75F * 1.5F), ammo, arrow),
+                            possiblyCustomArrowHelper(world, player, shotVelocity * (1.825F * 1.5F), ammo, arrow)
                         };
                         arrs[1].pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
                         arrs[2].pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
@@ -142,26 +153,26 @@ public final class CustomBow extends ItemBow {
                         arrs[4].pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
                         arrs[5].pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
                     } else {
-                        if (itemRand.nextInt(4) == 0) { // Multi bow
+                        if (bonusArrow) { // Multi bow
                             arrs = new EntityArrow[] {
-                                arrowHelper(world, player, shotVelocity * 2.0F, ammo, arrow),
-                                arrowHelper(world, player, shotVelocity * 1.65F, ammo, arrow),
-                                arrowHelper(world, player, shotVelocity * 1.275F, ammo, arrow)
+                                arrowHelper(world, player, shotVelocity * (2.0F * 1.5F), ammo, arrow),
+                                arrowHelper(world, player, shotVelocity * (1.65F * 1.5F), ammo, arrow),
+                                arrowHelper(world, player, shotVelocity * (1.275F * 1.5F), ammo, arrow)
                             };
                             arrs[2].pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
                         } else {
                             arrs = new EntityArrow[] {
-                                arrowHelper(world, player, shotVelocity * 2.0F, ammo, arrow),
-                                arrowHelper(world, player, shotVelocity * 1.65F, ammo, arrow)
+                                arrowHelper(world, player, shotVelocity * (2.0F * 1.5F), ammo, arrow),
+                                arrowHelper(world, player, shotVelocity * (1.65F * 1.5F), ammo, arrow)
                             };
                         }
 
                         arrs[1].pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
                     }
                 } else if (bowType == ARROW_TYPE_NOT_CUSTOM) { // "Standard" style bows that do not shoot multiple arrows or have a custom arrow type. Note to self: this is after the multi-arrow bows due to the multi bow having arrows of a normal type.
-                    arrs = new EntityArrow[] { arrowHelper(world, player, shotVelocity * 2.0F, ammo, arrow) };
+                    arrs = new EntityArrow[] { arrowHelper(world, player, shotVelocity * (2.0F * 1.5F), ammo, arrow) };
                 } else { // Bows that shoot only one custom arrow, currently only frost / fire bows
-                    arrs = new EntityArrow[] { possiblyCustomArrowHelper(world, player, shotVelocity * 2.0F, ammo, arrow) };
+                    arrs = new EntityArrow[] { possiblyCustomArrowHelper(world, player, shotVelocity * (2.0F * 1.5F), ammo, arrow) };
                 }
 
                 if (alwaysShoots) {
@@ -227,7 +238,7 @@ public final class CustomBow extends ItemBow {
                         arrs[0].setDamage(arrs[0].getDamage() * 1.5D);
                         arrs[1].setDamage(arrs[1].getDamage() * 1.3D);
 
-                        if (arrs.length > 2) {
+                        if (bonusArrow) {
                             world.spawnEntity(arrs[2]);
                             /**
                              * This was some code that checked the rotationYaw of the shooting player, but didn't change anything.
@@ -254,14 +265,14 @@ public final class CustomBow extends ItemBow {
 
             // Play the "bow shot" sound
             if (multiShot && (bowType != ARROW_TYPE_ENDER)) { // Multi bow
-                world.playSound(player, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
-                world.playSound(player, player.posX + (player.rotationYaw / 180), player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
-                // TODO
-                /*if (arrs.length > 2) {
-                	world.playSound(player, player.posX - (player.rotationYaw / 180), player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + shotVelocity * 0.5F);
-                }*/
+                world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
+                world.playSound(null, player.posX + (player.rotationYaw / 180), player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
+
+                if (bonusArrow) {
+                    world.playSound(null, player.posX - (player.rotationYaw / 180), player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
+                }
             } else { // Other bows
-                world.playSound(player, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
+                world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
             }
 
             // TODO merge somehow
