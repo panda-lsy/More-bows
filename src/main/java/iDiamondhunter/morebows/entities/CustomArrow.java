@@ -1,10 +1,13 @@
 package iDiamondhunter.morebows.entities;
 
+import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_ENDER;
+import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_FIRE;
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_FROST;
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_NOT_CUSTOM;
 import static iDiamondhunter.morebows.MoreBows.frostArrowsShouldBeCold;
 import static iDiamondhunter.morebows.MoreBows.oldFrostArrowRendering;
 
+import iDiamondhunter.morebows.MoreBows;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSnow;
@@ -195,6 +198,57 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
                     world.spawnParticle(EnumParticleTypes.WATER_SPLASH, posX + ((motionX * i) / 4.0D), posY + ((motionY * i) / 4.0D), posZ + ((motionZ * i) / 4.0D), -motionX, -motionY + 0.2D, -motionZ);
                 }
             }
+        }
+    }
+
+    /**
+     * Creates the particle effects when a custom arrow hits an entity.
+     */
+    @Override
+    protected void arrowHit(EntityLivingBase living) {
+        final EnumParticleTypes part;
+        final int amount;
+        final double velocity;
+        final boolean randDisp;
+
+        switch (type) {
+        case ARROW_TYPE_ENDER:
+            part = EnumParticleTypes.PORTAL;
+            amount = 3;
+            randDisp = true;
+            velocity = 1;
+            break;
+
+        case ARROW_TYPE_FIRE:
+            if (isBurning()) {
+                part = EnumParticleTypes.FLAME;
+            } else {
+                part = EnumParticleTypes.SMOKE_NORMAL;
+            }
+
+            amount = 5;
+            randDisp = true;
+            velocity = 0.05;
+            break;
+
+        case ARROW_TYPE_FROST:
+            part = EnumParticleTypes.WATER_SPLASH;
+            amount = 1;
+            randDisp = false;
+            velocity = 0.01;
+            break;
+
+        default:
+            part = EnumParticleTypes.SUSPENDED_DEPTH;
+            amount = 20;
+            randDisp = true;
+            velocity = 0;
+            break;
+        }
+
+        // TODO replace with client-side method
+        for (int i = 0; i < amount; i++) {
+            MoreBows.tryPart(world, living, part, randDisp, velocity);
         }
     }
 

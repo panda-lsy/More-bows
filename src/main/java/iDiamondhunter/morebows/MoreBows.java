@@ -6,10 +6,13 @@ import iDiamondhunter.morebows.entities.ArrowSpawner;
 import iDiamondhunter.morebows.entities.CustomArrow;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -18,6 +21,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -168,85 +172,29 @@ public class MoreBows {
     }
 
     /**
-     * Creates the particle effects when a custom arrow hits an entity.
-     *
-     * @param event the event
-     */
-    // TODO unimplemented
-    /*@SubscribeEvent
-    public final void arrHit(LivingAttackEvent event) {
-        if ((!event.entity.worldObj.isRemote) && (event.source.getSourceOfDamage() instanceof CustomArrow)) {
-            final CustomArrow arr = (CustomArrow) event.source.getSourceOfDamage();
-            final String part;
-            final int amount;
-            final double velocity;
-            final boolean randDisp;
-
-            switch (arr.type) {
-            case ARROW_TYPE_ENDER:
-                part = "portal";
-                amount = 3;
-                randDisp = true;
-                velocity = 1;
-                break;
-
-            case ARROW_TYPE_FIRE:
-                if (arr.isBurning()) {
-                    part = "flame";
-                } else {
-                    part = "smoke";
-                }
-
-                amount = 5;
-                randDisp = true;
-                velocity = 0.05;
-                break;
-
-            case ARROW_TYPE_FROST:
-                part = "splash";
-                amount = 1;
-                randDisp = false;
-                velocity = 0.01;
-                break;
-
-            default:
-                part = "depthsuspend";
-                amount = 20;
-                randDisp = true;
-                velocity = 0;
-                break;
-            }
-
-            for (int i = 0; i < amount; i++) {
-                tryPart(event.entity.worldObj, event.entity, part, randDisp, velocity);
-            }
-        }
-    }*/
-
-    /**
      * Handles custom effects from the frost arrow.
+     * TODO see if this can be done inside CustomArrow
      *
      * @param event the event
      */
-    // TODO unimplemented
-    /*@SubscribeEvent
+    @SubscribeEvent
     public final void arrHurt(LivingHurtEvent event) {
-        if ((event.source.getSourceOfDamage() instanceof CustomArrow) && (((CustomArrow) event.source.getSourceOfDamage()).type == ARROW_TYPE_FROST)) {
+        if ((event.getSource().getImmediateSource() instanceof CustomArrow) && (((CustomArrow) event.getSource().getImmediateSource()).type == ARROW_TYPE_FROST)) {
             if (frostArrowsShouldBeCold) {
-                if (event.entityLiving instanceof EntityBlaze) {
-                    event.ammount *= 3;
+                if (event.getEntityLiving() instanceof EntityBlaze) {
+                    event.setAmount(event.getAmount() * 3);
                 }
 
-                event.entity.extinguish();
+                event.getEntityLiving().extinguish();
             }
 
             if (!oldFrostArrowMobSlowdown) {
-                event.entityLiving.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 300, 2));
+                event.getEntityLiving().addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("slowness"), 300, 2));
             } else {
-                event.entity.setInWeb();
+                event.getEntityLiving().setInWeb();
             }
         }
-    }*/
+    }
 
     /**
      * Calls conf() when the Configuration changes.
