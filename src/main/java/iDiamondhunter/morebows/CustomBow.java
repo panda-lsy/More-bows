@@ -5,8 +5,6 @@ import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_FIRE;
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_NOT_CUSTOM;
 import static iDiamondhunter.morebows.MoreBows.bowMaxUseDuration;
 
-import javax.annotation.Nullable;
-
 import iDiamondhunter.morebows.entities.ArrowSpawner;
 import iDiamondhunter.morebows.entities.CustomArrow;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -17,7 +15,6 @@ import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumRarity;
-import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
@@ -26,8 +23,6 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * This entire class is a huge hack. I'm ashamed of myself. And yes, this is important to document.
@@ -64,16 +59,12 @@ public final class CustomBow extends ItemBow {
         this.multiShot = multiShot;
         this.powerDiv = powerDiv;
         this.rarity = rarity;
-        addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter() {
-            @Override
-            @SideOnly(Side.CLIENT)
-            public float apply(ItemStack bow, @Nullable World world, @Nullable EntityLivingBase entity) {
-                if (entity == null) {
-                    return 0.0F;
-                }
-
-                return !(entity.getActiveItemStack().getItem() instanceof CustomBow) ? 0.0F : (bowMaxUseDuration - entity.getItemInUseCount()) / powerDiv;
+        addPropertyOverride(new ResourceLocation("pull"), (ItemStack bow, World world, EntityLivingBase entity) -> {
+            if (entity == null) {
+                return 0.0F;
             }
+
+            return (bowMaxUseDuration - entity.getItemInUseCount()) / powerDiv;
         });
     }
 
