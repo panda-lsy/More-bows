@@ -9,16 +9,21 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.item.Item;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.FOVUpdateEvent;
+import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.RenderSpecificHandEvent;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.fml.client.IModGuiFactory;
 import net.minecraftforge.fml.client.config.GuiConfig;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -27,7 +32,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
  * Handles almost all general client side only code. Client is also the client proxy.
  * - Client event handling
  * - Client rendering registration
- * - Even implements IModGuiFactory
+ * - Even implements IModGuiFactory and IRenderFactory!
+ * TODO much of the Config related code is outdated, although it still works.
+ * Disregard my comments, they were written for 1.7.10.
  */
 public final class Client extends MoreBows implements IModGuiFactory, IRenderFactory<CustomArrow> {
 
@@ -67,6 +74,7 @@ public final class Client extends MoreBows implements IModGuiFactory, IRenderFac
      * This is necessary to make the bow draw back at the right speed.
      * This would not be an issue if there was a way to customize rendering for EnumAction.BOW,
      * but there is seemingly no way to do this.
+     * TODO investigate a better way to do this.
      *
      * @param event the event
      */
@@ -176,6 +184,26 @@ public final class Client extends MoreBows implements IModGuiFactory, IRenderFac
         RenderingRegistry.registerEntityRenderingHandler(CustomArrow.class, new Client());
     }
 
+    // TODO review
+    @SubscribeEvent
+    public void registerModels(ModelRegistryEvent event) {
+        for (final Item item : allItems) {
+            ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName().toString()));
+        }
+    }
+
+    /**
+     * Calls conf() when the Configuration changes.
+     *
+     * @param event the event
+     */
+    @SubscribeEvent
+    public void confChange(OnConfigChangedEvent event) {
+        if (MOD_ID.equals(event.getModID())) {
+            conf();
+        }
+    }
+
     @Override
     public Set<RuntimeOptionCategoryElement> runtimeGuiCategories() {
         return null;
@@ -195,20 +223,5 @@ public final class Client extends MoreBows implements IModGuiFactory, IRenderFac
     public Render<CustomArrow> createRenderFor(RenderManager manager) {
         return new ModRenderer(manager);
     }
-
-    /**
-     * TODO Possibly implement something like this but more compatible.
-     *
-     * <pre>
-     * {@code
-     * {@literal @}SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
-     * public void guiChange(GuiOpenEvent event) {
-     *     if (event.gui instanceof GuiIngameModOptions) {
-     *         event.gui = new Config(null);
-     *     }
-     * }
-     * }
-     * </pre>
-     */
 
 }

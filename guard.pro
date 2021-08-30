@@ -57,10 +57,6 @@
 -optimizationpasses 64
 -mergeinterfacesaggressively
 -overloadaggressively
-
-# TODO Decide if this is a good idea. allowaccessmodification is probably safe. dontpreverify seems to work on modern JVMs (target needs to be Java 6, lower doesn't matter as preverification doesn't exist yet), need to do more exhaustive testing.
-
--dontpreverify
 -allowaccessmodification
 
 # Debug info

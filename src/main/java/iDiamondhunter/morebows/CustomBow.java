@@ -33,11 +33,6 @@ public final class CustomBow extends ItemBow {
     /* Bow instance variables */
     private final byte bowType;
     private final double damageMult;
-    /**
-     * The amount of time it takes to switch bow icons when the bow is being drawn back.
-     * TODO This is not a great solution.
-     */
-    //public final byte[] iconTimes;
     private final boolean multiShot;
     public final float powerDiv;
     private final EnumRarity rarity;
@@ -318,15 +313,4 @@ public final class CustomBow extends ItemBow {
         return entityarrow;
     }
 
-    // TODO why was this a static method :(
-    /*private float customArrowVelocity(int charge) {
-        float shotVelocity = charge / powerDiv;
-        shotVelocity = ((shotVelocity * shotVelocity) + (shotVelocity * 2.0F)) / 3.0F;
-
-        if (shotVelocity > 1.0F) {
-            shotVelocity = 1.0F;
-        }
-
-        return shotVelocity;
-    }*/
 }
