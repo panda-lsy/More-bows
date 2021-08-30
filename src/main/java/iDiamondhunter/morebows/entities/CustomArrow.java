@@ -167,7 +167,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
                      */
 
                     // TODO Forge suggests using inBelowState.isSideSolid(IBlockAccess, BlockPos, EnumFacing.UP), not sure why
-                    if ((inBlock == Blocks.AIR) && (downBlockState.isTopSolid())) {
+                    if ((inBlock == Blocks.AIR) && downBlockState.isTopSolid()) {
                         world.setBlockState(inBlockPos, Blocks.SNOW_LAYER.getDefaultState());
                     } else if (inBlock == Blocks.SNOW_LAYER) {
                         final int currentSnowLevel = inBlockState.getValue(BlockSnow.LAYERS);
