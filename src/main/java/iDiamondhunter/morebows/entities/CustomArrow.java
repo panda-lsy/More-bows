@@ -19,6 +19,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -33,8 +34,6 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
 
     /** If this is the first time this arrow has hit a block. */
     private boolean firstBlockHit = true;
-    /** How many ticks this arrow has been in the ground for. -1 is used to indicate that the arrow has not yet hit the ground. */
-    private byte inTicks = -1;
     /** The type of this arrow. In an ideal world, this would be final, but this is not an ideal world. See readSpawnData. */
     public byte type = ARROW_TYPE_NOT_CUSTOM;
 
@@ -67,7 +66,6 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
      *
      * @param a used in super construction
      * @param b used in super construction
-     * @param c used in super construction
      */
     public CustomArrow(World a, EntityLivingBase b) {
         super(a, b);
@@ -78,7 +76,6 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
      *
      * @param a    used in super construction
      * @param b    used in super construction
-     * @param c    used in super construction
      * @param type the type of arrow
      */
     public CustomArrow(World a, EntityLivingBase b, byte type) {
@@ -111,31 +108,18 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
                 extinguish();
             }
 
-            /**
-             * Hack to determine when the arrow has hit the ground. inGround is a private field.
-             * Access transformers can be used for this, but they're are annoying to deal with and they aren't always safe.
-             * However, instead we can take advantage of the fact that arrowShake is always set to 7 after an arrow has hit the ground.
-             * inTicks is used to store this information.
-             *
-             * TODO replace with inGround, it's not private anymore
-             */
-            if (arrowShake == 7) {
-                inTicks = 0;
-                pickupStatus = PickupStatus.DISALLOWED;
-            }
+            if (timeInGround > 0) {
+                if (timeInGround == 1) {
+                    pickupStatus = PickupStatus.DISALLOWED;
+                }
 
-            if (inTicks > -1) {
-                inTicks++;
-
-                /** Shrinks the size of the frost arrow if it's in the ground and the mod is in old rendering mode TODO this logic doesn't work anymore? */
+                /** Shrinks the size of the frost arrow if it's in the ground and the mod is in old rendering mode. */
                 if (firstBlockHit && world.isRemote && oldFrostArrowRendering) {
                     setSize(0.1F, 0.1F);
-                    /** For some reason, this prevents the arrow from displaying in the wrong position after the size is set. TODO Figure out why this works. */
-                    setPosition(posX, posY, posZ);
                     firstBlockHit = false;
                 }
 
-                if (inTicks <= 2) {
+                if (timeInGround <= 3) {
                     world.spawnParticle(EnumParticleTypes.SNOWBALL, posX, posY, posZ, 0.0D, 0.0D, 0.0D);
                 }
 
@@ -149,16 +133,17 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
                  * }
                  * </pre>
                  */
-                if (inTicks <= 30) {
-                    world.spawnParticle(EnumParticleTypes.WATER_SPLASH, posX, posY - 0.3D, posZ, 0.0D, 0.0D, 0.0D);
+                if (timeInGround <= 31) {
+                    world.spawnParticle(EnumParticleTypes.WATER_SPLASH, posX, posY, posZ, 0.0D, 0.0D, 0.0D);
                 }
 
                 /** Responsible for adding snow layers on top the block the arrow hits, or "freezing" the water it's in by setting the block to ice. */
-                if (inTicks == 64) {
+                if (timeInGround == 65) {
                     final BlockPos inBlockPos = new BlockPos(this);
                     final IBlockState inBlockState = world.getBlockState(inBlockPos);
                     final Block inBlock = inBlockState.getBlock();
-                    final IBlockState downBlockState = world.getBlockState(inBlockPos.down());
+                    final BlockPos downBlockPos = inBlockPos.down();
+                    final IBlockState downBlockState = world.getBlockState(downBlockPos);
 
                     /*
                      * If this arrow is inside an air block, and there is a block underneath it with a solid surface, place a snow layer on top of that block.
@@ -166,8 +151,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
                      * If this arrow is inside water, replace the water with ice.
                      */
 
-                    // TODO Forge suggests using inBelowState.isSideSolid(IBlockAccess, BlockPos, EnumFacing.UP), not sure why
-                    if ((inBlock == Blocks.AIR) && downBlockState.isTopSolid()) {
+                    if ((inBlock == Blocks.AIR) && downBlockState.isSideSolid(world, downBlockPos, EnumFacing.UP)) {
                         world.setBlockState(inBlockPos, Blocks.SNOW_LAYER.getDefaultState());
                     } else if (inBlock == Blocks.SNOW_LAYER) {
                         final int currentSnowLevel = inBlockState.getValue(BlockSnow.LAYERS);
@@ -190,7 +174,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
                     }
                 }
 
-                if (inTicks >= 64) {
+                if (timeInGround >= 65) {
                     setDead();
                 }
             } else if (super.getIsCritical()) {
@@ -255,13 +239,11 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
     @Override
     public void readEntityFromNBT(NBTTagCompound tag) {
         super.readEntityFromNBT(tag);
-        inTicks = tag.getByte("inTicks");
         type = tag.getByte("type");
     }
 
     @Override
     public void readSpawnData(ByteBuf data) {
-        inTicks = data.readByte();
         type = data.readByte();
         /** See NetHandlerPlayClient.handleSpawnObject (line 414) TODO this comment is outdated */
         final Entity shooter = world.getEntityByID(data.readInt());
@@ -274,13 +256,11 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
     @Override
     public void writeEntityToNBT(NBTTagCompound tag) {
         super.writeEntityToNBT(tag);
-        tag.setByte("inTicks", inTicks);
         tag.setByte("type", type);
     }
 
     @Override
     public void writeSpawnData(ByteBuf data) {
-        data.writeByte(inTicks);
         data.writeByte(type);
         data.writeInt(shootingEntity != null ? shootingEntity.getEntityId() : -1);
     }
