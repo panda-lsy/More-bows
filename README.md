@@ -1,5 +1,3 @@
-# Warning: This port is very WIP, come back later!
-
 # More Bows: Restrung!
 
 [![CurseForge downloads badge](http://cf.way2muchnoise.eu/full_466902_downloads.svg "CurseForge downloads")](https://www.curseforge.com/minecraft/mc-mods/more-bows-restrung)
@@ -34,7 +32,7 @@ Descriptions taken from [iDiamondhunter's page for the mod](https://www.minecraf
 
 ### Building:
 
-_This was outdated, so I removed it! Remind me to update this when the port is done..._
+The buildscript for this mod uses a fairly standard Gradle 6.x + ForgeGradle 4.x combination. A Java 8 JDK is required.
 
 ### Licence:
 
