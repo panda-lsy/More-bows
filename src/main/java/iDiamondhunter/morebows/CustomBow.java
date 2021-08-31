@@ -64,6 +64,25 @@ public final class CustomBow extends ItemBow {
         });
     }
 
+    // TODO review
+    private EntityArrow arrowHelper(World world, EntityPlayer player, float velocity, ItemStack ammo, ItemArrow arrow) {
+        final EntityArrow entityarrow = arrow.createArrow(world, ammo, player);
+        return arrowHelperHelper(world, player, velocity, ammo, entityarrow);
+    }
+
+    // TODO review
+    private EntityArrow arrowHelperHelper(World world, EntityPlayer player, float velocity, ItemStack ammo, EntityArrow entityarrow) {
+        entityarrow = customizeArrow(entityarrow);
+        entityarrow.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, velocity, 1.0F);
+        return entityarrow;
+    }
+
+    // TODO review
+    private EntityArrow customArrowHelper(World world, EntityPlayer player, float velocity, ItemStack ammo, ItemArrow arrow) {
+        final EntityArrow entityarrow = new CustomArrow(world, player, bowType);
+        return arrowHelperHelper(world, player, velocity, ammo, entityarrow);
+    }
+
     @Override
     public IRarity getForgeRarity(ItemStack stack) {
         return rarity;
@@ -293,25 +312,6 @@ public final class CustomBow extends ItemBow {
         }
 
         return arrowHelper(world, player, velocity, ammo, arrow);
-    }
-
-    // TODO review
-    private EntityArrow arrowHelper(World world, EntityPlayer player, float velocity, ItemStack ammo, ItemArrow arrow) {
-        final EntityArrow entityarrow = arrow.createArrow(world, ammo, player);
-        return arrowHelperHelper(world, player, velocity, ammo, entityarrow);
-    }
-
-    // TODO review
-    private EntityArrow customArrowHelper(World world, EntityPlayer player, float velocity, ItemStack ammo, ItemArrow arrow) {
-        final EntityArrow entityarrow = new CustomArrow(world, player, bowType);
-        return arrowHelperHelper(world, player, velocity, ammo, entityarrow);
-    }
-
-    // TODO review
-    private EntityArrow arrowHelperHelper(World world, EntityPlayer player, float velocity, ItemStack ammo, EntityArrow entityarrow) {
-        entityarrow = customizeArrow(entityarrow);
-        entityarrow.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, velocity, 1.0F);
-        return entityarrow;
     }
 
 }

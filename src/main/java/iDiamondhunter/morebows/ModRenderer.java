@@ -14,11 +14,11 @@ import net.minecraft.util.ResourceLocation;
 
 public final class ModRenderer extends RenderArrow<CustomArrow> {
 
+    private static final ResourceLocation ARROWS = new ResourceLocation("textures/entity/projectiles/arrow.png");
+    private static final ResourceLocation BLOCKS = TextureMap.LOCATION_BLOCKS_TEXTURE;
+
     private final Render<Entity> cube;
     private final Render<Entity> snow;
-
-    private static final ResourceLocation BLOCKS = TextureMap.LOCATION_BLOCKS_TEXTURE;
-    private static final ResourceLocation ARROWS = new ResourceLocation("textures/entity/projectiles/arrow.png");
 
     protected ModRenderer(RenderManager renderManager) {
         super(renderManager);

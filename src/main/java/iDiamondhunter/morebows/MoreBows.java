@@ -204,6 +204,22 @@ public class MoreBows {
         MinecraftForge.EVENT_BUS.register(proxy);
     }
 
+    /** This was once used to register anything needed both client side and server side, but it looks like it's not needed for server-side registration anymore. TODO probably remove */
+    protected void register() {
+        // This space left unintentionally blank?
+    }
+
+    // TODO review
+    @SubscribeEvent
+    public final void registerEntities(RegistryEvent.Register<EntityEntry> event) {
+        event.getRegistry().registerAll(customArrowEntry, arrowSpawnerEntry);
+    }
+
+    // TODO modify recipes involving bows?
+    /*@SubscribeEvent
+    public final void registerRecipes(RegistryEvent.Register<IRecipe> event) {
+    }*/
+
     // TODO review
     @SubscribeEvent
     public final void registerItems(RegistryEvent.Register<Item> event) {
@@ -221,22 +237,6 @@ public class MoreBows {
         OreDictionary.registerOre("bowDiamond", new ItemStack(DiamondBow, 1, OreDictionary.WILDCARD_VALUE));
         OreDictionary.registerOre("bowGold", new ItemStack(GoldBow, 1, OreDictionary.WILDCARD_VALUE));
         OreDictionary.registerOre("bowIron", new ItemStack(IronBow, 1, OreDictionary.WILDCARD_VALUE));
-    }
-
-    // TODO review
-    @SubscribeEvent
-    public final void registerEntities(RegistryEvent.Register<EntityEntry> event) {
-        event.getRegistry().registerAll(customArrowEntry, arrowSpawnerEntry);
-    }
-
-    // TODO modify recipes involving bows?
-    /*@SubscribeEvent
-    public static void registerRecipes(RegistryEvent.Register<IRecipe> event) {
-    }*/
-
-    /** This was once used to register anything needed both client side and server side, but it looks like it's not needed for server-side registration anymore. TODO probably remove */
-    protected void register() {
-        // This space left unintentionally blank?
     }
 
 }

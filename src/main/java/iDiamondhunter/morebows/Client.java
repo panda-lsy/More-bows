@@ -70,6 +70,97 @@ public final class Client extends MoreBows implements IModGuiFactory, IRenderFac
     }
 
     /**
+     * Calls conf() when the Configuration changes.
+     *
+     * @param event the event
+     */
+    @SubscribeEvent
+    public void confChange(OnConfigChangedEvent event) {
+        if (MOD_ID.equals(event.getModID())) {
+            conf();
+        }
+    }
+
+    @Override
+    public GuiScreen createConfigGui(GuiScreen parent) {
+        return new Config(parent);
+    }
+
+    @Override
+    public Render<CustomArrow> createRenderFor(RenderManager manager) {
+        return new ModRenderer(manager);
+    }
+
+    /**
+     * Handles the FOV "zoom in" when drawing a custom bow.
+     *
+     * @param event the event
+     */
+    @SubscribeEvent
+    public void FOV(FOVUpdateEvent event) {
+        if ((event.getEntity().getActiveItemStack() != null) && (event.getEntity().getActiveItemStack().getItem() instanceof CustomBow)) {
+            float finalFov = event.getFov();
+            // First, we have to reverse the standard bow zoom.
+            // Minecraft helpfully applies the standard bow zoom to any item that is an instance of a ItemBow.
+            // However, our CustomBows draw back at different speeds, so the standard zoom is not at the right speed.
+            // To compensate for this, we just calculate the standard bow zoom, and apply it in reverse.
+            float realBow = (bowMaxUseDuration - event.getEntity().getItemInUseCount()) / 20.0F;
+
+            if (realBow > 1.0F) {
+                realBow = 1.0F;
+            } else {
+                realBow *= realBow;
+            }
+
+            // Minecraft uses finalFov *= 1.0F - (realBow * 0.15F) to calculate the standard bow zoom.
+            // To reverse this, we just divide it instead.
+            finalFov /= 1.0F - (realBow * 0.15F);
+            // We now calculate and apply our CustomBow zoom.
+            // The only difference between standard bow zoom and CustomBow zoom is that we change the hardcoded value of 20.0F to whatever powerDiv is.
+            float customBow = (bowMaxUseDuration - event.getEntity().getItemInUseCount()) / ((CustomBow) event.getEntity().getActiveItemStack().getItem()).powerDiv;
+
+            if (customBow > 1.0F) {
+                customBow = 1.0F;
+            } else {
+                customBow *= customBow;
+            }
+
+            finalFov *= 1.0F - (customBow * 0.15F);
+            event.setNewfov(finalFov);
+        }
+    }
+
+    @Override
+    public boolean hasConfigGui() {
+        return true;
+    }
+
+    @Override
+    public void initialize(Minecraft a) {
+        /* This space left intentionally blank */
+    }
+
+    /** If you know why mainConfigGuiClass wasn't designed to use an anonymous inner class, please let me know :( */
+    public Class<? extends GuiScreen> mainConfigGuiClass() {
+        return Config.class;
+    }
+
+    @Override
+    protected void register() {
+        super.register();
+        /** Registration of custom renderers */
+        RenderingRegistry.registerEntityRenderingHandler(CustomArrow.class, new Client());
+    }
+
+    // TODO review
+    @SubscribeEvent
+    public void registerModels(ModelRegistryEvent event) {
+        for (final Item item : allItems) {
+            ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName().toString()));
+        }
+    }
+
+    /**
      * Handles rendering a CustomBow when drawing it back in first person.
      * This is necessary to make the bow draw back at the right speed.
      * This would not be an issue if there was a way to customize rendering for EnumAction.BOW,
@@ -128,100 +219,9 @@ public final class Client extends MoreBows implements IModGuiFactory, IRenderFac
         }
     }
 
-    /**
-     * Handles the FOV "zoom in" when drawing a custom bow.
-     *
-     * @param event the event
-     */
-    @SubscribeEvent
-    public void FOV(FOVUpdateEvent event) {
-        if ((event.getEntity().getActiveItemStack() != null) && (event.getEntity().getActiveItemStack().getItem() instanceof CustomBow)) {
-            float finalFov = event.getFov();
-            // First, we have to reverse the standard bow zoom.
-            // Minecraft helpfully applies the standard bow zoom to any item that is an instance of a ItemBow.
-            // However, our CustomBows draw back at different speeds, so the standard zoom is not at the right speed.
-            // To compensate for this, we just calculate the standard bow zoom, and apply it in reverse.
-            float realBow = (bowMaxUseDuration - event.getEntity().getItemInUseCount()) / 20.0F;
-
-            if (realBow > 1.0F) {
-                realBow = 1.0F;
-            } else {
-                realBow *= realBow;
-            }
-
-            // Minecraft uses finalFov *= 1.0F - (realBow * 0.15F) to calculate the standard bow zoom.
-            // To reverse this, we just divide it instead.
-            finalFov /= 1.0F - (realBow * 0.15F);
-            // We now calculate and apply our CustomBow zoom.
-            // The only difference between standard bow zoom and CustomBow zoom is that we change the hardcoded value of 20.0F to whatever powerDiv is.
-            float customBow = (bowMaxUseDuration - event.getEntity().getItemInUseCount()) / ((CustomBow) event.getEntity().getActiveItemStack().getItem()).powerDiv;
-
-            if (customBow > 1.0F) {
-                customBow = 1.0F;
-            } else {
-                customBow *= customBow;
-            }
-
-            finalFov *= 1.0F - (customBow * 0.15F);
-            event.setNewfov(finalFov);
-        }
-    }
-
-    @Override
-    public void initialize(Minecraft a) {
-        /* This space left intentionally blank */
-    }
-
-    /** If you know why mainConfigGuiClass wasn't designed to use an anonymous inner class, please let me know :( */
-    public Class<? extends GuiScreen> mainConfigGuiClass() {
-        return Config.class;
-    }
-
-    @Override
-    protected void register() {
-        super.register();
-        /** Registration of custom renderers */
-        RenderingRegistry.registerEntityRenderingHandler(CustomArrow.class, new Client());
-    }
-
-    // TODO review
-    @SubscribeEvent
-    public void registerModels(ModelRegistryEvent event) {
-        for (final Item item : allItems) {
-            ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName().toString()));
-        }
-    }
-
-    /**
-     * Calls conf() when the Configuration changes.
-     *
-     * @param event the event
-     */
-    @SubscribeEvent
-    public void confChange(OnConfigChangedEvent event) {
-        if (MOD_ID.equals(event.getModID())) {
-            conf();
-        }
-    }
-
     @Override
     public Set<RuntimeOptionCategoryElement> runtimeGuiCategories() {
         return null;
-    }
-
-    @Override
-    public boolean hasConfigGui() {
-        return true;
-    }
-
-    @Override
-    public GuiScreen createConfigGui(GuiScreen parent) {
-        return new Config(parent);
-    }
-
-    @Override
-    public Render<CustomArrow> createRenderFor(RenderManager manager) {
-        return new ModRenderer(manager);
     }
 
 }

@@ -83,6 +83,63 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
         this.type = type;
     }
 
+    /**
+     * Creates the particle effects when a custom arrow hits an entity.
+     */
+    @Override
+    protected void arrowHit(EntityLivingBase living) {
+        final EnumParticleTypes part;
+        final int amount;
+        final double velocity;
+        final boolean randDisp;
+
+        switch (type) {
+        case ARROW_TYPE_ENDER:
+            part = EnumParticleTypes.PORTAL;
+            amount = 3;
+            randDisp = true;
+            velocity = 1;
+            break;
+
+        case ARROW_TYPE_FIRE:
+            if (isBurning()) {
+                part = EnumParticleTypes.FLAME;
+            } else {
+                part = EnumParticleTypes.SMOKE_NORMAL;
+            }
+
+            amount = 5;
+            randDisp = true;
+            velocity = 0.05;
+            break;
+
+        case ARROW_TYPE_FROST:
+            part = EnumParticleTypes.WATER_SPLASH;
+            amount = 1;
+            randDisp = false;
+            velocity = 0.01;
+            break;
+
+        default:
+            part = EnumParticleTypes.SUSPENDED_DEPTH;
+            amount = 20;
+            randDisp = true;
+            velocity = 0;
+            break;
+        }
+
+        // TODO replace with client-side method
+        for (int i = 0; i < amount; i++) {
+            MoreBows.tryPart(world, living, part, randDisp, velocity);
+        }
+    }
+
+    /** TODO does this ever matter? if not, consider just returning null. */
+    @Override
+    protected ItemStack getArrowStack() {
+        return new ItemStack(Items.ARROW);
+    }
+
     /** This may not accurately return whether an arrow is critical or not. This is to hide crit particle trails, when a custom arrow has a custom particle trail. */
     @Override
     @SideOnly(Side.CLIENT)
@@ -185,57 +242,6 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
         }
     }
 
-    /**
-     * Creates the particle effects when a custom arrow hits an entity.
-     */
-    @Override
-    protected void arrowHit(EntityLivingBase living) {
-        final EnumParticleTypes part;
-        final int amount;
-        final double velocity;
-        final boolean randDisp;
-
-        switch (type) {
-        case ARROW_TYPE_ENDER:
-            part = EnumParticleTypes.PORTAL;
-            amount = 3;
-            randDisp = true;
-            velocity = 1;
-            break;
-
-        case ARROW_TYPE_FIRE:
-            if (isBurning()) {
-                part = EnumParticleTypes.FLAME;
-            } else {
-                part = EnumParticleTypes.SMOKE_NORMAL;
-            }
-
-            amount = 5;
-            randDisp = true;
-            velocity = 0.05;
-            break;
-
-        case ARROW_TYPE_FROST:
-            part = EnumParticleTypes.WATER_SPLASH;
-            amount = 1;
-            randDisp = false;
-            velocity = 0.01;
-            break;
-
-        default:
-            part = EnumParticleTypes.SUSPENDED_DEPTH;
-            amount = 20;
-            randDisp = true;
-            velocity = 0;
-            break;
-        }
-
-        // TODO replace with client-side method
-        for (int i = 0; i < amount; i++) {
-            MoreBows.tryPart(world, living, part, randDisp, velocity);
-        }
-    }
-
     @Override
     public void readEntityFromNBT(NBTTagCompound tag) {
         super.readEntityFromNBT(tag);
@@ -263,12 +269,6 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
     public void writeSpawnData(ByteBuf data) {
         data.writeByte(type);
         data.writeInt(shootingEntity != null ? shootingEntity.getEntityId() : -1);
-    }
-
-    /** TODO does this ever matter? if not, consider just returning null. */
-    @Override
-    protected ItemStack getArrowStack() {
-        return new ItemStack(Items.ARROW);
     }
 
 }
