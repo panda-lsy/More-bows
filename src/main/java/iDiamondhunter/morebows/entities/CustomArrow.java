@@ -43,6 +43,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
      *
      * @param a used in super construction
      */
+    @SuppressWarnings("unused")
     public CustomArrow(World a) {
         super(a);
     }
@@ -56,6 +57,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
      * @param c used in super construction
      * @param d used in super construction
      */
+    @SuppressWarnings("unused")
     public CustomArrow(World a, double b, double c, double d) {
         super(a, b, c, d);
     }
@@ -67,6 +69,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
      * @param a used in super construction
      * @param b used in super construction
      */
+    @SuppressWarnings("unused")
     public CustomArrow(World a, EntityLivingBase b) {
         super(a, b);
     }
@@ -144,7 +147,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
     @Override
     @SideOnly(Side.CLIENT)
     public boolean getIsCritical() {
-        return type == ARROW_TYPE_FROST ? false : super.getIsCritical();
+        return (type != ARROW_TYPE_FROST) && super.getIsCritical();
         /**
          * Obviously, you're just a bad shot :D
          * This is a hack to prevent the vanilla crit particles from displaying for frost arrows, so that they can have a custom particle trail.
@@ -217,7 +220,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
                             final IBlockState extraSnow = inBlockState.withProperty(BlockSnow.LAYERS, currentSnowLevel + 1);
                             final AxisAlignedBB extraSnowBB = extraSnow.getCollisionBoundingBox(world, inBlockPos);
 
-                            if (world.checkNoEntityCollision(extraSnowBB.offset(inBlockPos))) {
+                            if ((extraSnowBB != null) && world.checkNoEntityCollision(extraSnowBB.offset(inBlockPos))) {
                                 world.setBlockState(inBlockPos, extraSnow, 10);
                             }
                         }

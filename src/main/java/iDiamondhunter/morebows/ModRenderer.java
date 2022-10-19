@@ -20,7 +20,7 @@ public final class ModRenderer extends RenderArrow<CustomArrow> {
     private final Render<Entity> cube;
     private final Render<Entity> snow;
 
-    protected ModRenderer(RenderManager renderManager) {
+    ModRenderer(RenderManager renderManager) {
         super(renderManager);
         /** Not sure if this is a super cursed hack, of if it's actually the best way to do this... */
         cube = renderManager.getEntityClassRenderObject(Entity.class);

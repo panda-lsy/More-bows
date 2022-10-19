@@ -18,6 +18,7 @@ import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
+import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
@@ -42,7 +43,7 @@ public final class CustomBow extends ItemBow {
      * A more customizable bow than the vanilla one.
      *
      * @param maxDamage  The maximum damage a bow can do.
-     * @param bowType    The type of arrows this bow shoots. This also influences some of the behaviors of the bow as well.
+     * @param bowType    The type of arrows this bow shoots. This also influences some behaviors of the bow as well.
      * @param damageMult The multiplier to damage done by an arrow shot by this bow.
      * @param multiShot  A dirty, dirty hack, indicating if this bow shoots multiple arrows or not.
      * @param powerDiv   The power divisor of this bow. TODO document better.
@@ -67,20 +68,20 @@ public final class CustomBow extends ItemBow {
     // TODO review
     private EntityArrow arrowHelper(World world, EntityPlayer player, float velocity, ItemStack ammo, ItemArrow arrow) {
         final EntityArrow entityarrow = arrow.createArrow(world, ammo, player);
-        return arrowHelperHelper(world, player, velocity, ammo, entityarrow);
+        return arrowHelperHelper(player, velocity, entityarrow);
     }
 
     // TODO review
-    private EntityArrow arrowHelperHelper(World world, EntityPlayer player, float velocity, ItemStack ammo, EntityArrow entityarrow) {
+    private EntityArrow arrowHelperHelper(EntityPlayer player, float velocity, EntityArrow entityarrow) {
         entityarrow = customizeArrow(entityarrow);
         entityarrow.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, velocity, 1.0F);
         return entityarrow;
     }
 
     // TODO review
-    private EntityArrow customArrowHelper(World world, EntityPlayer player, float velocity, ItemStack ammo, ItemArrow arrow) {
+    private EntityArrow customArrowHelper(World world, EntityPlayer player, float velocity) {
         final EntityArrow entityarrow = new CustomArrow(world, player, bowType);
-        return arrowHelperHelper(world, player, velocity, ammo, entityarrow);
+        return arrowHelperHelper(player, velocity, entityarrow);
     }
 
     @Override
@@ -203,30 +204,30 @@ public final class CustomBow extends ItemBow {
 
                 // Add enchantment effects / other modifiers to each arrow
                 // TODO review
-                for (int i = 0; i < arrs.length; ++i) {
+                for (final EntityArrow arr : arrs) {
                     if (isCrit) { /* setIsCritical calls dataWatcher methods, avoid calling it unless needed. */
-                        arrs[i].setIsCritical(true);
+                        arr.setIsCritical(true);
                     }
 
                     if (power > 0) {
-                        arrs[i].setDamage(arrs[i].getDamage() + (power * 0.5D) + 0.5D);
+                        arr.setDamage(arr.getDamage() + (power * 0.5D) + 0.5D);
                     }
 
                     if (knockback > 0) {
-                        arrs[i].setKnockbackStrength(knockback);
+                        arr.setKnockbackStrength(knockback);
                     }
 
                     if (flame) {
-                        arrs[i].setFire(100);
+                        arr.setFire(100);
 
                         if (bowType == ARROW_TYPE_FIRE) {
-                            arrs[i].setDamage(arrs[i].getDamage() * 1.25D);
+                            arr.setDamage(arr.getDamage() * 1.25D);
                         }
                     } else if (bowType == ARROW_TYPE_FIRE) {
-                        arrs[i].setFire(50);
+                        arr.setFire(50);
                     }
 
-                    arrs[i].setDamage(arrs[i].getDamage() * damageMult);
+                    arr.setDamage(arr.getDamage() * damageMult);
                 }
 
                 bow.damageItem(1, player);
@@ -274,8 +275,8 @@ public final class CustomBow extends ItemBow {
                         }
                     }
                 } else { // Other bows
-                    for (int i = 0; i < arrs.length; ++i) {
-                        world.spawnEntity(arrs[i]);
+                    for (final EntityArrow arr : arrs) {
+                        world.spawnEntity(arr);
                     }
                 }
             }
@@ -301,14 +302,18 @@ public final class CustomBow extends ItemBow {
                 }
             }
 
-            player.addStat(StatList.getObjectUseStats(this));
+            final StatBase stat = StatList.getObjectUseStats(this);
+
+            if (stat != null) {
+                player.addStat(stat);
+            }
         }
     }
 
     // TODO review
     private EntityArrow possiblyCustomArrowHelper(World world, EntityPlayer player, float velocity, ItemStack ammo, ItemArrow arrow) {
         if (arrow == Items.ARROW) {
-            return customArrowHelper(world, player, velocity, ammo, arrow);
+            return customArrowHelper(world, player, velocity);
         }
 
         return arrowHelper(world, player, velocity, ammo, arrow);

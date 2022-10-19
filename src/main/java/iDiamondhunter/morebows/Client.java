@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -98,7 +99,7 @@ public final class Client extends MoreBows implements IModGuiFactory, IRenderFac
      */
     @SubscribeEvent
     public void FOV(FOVUpdateEvent event) {
-        if ((event.getEntity().getActiveItemStack() != null) && (event.getEntity().getActiveItemStack().getItem() instanceof CustomBow)) {
+        if (event.getEntity().getActiveItemStack().getItem() instanceof CustomBow) {
             float finalFov = event.getFov();
             // First, we have to reverse the standard bow zoom.
             // Minecraft helpfully applies the standard bow zoom to any item that is an instance of a ItemBow.
@@ -140,11 +141,6 @@ public final class Client extends MoreBows implements IModGuiFactory, IRenderFac
         /* This space left intentionally blank */
     }
 
-    /** If you know why mainConfigGuiClass wasn't designed to use an anonymous inner class, please let me know :( */
-    public Class<? extends GuiScreen> mainConfigGuiClass() {
-        return Config.class;
-    }
-
     @Override
     protected void register() {
         super.register();
@@ -156,7 +152,11 @@ public final class Client extends MoreBows implements IModGuiFactory, IRenderFac
     @SubscribeEvent
     public void registerModels(ModelRegistryEvent event) {
         for (final Item item : allItems) {
-            ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName().toString()));
+            final ResourceLocation itemLocation = item.getRegistryName();
+
+            if (itemLocation != null) {
+                ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(itemLocation.toString()));
+            }
         }
     }
 
