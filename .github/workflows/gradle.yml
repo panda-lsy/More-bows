@@ -34,7 +34,7 @@ jobs:
       with:
         gradle-version: wrapper
         cache-read-only: ${{ github.ref != 'refs/heads/forge-1.12.2' && github.ref != 'refs/heads/forge-1.7.10' }}
-        arguments: build --scan
+        arguments: build --scan --stacktrace --warning-mode all
     - name: Rezip mod .jar files to remove directory entries
       run: bash removeDirectoryEntries.sh
     - name: Run strip-nondeterminism on built .jar files
