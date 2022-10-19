@@ -6,7 +6,8 @@ name: Java CI with Gradle (Forge 1.12.2 - draft release)
 on:
   push:
     # Sequence of patterns matched against refs/tags
-    tags: 'v*1.12.2' # Push events to matching v*+1.12.2
+    tags: 
+      - 'v*1.12.2' # Push events to matching v*+1.12.2
 
 jobs:
   build:
@@ -15,11 +16,12 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Set up JDK 8
       id: setup_jdk_8
-      uses: actions/setup-java@v1
+      uses: actions/setup-java@v3
       with:
+        distribution: 'zulu'
         java-version: 8
     - name: Install advancecomp
       run: sudo apt-get install advancecomp
@@ -28,12 +30,10 @@ jobs:
     - name: Build with Gradle
       env:
         BUILD_RELEASE: ${{ github.event.release.prerelease == false }}
-      uses: gradle/gradle-build-action@v1
+      uses: gradle/gradle-build-action@v2
       with:
         gradle-version: wrapper
-        distributions-cache-enabled: false
-        dependencies-cache-enabled: false
-        configuration-cache-enabled: false
+        cache-disabled: true
         arguments: build
     - name: Rezip mod .jar files to remove directory entries
       run: bash removeDirectoryEntries.sh
@@ -41,6 +41,7 @@ jobs:
       run: strip-nondeterminism build/libs/*.jar
     - name: Run advzip (-i 99999) on built .jar files
       run: advzip --shrink-insane -kzi 99999 -p build/libs/*.jar
+      # TODO Everything is now outdated
     - name: Draft release
       id: create_release
       uses: actions/create-release@v1
