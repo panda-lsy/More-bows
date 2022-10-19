@@ -16,7 +16,7 @@ buildscript {
         dependencies {
             classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         }
-        classpath 'com.guardsquare:proguard-gradle:7.1.1'
+        classpath 'com.guardsquare:proguard-gradle:7.2.2'
     }
 }
 
@@ -43,8 +43,8 @@ def compiler = javaToolchains.compilerFor {
     languageVersion = JavaLanguageVersion.of(8)
 }
 
-import groovy.json.JsonSlurper
 import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
 
 version = project.mod_version
 group = project.mod_group
@@ -110,8 +110,12 @@ processResources {
     // Validate and minify every JSON file.
     // Bonus super unnecessary micro-optimisation: mcmod.info and .mcmeta files are also JSON files!
     doLast {
-        fileTree(dir: outputs.files.asPath, includes: ["**/mcmod.info", "**/*.mcmeta", "**/*.json"]).each {
-            File file -> file.text = JsonOutput.toJson(new JsonSlurper().parse(file))
+        fileTree(dir: outputs.files.asPath, includes: [
+            "**/mcmod.info",
+            "**/*.mcmeta",
+            "**/*.json"
+        ]).each { File file ->
+            file.text = JsonOutput.toJson(new JsonSlurper().parse(file))
         }
     }
 }
@@ -192,7 +196,7 @@ artifacts {
 
 // TODO this is a bit dumb
 task deleteProGuardOutput(type: Delete, dependsOn: proguard) {
-   delete proguard.outputs.files.singleFile
+    delete proguard.outputs.files.singleFile
 }
 
 build.finalizedBy(cleanUnmappedJar, deleteProGuardOutput)
