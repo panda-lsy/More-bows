@@ -34,7 +34,7 @@ jobs:
       with:
         gradle-version: wrapper
         cache-disabled: true
-        arguments: build
+        arguments: build --scan
     - name: Rezip mod .jar files to remove directory entries
       run: bash removeDirectoryEntries.sh
     - name: Run strip-nondeterminism on built .jar files
