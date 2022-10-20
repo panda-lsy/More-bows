@@ -73,7 +73,7 @@ public final class ArrowSpawner extends Entity {
             if (ticksExisted == 1) {
                 /** Check that the arrows exist before accessing them. */
                 if (invalidArrAmount(arrows)) {
-                    MoreBows.modLog.error("Invalid arrow ammount when trying to spawn ender arrows!");
+                    MoreBows.modLog.error("Invalid arrow amount when trying to spawn ender arrows!");
                     setDead();
                     return;
                 }
@@ -85,14 +85,14 @@ public final class ArrowSpawner extends Entity {
             if (ticksExisted == 61) {
                 /** Check that the arrows exist before accessing them. */
                 if (invalidArrAmount(arrows)) {
-                    MoreBows.modLog.error("Invalid arrow ammount when trying to spawn ender arrows!");
+                    MoreBows.modLog.error("Invalid arrow amount when trying to spawn ender arrows!");
                     setDead();
                     return;
                 }
 
                 // Second batch of arrows TODO Check if accurate to older versions of the mod
                 world.spawnEntity(arrows[1]);
-                world.playSound(null, arrows[1].posX, arrows[1].posY, arrows[1].posZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.PLAYERS, 0.5F, (1F / ((rand.nextFloat() * 0.4F) + 1F)) + (shotVelocity * 0.4F));
+                world.playSound(null, arrows[1].posX, arrows[1].posY, arrows[1].posZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.PLAYERS, 0.5F, (1.0F / ((rand.nextFloat() * 0.4F) + 1.0F)) + (shotVelocity * 0.4F));
                 world.spawnEntity(arrows[2]);
                 arrows[2].posY++;
                 arrows[2].posX -= 1.25;
@@ -102,7 +102,7 @@ public final class ArrowSpawner extends Entity {
                 arrows[3].posY += 1.45;
                 arrows[3].posX -= 2.25;
                 arrows[3].posZ -= 0.75;
-                world.playSound(null, arrows[1].posX, arrows[1].posY, arrows[1].posZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.PLAYERS, 0.25F, (1F / ((rand.nextFloat() * 0.4F) + 1F)) + (shotVelocity * 0.3F));
+                world.playSound(null, arrows[1].posX, arrows[1].posY, arrows[1].posZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.PLAYERS, 0.25F, (1.0F / ((rand.nextFloat() * 0.4F) + 1.0F)) + (shotVelocity * 0.3F));
                 world.spawnEntity(arrows[4]);
                 arrows[4].posY += 2;
                 arrows[4].posX += 0.25;
@@ -112,7 +112,7 @@ public final class ArrowSpawner extends Entity {
                 arrows[5].posY += 1.75;
                 arrows[5].posX += 1.75;
                 arrows[5].posZ += 1.5;
-                world.playSound(null, arrows[1].posX, arrows[1].posY, arrows[1].posZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.PLAYERS, 0.5F, (1F / ((rand.nextFloat() * 0.4F) + 1F)) + (shotVelocity * 0.4F));
+                world.playSound(null, arrows[1].posX, arrows[1].posY, arrows[1].posZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.PLAYERS, 0.5F, (1.0F / ((rand.nextFloat() * 0.4F) + 1.0F)) + (shotVelocity * 0.4F));
             }
         }
     }

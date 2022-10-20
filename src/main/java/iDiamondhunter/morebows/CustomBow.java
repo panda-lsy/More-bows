@@ -159,7 +159,7 @@ public final class CustomBow extends ItemBow {
                     if (bowType == ARROW_TYPE_ENDER) { // Ender bow
                         arrs = new EntityArrow[] {
                             possiblyCustomArrowHelper(world, player, shotVelocity * (2.0F * 1.5F), ammo, arrow),
-                            possiblyCustomArrowHelper(world, player, shotVelocity * (1F * 1.5F), ammo, arrow),
+                            possiblyCustomArrowHelper(world, player, shotVelocity * (1.0F * 1.5F), ammo, arrow),
                             possiblyCustomArrowHelper(world, player, shotVelocity * (1.2F * 1.5F), ammo, arrow),
                             possiblyCustomArrowHelper(world, player, shotVelocity * (1.5F * 1.5F), ammo, arrow),
                             possiblyCustomArrowHelper(world, player, shotVelocity * (1.75F * 1.5F), ammo, arrow),

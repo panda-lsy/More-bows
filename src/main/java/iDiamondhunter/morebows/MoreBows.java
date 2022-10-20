@@ -96,7 +96,7 @@ public class MoreBows {
 
     /* Default values for bow construction */
     /** Default values for bow construction: the default damage multiplier. */
-    private static final double noDamageMult = 1D;
+    private static final double noDamageMult = 1.0D;
     /** Default values for bow construction: the default power divisor (TODO document better) */
     private static final float defaultPowerDiv = 20.0F;
     /** Default values for bow construction: the default type of arrow a bow shoots. */

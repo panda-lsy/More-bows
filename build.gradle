@@ -45,6 +45,7 @@ def compiler = javaToolchains.compilerFor {
 
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
+import proguard.gradle.ProGuardTask
 
 version = project.mod_version
 group = project.mod_group
@@ -169,7 +170,7 @@ task unmappedJar(type: Jar) {
 }
 
 // This task uses ProGuard to shrink the built .jar's file size and optimise the bytecode. TODO Cleanup.
-task proguard(dependsOn: unmappedJar, type: proguard.gradle.ProGuardTask) {
+task proguard(dependsOn: unmappedJar, type: ProGuardTask) {
     verbose
 
     // Use the non-remapped .jar as the input file, because ForgeGradle has a convient task to map it to obfuscated Minecraft class names for us when we're done optimising it
