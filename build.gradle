@@ -190,7 +190,7 @@ task proguard(dependsOn: unmappedJar, type: proguard.gradle.ProGuardTask) {
 }
 
 // TODO rethink probably
-task optimisedJar (type: Jar, dependsOn: proguard) {
+task optimisedJar(type: Jar, dependsOn: proguard) {
     from zipTree(proguard.outputs.files.singleFile)
     //classifier = "proguard"
 }
