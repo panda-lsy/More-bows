@@ -29,7 +29,7 @@ import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
 import net.minecraftforge.oredict.OreDictionary;
 
 /** If you're reading this, I'm very sorry you have to deal with my code. */
-@Mod(modid = MoreBows.MOD_ID, guiFactory = "iDiamondhunter.morebows.Client" /* Note: Forge likes to complain if there isn't something assigned to the "version" property when loading. It should get overwritten by the actual version in the mcmod.info file. */)
+@Mod(modid = MoreBows.MOD_ID, version = "${version}", guiFactory = "iDiamondhunter.morebows.Client", updateJSON="https://nerdthened.github.io/More-bows/update.json")
 public class MoreBows {
 
     /** The full name of More Bows */

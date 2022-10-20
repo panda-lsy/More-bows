@@ -120,6 +120,25 @@ processResources {
     }
 }
 
+// Hack to add variables to source code on build. TODO: Remove this
+task processSource(type: Sync) {
+    // This will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+
+    from('src/main/java') {
+        filesMatching('iDiamondhunter/morebows/MoreBows.java') {
+            expand 'version': version
+        }
+    }
+
+    into "$buildDir/srcHack"
+}
+
+// Hack to add variables to source code on build. TODO: Remove this
+compileJava {
+    source = processSource.outputs
+}
+
 // workaround for userdev bug
 tasks.create("copyResourceToClasses", Copy.class) {
     tasks.classes.dependsOn(it)
