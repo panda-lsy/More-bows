@@ -1,10 +1,11 @@
 package iDiamondhunter.morebows;
 
-import static iDiamondhunter.morebows.MoreBowsConfig.frostArrowsShouldBeCold;
-import static iDiamondhunter.morebows.MoreBowsConfig.oldFrostArrowMobSlowdown;
+import static iDiamondhunter.morebows.config.ConfigGeneral.frostArrowsShouldBeCold;
+import static iDiamondhunter.morebows.config.ConfigGeneral.oldFrostArrowMobSlowdown;
 
 import org.apache.logging.log4j.Logger;
 
+import iDiamondhunter.morebows.config.ConfigBows;
 import iDiamondhunter.morebows.entities.ArrowSpawner;
 import iDiamondhunter.morebows.entities.CustomArrow;
 import net.minecraft.entity.Entity;
@@ -39,7 +40,7 @@ public class MoreBows {
     static final String MOD_NAME = "More Bows Restrung";
 
     /** The mod ID of More Bows */
-    static final String MOD_ID = "morebows";
+    public static final String MOD_ID = "morebows";
 
     /** Used for naming items. */
     private static final String modSeparator = "morebows:";
@@ -88,25 +89,35 @@ public class MoreBows {
     private static final String FlameBowName = "flame_bow";
     private static final String FrostBowName = "frost_bow";
 
-    /* Default values for bow construction */
-    /** Default values for bow construction: the default damage multiplier. */
-    private static final double noDamageMult = 1.0D;
-    /** Default values for bow construction: the default power divisor (TODO document better) */
-    private static final float defaultPowerDiv = 20.0F;
     /** Default values for bow construction: the default type of arrow a bow shoots. */
     private static final byte defaultArrowType = ARROW_TYPE_NOT_CUSTOM;
 
-    /* Bow items. */
-    private static final Item DiamondBow = new CustomBow(1016, defaultArrowType, 2.25D, false, 6.0F, EnumRarity.RARE).setTranslationKey(DiamondBowName).setRegistryName(modSeparator + DiamondBowName);
-    private static final Item EnderBow = new CustomBow(215, ARROW_TYPE_ENDER, noDamageMult, true, 22.0F, EnumRarity.EPIC).setTranslationKey(EnderBowName).setRegistryName(modSeparator + EnderBowName);
-    private static final Item FlameBow = new CustomBow(576, ARROW_TYPE_FIRE, 2.0D, false, 15.0F, EnumRarity.UNCOMMON).setTranslationKey(FlameBowName).setRegistryName(modSeparator + FlameBowName);
-    private static final Item FrostBow = new CustomBow(550, ARROW_TYPE_FROST, noDamageMult, false, 26.0F, EnumRarity.COMMON).setTranslationKey(FrostBowName).setRegistryName(modSeparator + FrostBowName);
-    private static final Item GoldBow = new CustomBow(68, defaultArrowType, 2.5D, false, 6.0F, EnumRarity.UNCOMMON).setTranslationKey(GoldBowName).setRegistryName(modSeparator + GoldBowName);
-    private static final Item IronBow = new CustomBow(550, defaultArrowType, 1.5D, false, 17.0F, EnumRarity.COMMON).setTranslationKey(IronBowName).setRegistryName(modSeparator + IronBowName);
-    private static final Item MultiBow = new CustomBow(550, ARROW_TYPE_NOT_CUSTOM, noDamageMult, true, 13.0F, EnumRarity.RARE).setTranslationKey(MultiBowName).setRegistryName(modSeparator + MultiBowName);
-    private static final Item StoneBow = new CustomBow(484, defaultArrowType, 1.15D, false, defaultPowerDiv, EnumRarity.COMMON).setTranslationKey(StoneBowName).setRegistryName(modSeparator + StoneBowName);
+    private static Item DiamondBow;
+    private static Item EnderBow;
+    private static Item FlameBow;
+    private static Item FrostBow;
+    private static Item GoldBow;
+    private static Item IronBow;
+    private static Item MultiBow;
+    private static Item StoneBow;
 
-    static final Item[] allItems = { DiamondBow, EnderBow, FlameBow, FrostBow, GoldBow, IronBow, MultiBow, StoneBow } ;
+    private static Item[] allItems = null;
+
+    protected static final Item[] getAllItems () {
+        if (allItems == null) {
+            DiamondBow = new CustomBow(ConfigBows.DiamondBow.confDurability, defaultArrowType, ConfigBows.DiamondBow.confDamageMult, false, ConfigBows.DiamondBow.confPowerDiv, EnumRarity.RARE).setTranslationKey(DiamondBowName).setRegistryName(modSeparator + DiamondBowName);
+            EnderBow = new CustomBow(ConfigBows.EnderBow.confDurability, ARROW_TYPE_ENDER, ConfigBows.EnderBow.confDamageMult, true, ConfigBows.EnderBow.confPowerDiv, EnumRarity.EPIC).setTranslationKey(EnderBowName).setRegistryName(modSeparator + EnderBowName);
+            FlameBow = new CustomBow(ConfigBows.FlameBow.confDurability, ARROW_TYPE_FIRE, ConfigBows.FlameBow.confDamageMult, false, ConfigBows.FlameBow.confPowerDiv, EnumRarity.UNCOMMON).setTranslationKey(FlameBowName).setRegistryName(modSeparator + FlameBowName);
+            FrostBow = new CustomBow(ConfigBows.FrostBow.confDurability, ARROW_TYPE_FROST, ConfigBows.FrostBow.confDamageMult, false, ConfigBows.FrostBow.confPowerDiv, EnumRarity.COMMON).setTranslationKey(FrostBowName).setRegistryName(modSeparator + FrostBowName);
+            GoldBow = new CustomBow(ConfigBows.GoldBow.confDurability, defaultArrowType, ConfigBows.GoldBow.confDamageMult, false, ConfigBows.GoldBow.confPowerDiv, EnumRarity.UNCOMMON).setTranslationKey(GoldBowName).setRegistryName(modSeparator + GoldBowName);
+            IronBow = new CustomBow(ConfigBows.IronBow.confDurability, defaultArrowType, ConfigBows.IronBow.confDamageMult, false, ConfigBows.IronBow.confPowerDiv, EnumRarity.COMMON).setTranslationKey(IronBowName).setRegistryName(modSeparator + IronBowName);
+            MultiBow = new CustomBow(ConfigBows.MultiBow.confDurability, ARROW_TYPE_NOT_CUSTOM, ConfigBows.MultiBow.confDamageMult, true, ConfigBows.MultiBow.confPowerDiv, EnumRarity.RARE).setTranslationKey(MultiBowName).setRegistryName(modSeparator + MultiBowName);
+            StoneBow = new CustomBow(ConfigBows.StoneBow.confDurability, defaultArrowType, ConfigBows.StoneBow.confDamageMult, false, ConfigBows.StoneBow.confPowerDiv, EnumRarity.COMMON).setTranslationKey(StoneBowName).setRegistryName(modSeparator + StoneBowName);
+            allItems = new Item[] { DiamondBow, EnderBow, FlameBow, FrostBow, GoldBow, IronBow, MultiBow, StoneBow } ;
+        }
+
+        return allItems;
+    }
 
     /* EntityEntryBuilders. */
     private static final EntityEntry customArrowEntry = EntityEntryBuilder.create().entity(CustomArrow.class).id("custom_arrow", 1).name("Custom arrow").tracker(64, 20, true).build();
@@ -210,11 +221,11 @@ public class MoreBows {
     // TODO review
     @SubscribeEvent
     public final void registerItems(RegistryEvent.Register<Item> event) {
-        event.getRegistry().registerAll(allItems);
+        event.getRegistry().registerAll(getAllItems());
 
         // Apparently, you should register to the OreDictionary in this event. I don't make the rules.
         // TODO create a config setting to use WILDCARD_VALUE or not
-        for (final Item item : allItems) {
+        for (final Item item : getAllItems()) {
             OreDictionary.registerOre("bow", new ItemStack(item, 1, OreDictionary.WILDCARD_VALUE));
         }
 

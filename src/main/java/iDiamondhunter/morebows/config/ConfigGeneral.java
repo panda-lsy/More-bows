@@ -1,10 +1,12 @@
-package iDiamondhunter.morebows;
+package iDiamondhunter.morebows.config;
 
+import iDiamondhunter.morebows.MoreBows;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.LangKey;
 
+@LangKey("confGenCat")
 @Config(modid = MoreBows.MOD_ID)
-public class MoreBowsConfig {
+public class ConfigGeneral {
     /** MoreBows config setting: If true, frost arrows extinguish fire from Entities that are on fire. If false, frost arrows can be on fire. */
     @LangKey("frostArrowsShouldBeCold")
     public static boolean frostArrowsShouldBeCold = true;

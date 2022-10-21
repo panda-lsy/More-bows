@@ -96,7 +96,7 @@ public final class Client extends MoreBows implements IRenderFactory<CustomArrow
     // TODO review
     @SubscribeEvent
     public void registerModels(ModelRegistryEvent event) {
-        for (final Item item : allItems) {
+        for (final Item item : getAllItems()) {
             final ResourceLocation itemLocation = item.getRegistryName();
 
             if (itemLocation != null) {

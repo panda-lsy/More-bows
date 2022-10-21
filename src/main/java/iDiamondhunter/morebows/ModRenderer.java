@@ -2,7 +2,7 @@ package iDiamondhunter.morebows;
 
 
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_FROST;
-import static iDiamondhunter.morebows.MoreBowsConfig.oldFrostArrowRendering;
+import static iDiamondhunter.morebows.config.ConfigGeneral.oldFrostArrowRendering;
 
 import iDiamondhunter.morebows.entities.CustomArrow;
 import net.minecraft.client.renderer.entity.Render;

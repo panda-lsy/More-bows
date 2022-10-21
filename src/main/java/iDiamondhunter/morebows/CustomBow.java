@@ -42,7 +42,7 @@ final class CustomBow extends ItemBow {
     /**
      * A more customizable bow than the vanilla one.
      *
-     * @param maxDamage  The maximum damage a bow can do.
+     * @param maxDamage  The durability of the bow.
      * @param bowType    The type of arrows this bow shoots. This also influences some behaviors of the bow as well.
      * @param damageMult The multiplier to damage done by an arrow shot by this bow.
      * @param multiShot  A dirty, dirty hack, indicating if this bow shoots multiple arrows or not.
