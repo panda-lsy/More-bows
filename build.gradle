@@ -173,7 +173,7 @@ task unmappedJar(type: Jar) {
 task proguard(dependsOn: unmappedJar, type: ProGuardTask) {
     verbose
 
-    // Use the non-remapped .jar as the input file, because ForgeGradle has a convient task to map it to obfuscated Minecraft class names for us when we're done optimising it
+    // Use the non-remapped .jar as the input file, because ForgeGradle has a convenient task to map it to obfuscated Minecraft class names for us when we're done optimising it
     injars "build/libs/" + rootProject.name + "-" + version + "-dev.jar"
     outjars "build/libs/" + rootProject.name + "-" + version + "-proguard-dev.jar"
 
