@@ -14,6 +14,7 @@ public class ConfigBows {
     private static final double noDamageMult = 1.0D;
     /** Default values for bow construction: the default power divisor (TODO document better) */
     private static final float defaultPowerDiv = 20.0F;
+
     @LangKey("item.diamond_bow.name")
     @RequiresMcRestart
     public static BowConfig DiamondBow = new BowConfig(1016, 2.25D, 6.0F);
