@@ -44,7 +44,7 @@ public final class Client extends MoreBows implements IModGuiFactory, IRenderFac
      * Why this wasn't an anonymous inner class is beyond me.
      * TODO see if this can be removed.
      */
-    public static final class Config extends GuiConfig {
+    private static final class Config extends GuiConfig {
         /**
          * Returns a new Config with all child elements of whatever's in the default config category.
          * This might break in the future, at which point something like this should be implemented:
@@ -65,7 +65,7 @@ public final class Client extends MoreBows implements IModGuiFactory, IRenderFac
          *
          * @param g the previous screen.
          */
-        public Config(GuiScreen g) {
+        Config(GuiScreen g) {
             super(g, new ConfigElement(MoreBows.config.getCategory(CATEGORY_GENERAL)).getChildElements(), MOD_ID, false, false, /* GuiConfig.getAbridgedConfigPath(MoreBows.config.toString()) */ MOD_NAME);
         }
     }
@@ -99,13 +99,16 @@ public final class Client extends MoreBows implements IModGuiFactory, IRenderFac
      */
     @SubscribeEvent
     public void FOV(FOVUpdateEvent event) {
-        if (event.getEntity().getActiveItemStack().getItem() instanceof CustomBow) {
+        final Item eventItem = event.getEntity().getActiveItemStack().getItem();
+
+        if (eventItem instanceof CustomBow) {
             float finalFov = event.getFov();
+            final float itemUseCount = bowMaxUseDuration - event.getEntity().getItemInUseCount();
             // First, we have to reverse the standard bow zoom.
             // Minecraft helpfully applies the standard bow zoom to any item that is an instance of a ItemBow.
             // However, our CustomBows draw back at different speeds, so the standard zoom is not at the right speed.
             // To compensate for this, we just calculate the standard bow zoom, and apply it in reverse.
-            float realBow = (bowMaxUseDuration - event.getEntity().getItemInUseCount()) / 20.0F;
+            float realBow = itemUseCount / 20.0F;
 
             if (realBow > 1.0F) {
                 realBow = 1.0F;
@@ -118,7 +121,7 @@ public final class Client extends MoreBows implements IModGuiFactory, IRenderFac
             finalFov /= 1.0F - (realBow * 0.15F);
             // We now calculate and apply our CustomBow zoom.
             // The only difference between standard bow zoom and CustomBow zoom is that we change the hardcoded value of 20.0F to whatever powerDiv is.
-            float customBow = (bowMaxUseDuration - event.getEntity().getItemInUseCount()) / ((CustomBow) event.getEntity().getActiveItemStack().getItem()).powerDiv;
+            float customBow = itemUseCount / ((CustomBow) eventItem).powerDiv;
 
             if (customBow > 1.0F) {
                 customBow = 1.0F;

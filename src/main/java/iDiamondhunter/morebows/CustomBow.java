@@ -30,13 +30,13 @@ import net.minecraftforge.common.IRarity;
  * This entire class is a huge hack. I'm ashamed of myself. And yes, this is important to document.
  * TODO: Possibly come up with better ideas for various bits of this class.
  **/
-public final class CustomBow extends ItemBow {
+final class CustomBow extends ItemBow {
 
     /* Bow instance variables */
     private final byte bowType;
     private final double damageMult;
     private final boolean multiShot;
-    public final float powerDiv;
+    final float powerDiv;
     private final EnumRarity rarity;
 
     /**
@@ -49,7 +49,7 @@ public final class CustomBow extends ItemBow {
      * @param powerDiv   The power divisor of this bow. TODO document better.
      * @param rarity     The rarity of this bow.
      */
-    public CustomBow(int maxDamage, byte bowType, double damageMult, boolean multiShot, float powerDiv, EnumRarity rarity) {
+    CustomBow(int maxDamage, byte bowType, double damageMult, boolean multiShot, float powerDiv, EnumRarity rarity) {
         setMaxDamage(maxDamage);
         this.bowType = bowType;
         this.damageMult = damageMult;

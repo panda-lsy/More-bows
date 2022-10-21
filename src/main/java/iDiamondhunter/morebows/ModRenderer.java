@@ -12,7 +12,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.EntitySnowball;
 import net.minecraft.util.ResourceLocation;
 
-public final class ModRenderer extends RenderArrow<CustomArrow> {
+final class ModRenderer extends RenderArrow<CustomArrow> {
 
     private static final ResourceLocation ARROWS = new ResourceLocation("textures/entity/projectiles/arrow.png");
     private static final ResourceLocation BLOCKS = TextureMap.LOCATION_BLOCKS_TEXTURE;

@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import iDiamondhunter.morebows.entities.ArrowSpawner;
 import iDiamondhunter.morebows.entities.CustomArrow;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumRarity;
@@ -168,23 +169,27 @@ public class MoreBows {
      */
     @SubscribeEvent
     public final void arrHurt(LivingHurtEvent event) {
-        if ((event.getSource().getImmediateSource() instanceof CustomArrow) && (((CustomArrow) event.getSource().getImmediateSource()).type == ARROW_TYPE_FROST)) {
+        final Entity source = event.getSource().getImmediateSource();
+
+        if ((source instanceof CustomArrow) && (((CustomArrow) source).type == ARROW_TYPE_FROST)) {
+            final EntityLivingBase living = event.getEntityLiving();
+
             if (frostArrowsShouldBeCold) {
-                if (event.getEntityLiving() instanceof EntityBlaze) {
+                if (living instanceof EntityBlaze) {
                     event.setAmount(event.getAmount() * 3);
                 }
 
-                event.getEntityLiving().extinguish();
+                living.extinguish();
             }
 
             if (!oldFrostArrowMobSlowdown) {
                 final Potion slow = Potion.getPotionFromResourceLocation("slowness");
 
                 if (slow != null) {
-                    event.getEntityLiving().addPotionEffect(new PotionEffect(slow, 300, 2));
+                    living.addPotionEffect(new PotionEffect(slow, 300, 2));
                 }
             } else {
-                event.getEntityLiving().setInWeb();
+                living.setInWeb();
             }
         }
     }
