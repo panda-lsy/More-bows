@@ -40,6 +40,11 @@
 -keepnames,allowoptimization public class iDiamondhunter.morebows.Client
 -keepnames,allowoptimization public class iDiamondhunter.morebows.MoreBows
 
+# Keep config entry names
+-keepclassmembernames public class iDiamondhunter.morebows.MoreBowsConfig {
+    public static *;
+}
+
 # Keep all initialisers, because ProGuard keeps trying to make them private.
 
 -keepclassmembers class * { public <init>(...); }

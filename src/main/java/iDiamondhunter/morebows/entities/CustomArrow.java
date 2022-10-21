@@ -4,8 +4,8 @@ import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_ENDER;
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_FIRE;
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_FROST;
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_NOT_CUSTOM;
-import static iDiamondhunter.morebows.MoreBows.frostArrowsShouldBeCold;
-import static iDiamondhunter.morebows.MoreBows.oldFrostArrowRendering;
+import static iDiamondhunter.morebows.MoreBowsConfig.frostArrowsShouldBeCold;
+import static iDiamondhunter.morebows.MoreBowsConfig.oldFrostArrowRendering;
 
 import iDiamondhunter.morebows.MoreBows;
 import io.netty.buffer.ByteBuf;

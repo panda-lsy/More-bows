@@ -2,6 +2,7 @@ package iDiamondhunter.morebows;
 
 
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_FROST;
+import static iDiamondhunter.morebows.MoreBowsConfig.oldFrostArrowRendering;
 
 import iDiamondhunter.morebows.entities.CustomArrow;
 import net.minecraft.client.renderer.entity.Render;
@@ -30,7 +31,7 @@ final class ModRenderer extends RenderArrow<CustomArrow> {
     @Override
     public void doRender(CustomArrow e, double a, double b, double c, float d, float f) {
         if (e.type == ARROW_TYPE_FROST) {
-            if (!MoreBows.oldFrostArrowRendering) {
+            if (!oldFrostArrowRendering) {
                 snow.doRender(e, a, b, c, d, f);
             } else {
                 cube.doRender(e, a, b, c, d, f);
@@ -46,7 +47,7 @@ final class ModRenderer extends RenderArrow<CustomArrow> {
             return ARROWS;
         }
 
-        if (!MoreBows.oldFrostArrowRendering) {
+        if (!oldFrostArrowRendering) {
             return BLOCKS;
         }
 

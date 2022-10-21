@@ -1,12 +1,7 @@
 package iDiamondhunter.morebows;
 
-import static net.minecraftforge.common.config.Configuration.CATEGORY_GENERAL;
-
-import java.util.Set;
-
 import iDiamondhunter.morebows.entities.CustomArrow;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -21,9 +16,8 @@ import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.RenderSpecificHandEvent;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.common.config.ConfigElement;
-import net.minecraftforge.fml.client.IModGuiFactory;
-import net.minecraftforge.fml.client.config.GuiConfig;
+import net.minecraftforge.common.config.Config.Type;
+import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -37,54 +31,12 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
  * TODO much of the Config related code is outdated, although it still works.
  * Disregard my comments, they were written for 1.7.10.
  */
-public final class Client extends MoreBows implements IModGuiFactory, IRenderFactory<CustomArrow> {
-
-    /**
-     * A class that extends GuiConfig, because the Forge team likes to complicate things.
-     * Why this wasn't an anonymous inner class is beyond me.
-     * TODO see if this can be removed.
-     */
-    private static final class Config extends GuiConfig {
-        /**
-         * Returns a new Config with all child elements of whatever's in the default config category.
-         * This might break in the future, at which point something like this should be implemented:
-         *
-         * <pre>
-         * {@code
-         * private static String[] wantedProperties = new String[] { "oldFrostArrowRendering" };
-         *
-         * private static List<IConfigElement> getConfigElements() {
-         *     final List<IConfigElement> list = new ArrayList<IConfigElement>();
-         *     for (final String propName : wantedProperties) {
-         *         list.add(new ConfigElement<Boolean>(MoreBows.config.get(Configuration.CATEGORY_GENERAL, propName, false)));
-         *     }
-         *     return list;
-         * }
-         * }
-         * </pre>
-         *
-         * @param g the previous screen.
-         */
-        Config(GuiScreen g) {
-            super(g, new ConfigElement(MoreBows.config.getCategory(CATEGORY_GENERAL)).getChildElements(), MOD_ID, false, false, /* GuiConfig.getAbridgedConfigPath(MoreBows.config.toString()) */ MOD_NAME);
-        }
-    }
-
-    /**
-     * Calls conf() when the Configuration changes.
-     *
-     * @param event the event
-     */
+public final class Client extends MoreBows implements IRenderFactory<CustomArrow> {
     @SubscribeEvent
     public void confChange(OnConfigChangedEvent event) {
         if (MOD_ID.equals(event.getModID())) {
-            conf();
+            ConfigManager.sync(MOD_ID, Type.INSTANCE);
         }
-    }
-
-    @Override
-    public GuiScreen createConfigGui(GuiScreen parent) {
-        return new Config(parent);
     }
 
     @Override
@@ -132,16 +84,6 @@ public final class Client extends MoreBows implements IModGuiFactory, IRenderFac
             finalFov *= 1.0F - (customBow * 0.15F);
             event.setNewfov(finalFov);
         }
-    }
-
-    @Override
-    public boolean hasConfigGui() {
-        return true;
-    }
-
-    @Override
-    public void initialize(Minecraft a) {
-        /* This space left intentionally blank */
     }
 
     @Override
@@ -220,11 +162,6 @@ public final class Client extends MoreBows implements IModGuiFactory, IRenderFac
             mc.getItemRenderer().renderItemSide(mc.player, event.getItemStack(), rightHanded ? ItemCameraTransforms.TransformType.FIRST_PERSON_RIGHT_HAND : ItemCameraTransforms.TransformType.FIRST_PERSON_LEFT_HAND, !rightHanded);
             GlStateManager.popMatrix();
         }
-    }
-
-    @Override
-    public Set<RuntimeOptionCategoryElement> runtimeGuiCategories() {
-        return null;
     }
 
 }

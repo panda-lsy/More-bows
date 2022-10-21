@@ -1,5 +1,8 @@
 package iDiamondhunter.morebows;
 
+import static iDiamondhunter.morebows.MoreBowsConfig.frostArrowsShouldBeCold;
+import static iDiamondhunter.morebows.MoreBowsConfig.oldFrostArrowMobSlowdown;
+
 import org.apache.logging.log4j.Logger;
 
 import iDiamondhunter.morebows.entities.ArrowSpawner;
@@ -17,7 +20,6 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -30,7 +32,7 @@ import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
 import net.minecraftforge.oredict.OreDictionary;
 
 /** If you're reading this, I'm very sorry you have to deal with my code. */
-@Mod(modid = MoreBows.MOD_ID, version = "${version}", guiFactory = "iDiamondhunter.morebows.Client", updateJSON = "https://nerdthened.github.io/More-bows/update.json")
+@Mod(modid = MoreBows.MOD_ID, version = "${version}", updateJSON = "https://nerdthened.github.io/More-bows/update.json")
 public class MoreBows {
 
     /** The full name of More Bows */
@@ -44,18 +46,9 @@ public class MoreBows {
 
     /** Mod proxy. TODO This is super janky, see if it's possible to remove this */
     @SidedProxy(clientSide = "iDiamondhunter.morebows.Client", serverSide = "iDiamondhunter.morebows.MoreBows")
-    private static MoreBows proxy;
+    public static MoreBows proxy;
 
     public static Logger modLog;
-
-    /** MoreBows config */
-    static Configuration config;
-    /** MoreBows config setting: If true, frost arrows extinguish fire from Entities that are on fire. If false, frost arrows can be on fire. */
-    public static boolean frostArrowsShouldBeCold;
-    /** MoreBows config setting: If true, frost arrows slow Entities down by pretending to have set them in a web for one tick. If false, frost arrows apply the slowness potion effect on hit. */
-    private static boolean oldFrostArrowMobSlowdown;
-    /** MoreBows config setting: If true, render frost arrows as snow cubes. If false, render as snowballs. */
-    public static boolean oldFrostArrowRendering;
 
     /*
      * Hardcoded magic numbers, because Enums (as they're classes) require a large amount of file space, and I'm targeting 64kb as the compiled .jar size.
@@ -118,14 +111,6 @@ public class MoreBows {
     /* EntityEntryBuilders. */
     private static final EntityEntry customArrowEntry = EntityEntryBuilder.create().entity(CustomArrow.class).id("custom_arrow", 1).name("Custom arrow").tracker(64, 20, true).build();
     private static final EntityEntry arrowSpawnerEntry = EntityEntryBuilder.create().entity(ArrowSpawner.class).id("arrow_spawner", 2).name("Arrow spawner").tracker(-1, Integer.MAX_VALUE, false).build();
-
-    /** This method syncs the config file with the Configuration, as well as syncing any config related variables. */
-    protected static final void conf() {
-        frostArrowsShouldBeCold = config.get(Configuration.CATEGORY_GENERAL, "frostArrowsShouldBeCold", true).getBoolean();
-        oldFrostArrowMobSlowdown = config.get(Configuration.CATEGORY_GENERAL, "oldFrostArrowMobSlowdown", false).getBoolean();
-        oldFrostArrowRendering = config.get(Configuration.CATEGORY_GENERAL, "oldFrostArrowRendering", false).getBoolean();
-        config.save();
-    }
 
     /**
      * This method attempts to spawn a particle on the server world.
@@ -202,8 +187,6 @@ public class MoreBows {
     @EventHandler
     public final void init(FMLPreInitializationEvent event) {
         modLog = event.getModLog();
-        config = new Configuration(event.getSuggestedConfigurationFile());
-        conf();
         proxy.register();
         MinecraftForge.EVENT_BUS.register(proxy);
     }
