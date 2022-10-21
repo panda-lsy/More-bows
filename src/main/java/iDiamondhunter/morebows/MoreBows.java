@@ -46,7 +46,7 @@ public class MoreBows {
 
     /** Mod proxy. TODO This is super janky, see if it's possible to remove this */
     @SidedProxy(clientSide = "iDiamondhunter.morebows.Client", serverSide = "iDiamondhunter.morebows.MoreBows")
-    public static MoreBows proxy;
+    private static MoreBows proxy;
 
     public static Logger modLog;
 
