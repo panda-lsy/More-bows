@@ -240,6 +240,7 @@ final class CustomBow extends ItemBow {
                     } else { // Multi bow
                         world.spawnEntity(arrs[0]);
                         world.spawnEntity(arrs[1]);
+
                         /**
                          * This was some code that checked the rotationYaw of the shooting player, but didn't change anything.
                          * TODO figure out which is supposed to be changed and to what
@@ -252,12 +253,16 @@ final class CustomBow extends ItemBow {
                          * }
                          * </pre>
                          */
-                        arrs[1].posX = arrs[1].posX + (arrs[1].shootingEntity.rotationYaw / 180);
+                        if (arrs[1].shootingEntity != null) {
+                            arrs[1].posX = arrs[1].posX + (arrs[1].shootingEntity.rotationYaw / 180);
+                        }
+
                         arrs[0].setDamage(arrs[0].getDamage() * 1.5D);
                         arrs[1].setDamage(arrs[1].getDamage() * 1.3D);
 
                         if (bonusArrow) {
                             world.spawnEntity(arrs[2]);
+
                             /**
                              * This was some code that checked the rotationYaw of the shooting player, but didn't change anything.
                              * TODO figure out which is supposed to be changed and to what
@@ -270,7 +275,10 @@ final class CustomBow extends ItemBow {
                              * }
                              * </pre>
                              */
-                            arrs[2].posX = arrs[2].posX - (arrs[2].shootingEntity.rotationYaw / 180);
+                            if (arrs[2].shootingEntity != null) {
+                                arrs[2].posX = arrs[2].posX - (arrs[2].shootingEntity.rotationYaw / 180);
+                            }
+
                             arrs[2].setDamage(arrs[2].getDamage() * 1.15D);
                         }
                     }
