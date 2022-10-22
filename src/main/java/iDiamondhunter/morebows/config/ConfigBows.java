@@ -5,14 +5,14 @@ import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.LangKey;
 import net.minecraftforge.common.config.Config.RequiresMcRestart;
 
-@LangKey("confBowCat")
+@LangKey("confCatBow")
 @Config(modid = MoreBows.MOD_ID, category = "bows")
 public class ConfigBows {
 
     /* Default values for bow construction */
     /** Default values for bow construction: the default damage multiplier. */
     private static final double noDamageMult = 1.0D;
-    /** Default values for bow construction: the default power divisor (TODO document better) */
+    /** Default values for bow construction: the default power divisor */
     private static final float defaultPowerDiv = 20.0F;
 
     @LangKey("item.diamond_bow.name")
@@ -49,18 +49,18 @@ public class ConfigBows {
 
     public static class BowConfig {
 
-        public BowConfig (int confDurability, double confDamageMult, float confPowerDiv) {
-            this.confDurability = confDurability;
-            this.confDamageMult = confDamageMult;
-            this.confPowerDiv = confPowerDiv;
+        public BowConfig (int confBowDurability, double confBowDamageMult, float confBowDrawbackDiv) {
+            this.confBowDurability = confBowDurability;
+            this.confBowDamageMult = confBowDamageMult;
+            this.confBowDrawbackDiv = confBowDrawbackDiv;
         }
 
-        @LangKey("confDurability")
-        public int confDurability;
-        @LangKey("confDamageMult")
-        public double confDamageMult;
-        @LangKey("confPowerDiv")
-        public float confPowerDiv;
+        @LangKey("confBowDurability")
+        public int confBowDurability;
+        @LangKey("confBowDamageMult")
+        public double confBowDamageMult;
+        @LangKey("confBowDrawbackDiv")
+        public float confBowDrawbackDiv;
     }
 
 }
