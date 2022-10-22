@@ -5,7 +5,7 @@ import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.LangKey;
 import net.minecraftforge.common.config.Config.RequiresMcRestart;
 
-@LangKey("confCatBow")
+@LangKey(MoreBows.MOD_ID + "." + "confCatBow")
 @Config(modid = MoreBows.MOD_ID, category = "bows")
 public class ConfigBows {
 
@@ -15,35 +15,35 @@ public class ConfigBows {
     /** Default values for bow construction: the default power divisor */
     private static final float defaultPowerDiv = 20.0F;
 
-    @LangKey("item.diamond_bow.name")
+    @LangKey("item." + MoreBows.DiamondBowTransKey + ".name")
     @RequiresMcRestart
     public static BowConfig DiamondBow = new BowConfig(1016, 2.25D, 6.0F);
 
-    @LangKey("item.ender_bow.name")
+    @LangKey("item." + MoreBows.EnderBowTransKey + ".name")
     @RequiresMcRestart
     public static BowConfig EnderBow = new BowConfig(215, noDamageMult, 22.0F);
 
-    @LangKey("item.flame_bow.name")
+    @LangKey("item." + MoreBows.FlameBowTransKey + ".name")
     @RequiresMcRestart
     public static BowConfig FlameBow = new BowConfig(576, 2.0D, 15.0F);
 
-    @LangKey("item.frost_bow.name")
+    @LangKey("item." + MoreBows.FrostBowTransKey + ".name")
     @RequiresMcRestart
     public static BowConfig FrostBow = new BowConfig(550, noDamageMult, 26.0F);
 
-    @LangKey("item.gold_bow.name")
+    @LangKey("item." + MoreBows.GoldBowTransKey + ".name")
     @RequiresMcRestart
     public static BowConfig GoldBow = new BowConfig(68, 2.5D, 6.0F);
 
-    @LangKey("item.iron_bow.name")
+    @LangKey("item." + MoreBows.IronBowTransKey + ".name")
     @RequiresMcRestart
     public static BowConfig IronBow = new BowConfig(550, 1.5D, 17.0F);
 
-    @LangKey("item.multi_bow.name")
+    @LangKey("item." + MoreBows.MultiBowTransKey + ".name")
     @RequiresMcRestart
     public static BowConfig MultiBow = new BowConfig(550, noDamageMult, 13.0F);
 
-    @LangKey("item.stone_bow.name")
+    @LangKey("item." + MoreBows.StoneBowTransKey + ".name")
     @RequiresMcRestart
     public static BowConfig StoneBow = new BowConfig(484, 1.15D, defaultPowerDiv);
 
@@ -55,11 +55,11 @@ public class ConfigBows {
             this.confBowDrawbackDiv = confBowDrawbackDiv;
         }
 
-        @LangKey("confBowDurability")
+        @LangKey(MoreBows.MOD_ID + "." + "confBowDurability")
         public int confBowDurability;
-        @LangKey("confBowDamageMult")
+        @LangKey(MoreBows.MOD_ID + "." + "confBowDamageMult")
         public double confBowDamageMult;
-        @LangKey("confBowDrawbackDiv")
+        @LangKey(MoreBows.MOD_ID + "." + "confBowDrawbackDiv")
         public float confBowDrawbackDiv;
     }
 
