@@ -6,7 +6,7 @@ import net.minecraftforge.common.config.Config.LangKey;
 import net.minecraftforge.common.config.Config.RequiresMcRestart;
 
 @LangKey(MoreBows.MOD_ID + "." + "confCatBow")
-@Config(modid = MoreBows.MOD_ID, category = "bows")
+@Config(modid = MoreBows.MOD_ID, category = "bows", name = MoreBows.MOD_ID + "_bowstats")
 public class ConfigBows {
 
     /* Default values for bow construction */
