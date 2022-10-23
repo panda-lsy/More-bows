@@ -16,4 +16,9 @@ public class ConfigGeneral {
     /** MoreBows config setting: If true, render frost arrows as snow cubes. If false, render as snowballs. */
     @LangKey(MoreBows.MOD_ID + "." + "confGenOldRendering")
     public static boolean oldFrostArrowRendering = false;
+    /** MoreBows config setting: TODO */
+    @LangKey(MoreBows.MOD_ID + "." + "confMultiShotArrowUsage")
+    public static CustomArrowMultiShotType customArrowMultiShot = CustomArrowMultiShotType.AlwaysCustomEvenWithSingle;
+
+    public enum CustomArrowMultiShotType { AlwaysCustomEvenWithSingle, FreeExtraNormalArrows, UseAmountShot; }
 }

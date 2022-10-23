@@ -22,3 +22,5 @@ morebows.confGenOldRendering.tooltip=If this is enabled, frost arrows will rende
 morebows.confGenOldRendering=Old frost arrow rendering
 morebows.confGenOldSlowdown.tooltip=If this is enabled, frost arrows will slow Entities down by pretending to have set them in a web for one tick. If this is disabled, frost arrows apply the slowness potion effect on hit.
 morebows.confGenOldSlowdown=Old frost arrow mob slowdown
+morebows.confMultiShotArrowUsage.tooltip=TODO
+morebows.confMultiShotArrowUsage=Multishot bow arrow usage

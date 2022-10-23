@@ -5,6 +5,8 @@ import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_FIRE;
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_NOT_CUSTOM;
 import static iDiamondhunter.morebows.MoreBows.bowMaxUseDuration;
 
+import iDiamondhunter.morebows.config.ConfigGeneral;
+import iDiamondhunter.morebows.config.ConfigGeneral.CustomArrowMultiShotType;
 import iDiamondhunter.morebows.entities.ArrowSpawner;
 import iDiamondhunter.morebows.entities.CustomArrow;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -31,6 +33,9 @@ import net.minecraftforge.common.IRarity;
  * TODO: Possibly come up with better ideas for various bits of this class.
  **/
 final class CustomBow extends ItemBow {
+
+    private static final ItemStack defaultAmmo = new ItemStack(Items.ARROW);
+    private static final ItemArrow defaultArrow = (ItemArrow) Items.ARROW;
 
     /* Bow instance variables */
     private final byte bowType;
@@ -130,6 +135,32 @@ final class CustomBow extends ItemBow {
             // TODO merge with alwaysShoots somehow
             final boolean infiniteAmmo = player.capabilities.isCreativeMode || ((ammo.getItem() instanceof ItemArrow) && ((ItemArrow) ammo.getItem()).isInfinite(ammo, bow, player));
             final boolean bonusArrow = itemRand.nextInt(4) == 0;
+            final int ammoCount = ammo.getCount();
+            final int usedAmmo;
+            final int shotArrows;
+            
+            // TODO Redo all of this.
+
+            if ((ConfigGeneral.customArrowMultiShot == CustomArrowMultiShotType.UseAmountShot) && multiShot) {
+                if (bowType == ARROW_TYPE_ENDER) { // Ender bow
+                    usedAmmo = ammoCount > 6 ? 6 : ammoCount;
+                } else {
+                    final int maxAmmo = bonusArrow ? 3 : 2;
+                    usedAmmo = ammoCount > maxAmmo ? maxAmmo : ammoCount;
+                }
+            } else {
+                usedAmmo = 1;
+            }
+
+            if (ConfigGeneral.customArrowMultiShot == CustomArrowMultiShotType.UseAmountShot) {
+                shotArrows = usedAmmo;
+            } else {
+                if (bowType == ARROW_TYPE_ENDER) { // Ender bow
+                    shotArrows = 6;
+                } else {
+                    shotArrows = bonusArrow ? 3 : 2;
+                }
+            }
 
             if (!world.isRemote) {
                 final boolean isCrit;
@@ -156,36 +187,83 @@ final class CustomBow extends ItemBow {
                  * (2.0F * 1.5F == 3.0F).
                  */
                 if (multiShot) { // Bows that shoot multiple arrows
-                    if (bowType == ARROW_TYPE_ENDER) { // Ender bow
-                        arrs = new EntityArrow[] {
-                            possiblyCustomArrowHelper(world, player, shotVelocity * (2.0F * 1.5F), ammo, arrow),
-                            possiblyCustomArrowHelper(world, player, shotVelocity * (1.0F * 1.5F), ammo, arrow),
-                            possiblyCustomArrowHelper(world, player, shotVelocity * (1.2F * 1.5F), ammo, arrow),
-                            possiblyCustomArrowHelper(world, player, shotVelocity * (1.5F * 1.5F), ammo, arrow),
-                            possiblyCustomArrowHelper(world, player, shotVelocity * (1.75F * 1.5F), ammo, arrow),
-                            possiblyCustomArrowHelper(world, player, shotVelocity * (1.825F * 1.5F), ammo, arrow)
-                        };
-                        arrs[1].pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
-                        arrs[2].pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
-                        arrs[3].pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
-                        arrs[4].pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
-                        arrs[5].pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
-                    } else {
-                        if (bonusArrow) { // Multi bow
-                            arrs = new EntityArrow[] {
-                                arrowHelper(world, player, shotVelocity * (2.0F * 1.5F), ammo, arrow),
-                                arrowHelper(world, player, shotVelocity * (1.65F * 1.5F), ammo, arrow),
-                                arrowHelper(world, player, shotVelocity * (1.275F * 1.5F), ammo, arrow)
-                            };
-                            arrs[2].pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
-                        } else {
-                            arrs = new EntityArrow[] {
-                                arrowHelper(world, player, shotVelocity * (2.0F * 1.5F), ammo, arrow),
-                                arrowHelper(world, player, shotVelocity * (1.65F * 1.5F), ammo, arrow)
-                            };
-                        }
+                    final ItemStack useAmmo;
+                    final ItemArrow useArrow;
+                    final EntityArrow.PickupStatus pickStatus = (ConfigGeneral.customArrowMultiShot == CustomArrowMultiShotType.UseAmountShot) && !infiniteAmmo ? EntityArrow.PickupStatus.ALLOWED : EntityArrow.PickupStatus.CREATIVE_ONLY;
 
-                        arrs[1].pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
+                    if (ConfigGeneral.customArrowMultiShot == CustomArrowMultiShotType.FreeExtraNormalArrows) {
+                        useAmmo = defaultAmmo;
+                        useArrow = defaultArrow;
+                    } else {
+                        useAmmo = ammo;
+                        useArrow = arrow;
+                    }
+
+                    if (bowType == ARROW_TYPE_ENDER) { // Ender bow
+                        arrs = new EntityArrow[shotArrows];
+
+                        for (int i = 0; i < arrs.length; ++i) {
+                            switch (i) {
+                            case 0:
+                                arrs[i] = possiblyCustomArrowHelper(world, player, shotVelocity * (2.0F * 1.5F), ammo, arrow);
+                                break;
+
+                            case 1:
+                                arrs[i] = possiblyCustomArrowHelper(world, player, shotVelocity * (1.0F * 1.5F), useAmmo, useArrow);
+                                arrs[i].pickupStatus = pickStatus;
+                                break;
+
+                            case 2:
+                                arrs[i] = possiblyCustomArrowHelper(world, player, shotVelocity * (1.2F * 1.5F), useAmmo, useArrow);
+                                arrs[i].pickupStatus = pickStatus;
+                                break;
+
+                            case 3:
+                                arrs[i] =  possiblyCustomArrowHelper(world, player, shotVelocity * (1.5F * 1.5F), useAmmo, useArrow);
+                                arrs[i].pickupStatus = pickStatus;
+                                break;
+
+                            case 4:
+                                arrs[i] = possiblyCustomArrowHelper(world, player, shotVelocity * (1.75F * 1.5F), useAmmo, useArrow);
+                                arrs[i].pickupStatus = pickStatus;
+                                break;
+
+                            case 5:
+                                arrs[i] = possiblyCustomArrowHelper(world, player, shotVelocity * (1.825F * 1.5F), useAmmo, useArrow);
+                                arrs[i].pickupStatus = pickStatus;
+                                break;
+
+                            default:
+                                arrs[i] = possiblyCustomArrowHelper(world, player, shotVelocity * (2.0F * 1.5F), useAmmo, useArrow);
+                                arrs[i].pickupStatus = pickStatus;
+                                break;
+                            }
+                        }
+                    } else {
+                        arrs = new EntityArrow[shotArrows];
+
+                        for (int i = 0; i < arrs.length; ++i) {
+                            switch (i) {
+                            case 0:
+                                arrs[i] = arrowHelper(world, player, shotVelocity * (2.0F * 1.5F), ammo, arrow);
+                                break;
+
+                            case 1:
+                                arrs[i] = arrowHelper(world, player, shotVelocity * (1.65F * 1.5F), useAmmo, useArrow);
+                                arrs[i].pickupStatus = pickStatus;
+                                break;
+
+                            case 2:
+                                arrs[i] = arrowHelper(world, player, shotVelocity * (1.275F * 1.5F), useAmmo, useArrow);
+                                arrs[i].pickupStatus = pickStatus;
+                                break;
+
+                            default:
+                                arrs[i] = arrowHelper(world, player, shotVelocity * (2.0F * 1.5F), ammo, arrow);
+                                arrs[i].pickupStatus = pickStatus;
+                                break;
+                            }
+                        }
                     }
                 } else if (bowType == ARROW_TYPE_NOT_CUSTOM) { // "Standard" style bows that do not shoot multiple arrows or have a custom arrow type. Note to self: this is after the multi-arrow bows due to the multi bow having arrows of a normal type.
                     arrs = new EntityArrow[] { arrowHelper(world, player, shotVelocity * (2.0F * 1.5F), ammo, arrow) };
@@ -238,48 +316,37 @@ final class CustomBow extends ItemBow {
                     if (bowType == ARROW_TYPE_ENDER) { // Ender bow
                         world.spawnEntity(new ArrowSpawner(world, player.posX, player.posY, player.posZ, shotVelocity, arrs));
                     } else { // Multi bow
-                        world.spawnEntity(arrs[0]);
-                        world.spawnEntity(arrs[1]);
+                        for (int i = 0; i < arrs.length; ++i) {
+                            switch (i) {
+                            case 0:
+                                world.spawnEntity(arrs[i]);
+                                arrs[i].setDamage(arrs[i].getDamage() * 1.5D);
+                                break;
 
-                        /**
-                         * This was some code that checked the rotationYaw of the shooting player, but didn't change anything.
-                         * TODO figure out which is supposed to be changed and to what
-                         *
-                         * <pre>
-                         * if (arrs[1].shootingEntity.rotationYaw > 180) {
-                         *     arrs[1].posX = arrs[1].posX + (arrs[1].shootingEntity.rotationYaw / 180);
-                         * } else {
-                         *     arrs[1].posX = arrs[1].posX + (arrs[1].shootingEntity.rotationYaw / 180);
-                         * }
-                         * </pre>
-                         */
-                        if (arrs[1].shootingEntity != null) {
-                            arrs[1].posX = arrs[1].posX + (arrs[1].shootingEntity.rotationYaw / 180);
-                        }
+                            case 1:
+                                world.spawnEntity(arrs[i]);
 
-                        arrs[0].setDamage(arrs[0].getDamage() * 1.5D);
-                        arrs[1].setDamage(arrs[1].getDamage() * 1.3D);
+                                if (arrs[i].shootingEntity != null) {
+                                    arrs[i].posX = arrs[i].posX + (arrs[i].shootingEntity.rotationYaw / 180);
+                                }
 
-                        if (bonusArrow) {
-                            world.spawnEntity(arrs[2]);
+                                arrs[i].setDamage(arrs[i].getDamage() * 1.3D);
+                                break;
 
-                            /**
-                             * This was some code that checked the rotationYaw of the shooting player, but didn't change anything.
-                             * TODO figure out which is supposed to be changed and to what
-                             *
-                             * <pre>
-                             * if (arrs[2].shootingEntity.rotationYaw > 180) {
-                             *     arrs[2].posX = arrs[2].posX - (arrs[2].shootingEntity.rotationYaw / 180);
-                             * } else {
-                             *     arrs[2].posX = arrs[2].posX - (arrs[2].shootingEntity.rotationYaw / 180);
-                             * }
-                             * </pre>
-                             */
-                            if (arrs[2].shootingEntity != null) {
-                                arrs[2].posX = arrs[2].posX - (arrs[2].shootingEntity.rotationYaw / 180);
+                            case 2:
+                                world.spawnEntity(arrs[i]);
+
+                                if (arrs[i].shootingEntity != null) {
+                                    arrs[i].posX = arrs[i].posX - (arrs[i].shootingEntity.rotationYaw / 180);
+                                }
+
+                                arrs[i].setDamage(arrs[i].getDamage() * 1.15D);
+                                break;
+
+                            default:
+                                world.spawnEntity(arrs[i]);
+                                break;
                             }
-
-                            arrs[2].setDamage(arrs[2].getDamage() * 1.15D);
                         }
                     }
                 } else { // Other bows
@@ -303,7 +370,7 @@ final class CustomBow extends ItemBow {
 
             if (!infiniteAmmo) {
                 // TODO review
-                ammo.shrink(1);
+                ammo.shrink(usedAmmo);
 
                 if (ammo.isEmpty()) {
                     player.inventory.deleteStack(ammo);
