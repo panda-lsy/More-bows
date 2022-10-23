@@ -97,22 +97,22 @@ public final class ArrowSpawner extends Entity {
                 arrows[2].posY++;
                 arrows[2].posX -= 1.25;
                 arrows[2].posZ += 1.75;
-                world.playSound(null, arrows[1].posX, arrows[1].posY, arrows[1].posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, (1.0F / ((rand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
+                world.playSound(null, arrows[2].posX, arrows[2].posY, arrows[2].posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, (1.0F / ((rand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
                 world.spawnEntity(arrows[3]);
                 arrows[3].posY += 1.45;
                 arrows[3].posX -= 2.25;
                 arrows[3].posZ -= 0.75;
-                world.playSound(null, arrows[1].posX, arrows[1].posY, arrows[1].posZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.PLAYERS, 0.25F, (1.0F / ((rand.nextFloat() * 0.4F) + 1.0F)) + (shotVelocity * 0.3F));
+                world.playSound(null, arrows[3].posX, arrows[3].posY, arrows[3].posZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.PLAYERS, 0.25F, (1.0F / ((rand.nextFloat() * 0.4F) + 1.0F)) + (shotVelocity * 0.3F));
                 world.spawnEntity(arrows[4]);
                 arrows[4].posY += 2;
                 arrows[4].posX += 0.25;
                 arrows[4].posZ += 2.5;
-                world.playSound(null, arrows[1].posX, arrows[1].posY, arrows[1].posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, (1.0F / ((rand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
+                world.playSound(null, arrows[4].posX, arrows[4].posY, arrows[4].posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, (1.0F / ((rand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
                 world.spawnEntity(arrows[5]);
                 arrows[5].posY += 1.75;
                 arrows[5].posX += 1.75;
                 arrows[5].posZ += 1.5;
-                world.playSound(null, arrows[1].posX, arrows[1].posY, arrows[1].posZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.PLAYERS, 0.5F, (1.0F / ((rand.nextFloat() * 0.4F) + 1.0F)) + (shotVelocity * 0.4F));
+                world.playSound(null, arrows[5].posX, arrows[5].posY, arrows[5].posZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.PLAYERS, 0.5F, (1.0F / ((rand.nextFloat() * 0.4F) + 1.0F)) + (shotVelocity * 0.4F));
             }
         }
     }
