@@ -134,7 +134,7 @@ final class CustomBow extends ItemBow {
 
             // TODO merge with alwaysShoots somehow
             final boolean infiniteAmmo = player.capabilities.isCreativeMode || ((ammo.getItem() instanceof ItemArrow) && ((ItemArrow) ammo.getItem()).isInfinite(ammo, bow, player));
-            final boolean bonusArrow = itemRand.nextInt(4) == 0;
+            final boolean bonusArrow = multiShot && (bowType != ARROW_TYPE_ENDER) ? itemRand.nextInt(4) == 0 : false;
             final int ammoCount = infiniteAmmo ? 64 : ammo.getCount();
             final int usedAmmo;
             final int shotArrows;
