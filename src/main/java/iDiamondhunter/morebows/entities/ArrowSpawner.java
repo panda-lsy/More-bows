@@ -79,52 +79,59 @@ public final class ArrowSpawner extends Entity {
 
             if (ticksExisted == 61) {
                 for (int i = 1; i < arrows.length; ++i) {
-                    switch (i) {
-                    case 1:
-                        world.spawnEntity(arrows[i]);
-                        world.playSound(null, arrows[i].posX, arrows[i].posY, arrows[i].posZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.PLAYERS, 0.5F, (1.0F / ((rand.nextFloat() * 0.4F) + 1.0F)) + (shotVelocity * 0.4F));
-                        break;
+                    world.spawnEntity(arrows[i]);
+                    final double arrYDisp;
+                    final double arrXDisp;
+                    final double arrZDisp;
+                    final float soundVolume;
+                    final float soundPitch;
 
+                    switch (i) {
                     case 2:
-                        world.spawnEntity(arrows[i]);
-                        arrows[i].posY++;
-                        arrows[i].posX -= 1.25;
-                        arrows[i].posZ += 1.75;
-                        world.playSound(null, arrows[i].posX, arrows[i].posY, arrows[i].posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, (1.0F / ((rand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
+                        arrYDisp = 1;
+                        arrXDisp = -1.25;
+                        arrZDisp = 1.75;
+                        soundVolume = 1.0F;
+                        soundPitch = (1.0F / ((rand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F);
                         break;
 
                     case 3:
-                        world.spawnEntity(arrows[i]);
-                        arrows[i].posY += 1.45;
-                        arrows[i].posX -= 2.25;
-                        arrows[i].posZ -= 0.75;
-                        world.playSound(null, arrows[i].posX, arrows[i].posY, arrows[i].posZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.PLAYERS, 0.25F, (1.0F / ((rand.nextFloat() * 0.4F) + 1.0F)) + (shotVelocity * 0.3F));
+                        arrYDisp = 1.45;
+                        arrXDisp = -2.25;
+                        arrZDisp = -0.75;
+                        soundVolume = 0.25F;
+                        soundPitch = (1.0F / ((rand.nextFloat() * 0.4F) + 1.0F)) + (shotVelocity * 0.3F);
                         break;
 
                     case 4:
-                        world.spawnEntity(arrows[i]);
-                        arrows[i].posY += 2;
-                        arrows[i].posX += 0.25;
-                        arrows[i].posZ += 2.5;
-                        world.playSound(null, arrows[i].posX, arrows[i].posY, arrows[i].posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, (1.0F / ((rand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
+                        arrYDisp = 2;
+                        arrXDisp = 0.25;
+                        arrZDisp = 2.5;
+                        soundVolume = 1.0F;
+                        soundPitch = (1.0F / ((rand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F);
                         break;
-                        
+
                     case 5:
-                        world.spawnEntity(arrows[i]);
-                        arrows[i].posY += 1.75;
-                        arrows[i].posX += 1.75;
-                        arrows[i].posZ += 1.5;
-                        world.playSound(null, arrows[i].posX, arrows[i].posY, arrows[i].posZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.PLAYERS, 0.5F, (1.0F / ((rand.nextFloat() * 0.4F) + 1.0F)) + (shotVelocity * 0.4F));
+                        arrYDisp = 1.75;
+                        arrXDisp = 1.75;
+                        arrZDisp = 1.5;
+                        soundVolume = 0.5F;
+                        soundPitch = (1.0F / ((rand.nextFloat() * 0.4F) + 1.0F)) + (shotVelocity * 0.4F);
                         break;
 
                     default:
-                        world.spawnEntity(arrows[i]);
-                        //arrows[i].posY += 1.75;
-                        //arrows[i].posX += 1.75;
-                        //arrows[i].posZ += 1.5;
-                        world.playSound(null, arrows[i].posX, arrows[i].posY, arrows[i].posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 0.5F, (1.0F / ((rand.nextFloat() * 0.4F) + 1.0F)) + (shotVelocity * 0.4F));
+                        arrYDisp = 0.0D;
+                        arrXDisp = 0.0D;
+                        arrZDisp = 0.0D;
+                        soundVolume = 0.5F;
+                        soundPitch = (1.0F / ((rand.nextFloat() * 0.4F) + 1.0F)) + (shotVelocity * 0.4F);
                         break;
                     }
+
+                    arrows[i].posY += arrYDisp;
+                    arrows[i].posX += arrXDisp;
+                    arrows[i].posZ += arrZDisp;
+                    world.playSound(null, arrows[i].posX, arrows[i].posY, arrows[i].posZ, (i % 2) == 1 ? SoundEvents.ENTITY_ENDERMEN_TELEPORT : SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, soundVolume, soundPitch);
                 }
             }
         }

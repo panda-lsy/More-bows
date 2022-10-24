@@ -138,28 +138,25 @@ final class CustomBow extends ItemBow {
             final int ammoCount = ammo.getCount();
             final int usedAmmo;
             final int shotArrows;
-
             // TODO Redo all of this.
+            final int maxAmmo;
 
-            if ((ConfigGeneral.customArrowMultiShot == CustomArrowMultiShotType.UseAmountShot) && multiShot) {
+            if (multiShot) {
                 if (bowType == ARROW_TYPE_ENDER) { // Ender bow
-                    usedAmmo = ammoCount > 6 ? 6 : ammoCount;
+                    maxAmmo = 6;
                 } else {
-                    final int maxAmmo = bonusArrow ? 3 : 2;
-                    usedAmmo = ammoCount > maxAmmo ? maxAmmo : ammoCount;
+                    maxAmmo = bonusArrow ? 3 : 2;
                 }
             } else {
-                usedAmmo = 1;
+                maxAmmo = 1;
             }
 
             if (ConfigGeneral.customArrowMultiShot == CustomArrowMultiShotType.UseAmountShot) {
+                usedAmmo = ammoCount > maxAmmo ? maxAmmo : ammoCount;
                 shotArrows = usedAmmo;
             } else {
-                if (bowType == ARROW_TYPE_ENDER) { // Ender bow
-                    shotArrows = 6;
-                } else {
-                    shotArrows = bonusArrow ? 3 : 2;
-                }
+                usedAmmo = 1;
+                shotArrows = maxAmmo;
             }
 
             if (!world.isRemote) {
@@ -203,65 +200,66 @@ final class CustomBow extends ItemBow {
                         arrs = new EntityArrow[shotArrows];
 
                         for (int i = 0; i < arrs.length; ++i) {
-                            switch (i) {
-                            case 0:
-                                arrs[i] = possiblyCustomArrowHelper(world, player, shotVelocity * (2.0F * 1.5F), ammo, arrow);
-                                break;
+                            final float velocityChoice;
 
+                            switch (i) {
                             case 1:
-                                arrs[i] = possiblyCustomArrowHelper(world, player, shotVelocity * (1.0F * 1.5F), useAmmo, useArrow);
-                                arrs[i].pickupStatus = pickStatus;
+                                velocityChoice = shotVelocity * (1.0F * 1.5F);
                                 break;
 
                             case 2:
-                                arrs[i] = possiblyCustomArrowHelper(world, player, shotVelocity * (1.2F * 1.5F), useAmmo, useArrow);
-                                arrs[i].pickupStatus = pickStatus;
+                                velocityChoice = shotVelocity * (1.2F * 1.5F);
                                 break;
 
                             case 3:
-                                arrs[i] =  possiblyCustomArrowHelper(world, player, shotVelocity * (1.5F * 1.5F), useAmmo, useArrow);
-                                arrs[i].pickupStatus = pickStatus;
+                                velocityChoice = shotVelocity * (1.5F * 1.5F);
                                 break;
 
                             case 4:
-                                arrs[i] = possiblyCustomArrowHelper(world, player, shotVelocity * (1.75F * 1.5F), useAmmo, useArrow);
-                                arrs[i].pickupStatus = pickStatus;
+                                velocityChoice = shotVelocity * (1.75F * 1.5F);
                                 break;
 
                             case 5:
-                                arrs[i] = possiblyCustomArrowHelper(world, player, shotVelocity * (1.825F * 1.5F), useAmmo, useArrow);
-                                arrs[i].pickupStatus = pickStatus;
+                                velocityChoice = shotVelocity * (1.825F * 1.5F);
                                 break;
 
                             default:
-                                arrs[i] = possiblyCustomArrowHelper(world, player, shotVelocity * (2.0F * 1.5F), useAmmo, useArrow);
-                                arrs[i].pickupStatus = pickStatus;
+                                velocityChoice = shotVelocity * (2.0F * 1.5F);
                                 break;
+                            }
+
+                            if (i > 0) {
+                                arrs[i] = possiblyCustomArrowHelper(world, player, velocityChoice, useAmmo, useArrow);
+                                arrs[i].pickupStatus = pickStatus;
+                            } else {
+                                arrs[i] = possiblyCustomArrowHelper(world, player, velocityChoice, ammo, arrow);
                             }
                         }
                     } else {
                         arrs = new EntityArrow[shotArrows];
 
                         for (int i = 0; i < arrs.length; ++i) {
-                            switch (i) {
-                            case 0:
-                                arrs[i] = arrowHelper(world, player, shotVelocity * (2.0F * 1.5F), ammo, arrow);
-                                break;
+                            final float velocityChoice;
 
+                            switch (i) {
                             case 1:
-                                arrs[i] = arrowHelper(world, player, shotVelocity * (1.65F * 1.5F), useAmmo, useArrow);
-                                arrs[i].pickupStatus = pickStatus;
+                                velocityChoice = shotVelocity * (1.65F * 1.5F);
                                 break;
 
                             case 2:
-                                arrs[i] = arrowHelper(world, player, shotVelocity * (1.275F * 1.5F), useAmmo, useArrow);
-                                arrs[i].pickupStatus = pickStatus;
+                                velocityChoice = shotVelocity * (1.275F * 1.5F);
                                 break;
 
                             default:
-                                arrs[i] = arrowHelper(world, player, shotVelocity * (2.0F * 1.5F), ammo, arrow);
-                                arrs[i].pickupStatus = pickStatus;
+                                velocityChoice = shotVelocity * (2.0F * 1.5F);
                                 break;
+                            }
+
+                            if (i > 0) {
+                                arrs[i] = arrowHelper(world, player, velocityChoice, useAmmo, useArrow);
+                                arrs[i].pickupStatus = pickStatus;
+                            } else {
+                                arrs[i] = arrowHelper(world, player, velocityChoice, ammo, arrow);
                             }
                         }
                     }
@@ -317,36 +315,29 @@ final class CustomBow extends ItemBow {
                         world.spawnEntity(new ArrowSpawner(world, player.posX, player.posY, player.posZ, shotVelocity, arrs));
                     } else { // Multi bow
                         for (int i = 0; i < arrs.length; ++i) {
+                            world.spawnEntity(arrs[i]);
+                            final double damageMultiChoice;
+
                             switch (i) {
-                            case 0:
-                                world.spawnEntity(arrs[i]);
-                                arrs[i].setDamage(arrs[i].getDamage() * 1.5D);
-                                break;
-
                             case 1:
-                                world.spawnEntity(arrs[i]);
-
-                                if (arrs[i].shootingEntity != null) {
-                                    arrs[i].posX = arrs[i].posX + (arrs[i].shootingEntity.rotationYaw / 180);
-                                }
-
-                                arrs[i].setDamage(arrs[i].getDamage() * 1.3D);
+                                damageMultiChoice = 1.3D;
                                 break;
 
                             case 2:
-                                world.spawnEntity(arrs[i]);
-
-                                if (arrs[i].shootingEntity != null) {
-                                    arrs[i].posX = arrs[i].posX - (arrs[i].shootingEntity.rotationYaw / 180);
-                                }
-
-                                arrs[i].setDamage(arrs[i].getDamage() * 1.15D);
+                                damageMultiChoice = 1.15D;
                                 break;
 
                             default:
-                                world.spawnEntity(arrs[i]);
+                                damageMultiChoice = 1.5D;
                                 break;
                             }
+
+                            if ((i > 0) && (arrs[i].shootingEntity != null)) {
+                                final double negate = ((i % 2) * 2) - 1;
+                                arrs[i].posX += ((arrs[i].shootingEntity.rotationYaw / 180.0D) * negate);
+                            }
+
+                            arrs[i].setDamage(arrs[i].getDamage() * damageMultiChoice);
                         }
                     }
                 } else { // Other bows
