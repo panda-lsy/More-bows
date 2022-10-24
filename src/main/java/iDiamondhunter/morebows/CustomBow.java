@@ -334,7 +334,7 @@ final class CustomBow extends ItemBow {
 
                             if ((i > 0) && (arrs[i].shootingEntity != null)) {
                                 final double negate = ((i % 2) * 2) - 1;
-                                arrs[i].posX += ((arrs[i].shootingEntity.rotationYaw / 180.0D) * negate);
+                                arrs[i].posX += (arrs[i].shootingEntity.rotationYaw / 180.0D) * negate;
                             }
 
                             arrs[i].setDamage(arrs[i].getDamage() * damageMultiChoice);
