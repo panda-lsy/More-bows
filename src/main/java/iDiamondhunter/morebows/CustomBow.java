@@ -134,7 +134,6 @@ final class CustomBow extends ItemBow {
 
             // TODO merge with alwaysShoots somehow
             final boolean infiniteAmmo = player.capabilities.isCreativeMode || ((ammo.getItem() instanceof ItemArrow) && ((ItemArrow) ammo.getItem()).isInfinite(ammo, bow, player));
-            final boolean bonusArrow = multiShot && (bowType != ARROW_TYPE_ENDER) ? itemRand.nextInt(4) == 0 : false;
             final int ammoCount = infiniteAmmo ? 64 : ammo.getCount();
             final int usedAmmo;
             final int shotArrows;
@@ -145,7 +144,7 @@ final class CustomBow extends ItemBow {
                 if (bowType == ARROW_TYPE_ENDER) { // Ender bow
                     maxAmmo = 6;
                 } else {
-                    maxAmmo = bonusArrow ? 3 : 2;
+                    maxAmmo = itemRand.nextInt(4) == 0 ? 3 : 2;
                 }
             } else {
                 maxAmmo = 1;
@@ -352,7 +351,7 @@ final class CustomBow extends ItemBow {
                 world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
                 world.playSound(null, player.posX + (player.rotationYaw / 180), player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
 
-                if (bonusArrow) {
+                if (shotArrows > 2) {
                     world.playSound(null, player.posX - (player.rotationYaw / 180), player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
                 }
             } else { // Other bows
