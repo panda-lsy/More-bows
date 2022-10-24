@@ -188,7 +188,7 @@ final class CustomBow extends ItemBow {
                     final ItemArrow useArrow;
                     final EntityArrow.PickupStatus pickStatus = (ConfigGeneral.customArrowMultiShot == CustomArrowMultiShotType.UseAmountShot) && !infiniteAmmo ? EntityArrow.PickupStatus.ALLOWED : EntityArrow.PickupStatus.CREATIVE_ONLY;
 
-                    if (ConfigGeneral.customArrowMultiShot == CustomArrowMultiShotType.FreeExtraNormalArrows) {
+                    if (ConfigGeneral.customArrowMultiShot == CustomArrowMultiShotType.AlwaysStandardArrows) {
                         useAmmo = defaultAmmo;
                         useArrow = defaultArrow;
                     } else {

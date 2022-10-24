@@ -17,8 +17,24 @@ public class ConfigGeneral {
     @LangKey(MoreBows.MOD_ID + "." + "confGenOldRendering")
     public static boolean oldFrostArrowRendering = false;
     /** MoreBows config setting: TODO */
-    @LangKey(MoreBows.MOD_ID + "." + "confMultiShotArrowUsage")
-    public static CustomArrowMultiShotType customArrowMultiShot = CustomArrowMultiShotType.AlwaysCustomEvenWithSingle;
+    private static final String confMultiShotAmmo = "confMultiShotAmmo";
+    @LangKey(MoreBows.MOD_ID + "." + confMultiShotAmmo)
+    public static CustomArrowMultiShotType customArrowMultiShot = CustomArrowMultiShotType.AlwaysCustomArrows;
 
-    public enum CustomArrowMultiShotType { AlwaysCustomEvenWithSingle, FreeExtraNormalArrows, UseAmountShot; }
+    public enum CustomArrowMultiShotType {
+        AlwaysCustomArrows(MoreBows.MOD_ID + "." + confMultiShotAmmo + ".AlwaysCustomArrows"),
+        AlwaysStandardArrows(MoreBows.MOD_ID + "." + confMultiShotAmmo + ".AlwaysStandardArrows"),
+        UseAmountShot(MoreBows.MOD_ID + "." + confMultiShotAmmo + ".UseAmountShot");
+
+        private final String langKey;
+
+        CustomArrowMultiShotType(String langKey) {
+            this.langKey = langKey;
+        }
+
+        @Override
+        public String toString() {
+            return langKey;
+        }
+    }
 }
