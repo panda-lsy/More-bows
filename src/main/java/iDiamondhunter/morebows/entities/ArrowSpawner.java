@@ -107,7 +107,8 @@ public final class ArrowSpawner extends Entity {
                         arrows[i].posX += 0.25;
                         arrows[i].posZ += 2.5;
                         world.playSound(null, arrows[i].posX, arrows[i].posY, arrows[i].posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, (1.0F / ((rand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
-
+                        break;
+                        
                     case 5:
                         world.spawnEntity(arrows[i]);
                         arrows[i].posY += 1.75;

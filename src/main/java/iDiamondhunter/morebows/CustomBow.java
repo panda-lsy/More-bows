@@ -138,7 +138,7 @@ final class CustomBow extends ItemBow {
             final int ammoCount = ammo.getCount();
             final int usedAmmo;
             final int shotArrows;
-            
+
             // TODO Redo all of this.
 
             if ((ConfigGeneral.customArrowMultiShot == CustomArrowMultiShotType.UseAmountShot) && multiShot) {
