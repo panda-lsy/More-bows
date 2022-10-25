@@ -72,7 +72,7 @@ public final class ConfigBows {
          * @param confBowDamageMult  The default bow damage multiplier.
          * @param confBowDrawbackDiv The default bow drawback divisor.
          */
-        private BowConfig(int confBowDurability, double confBowDamageMult, float confBowDrawbackDiv) {
+        BowConfig(int confBowDurability, double confBowDamageMult, float confBowDrawbackDiv) {
             this.confBowDurability = confBowDurability;
             this.confBowDamageMult = confBowDamageMult;
             this.confBowDrawbackDiv = confBowDrawbackDiv;
