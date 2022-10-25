@@ -108,6 +108,10 @@ final class CustomBow extends ItemBow {
      */
     @Override
     public IRarity getForgeRarity(ItemStack stack) {
+        if (rarity == EnumRarity.COMMON) {
+            return super.getForgeRarity(stack);
+        }
+
         return rarity;
     }
 
