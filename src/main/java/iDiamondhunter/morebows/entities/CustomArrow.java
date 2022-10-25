@@ -224,9 +224,9 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
                  * or "freezing" the water it's in by setting the block to ice.
                  */
                 if (timeInGround == 65) {
-                    final BlockPos inBlockPos = new BlockPos(this);
-                    final IBlockState inBlockState = world.getBlockState(inBlockPos);
-                    final Block inBlock = inBlockState.getBlock();
+                    BlockPos inBlockPos = new BlockPos(this);
+                    IBlockState inBlockState = world.getBlockState(inBlockPos);
+                    Block inBlock = inBlockState.getBlock();
 
                     /*
                      * If this arrow is inside an air block,
@@ -241,13 +241,6 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
 
                     if (inBlock.isAir(inBlockState, world, inBlockPos) && Blocks.SNOW_LAYER.canPlaceBlockAt(world, inBlockPos)) {
                         world.setBlockState(inBlockPos, Blocks.SNOW_LAYER.getDefaultState());
-                    } else if (inBlock == Blocks.SNOW_LAYER) {
-                        final int currentSnowLevel = inBlockState.<Integer>getValue(BlockSnow.LAYERS);
-
-                        if (currentSnowLevel < 8) {
-                            final IBlockState extraSnow = inBlockState.withProperty(BlockSnow.LAYERS, currentSnowLevel + 1);
-                            world.setBlockState(inBlockPos, extraSnow, 10);
-                        }
                     } else if (inBlock == Blocks.WATER) {
                         /*
                          * TODO Check if the earlier event or this one is the correct one.
@@ -255,6 +248,27 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
                          * Also: bouncy arrow on ice, a bit like stone skimming? Could be cool.
                          */
                         world.setBlockState(inBlockPos, Blocks.ICE.getDefaultState());
+                    } else if (inBlock == Blocks.SNOW_LAYER) {
+                        int currentSnowLevel = 8;
+
+                        while (inBlock == Blocks.SNOW_LAYER) {
+                            currentSnowLevel = inBlockState.<Integer>getValue(BlockSnow.LAYERS);
+
+                            if (currentSnowLevel <= 7) {
+                                break;
+                            }
+
+                            inBlockPos = inBlockPos.up();
+                            inBlockState = world.getBlockState(inBlockPos);
+                            inBlock = inBlockState.getBlock();
+                        }
+
+                        if (currentSnowLevel < 8) {
+                            final IBlockState extraSnow = inBlockState.withProperty(BlockSnow.LAYERS, currentSnowLevel + 1);
+                            world.setBlockState(inBlockPos, extraSnow, 10);
+                        } else if (inBlock.isAir(inBlockState, world, inBlockPos) && Blocks.SNOW_LAYER.canPlaceBlockAt(world, inBlockPos)) {
+                            world.setBlockState(inBlockPos, Blocks.SNOW_LAYER.getDefaultState());
+                        }
                     }
                 }
 
