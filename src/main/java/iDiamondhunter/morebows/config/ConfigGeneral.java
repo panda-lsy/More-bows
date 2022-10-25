@@ -7,7 +7,12 @@ import net.minecraftforge.common.config.Config.LangKey;
 /** General config settings. */
 @LangKey(MoreBows.MOD_ID + "." + "confCatGen")
 @Config(modid = MoreBows.MOD_ID)
-public class ConfigGeneral {
+public final class ConfigGeneral {
+
+    private ConfigGeneral() {
+        // Empty private constructor to hide default constructor
+    }
+
     private static final String confMultiShotAmmo = "confMultiShotAmmo";
 
     /**

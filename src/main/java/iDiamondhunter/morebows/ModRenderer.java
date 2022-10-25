@@ -21,32 +21,32 @@ final class ModRenderer extends RenderArrow<CustomArrow> {
     private final Render<Entity> cube;
     private final Render<Entity> snow;
 
-    ModRenderer(RenderManager renderManager) {
-        super(renderManager);
-        /**
+    ModRenderer(RenderManager renderManagerIn) {
+        super(renderManagerIn);
+        /*
          * Not sure if this is a super cursed hack,
          * or if it's actually the best way to do this...
          */
-        cube = renderManager.getEntityClassRenderObject(Entity.class);
-        snow = renderManager.getEntityClassRenderObject(EntitySnowball.class);
+        cube = renderManagerIn.getEntityClassRenderObject(Entity.class);
+        snow = renderManagerIn.getEntityClassRenderObject(EntitySnowball.class);
     }
 
     @Override
-    public void doRender(CustomArrow e, double a, double b, double c, float d, float f) {
-        if (e.type == ARROW_TYPE_FROST) {
+    public void doRender(CustomArrow entity, double x, double y, double z, float entityYaw, float partialTicks) {
+        if (entity.type == ARROW_TYPE_FROST) {
             if (!oldFrostArrowRendering) {
-                snow.doRender(e, a, b, c, d, f);
+                snow.doRender(entity, x, y, z, entityYaw, partialTicks);
             } else {
-                cube.doRender(e, a, b, c, d, f);
+                cube.doRender(entity, x, y, z, entityYaw, partialTicks);
             }
         } else {
-            super.doRender(e, a, b, c, d, f);
+            super.doRender(entity, x, y, z, entityYaw, partialTicks);
         }
     }
 
     @Override
-    protected ResourceLocation getEntityTexture(CustomArrow e) {
-        if (e.type != ARROW_TYPE_FROST) {
+    protected ResourceLocation getEntityTexture(CustomArrow entity) {
+        if (entity.type != ARROW_TYPE_FROST) {
             return ARROWS;
         }
 

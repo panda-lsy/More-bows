@@ -8,11 +8,15 @@ import net.minecraftforge.common.config.Config.RequiresMcRestart;
 /** Bow stats config settings. */
 @LangKey(MoreBows.MOD_ID + "." + "confCatBow")
 @Config(modid = MoreBows.MOD_ID, category = "bows", name = MoreBows.MOD_ID + "_bowstats")
-public class ConfigBows {
+public final class ConfigBows {
+
+    private ConfigBows() {
+        // Empty private constructor to hide default constructor
+    }
 
     /* Default values for bow construction. */
     /** Default values for bow construction: the default damage multiplier. */
-    private static final double noDamageMult = 1.0D;
+    private static final double noDamageMult = 1.0;
 
     /** Default values for bow construction: the default power divisor. */
     private static final float defaultPowerDiv = 20.0F;
@@ -21,7 +25,7 @@ public class ConfigBows {
     /** Diamond bow stats. */
     @LangKey("item." + MoreBows.DiamondBowTransKey + ".name")
     @RequiresMcRestart
-    public static BowConfig DiamondBow = new BowConfig(1016, 2.25D, 6.0F);
+    public static BowConfig DiamondBow = new BowConfig(1016, 2.25, 6.0F);
 
     /** Ender bow stats. */
     @LangKey("item." + MoreBows.EnderBowTransKey + ".name")
@@ -31,7 +35,7 @@ public class ConfigBows {
     /** Flame bow stats. */
     @LangKey("item." + MoreBows.FlameBowTransKey + ".name")
     @RequiresMcRestart
-    public static BowConfig FlameBow = new BowConfig(576, 2.0D, 15.0F);
+    public static BowConfig FlameBow = new BowConfig(576, 2.0, 15.0F);
 
     /** Frost bow stats. */
     @LangKey("item." + MoreBows.FrostBowTransKey + ".name")
@@ -41,12 +45,12 @@ public class ConfigBows {
     /** Gold bow stats. */
     @LangKey("item." + MoreBows.GoldBowTransKey + ".name")
     @RequiresMcRestart
-    public static BowConfig GoldBow = new BowConfig(68, 2.5D, 6.0F);
+    public static BowConfig GoldBow = new BowConfig(68, 2.5, 6.0F);
 
     /** Iron bow stats. */
     @LangKey("item." + MoreBows.IronBowTransKey + ".name")
     @RequiresMcRestart
-    public static BowConfig IronBow = new BowConfig(550, 1.5D, 17.0F);
+    public static BowConfig IronBow = new BowConfig(550, 1.5, 17.0F);
 
     /** Multi bow stats. */
     @LangKey("item." + MoreBows.MultiBowTransKey + ".name")
@@ -56,7 +60,7 @@ public class ConfigBows {
     /** Stone bow stats. */
     @LangKey("item." + MoreBows.StoneBowTransKey + ".name")
     @RequiresMcRestart
-    public static BowConfig StoneBow = new BowConfig(484, 1.15D, defaultPowerDiv);
+    public static BowConfig StoneBow = new BowConfig(484, 1.15, defaultPowerDiv);
 
     /** Data class for bow stats. Forge uses each field as config settings. */
     public static class BowConfig {
@@ -68,7 +72,7 @@ public class ConfigBows {
          * @param confBowDamageMult  The default bow damage multiplier.
          * @param confBowDrawbackDiv The default bow drawback divisor.
          */
-        public BowConfig(int confBowDurability, double confBowDamageMult, float confBowDrawbackDiv) {
+        private BowConfig(int confBowDurability, double confBowDamageMult, float confBowDrawbackDiv) {
             this.confBowDurability = confBowDurability;
             this.confBowDamageMult = confBowDamageMult;
             this.confBowDrawbackDiv = confBowDrawbackDiv;

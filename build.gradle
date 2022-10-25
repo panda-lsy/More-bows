@@ -39,7 +39,7 @@ apply plugin: 'net.minecraftforge.gradle'
 sourceCompatibility = 8
 targetCompatibility = 8
 
-def compiler = javaToolchains.compilerFor {
+final def compiler = javaToolchains.compilerFor {
     languageVersion = JavaLanguageVersion.of(8)
 }
 
@@ -50,8 +50,8 @@ import proguard.gradle.ProGuardTask
 version = project.mod_version
 group = project.mod_group
 
-def modName = project.mod_name
-def build_release = System.getenv("BUILD_RELEASE") == "true"
+final def modName = project.mod_name
+final def build_release = System.getenv("BUILD_RELEASE") == "true"
 
 // Add snapshot suffix to version if not building a release.
 // To build a release, set the environment variable BUILD_RELEASE to true.
@@ -115,7 +115,7 @@ processResources {
             "**/mcmod.info",
             "**/*.mcmeta",
             "**/*.json"
-        ]).each { File file ->
+        ]).each { final File file ->
             file.text = JsonOutput.toJson(new JsonSlurper().parse(file))
         }
     }

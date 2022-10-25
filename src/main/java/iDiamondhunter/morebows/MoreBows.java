@@ -36,9 +36,6 @@ import net.minecraftforge.oredict.OreDictionary;
 @Mod(modid = MoreBows.MOD_ID, version = "${version}", updateJSON = "https://nerdthened.github.io/More-bows/update.json")
 public class MoreBows {
 
-    /** The full name of More Bows. */
-    static final String MOD_NAME = "More Bows Restrung";
-
     /** The mod ID of More Bows. */
     public static final String MOD_ID = "morebows";
 
@@ -53,7 +50,7 @@ public class MoreBows {
     public static Logger modLog;
 
     /*
-     * Hardcoded magic numbers, because Enums (as they're classes)
+     * Hardcoded magic numbers, because Enums (as they are classes)
      * require a large amount of file space,
      * and I'm targeting 64kb as the compiled .jar size.
      * I'm really sorry for doing this.
@@ -134,7 +131,7 @@ public class MoreBows {
      *
      * @return an array of all bow items
      */
-    protected static final Item[] getAllItems() {
+    static Item[] getAllItems() {
         if (allItems == null) {
             DiamondBow = new CustomBow(ConfigBows.DiamondBow.confBowDurability, defaultArrowType, ConfigBows.DiamondBow.confBowDamageMult, false, ConfigBows.DiamondBow.confBowDrawbackDiv, EnumRarity.RARE).setTranslationKey(DiamondBowTransKey).setRegistryName(modSeparator + DiamondBowName);
             EnderBow = new CustomBow(ConfigBows.EnderBow.confBowDurability, ARROW_TYPE_ENDER, ConfigBows.EnderBow.confBowDamageMult, true, ConfigBows.EnderBow.confBowDrawbackDiv, EnumRarity.EPIC).setTranslationKey(EnderBowTransKey).setRegistryName(modSeparator + EnderBowName);
@@ -171,7 +168,7 @@ public class MoreBows {
      *                 around the entity.
      * @param velocity The velocity of spawned particles.
      */
-    public static final void tryPart(World world, Entity entity, EnumParticleTypes part, boolean randDisp, double velocity) {
+    public static void tryPart(World world, Entity entity, EnumParticleTypes part, boolean randDisp, double velocity) {
         if (!world.isRemote) {
             // final int amount = 1;
             final double xDisp;
@@ -180,12 +177,12 @@ public class MoreBows {
 
             if (randDisp) {
                 xDisp = (world.rand.nextFloat() * entity.width * 2.0F) - entity.width;
-                yDisp = 0.5D + (world.rand.nextFloat() * entity.height);
+                yDisp = 0.5 + (world.rand.nextFloat() * entity.height);
                 zDisp = (world.rand.nextFloat() * entity.width * 2.0F) - entity.width;
             } else {
-                xDisp = 0;
-                yDisp = 0.5D;
-                zDisp = 0;
+                xDisp = 0.0;
+                yDisp = 0.5;
+                zDisp = 0.0;
             }
 
             ((WorldServer) world).spawnParticle(part, entity.posX, entity.posY, entity.posZ, 1, xDisp, yDisp, zDisp, velocity);
@@ -207,7 +204,7 @@ public class MoreBows {
 
             if (frostArrowsShouldBeCold) {
                 if (living instanceof EntityBlaze) {
-                    event.setAmount(event.getAmount() * 3);
+                    event.setAmount(event.getAmount() * 3.0F);
                 }
 
                 living.extinguish();
@@ -243,7 +240,7 @@ public class MoreBows {
      * but it looks like it's not needed for server-side registration anymore.
      * TODO probably remove
      */
-    protected void register() {
+    void register() {
         // This space left unintentionally blank?
     }
 

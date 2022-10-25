@@ -48,48 +48,48 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
      * Don't use this.
      * TODO I think I can't remove these constructors, but I'm not sure.
      *
-     * @param a used in super construction
+     * @param worldIn used in super construction
      */
     @SuppressWarnings("unused")
-    public CustomArrow(World a) {
-        super(a);
+    public CustomArrow(World worldIn) {
+        super(worldIn);
     }
 
     /**
      * Don't use this.
      * TODO I think I can't remove these constructors, but I'm not sure.
      *
-     * @param a used in super construction
-     * @param b used in super construction
-     * @param c used in super construction
-     * @param d used in super construction
+     * @param worldIn used in super construction
+     * @param x       used in super construction
+     * @param y       used in super construction
+     * @param z       used in super construction
      */
     @SuppressWarnings("unused")
-    public CustomArrow(World a, double b, double c, double d) {
-        super(a, b, c, d);
+    public CustomArrow(World worldIn, double x, double y, double z) {
+        super(worldIn, x, y, z);
     }
 
     /**
      * Don't use this.
      * TODO I think I can't remove these constructors, but I'm not sure.
      *
-     * @param a used in super construction
-     * @param b used in super construction
+     * @param worldIn used in super construction
+     * @param shooter used in super construction
      */
     @SuppressWarnings("unused")
-    public CustomArrow(World a, EntityLivingBase b) {
-        super(a, b);
+    public CustomArrow(World worldIn, EntityLivingBase shooter) {
+        super(worldIn, shooter);
     }
 
     /**
      * A constructor that gives the CustomArrow an ArrowType.
      *
-     * @param a    used in super construction
-     * @param b    used in super construction
-     * @param type the type of arrow
+     * @param worldIn used in super construction
+     * @param shooter used in super construction
+     * @param type    the type of arrow
      */
-    public CustomArrow(World a, EntityLivingBase b, byte type) {
-        super(a, b);
+    public CustomArrow(World worldIn, EntityLivingBase shooter, byte type) {
+        super(worldIn, shooter);
         this.type = type;
     }
 
@@ -110,7 +110,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
             part = EnumParticleTypes.PORTAL;
             amount = 3;
             randDisp = true;
-            velocity = 1;
+            velocity = 1.0;
             break;
 
         case ARROW_TYPE_FIRE:
@@ -136,7 +136,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
             part = EnumParticleTypes.SUSPENDED_DEPTH;
             amount = 20;
             randDisp = true;
-            velocity = 0;
+            velocity = 0.0;
             break;
         }
 
@@ -167,7 +167,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
     @SideOnly(Side.CLIENT)
     public boolean getIsCritical() {
         return (type != ARROW_TYPE_FROST) && super.getIsCritical();
-        /**
+        /*
          * Obviously, you're just a bad shot :D
          * This is a hack to prevent the vanilla crit particles from displaying
          * for frost arrows, so that they can have a custom particle trail.
@@ -194,7 +194,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
                     pickupStatus = PickupStatus.DISALLOWED;
                 }
 
-                /**
+                /*
                  * Shrinks the size of the frost arrow if it's in the ground,
                  * and the mod is in old rendering mode.
                  */
@@ -204,10 +204,10 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
                 }
 
                 if (timeInGround <= 3) {
-                    world.spawnParticle(EnumParticleTypes.SNOWBALL, posX, posY, posZ, 0.0D, 0.0D, 0.0D);
+                    world.spawnParticle(EnumParticleTypes.SNOWBALL, posX, posY, posZ, 0.0, 0.0, 0.0);
                 }
 
-                /**
+                /*
                  * Behavior of older versions of More Bows
                  * TODO Possibly implement this
                  *
@@ -218,10 +218,10 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
                  * </pre>
                  */
                 if (timeInGround <= 31) {
-                    world.spawnParticle(EnumParticleTypes.WATER_SPLASH, posX, posY, posZ, 0.0D, 0.0D, 0.0D);
+                    world.spawnParticle(EnumParticleTypes.WATER_SPLASH, posX, posY, posZ, 0.0, 0.0, 0.0);
                 }
 
-                /**
+                /*
                  * Responsible for adding snow layers on top the block the arrow hits,
                  * or "freezing" the water it's in by setting the block to ice.
                  */
@@ -247,7 +247,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
                     if ((inBlock == Blocks.AIR) && downBlockState.isSideSolid(world, downBlockPos, EnumFacing.UP)) {
                         world.setBlockState(inBlockPos, Blocks.SNOW_LAYER.getDefaultState());
                     } else if (inBlock == Blocks.SNOW_LAYER) {
-                        final int currentSnowLevel = inBlockState.getValue(BlockSnow.LAYERS);
+                        final int currentSnowLevel = inBlockState.<Integer>getValue(BlockSnow.LAYERS);
 
                         if (currentSnowLevel < 8) {
                             final IBlockState extraSnow = inBlockState.withProperty(BlockSnow.LAYERS, currentSnowLevel + 1);
@@ -272,7 +272,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
                 }
             } else if (super.getIsCritical()) {
                 for (int i = 0; i < 4; ++i) {
-                    world.spawnParticle(EnumParticleTypes.WATER_SPLASH, posX + ((motionX * i) / 4.0D), posY + ((motionY * i) / 4.0D), posZ + ((motionZ * i) / 4.0D), -motionX, -motionY + 0.2D, -motionZ);
+                    world.spawnParticle(EnumParticleTypes.WATER_SPLASH, posX + ((motionX * i) / 4.0), posY + ((motionY * i) / 4.0), posZ + ((motionZ * i) / 4.0), -motionX, -motionY + 0.2, -motionZ);
                 }
             }
         }
@@ -281,12 +281,12 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
     /**
      * Read the CustomArrow from NBT.
      *
-     * @param tag the NBT tag
+     * @param compound the NBT tag
      */
     @Override
-    public void readEntityFromNBT(NBTTagCompound tag) {
-        super.readEntityFromNBT(tag);
-        type = tag.getByte("type");
+    public void readEntityFromNBT(NBTTagCompound compound) {
+        super.readEntityFromNBT(compound);
+        type = compound.getByte("type");
     }
 
     /**
@@ -294,10 +294,10 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
      * when spawning a CustomArrow.
      */
     @Override
-    public void readSpawnData(ByteBuf data) {
-        type = data.readByte();
-        /** See NetHandlerPlayClient.handleSpawnObject (line 470). */
-        final Entity shooter = world.getEntityByID(data.readInt());
+    public void readSpawnData(ByteBuf additionalData) {
+        type = additionalData.readByte();
+        /* See NetHandlerPlayClient.handleSpawnObject (line 470). */
+        final Entity shooter = world.getEntityByID(additionalData.readInt());
 
         if (shooter instanceof EntityLivingBase) {
             shootingEntity = shooter;
@@ -307,12 +307,12 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
     /**
      * Write the CustomArrow to NBT.
      *
-     * @param tag the NBT tag
+     * @param compound the NBT tag
      */
     @Override
-    public void writeEntityToNBT(NBTTagCompound tag) {
-        super.writeEntityToNBT(tag);
-        tag.setByte("type", type);
+    public void writeEntityToNBT(NBTTagCompound compound) {
+        super.writeEntityToNBT(compound);
+        compound.setByte("type", type);
     }
 
     /**
@@ -320,9 +320,9 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
      * when spawning a CustomArrow.
      */
     @Override
-    public void writeSpawnData(ByteBuf data) {
-        data.writeByte(type);
-        data.writeInt(shootingEntity != null ? shootingEntity.getEntityId() : -1);
+    public void writeSpawnData(ByteBuf buffer) {
+        buffer.writeByte(type);
+        buffer.writeInt(shootingEntity != null ? shootingEntity.getEntityId() : -1);
     }
 
 }
