@@ -19,9 +19,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
@@ -229,33 +227,26 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
                     final BlockPos inBlockPos = new BlockPos(this);
                     final IBlockState inBlockState = world.getBlockState(inBlockPos);
                     final Block inBlock = inBlockState.getBlock();
-                    final BlockPos downBlockPos = inBlockPos.down();
-                    final IBlockState downBlockState = world.getBlockState(downBlockPos);
 
                     /*
                      * If this arrow is inside an air block,
-                     * and there is a block underneath it with a solid surface,
+                     * and a snow layer can be placed at this location,
                      * place a snow layer on top of that block.
                      *
                      * If this arrow is inside a snow layer,
-                     * and a mob isn't colliding with the snow layer,
                      * increment the snow layer.
                      *
                      * If this arrow is inside water, replace the water with ice.
                      */
 
-                    if ((inBlock == Blocks.AIR) && downBlockState.isSideSolid(world, downBlockPos, EnumFacing.UP)) {
+                    if (inBlock.isAir(inBlockState, world, inBlockPos) && Blocks.SNOW_LAYER.canPlaceBlockAt(world, inBlockPos)) {
                         world.setBlockState(inBlockPos, Blocks.SNOW_LAYER.getDefaultState());
                     } else if (inBlock == Blocks.SNOW_LAYER) {
                         final int currentSnowLevel = inBlockState.<Integer>getValue(BlockSnow.LAYERS);
 
                         if (currentSnowLevel < 8) {
                             final IBlockState extraSnow = inBlockState.withProperty(BlockSnow.LAYERS, currentSnowLevel + 1);
-                            final AxisAlignedBB extraSnowBB = extraSnow.getCollisionBoundingBox(world, inBlockPos);
-
-                            if ((extraSnowBB != null) && world.checkNoEntityCollision(extraSnowBB.offset(inBlockPos))) {
-                                world.setBlockState(inBlockPos, extraSnow, 10);
-                            }
+                            world.setBlockState(inBlockPos, extraSnow, 10);
                         }
                     } else if (inBlock == Blocks.WATER) {
                         /*
