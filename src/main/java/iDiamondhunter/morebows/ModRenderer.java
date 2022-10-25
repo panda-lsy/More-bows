@@ -1,6 +1,5 @@
 package iDiamondhunter.morebows;
 
-
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_FROST;
 import static iDiamondhunter.morebows.config.ConfigGeneral.oldFrostArrowRendering;
 
@@ -13,6 +12,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.EntitySnowball;
 import net.minecraft.util.ResourceLocation;
 
+/** Handles rendering CustomArrows. */
 final class ModRenderer extends RenderArrow<CustomArrow> {
 
     private static final ResourceLocation ARROWS = new ResourceLocation("textures/entity/projectiles/arrow.png");
@@ -23,7 +23,10 @@ final class ModRenderer extends RenderArrow<CustomArrow> {
 
     ModRenderer(RenderManager renderManager) {
         super(renderManager);
-        /** Not sure if this is a super cursed hack, of if it's actually the best way to do this... */
+        /**
+         * Not sure if this is a super cursed hack,
+         * or if it's actually the best way to do this...
+         */
         cube = renderManager.getEntityClassRenderObject(Entity.class);
         snow = renderManager.getEntityClassRenderObject(EntitySnowball.class);
     }

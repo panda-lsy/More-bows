@@ -28,13 +28,20 @@ import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-
-/** This entity is a custom arrow. A large portion of logic around these arrows is handled in the MoreBows class with SubscribeEvents. TODO much of this is out of date, this is just a quick port */
+/**
+ * This entity is a custom arrow.
+ * A large portion of logic around these arrows
+ * is handled in the MoreBows class with SubscribeEvents.
+ * TODO much of this is out of date
+ */
 public final class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnData {
 
     /** If this is the first time this arrow has hit a block. */
     private boolean firstBlockHit = true;
-    /** The type of this arrow. In an ideal world, this would be final, but this is not an ideal world. See readSpawnData. */
+    /**
+     * The type of this arrow. In an ideal world, this would be final,
+     * but this is not an ideal world. See readSpawnData.
+     */
     public byte type = ARROW_TYPE_NOT_CUSTOM;
 
     /**
@@ -88,6 +95,8 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
 
     /**
      * Creates the particle effects when a custom arrow hits an entity.
+     *
+     * @param living the entity
      */
     @Override
     protected void arrowHit(EntityLivingBase living) {
@@ -137,27 +146,39 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
         }
     }
 
-    /** TODO does this ever matter? if not, consider just returning null. */
+    /**
+     * Gets the (default) arrow stack.
+     *
+     * @return the arrow stack
+     */
     @Override
     protected ItemStack getArrowStack() {
         return new ItemStack(Items.ARROW);
     }
 
-    /** This may not accurately return whether an arrow is critical or not. This is to hide crit particle trails, when a custom arrow has a custom particle trail. */
+    /**
+     * This may not accurately return whether an arrow is critical or not.
+     * This is to hide crit particle trails,
+     * when a custom arrow has a custom particle trail.
+     *
+     * @return true if critical (mostly)
+     */
     @Override
     @SideOnly(Side.CLIENT)
     public boolean getIsCritical() {
         return (type != ARROW_TYPE_FROST) && super.getIsCritical();
         /**
          * Obviously, you're just a bad shot :D
-         * This is a hack to prevent the vanilla crit particles from displaying for frost arrows, so that they can have a custom particle trail.
-         * The vanilla code to display the arrow particle trail is buried deep inside onUpdate,
-         * but the easiest way to get around this is just to pretend that the arrow isn't critical.
-         * I've made this only effect client-side logic, which means that things like critical hits still function.
+         * This is a hack to prevent the vanilla crit particles from displaying
+         * for frost arrows, so that they can have a custom particle trail.
+         * The vanilla code to display the arrow particle trail is inside onUpdate,
+         * but the easiest way to get around this is just to pretend
+         * the arrow isn't critical. I've made this only effect client-side logic,
+         * which means that things like critical hits still function.
          */
     }
 
-    /** TODO review a bunch of this logic, some of it should be updated */
+    /** TODO review a bunch of this logic, some of it should be updated. */
     @Override
     public void onUpdate() {
         super.onUpdate();
@@ -173,7 +194,10 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
                     pickupStatus = PickupStatus.DISALLOWED;
                 }
 
-                /** Shrinks the size of the frost arrow if it's in the ground and the mod is in old rendering mode. */
+                /**
+                 * Shrinks the size of the frost arrow if it's in the ground,
+                 * and the mod is in old rendering mode.
+                 */
                 if (firstBlockHit && world.isRemote && oldFrostArrowRendering) {
                     setSize(0.1F, 0.1F);
                     firstBlockHit = false;
@@ -197,7 +221,10 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
                     world.spawnParticle(EnumParticleTypes.WATER_SPLASH, posX, posY, posZ, 0.0D, 0.0D, 0.0D);
                 }
 
-                /** Responsible for adding snow layers on top the block the arrow hits, or "freezing" the water it's in by setting the block to ice. */
+                /**
+                 * Responsible for adding snow layers on top the block the arrow hits,
+                 * or "freezing" the water it's in by setting the block to ice.
+                 */
                 if (timeInGround == 65) {
                     final BlockPos inBlockPos = new BlockPos(this);
                     final IBlockState inBlockState = world.getBlockState(inBlockPos);
@@ -206,8 +233,14 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
                     final IBlockState downBlockState = world.getBlockState(downBlockPos);
 
                     /*
-                     * If this arrow is inside an air block, and there is a block underneath it with a solid surface, place a snow layer on top of that block.
-                     * If this arrow is inside a snow layer, and a mob isn't colliding with the snow layer, increment the snow layer.
+                     * If this arrow is inside an air block,
+                     * and there is a block underneath it with a solid surface,
+                     * place a snow layer on top of that block.
+                     *
+                     * If this arrow is inside a snow layer,
+                     * and a mob isn't colliding with the snow layer,
+                     * increment the snow layer.
+                     *
                      * If this arrow is inside water, replace the water with ice.
                      */
 
@@ -245,16 +278,25 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
         }
     }
 
+    /**
+     * Read the CustomArrow from NBT.
+     *
+     * @param tag the NBT tag
+     */
     @Override
     public void readEntityFromNBT(NBTTagCompound tag) {
         super.readEntityFromNBT(tag);
         type = tag.getByte("type");
     }
 
+    /**
+     * Used to set the arrow type and the shooting entity on the client side
+     * when spawning a CustomArrow.
+     */
     @Override
     public void readSpawnData(ByteBuf data) {
         type = data.readByte();
-        /** See NetHandlerPlayClient.handleSpawnObject (line 414) TODO this comment is outdated */
+        /** See NetHandlerPlayClient.handleSpawnObject (line 470). */
         final Entity shooter = world.getEntityByID(data.readInt());
 
         if (shooter instanceof EntityLivingBase) {
@@ -262,12 +304,21 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
         }
     }
 
+    /**
+     * Write the CustomArrow to NBT.
+     *
+     * @param tag the NBT tag
+     */
     @Override
     public void writeEntityToNBT(NBTTagCompound tag) {
         super.writeEntityToNBT(tag);
         tag.setByte("type", type);
     }
 
+    /**
+     * Used to send the arrow type and the shooting entity to the client
+     * when spawning a CustomArrow.
+     */
     @Override
     public void writeSpawnData(ByteBuf data) {
         data.writeByte(type);

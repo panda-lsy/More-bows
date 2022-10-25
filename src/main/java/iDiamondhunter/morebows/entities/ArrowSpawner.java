@@ -10,10 +10,16 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
-/** This entity is responsible for storing and spawning the time delayed "bonus" arrows of the ender bow. */
+/**
+ * This entity is responsible for storing and spawning
+ * the time delayed "bonus" arrows of the ender bow.
+ */
 public final class ArrowSpawner extends Entity {
 
+    /** The arrows to spawn. */
     private EntityArrow[] arrows;
+
+    /** The stored shot velocity. */
     private float shotVelocity;
 
     /**
@@ -28,7 +34,8 @@ public final class ArrowSpawner extends Entity {
     }
 
     /**
-     * This entity is responsible for storing and spawning the time delayed "bonus" arrows of the ender bow.
+     * This entity is responsible for storing and spawning
+     * the time delayed "bonus" arrows of the ender bow.
      *
      * @param world        the world to spawn in
      * @param posX         the x position.
@@ -137,7 +144,11 @@ public final class ArrowSpawner extends Entity {
         }
     }
 
-    /** This method reads the entity specific data from saved NBT data, including the stored arrows. TODO Clean-up code */
+    /**
+     * This method reads the entity specific data from saved NBT data,
+     * including the stored arrows.
+     * TODO Clean-up code
+     */
     @Override
     protected void readEntityFromNBT(NBTTagCompound tag) {
         /** Restore the saved amount of ticks that this entity has existed for */
@@ -159,7 +170,11 @@ public final class ArrowSpawner extends Entity {
                     final NBTTagCompound currentArrow = arrowsTag.getCompoundTag(arrTagName);
 
                     try {
-                        /** Assuming the data from the written NBT tag is valid, arrows[i] is set to an arrow created by calling createEntityFromNBT with the saved NBT data. */
+                        /**
+                         * Assuming the data from the written NBT tag is valid,
+                         * arrows[i] is set to an arrow created by calling
+                         * createEntityFromNBT with the saved NBT data.
+                         */
                         final Entity savedEntity = EntityList.createEntityFromNBT(currentArrow, world);
 
                         if (savedEntity instanceof EntityArrow) {
@@ -195,7 +210,10 @@ public final class ArrowSpawner extends Entity {
         }
     }
 
-    /** This method saves the entity specific data to NBT data, including the stored arrows. */
+    /**
+     * This method saves the entity specific data to NBT data,
+     * including the stored arrows.
+     */
     @Override
     protected void writeEntityToNBT(NBTTagCompound tag) {
         /** Save the amount of ticks that this entity has existed for */
@@ -204,7 +222,10 @@ public final class ArrowSpawner extends Entity {
         tag.setFloat("shotVelocity", shotVelocity);
 
         if (arrows != null) {
-            /** This compound tag will contain the saved NBT data from each arrow in the "arrows" array. */
+            /**
+             * This compound tag will contain the saved NBT data
+             * from each arrow in the "arrows" array.
+             */
             final NBTTagCompound arrowsTag = new NBTTagCompound();
 
             /** An over-engineered system to save an arbitrary amount of entities. */
@@ -227,7 +248,10 @@ public final class ArrowSpawner extends Entity {
                     arrTag = new EntityTippedArrow(world).serializeNBT();
                 }
 
-                /** The NBT for arrows[i] is then stored as a sub tag of the compound tag arrowsTag. */
+                /**
+                 * The NBT for arrows[i] is then stored as a sub tag
+                 * of the compound tag arrowsTag.
+                 */
                 arrowsTag.setTag("arrow" + i, arrTag);
             }
 

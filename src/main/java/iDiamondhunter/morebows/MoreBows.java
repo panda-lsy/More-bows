@@ -36,10 +36,10 @@ import net.minecraftforge.oredict.OreDictionary;
 @Mod(modid = MoreBows.MOD_ID, version = "${version}", updateJSON = "https://nerdthened.github.io/More-bows/update.json")
 public class MoreBows {
 
-    /** The full name of More Bows */
+    /** The full name of More Bows. */
     static final String MOD_NAME = "More Bows Restrung";
 
-    /** The mod ID of More Bows */
+    /** The mod ID of More Bows. */
     public static final String MOD_ID = "morebows";
 
     /** Used for naming items. */
@@ -49,10 +49,13 @@ public class MoreBows {
     @SidedProxy(clientSide = "iDiamondhunter.morebows.Client", serverSide = "iDiamondhunter.morebows.MoreBows")
     private static MoreBows proxy;
 
+    /** The mod log. */
     public static Logger modLog;
 
     /*
-     * Hardcoded magic numbers, because Enums (as they're classes) require a large amount of file space, and I'm targeting 64kb as the compiled .jar size.
+     * Hardcoded magic numbers, because Enums (as they're classes)
+     * require a large amount of file space,
+     * and I'm targeting 64kb as the compiled .jar size.
      * I'm really sorry for doing this.
      */
     /**
@@ -100,9 +103,14 @@ public class MoreBows {
     public static final String FrostBowTransKey = MOD_ID + "." + FrostBowName;
 
     /* Default values for bow construction */
+
     /** Default values for bow construction: the default type of arrow a bow shoots. */
     private static final byte defaultArrowType = ARROW_TYPE_NOT_CUSTOM;
 
+    /*
+     * Bow items.
+     * Avoid using directly, try to use getAllItems() instead.
+     */
     private static Item DiamondBow;
     private static Item EnderBow;
     private static Item FlameBow;
@@ -112,9 +120,21 @@ public class MoreBows {
     private static Item MultiBow;
     private static Item StoneBow;
 
+    /**
+     * An array of all bow items.
+     * Avoid using directly, try to use getAllItems() instead.
+     */
     private static Item[] allItems = null;
 
-    protected static final Item[] getAllItems () {
+    /**
+     * Constructs the array of all bow items if it hasn't been constructed,
+     * and returns it. This is a hack to construct the items
+     * after the config values have been loaded.
+     * TODO Make less hacky.
+     *
+     * @return an array of all bow items
+     */
+    protected static final Item[] getAllItems() {
         if (allItems == null) {
             DiamondBow = new CustomBow(ConfigBows.DiamondBow.confBowDurability, defaultArrowType, ConfigBows.DiamondBow.confBowDamageMult, false, ConfigBows.DiamondBow.confBowDrawbackDiv, EnumRarity.RARE).setTranslationKey(DiamondBowTransKey).setRegistryName(modSeparator + DiamondBowName);
             EnderBow = new CustomBow(ConfigBows.EnderBow.confBowDurability, ARROW_TYPE_ENDER, ConfigBows.EnderBow.confBowDamageMult, true, ConfigBows.EnderBow.confBowDrawbackDiv, EnumRarity.EPIC).setTranslationKey(EnderBowTransKey).setRegistryName(modSeparator + EnderBowName);
@@ -124,7 +144,7 @@ public class MoreBows {
             IronBow = new CustomBow(ConfigBows.IronBow.confBowDurability, defaultArrowType, ConfigBows.IronBow.confBowDamageMult, false, ConfigBows.IronBow.confBowDrawbackDiv, EnumRarity.COMMON).setTranslationKey(IronBowTransKey).setRegistryName(modSeparator + IronBowName);
             MultiBow = new CustomBow(ConfigBows.MultiBow.confBowDurability, ARROW_TYPE_NOT_CUSTOM, ConfigBows.MultiBow.confBowDamageMult, true, ConfigBows.MultiBow.confBowDrawbackDiv, EnumRarity.RARE).setTranslationKey(MultiBowTransKey).setRegistryName(modSeparator + MultiBowName);
             StoneBow = new CustomBow(ConfigBows.StoneBow.confBowDurability, defaultArrowType, ConfigBows.StoneBow.confBowDamageMult, false, ConfigBows.StoneBow.confBowDrawbackDiv, EnumRarity.COMMON).setTranslationKey(StoneBowTransKey).setRegistryName(modSeparator + StoneBowName);
-            allItems = new Item[] { DiamondBow, EnderBow, FlameBow, FrostBow, GoldBow, IronBow, MultiBow, StoneBow } ;
+            allItems = new Item[] { DiamondBow, EnderBow, FlameBow, FrostBow, GoldBow, IronBow, MultiBow, StoneBow };
         }
 
         return allItems;
@@ -136,15 +156,19 @@ public class MoreBows {
 
     /**
      * This method attempts to spawn a particle on the server world.
-     * It first checks if the provided world is a client or a server. If it is a client world, it doesn't do anything.
-     * If it is a server world, it calls the server world specific method to spawn a particle on the server.
+     * It first checks if the provided world is a client or a server.
+     * If it is a client world, it doesn't do anything.
+     * If it is a server world, it calls the server world specific method
+     * to spawn a particle on the server.
      * This particle will be sent to connected clients.
-     * The parameter randDisp can be set, which sets the particles position to somewhere random close to the entity.
+     * The parameter randDisp can be set, which sets the particles position
+     * to somewhere random close to the entity.
      *
      * @param world    The world to attempt to spawn a particle in.
      * @param entity   The entity to spawn the particle at.
      * @param part     The particle type to spawn.
-     * @param randDisp If this is true, particles will be randomly distributed around the entity.
+     * @param randDisp If this is true, particles will be randomly distributed
+     *                 around the entity.
      * @param velocity The velocity of spawned particles.
      */
     public static final void tryPart(World world, Entity entity, EnumParticleTypes part, boolean randDisp, double velocity) {
@@ -213,29 +237,42 @@ public class MoreBows {
         MinecraftForge.EVENT_BUS.register(proxy);
     }
 
-    /** This was once used to register anything needed both client side and server side, but it looks like it's not needed for server-side registration anymore. TODO probably remove */
+    /**
+     * This was once used to register anything needed
+     * both client side and server side,
+     * but it looks like it's not needed for server-side registration anymore.
+     * TODO probably remove
+     */
     protected void register() {
         // This space left unintentionally blank?
     }
 
-    // TODO review
+    /**
+     * Register entities.
+     * TODO review
+     *
+     * @param event the RegistryEvent
+     */
     @SubscribeEvent
     public final void registerEntities(RegistryEvent.Register<EntityEntry> event) {
         event.getRegistry().registerAll(customArrowEntry, arrowSpawnerEntry);
     }
 
-    // TODO modify recipes involving bows?
-    /*@SubscribeEvent
-    public final void registerRecipes(RegistryEvent.Register<IRecipe> event) {
-    }*/
-
-    // TODO review
+    /**
+     * Register items and OreDictionary entries.
+     * TODO review
+     *
+     * @param event the RegistryEvent
+     */
     @SubscribeEvent
     public final void registerItems(RegistryEvent.Register<Item> event) {
         event.getRegistry().registerAll(getAllItems());
 
-        // Apparently, you should register to the OreDictionary in this event. I don't make the rules.
-        // TODO create a config setting to use WILDCARD_VALUE or not
+        /*
+         * Apparently, you should register to the OreDictionary in this event.
+         * I don't make the rules.
+         * TODO create a config setting to use WILDCARD_VALUE or not
+         */
         for (final Item item : getAllItems()) {
             OreDictionary.registerOre("bow", new ItemStack(item, 1, OreDictionary.WILDCARD_VALUE));
         }

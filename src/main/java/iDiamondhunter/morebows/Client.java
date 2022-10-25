@@ -24,12 +24,10 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**
- * Handles almost all general client side only code. Client is also the client proxy.
+ * Handles general client side only code. Client is also the client proxy.
  * - Client event handling
  * - Client rendering registration
- * - Even implements IModGuiFactory and IRenderFactory!
- * TODO much of the Config related code is outdated, although it still works.
- * Disregard my comments, they were written for 1.7.10.
+ * - Even implements IRenderFactory!
  */
 public final class Client extends MoreBows implements IRenderFactory<CustomArrow> {
     @SubscribeEvent
@@ -47,7 +45,7 @@ public final class Client extends MoreBows implements IRenderFactory<CustomArrow
     /**
      * Handles the FOV "zoom in" when drawing a custom bow.
      *
-     * @param event the event
+     * @param event the FOVUpdateEvent
      */
     @SubscribeEvent
     public void FOV(FOVUpdateEvent event) {
@@ -56,10 +54,15 @@ public final class Client extends MoreBows implements IRenderFactory<CustomArrow
         if (eventItem instanceof CustomBow) {
             float finalFov = event.getFov();
             final float itemUseCount = bowMaxUseDuration - event.getEntity().getItemInUseCount();
-            // First, we have to reverse the standard bow zoom.
-            // Minecraft helpfully applies the standard bow zoom to any item that is an instance of a ItemBow.
-            // However, our CustomBows draw back at different speeds, so the standard zoom is not at the right speed.
-            // To compensate for this, we just calculate the standard bow zoom, and apply it in reverse.
+            /*
+             * First, we have to reverse the standard bow zoom.
+             * Minecraft helpfully applies the standard bow zoom
+             * to any item that is an instance of a ItemBow.
+             * However, our CustomBows draw back at different speeds,
+             * so the standard zoom is not at the right speed.
+             * To compensate for this, we just calculate the standard bow zoom,
+             * and apply it in reverse.
+             */
             float realBow = itemUseCount / 20.0F;
 
             if (realBow > 1.0F) {
@@ -68,11 +71,18 @@ public final class Client extends MoreBows implements IRenderFactory<CustomArrow
                 realBow *= realBow;
             }
 
-            // Minecraft uses finalFov *= 1.0F - (realBow * 0.15F) to calculate the standard bow zoom.
-            // To reverse this, we just divide it instead.
+            /*
+             * Minecraft uses finalFov *= 1.0F - (realBow * 0.15F)
+             * to calculate the standard bow zoom.
+             * To reverse this, we just divide it instead.
+             */
             finalFov /= 1.0F - (realBow * 0.15F);
-            // We now calculate and apply our CustomBow zoom.
-            // The only difference between standard bow zoom and CustomBow zoom is that we change the hardcoded value of 20.0F to whatever powerDiv is.
+            /*
+             * We now calculate and apply our CustomBow zoom.
+             * The only difference between standard bow zoom and CustomBow zoom
+             * is that we change the hardcoded value of 20.0F to
+             * whatever powerDiv is.
+             */
             float customBow = itemUseCount / ((CustomBow) eventItem).powerDiv;
 
             if (customBow > 1.0F) {
@@ -108,11 +118,11 @@ public final class Client extends MoreBows implements IRenderFactory<CustomArrow
     /**
      * Handles rendering a CustomBow when drawing it back in first person.
      * This is necessary to make the bow draw back at the right speed.
-     * This would not be an issue if there was a way to customize rendering for EnumAction.BOW,
-     * but there is seemingly no way to do this.
+     * This would not be an issue if there was a way to customize rendering for
+     * EnumAction.BOW, but there is seemingly no way to do this.
      * TODO investigate a better way to do this.
      *
-     * @param event the event
+     * @param event the RenderSpecificHandEvent
      */
     @SubscribeEvent
     public void renderBow(RenderSpecificHandEvent event) {
@@ -127,12 +137,12 @@ public final class Client extends MoreBows implements IRenderFactory<CustomArrow
             final boolean rightHanded = (event.getHand() == EnumHand.MAIN_HAND ? mc.player.getPrimaryHand() : mc.player.getPrimaryHand().opposite()) == EnumHandSide.RIGHT;
             final int handedSide = rightHanded ? 1 : -1;
             /*
-            // Translate to current hand
-            GlStateManager.translate(handedSide * 0.56F, -0.52F + (event.getEquipProgress() * -0.6F), -0.72F);
-            GlStateManager.translate(handedSide * -0.2785682F, 0.18344387F, 0.15731531F);
-            */
-            // Merged translate calls
-            //GlStateManager.translate(handedSide * (-0.2785682F + 0.56F), -0.52F + (event.getEquipProgress() * -0.6F) + 0.18344387F, -0.72F + 0.15731531F);
+             * Translate to current hand
+             * GlStateManager.translate(handedSide * 0.56F, -0.52F + (event.getEquipProgress() * -0.6F), -0.72F);
+             * GlStateManager.translate(handedSide * -0.2785682F, 0.18344387F, 0.15731531F);
+             * Merged translate calls
+             * GlStateManager.translate(handedSide * (-0.2785682F + 0.56F), -0.52F + (event.getEquipProgress() * -0.6F) + 0.18344387F, -0.72F + 0.15731531F);
+             */
             GlStateManager.translate(handedSide * 0.2814318F, -0.3365561F + (event.getEquipProgress() * -0.6F), -0.5626847F);
             // Rotate angles
             GlStateManager.rotate(-13.935F, 1.0F, 0.0F, 0.0F);

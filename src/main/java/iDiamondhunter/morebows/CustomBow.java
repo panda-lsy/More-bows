@@ -29,7 +29,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IRarity;
 
 /**
- * This entire class is a huge hack. I'm ashamed of myself. And yes, this is important to document.
+ * This entire class is a huge hack. I'm ashamed of myself.
+ * And yes, this is important to document.
  * TODO: Possibly come up with better ideas for various bits of this class.
  **/
 final class CustomBow extends ItemBow {
@@ -38,20 +39,30 @@ final class CustomBow extends ItemBow {
     private static final ItemArrow defaultArrow = (ItemArrow) Items.ARROW;
 
     /* Bow instance variables */
+    /** The type of arrows this bow shoots. */
     private final byte bowType;
+
+    /** The damage multiplier of the bow. */
     private final double damageMult;
+
+    /** True if the bow is a multi-shot bow. */
     private final boolean multiShot;
+
+    /** The drawback speed of the bow. */
     final float powerDiv;
+
+    /** The rarity of the bow. */
     private final EnumRarity rarity;
 
     /**
      * A more customizable bow than the vanilla one.
      *
      * @param maxDamage  The durability of the bow.
-     * @param bowType    The type of arrows this bow shoots. This also influences some behaviors of the bow as well.
+     * @param bowType    The type of arrows this bow shoots.
+     *                   This also influences some behaviors of the bow as well.
      * @param damageMult The multiplier to damage done by an arrow shot by this bow.
-     * @param multiShot  A dirty, dirty hack, indicating if this bow shoots multiple arrows or not.
-     * @param powerDiv   The power divisor of this bow. TODO document better.
+     * @param multiShot  True if this bow shoots multiple arrows.
+     * @param powerDiv   The power divisor of this bow. Influences drawback speed.
      * @param rarity     The rarity of this bow.
      */
     CustomBow(int maxDamage, byte bowType, double damageMult, boolean multiShot, float powerDiv, EnumRarity rarity) {
@@ -70,31 +81,40 @@ final class CustomBow extends ItemBow {
         });
     }
 
-    // TODO review
+    /** TODO review */
     private EntityArrow arrowHelper(World world, EntityPlayer player, float velocity, ItemStack ammo, ItemArrow arrow) {
         final EntityArrow entityarrow = arrow.createArrow(world, ammo, player);
         return arrowHelperHelper(player, velocity, entityarrow);
     }
 
-    // TODO review
+    /** TODO review */
     private EntityArrow arrowHelperHelper(EntityPlayer player, float velocity, EntityArrow entityarrow) {
         entityarrow = customizeArrow(entityarrow);
         entityarrow.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, velocity, 1.0F);
         return entityarrow;
     }
 
-    // TODO review
+    /** TODO review */
     private EntityArrow customArrowHelper(World world, EntityPlayer player, float velocity) {
         final EntityArrow entityarrow = new CustomArrow(world, player, bowType);
         return arrowHelperHelper(player, velocity, entityarrow);
     }
 
+    /**
+     * Gets the item rarity.
+     *
+     * @param stack the ItemStack
+     * @return the item rarity
+     */
     @Override
     public IRarity getForgeRarity(ItemStack stack) {
         return rarity;
     }
 
-    /** This method creates particles when left clicking with an ender bow. TODO probably replace with client-side function */
+    /**
+     * This method creates particles when left clicking with an ender bow.
+     * TODO probably replace with client-side function
+     */
     @Override
     public boolean onEntitySwing(EntityLivingBase player, ItemStack stack) {
         if (bowType == ARROW_TYPE_ENDER) {
@@ -104,14 +124,22 @@ final class CustomBow extends ItemBow {
         return false;
     }
 
-    /** This handles the process of shooting an arrow from this bow. TODO Cleanup, document more */
+    /**
+     * This handles the process of shooting an arrow from this bow.
+     * TODO Cleanup, document more
+     *
+     * @param bow    the ItemStack of the shot bow
+     * @param world  the world the bow was shot in
+     * @param living the shooting entity
+     * @param useRem how long the bow has been in use for
+     */
     @Override
     public void onPlayerStoppedUsing(ItemStack bow, World world, EntityLivingBase living, int useRem) {
         if (!(living instanceof EntityPlayer)) {
             return;
         }
 
-        final EntityPlayer player = (EntityPlayer)living;
+        final EntityPlayer player = (EntityPlayer) living;
         final boolean alwaysShoots = player.capabilities.isCreativeMode || (EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, bow) > 0);
         ItemStack ammo = findAmmo(player);
         final int charge = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(bow, world, player, bowMaxUseDuration - useRem, !ammo.isEmpty() || alwaysShoots);
@@ -137,11 +165,10 @@ final class CustomBow extends ItemBow {
             final int ammoCount = infiniteAmmo ? 64 : ammo.getCount();
             final int usedAmmo;
             final int shotArrows;
-            // TODO Redo all of this.
             final int maxAmmo;
 
             if (multiShot) {
-                if (bowType == ARROW_TYPE_ENDER) { // Ender bow
+                if (bowType == ARROW_TYPE_ENDER) {
                     maxAmmo = 6;
                 } else {
                     maxAmmo = itemRand.nextInt(4) == 0 ? 3 : 2;
@@ -168,16 +195,19 @@ final class CustomBow extends ItemBow {
                     isCrit = false;
                 }
 
-                final ItemArrow arrow = (ItemArrow)(ammo.getItem() instanceof ItemArrow ? ammo.getItem() : Items.ARROW);
+                final ItemArrow arrow = (ItemArrow) (ammo.getItem() instanceof ItemArrow ? ammo.getItem() : Items.ARROW);
                 final EntityArrow[] arrs;
 
                 /**
                  * Create the arrows to fire.
-                 * The velocity multiplier for each arrow is written as a value multiplied by 1.5F.
+                 * The velocity multiplier for each arrow
+                 * is written as a value multiplied by 1.5F.
                  * This is because this mod was originally for older versions of Minecraft,
                  * where the vanilla bow had a base velocity multiplier of 2.0F.
-                 * As I still want to maintain and backport changes for the 1.7.10 version of this mod,
-                 * (and because I can't figure out how the velocity multipliers for each CustomBow were chosen),
+                 * As I still want to maintain and backport changes
+                 * for the 1.7.10 version of this mod,
+                 * (and because I can't figure out how the velocity multipliers
+                 * for each CustomBow were chosen),
                  * I have simply multiplied each velocity multiplier
                  * to be the equivalent value for a base multiplier of 3.0F instead
                  * (2.0F * 1.5F == 3.0F).
@@ -262,7 +292,13 @@ final class CustomBow extends ItemBow {
                             }
                         }
                     }
-                } else if (bowType == ARROW_TYPE_NOT_CUSTOM) { // "Standard" style bows that do not shoot multiple arrows or have a custom arrow type. Note to self: this is after the multi-arrow bows due to the multi bow having arrows of a normal type.
+                } else if (bowType == ARROW_TYPE_NOT_CUSTOM) {
+                    /*
+                     * "Standard" style bows that do not shoot multiple arrows,
+                     * or have a custom arrow type.
+                     * Note to self: this is after the multi-arrow bows
+                     * due to the multi bow having arrows of a normal type.
+                     */
                     arrs = new EntityArrow[] { arrowHelper(world, player, shotVelocity * (2.0F * 1.5F), ammo, arrow) };
                 } else { // Bows that shoot only one custom arrow, currently only frost / fire bows
                     arrs = new EntityArrow[] { possiblyCustomArrowHelper(world, player, shotVelocity * (2.0F * 1.5F), ammo, arrow) };
@@ -362,7 +398,6 @@ final class CustomBow extends ItemBow {
             }
 
             if (!infiniteAmmo) {
-                // TODO review
                 ammo.shrink(usedAmmo);
 
                 if (ammo.isEmpty()) {
@@ -378,7 +413,7 @@ final class CustomBow extends ItemBow {
         }
     }
 
-    // TODO review
+    /** TODO review */
     private EntityArrow possiblyCustomArrowHelper(World world, EntityPlayer player, float velocity, ItemStack ammo, ItemArrow arrow) {
         if (arrow == Items.ARROW) {
             return customArrowHelper(world, player, velocity);
