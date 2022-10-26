@@ -7,7 +7,16 @@ layout: default
 {% assign image_files = site.static_files | where: "isRecipe", true | sort: 'basename' %}
 {% for img in image_files %}
 <picture>
-  <source srcset="{{ img.path | replace_first: ".png", ".webp" | relative_url }}" type="image/webp">
+  {% assign jxlPath = img.path | replace_first: ".png", ".jxl" %}
+  {% assign webpPath = img.path | replace_first: ".png", ".webp" %}
+  {% for siteFile in site.static_files %}
+    {% if siteFile.path == jxlPath %}
+      <source srcset="{{ jxlPath | relative_url }}" type="image/jxl">
+    {% endif %}
+    {% if siteFile.path == webpPath %}
+      <source srcset="{{ webpPath | relative_url }}" type="image/webp">
+    {% endif %}
+  {% endfor %}
   <img title="{{ img.basename }}" src="{{ img.path | relative_url }}" />
 </picture>
 {% endfor %}
