@@ -32,7 +32,7 @@ Descriptions taken from [iDiamondhunter's page for the mod](https://www.minecraf
 
 ### Building:
 
-The buildscript for this mod uses a fairly standard Gradle 6.x + ForgeGradle 4.x combination. A Java 8 JDK is required.
+The buildscript for this mod uses a fairly standard Gradle 7.x + ForgeGradle 5.1.x combination. A Java 8 JDK is required.
 
 ### Licence:
 
@@ -57,6 +57,6 @@ As iDiamondhunter ["removed the copyrights" from this mod](https://www.minecraft
     <picture>
         <source srcset="https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-320.webp 320w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-480.webp 480w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-600.webp 600w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-768.webp 768w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-900.webp 900w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-1024.webp 1024w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs.webp" type="image/webp">
         <source srcset="https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-320.png 320w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-480.png 480w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-600.png 600w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-768.png 768w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-900.png 900w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-1024.png 1024w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs.png" type="image/png">
-        <img src="https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs.png" alt="A screenshot of a player shooting pigs with the Ender bow" title="A mod for 1.12.2 in 2021? When pigs fly..." style='height: 100%; width: 100%; object-fit: contain'/>
+        <img src="https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs.png" alt="A screenshot of a player shooting pigs with the Ender bow" title="A mod for 1.12.2 in 2022? When pigs fly..." style='height: 100%; width: 100%; object-fit: contain'/>
     </picture>
 </p>
