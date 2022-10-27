@@ -17,6 +17,6 @@ layout: default
       <source srcset="{{ webpPath | relative_url }}" type="image/webp">
     {% endif %}
   {% endfor %}
-  <img height="664" width="704" title="{{ img.basename }}" src="{{ img.path | relative_url }}" />
+  <img height="664" width="704" style='height: 100%; width: 100%; object-fit: contain' title="{{ img.basename }}" src="{{ img.path | relative_url }}" />
 </picture>
 {% endfor %}
