@@ -155,6 +155,9 @@ tasks.create("copyResourceToClasses", Copy.class) {
 tasks.withType(JavaCompile) {
     // Ensures that the encoding of source files is set to UTF-8, see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
     options.encoding = "UTF-8"
+    // Tells Gradle to include more debug information in compiled .class files. For the optimised files, this will be removed by ProGuard.
+    options.debug = true
+    options.debugOptions.debugLevel = "source,lines,vars"
 }
 
 // This task creates a .jar file containing the source code of this mod.
