@@ -22,7 +22,9 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: 8
+          java-version: |
+            8
+            17
       - name: Install advancecomp
         run: sudo apt-get install advancecomp
       - name: Install strip-nondeterminism
