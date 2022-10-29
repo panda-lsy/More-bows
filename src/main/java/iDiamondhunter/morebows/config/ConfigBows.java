@@ -11,8 +11,34 @@ import net.minecraftforge.common.config.Config.RequiresMcRestart;
 @Config(modid = MoreBows.MOD_ID, category = "bows", name = MoreBows.MOD_ID + "_bowstats")
 public final class ConfigBows {
 
-    private ConfigBows() {
-        // Empty private constructor to hide default constructor
+    /** Data class for bow stats. Forge uses each field as config settings. */
+    public static class BowConfig {
+
+        /** The configured bow durability. */
+        @LangKey(MoreBows.MOD_ID + "." + "confBowDurability")
+        public int confBowDurability;
+
+        /** The configured bow damage multiplier. */
+        @LangKey(MoreBows.MOD_ID + "." + "confBowDamageMult")
+        public double confBowDamageMult;
+
+        /** The configured bow drawback divisor. */
+        @LangKey(MoreBows.MOD_ID + "." + "confBowDrawbackDiv")
+        public float confBowDrawbackDiv;
+
+        /**
+         * Creates configuration settings for a bow.
+         *
+         * @param confBowDurability  The default bow durability.
+         * @param confBowDamageMult  The default bow damage multiplier.
+         * @param confBowDrawbackDiv The default bow drawback divisor.
+         */
+        BowConfig(int confBowDurability, double confBowDamageMult, float confBowDrawbackDiv) {
+            this.confBowDurability = confBowDurability;
+            this.confBowDamageMult = confBowDamageMult;
+            this.confBowDrawbackDiv = confBowDrawbackDiv;
+        }
+
     }
 
     /* Default values for bow construction. */
@@ -71,33 +97,8 @@ public final class ConfigBows {
     @SuppressFBWarnings(value = "MS_SHOULD_BE_FINAL")
     public static BowConfig StoneBow = new BowConfig(484, 1.15, defaultPowerDiv);
 
-    /** Data class for bow stats. Forge uses each field as config settings. */
-    public static class BowConfig {
-
-        /**
-         * Creates configuration settings for a bow.
-         *
-         * @param confBowDurability  The default bow durability.
-         * @param confBowDamageMult  The default bow damage multiplier.
-         * @param confBowDrawbackDiv The default bow drawback divisor.
-         */
-        BowConfig(int confBowDurability, double confBowDamageMult, float confBowDrawbackDiv) {
-            this.confBowDurability = confBowDurability;
-            this.confBowDamageMult = confBowDamageMult;
-            this.confBowDrawbackDiv = confBowDrawbackDiv;
-        }
-
-        /** The configured bow durability. */
-        @LangKey(MoreBows.MOD_ID + "." + "confBowDurability")
-        public int confBowDurability;
-
-        /** The configured bow damage multiplier. */
-        @LangKey(MoreBows.MOD_ID + "." + "confBowDamageMult")
-        public double confBowDamageMult;
-
-        /** The configured bow drawback divisor. */
-        @LangKey(MoreBows.MOD_ID + "." + "confBowDrawbackDiv")
-        public float confBowDrawbackDiv;
+    private ConfigBows() {
+        // Empty private constructor to hide default constructor
     }
 
 }

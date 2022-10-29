@@ -138,6 +138,10 @@ public class MoreBows {
     @SuppressWarnings("NullAway.Init")
     private static Item[] allItems;
 
+    /* EntityEntryBuilders. */
+    private static final @NotNull EntityEntry customArrowEntry = EntityEntryBuilder.create().entity(CustomArrow.class).id("custom_arrow", 1).name("Custom arrow").tracker(64, 20, true).build();
+    private static final @NotNull EntityEntry arrowSpawnerEntry = EntityEntryBuilder.create().entity(ArrowSpawner.class).id("arrow_spawner", 2).name("Arrow spawner").tracker(-1, Integer.MAX_VALUE, false).build();
+
     /**
      * Constructs the array of all bow items if it hasn't been constructed,
      * and returns it. This is a hack to construct the items
@@ -161,10 +165,6 @@ public class MoreBows {
 
         return allItems;
     }
-
-    /* EntityEntryBuilders. */
-    private static final @NotNull EntityEntry customArrowEntry = EntityEntryBuilder.create().entity(CustomArrow.class).id("custom_arrow", 1).name("Custom arrow").tracker(64, 20, true).build();
-    private static final @NotNull EntityEntry arrowSpawnerEntry = EntityEntryBuilder.create().entity(ArrowSpawner.class).id("arrow_spawner", 2).name("Arrow spawner").tracker(-1, Integer.MAX_VALUE, false).build();
 
     /**
      * This method attempts to spawn a particle on the server world.

@@ -32,6 +32,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
  * - Even implements IRenderFactory!
  */
 public final class Client extends MoreBows implements IRenderFactory<CustomArrow> {
+
     @SubscribeEvent
     public void confChange(OnConfigChangedEvent event) {
         if (MOD_ID.equals(event.getModID())) {
