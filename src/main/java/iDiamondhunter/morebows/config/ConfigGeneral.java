@@ -1,5 +1,7 @@
 package iDiamondhunter.morebows.config;
 
+import org.jetbrains.annotations.NotNull;
+
 import iDiamondhunter.morebows.MoreBows;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.LangKey;
@@ -47,7 +49,7 @@ public final class ConfigGeneral {
      * See each enum constant for more information.
      */
     @LangKey(MoreBows.MOD_ID + "." + confMultiShotAmmo)
-    public static CustomArrowMultiShotType customArrowMultiShot = CustomArrowMultiShotType.AlwaysCustomArrows;
+    public static @NotNull CustomArrowMultiShotType customArrowMultiShot = CustomArrowMultiShotType.AlwaysCustomArrows;
 
     /** Changes how multi-shot bows handle shooting additional arrows. */
     public enum CustomArrowMultiShotType {
@@ -71,7 +73,7 @@ public final class ConfigGeneral {
         UseAmountShot(MoreBows.MOD_ID + "." + confMultiShotAmmo + ".UseAmountShot");
 
         /** The language key for this setting. */
-        private final String langKey;
+        private final @NotNull String langKey;
 
         /**
          * Create a new multi-shot config setting
@@ -79,7 +81,7 @@ public final class ConfigGeneral {
          *
          * @param langKey the language key
          */
-        CustomArrowMultiShotType(String langKey) {
+        CustomArrowMultiShotType(@NotNull String langKey) {
             this.langKey = langKey;
         }
 
@@ -90,7 +92,7 @@ public final class ConfigGeneral {
          * @return the language key
          */
         @Override
-        public String toString() {
+        public @NotNull String toString() {
             return langKey;
         }
     }

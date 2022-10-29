@@ -1,5 +1,6 @@
 package iDiamondhunter.morebows.entities;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import iDiamondhunter.morebows.MoreBows;
@@ -19,7 +20,7 @@ import net.minecraft.world.World;
 public final class ArrowSpawner extends Entity {
 
     /** The arrows to spawn. */
-    private @Nullable EntityArrow[] arrows;
+    private @Nullable EntityArrow @NotNull [] arrows;
 
     /** The stored shot velocity. */
     private float shotVelocity;
@@ -177,7 +178,7 @@ public final class ArrowSpawner extends Entity {
                          * arrows[i] is set to an arrow created by calling
                          * createEntityFromNBT with the saved NBT data.
                          */
-                        final Entity savedEntity = EntityList.createEntityFromNBT(currentArrow, world);
+                        final @Nullable Entity savedEntity = EntityList.createEntityFromNBT(currentArrow, world);
 
                         if (savedEntity instanceof EntityArrow) {
                             toAdd = (EntityArrow) savedEntity;

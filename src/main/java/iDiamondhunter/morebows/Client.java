@@ -1,5 +1,7 @@
 package iDiamondhunter.morebows;
 
+import org.jetbrains.annotations.Nullable;
+
 import iDiamondhunter.morebows.entities.CustomArrow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -107,7 +109,7 @@ public final class Client extends MoreBows implements IRenderFactory<CustomArrow
     @SubscribeEvent
     public void registerModels(ModelRegistryEvent event) {
         for (final Item item : getAllItems()) {
-            final ResourceLocation itemLocation = item.getRegistryName();
+            final @Nullable ResourceLocation itemLocation = item.getRegistryName();
 
             if (itemLocation != null) {
                 ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(itemLocation.toString()));

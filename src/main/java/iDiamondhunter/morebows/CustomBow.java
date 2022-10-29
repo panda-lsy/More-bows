@@ -5,6 +5,8 @@ import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_FIRE;
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_NOT_CUSTOM;
 import static iDiamondhunter.morebows.MoreBows.bowMaxUseDuration;
 
+import org.jetbrains.annotations.Nullable;
+
 import iDiamondhunter.morebows.config.ConfigGeneral;
 import iDiamondhunter.morebows.config.ConfigGeneral.CustomArrowMultiShotType;
 import iDiamondhunter.morebows.entities.ArrowSpawner;
@@ -409,7 +411,7 @@ final class CustomBow extends ItemBow {
                 }
             }
 
-            final StatBase stat = StatList.getObjectUseStats(this);
+            final @Nullable StatBase stat = StatList.getObjectUseStats(this);
 
             if (stat != null) {
                 player.addStat(stat);

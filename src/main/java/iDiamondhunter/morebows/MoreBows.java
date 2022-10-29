@@ -4,6 +4,8 @@ import static iDiamondhunter.morebows.config.ConfigGeneral.frostArrowsShouldBeCo
 import static iDiamondhunter.morebows.config.ConfigGeneral.oldFrostArrowMobSlowdown;
 
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import iDiamondhunter.morebows.config.ConfigBows;
 import iDiamondhunter.morebows.entities.ArrowSpawner;
@@ -159,8 +161,8 @@ public class MoreBows {
     }
 
     /* EntityEntryBuilders. */
-    private static final EntityEntry customArrowEntry = EntityEntryBuilder.create().entity(CustomArrow.class).id("custom_arrow", 1).name("Custom arrow").tracker(64, 20, true).build();
-    private static final EntityEntry arrowSpawnerEntry = EntityEntryBuilder.create().entity(ArrowSpawner.class).id("arrow_spawner", 2).name("Arrow spawner").tracker(-1, Integer.MAX_VALUE, false).build();
+    private static final @NotNull EntityEntry customArrowEntry = EntityEntryBuilder.create().entity(CustomArrow.class).id("custom_arrow", 1).name("Custom arrow").tracker(64, 20, true).build();
+    private static final @NotNull EntityEntry arrowSpawnerEntry = EntityEntryBuilder.create().entity(ArrowSpawner.class).id("arrow_spawner", 2).name("Arrow spawner").tracker(-1, Integer.MAX_VALUE, false).build();
 
     /**
      * This method attempts to spawn a particle on the server world.
@@ -208,7 +210,7 @@ public class MoreBows {
      */
     @SubscribeEvent
     public final void arrHurt(LivingHurtEvent event) {
-        final Entity source = event.getSource().getImmediateSource();
+        final @Nullable Entity source = event.getSource().getImmediateSource();
 
         if ((source instanceof CustomArrow) && (((CustomArrow) source).type == ARROW_TYPE_FROST)) {
             final EntityLivingBase living = event.getEntityLiving();
@@ -222,7 +224,7 @@ public class MoreBows {
             }
 
             if (!oldFrostArrowMobSlowdown) {
-                final Potion slow = Potion.getPotionFromResourceLocation("slowness");
+                final @Nullable Potion slow = Potion.getPotionFromResourceLocation("slowness");
 
                 if (slow != null) {
                     living.addPotionEffect(new PotionEffect(slow, 300, 2));

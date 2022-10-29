@@ -7,6 +7,8 @@ import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_NOT_CUSTOM;
 import static iDiamondhunter.morebows.config.ConfigGeneral.frostArrowsShouldBeCold;
 import static iDiamondhunter.morebows.config.ConfigGeneral.oldFrostArrowRendering;
 
+import org.jetbrains.annotations.Nullable;
+
 import iDiamondhunter.morebows.MoreBows;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
@@ -302,7 +304,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
     public void readSpawnData(ByteBuf additionalData) {
         type = additionalData.readByte();
         /* See NetHandlerPlayClient.handleSpawnObject (line 470). */
-        final Entity shooter = world.getEntityByID(additionalData.readInt());
+        final @Nullable Entity shooter = world.getEntityByID(additionalData.readInt());
 
         if (shooter instanceof EntityLivingBase) {
             shootingEntity = shooter;
