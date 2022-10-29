@@ -41,16 +41,16 @@ public final class ArrowSpawner extends Entity {
      * This entity is responsible for storing and spawning
      * the time delayed "bonus" arrows of the ender bow.
      *
-     * @param world        the world to spawn in
+     * @param worldIn      the world to spawn in
      * @param posX         the x position.
      * @param posY         the y position.
      * @param posZ         the z position.
      * @param shotVelocity the velocity of the stored arrows.
      * @param arrows       the stored arrows.
      */
-    @SuppressFBWarnings(value = "EI_EXPOSE_REP2")
-    public ArrowSpawner(World world, double posX, double posY, double posZ, float shotVelocity, EntityArrow[] arrows) {
-        this(world);
+    @SuppressFBWarnings("EI_EXPOSE_REP2")
+    public ArrowSpawner(World worldIn, double posX, double posY, double posZ, float shotVelocity, EntityArrow[] arrows) {
+        this(worldIn);
         this.shotVelocity = shotVelocity;
         this.posX = posX;
         this.posY = posY;

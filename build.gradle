@@ -114,7 +114,7 @@ dependencies {
     proguardHack "com.github.spotbugs:spotbugs-annotations:4.7.3"
 
     // Error Prone
-    errorprone "com.google.errorprone:error_prone_core:2.4.0"
+    errorprone "com.google.errorprone:error_prone_core:2.11.0"
     errorproneJavac "com.google.errorprone:javac:9+181-r4173-1"
 }
 

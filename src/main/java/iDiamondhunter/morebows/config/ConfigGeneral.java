@@ -67,7 +67,7 @@ public final class ConfigGeneral {
      * If false, frost arrows can be on fire.
      */
     @LangKey(MoreBows.MOD_ID + "." + "confGenFrostCold")
-    @SuppressFBWarnings(value = "MS_SHOULD_BE_FINAL")
+    @SuppressFBWarnings("MS_SHOULD_BE_FINAL")
     public static boolean frostArrowsShouldBeCold = true;
 
     /**
@@ -78,7 +78,7 @@ public final class ConfigGeneral {
      * TODO This never made much sense.
      */
     @LangKey(MoreBows.MOD_ID + "." + "confGenOldSlowdown")
-    @SuppressFBWarnings(value = "MS_SHOULD_BE_FINAL")
+    @SuppressFBWarnings("MS_SHOULD_BE_FINAL")
     public static boolean oldFrostArrowMobSlowdown = false;
 
     /**
@@ -87,7 +87,7 @@ public final class ConfigGeneral {
      * If false, render as snowballs.
      */
     @LangKey(MoreBows.MOD_ID + "." + "confGenOldRendering")
-    @SuppressFBWarnings(value = "MS_SHOULD_BE_FINAL")
+    @SuppressFBWarnings("MS_SHOULD_BE_FINAL")
     public static boolean oldFrostArrowRendering = false;
 
     /**

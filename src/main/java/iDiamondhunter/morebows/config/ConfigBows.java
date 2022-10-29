@@ -52,49 +52,49 @@ public final class ConfigBows {
     /** Diamond bow stats. */
     @LangKey("item." + MoreBows.DiamondBowTransKey + ".name")
     @RequiresMcRestart
-    @SuppressFBWarnings(value = "MS_SHOULD_BE_FINAL")
+    @SuppressFBWarnings("MS_SHOULD_BE_FINAL")
     public static BowConfig DiamondBow = new BowConfig(1016, 2.25, 6.0F);
 
     /** Ender bow stats. */
     @LangKey("item." + MoreBows.EnderBowTransKey + ".name")
     @RequiresMcRestart
-    @SuppressFBWarnings(value = "MS_SHOULD_BE_FINAL")
+    @SuppressFBWarnings("MS_SHOULD_BE_FINAL")
     public static BowConfig EnderBow = new BowConfig(215, noDamageMult, 22.0F);
 
     /** Flame bow stats. */
     @LangKey("item." + MoreBows.FlameBowTransKey + ".name")
     @RequiresMcRestart
-    @SuppressFBWarnings(value = "MS_SHOULD_BE_FINAL")
+    @SuppressFBWarnings("MS_SHOULD_BE_FINAL")
     public static BowConfig FlameBow = new BowConfig(576, 2.0, 15.0F);
 
     /** Frost bow stats. */
     @LangKey("item." + MoreBows.FrostBowTransKey + ".name")
     @RequiresMcRestart
-    @SuppressFBWarnings(value = "MS_SHOULD_BE_FINAL")
+    @SuppressFBWarnings("MS_SHOULD_BE_FINAL")
     public static BowConfig FrostBow = new BowConfig(550, noDamageMult, 26.0F);
 
     /** Gold bow stats. */
     @LangKey("item." + MoreBows.GoldBowTransKey + ".name")
     @RequiresMcRestart
-    @SuppressFBWarnings(value = "MS_SHOULD_BE_FINAL")
+    @SuppressFBWarnings("MS_SHOULD_BE_FINAL")
     public static BowConfig GoldBow = new BowConfig(68, 2.5, 6.0F);
 
     /** Iron bow stats. */
     @LangKey("item." + MoreBows.IronBowTransKey + ".name")
     @RequiresMcRestart
-    @SuppressFBWarnings(value = "MS_SHOULD_BE_FINAL")
+    @SuppressFBWarnings("MS_SHOULD_BE_FINAL")
     public static BowConfig IronBow = new BowConfig(550, 1.5, 17.0F);
 
     /** Multi bow stats. */
     @LangKey("item." + MoreBows.MultiBowTransKey + ".name")
     @RequiresMcRestart
-    @SuppressFBWarnings(value = "MS_SHOULD_BE_FINAL")
+    @SuppressFBWarnings("MS_SHOULD_BE_FINAL")
     public static BowConfig MultiBow = new BowConfig(550, noDamageMult, 13.0F);
 
     /** Stone bow stats. */
     @LangKey("item." + MoreBows.StoneBowTransKey + ".name")
     @RequiresMcRestart
-    @SuppressFBWarnings(value = "MS_SHOULD_BE_FINAL")
+    @SuppressFBWarnings("MS_SHOULD_BE_FINAL")
     public static BowConfig StoneBow = new BowConfig(484, 1.15, defaultPowerDiv);
 
     private ConfigBows() {

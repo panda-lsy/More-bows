@@ -1,3 +1,6 @@
+/**
+ * This package contains code for the entities of More Bows.
+ */
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 package iDiamondhunter.morebows.entities;

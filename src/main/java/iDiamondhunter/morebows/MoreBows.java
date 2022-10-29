@@ -52,7 +52,7 @@ public class MoreBows {
 
     /** The mod log. */
     @SuppressWarnings("NullAway.Init")
-    @SuppressFBWarnings(value = "MS_CANNOT_BE_FINAL")
+    @SuppressFBWarnings("MS_CANNOT_BE_FINAL")
     public static Logger modLog;
 
     /*
@@ -243,7 +243,7 @@ public class MoreBows {
      * @param event the event
      */
     @EventHandler
-    @SuppressFBWarnings(value = "ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD")
+    @SuppressFBWarnings("ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD")
     public final void init(FMLPreInitializationEvent event) {
         modLog = event.getModLog();
         proxy.register();
