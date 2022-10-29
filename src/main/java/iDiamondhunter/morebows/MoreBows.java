@@ -44,9 +44,11 @@ public class MoreBows {
 
     /** Mod proxy. TODO This is super janky, see if it's possible to remove this */
     @SidedProxy(clientSide = "iDiamondhunter.morebows.Client", serverSide = "iDiamondhunter.morebows.MoreBows")
+    @SuppressWarnings("NullAway.Init")
     private static MoreBows proxy;
 
     /** The mod log. */
+    @SuppressWarnings("NullAway.Init")
     public static Logger modLog;
 
     /*
@@ -108,20 +110,29 @@ public class MoreBows {
      * Bow items.
      * Avoid using directly, try to use getAllItems() instead.
      */
+    @SuppressWarnings("NullAway.Init")
     private static Item DiamondBow;
+    @SuppressWarnings("NullAway.Init")
     private static Item EnderBow;
+    @SuppressWarnings("NullAway.Init")
     private static Item FlameBow;
+    @SuppressWarnings("NullAway.Init")
     private static Item FrostBow;
+    @SuppressWarnings("NullAway.Init")
     private static Item GoldBow;
+    @SuppressWarnings("NullAway.Init")
     private static Item IronBow;
+    @SuppressWarnings("NullAway.Init")
     private static Item MultiBow;
+    @SuppressWarnings("NullAway.Init")
     private static Item StoneBow;
 
     /**
      * An array of all bow items.
      * Avoid using directly, try to use getAllItems() instead.
      */
-    private static Item[] allItems = null;
+    @SuppressWarnings("NullAway.Init")
+    private static Item[] allItems;
 
     /**
      * Constructs the array of all bow items if it hasn't been constructed,

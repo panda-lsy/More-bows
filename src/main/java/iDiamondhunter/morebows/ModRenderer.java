@@ -3,6 +3,8 @@ package iDiamondhunter.morebows;
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_FROST;
 import static iDiamondhunter.morebows.config.ConfigGeneral.oldFrostArrowRendering;
 
+import org.jetbrains.annotations.Nullable;
+
 import iDiamondhunter.morebows.entities.CustomArrow;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderArrow;
@@ -45,6 +47,7 @@ final class ModRenderer extends RenderArrow<CustomArrow> {
     }
 
     @Override
+    @Nullable
     protected ResourceLocation getEntityTexture(CustomArrow entity) {
         if (entity.type != ARROW_TYPE_FROST) {
             return ARROWS;

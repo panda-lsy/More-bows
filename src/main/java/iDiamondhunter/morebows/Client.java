@@ -16,7 +16,7 @@ import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.RenderSpecificHandEvent;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.common.config.Config.Type;
+import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
@@ -33,7 +33,7 @@ public final class Client extends MoreBows implements IRenderFactory<CustomArrow
     @SubscribeEvent
     public void confChange(OnConfigChangedEvent event) {
         if (MOD_ID.equals(event.getModID())) {
-            ConfigManager.sync(MOD_ID, Type.INSTANCE);
+            ConfigManager.sync(MOD_ID, Config.Type.INSTANCE);
         }
     }
 

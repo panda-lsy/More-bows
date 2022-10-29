@@ -51,7 +51,7 @@
 
 # Annotations and generic method signatures are kept, as Forge uses them for reflection.
 
--keepattributes *Annotation*,Signature
+-keepattributes RuntimeVisibleAnnotations,Signature
 
 # Repackage all classes into iDiamondhunter.morebows
 

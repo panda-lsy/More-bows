@@ -1,5 +1,7 @@
 package iDiamondhunter.morebows.entities;
 
+import org.jetbrains.annotations.Nullable;
+
 import iDiamondhunter.morebows.MoreBows;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -17,7 +19,7 @@ import net.minecraft.world.World;
 public final class ArrowSpawner extends Entity {
 
     /** The arrows to spawn. */
-    private EntityArrow[] arrows;
+    private @Nullable EntityArrow[] arrows;
 
     /** The stored shot velocity. */
     private float shotVelocity;
@@ -74,7 +76,7 @@ public final class ArrowSpawner extends Entity {
         if (!world.isRemote) {
             if (ticksExisted == 1) {
                 /* Check that the arrows exist before accessing them. */
-                if (arrows.length == 0) {
+                if ((arrows == null) || (arrows.length == 0)) {
                     MoreBows.modLog.error("No arrows in ArrowSpawner!");
                     setDead();
                     return;
@@ -84,7 +86,7 @@ public final class ArrowSpawner extends Entity {
                 world.spawnEntity(arrows[0]);
             }
 
-            if (ticksExisted == 61) {
+            if ((ticksExisted == 61) && (arrows != null)) {
                 for (int i = 1; i < arrows.length; ++i) {
                     world.spawnEntity(arrows[i]);
                     final double arrYDisp;
@@ -160,7 +162,7 @@ public final class ArrowSpawner extends Entity {
         if (compound.hasKey("arrows", 10)) {
             final NBTTagCompound arrowsTag = compound.getCompoundTag("arrows");
             final int arrowsAmount = arrowsTag.getSize();
-            arrows = new EntityArrow[arrowsAmount];
+            final EntityArrow[] readArrows = new EntityArrow[arrowsAmount];
 
             for (int i = 0; i < arrowsAmount; i++) {
                 final String arrTagName = "arrow" + i;
@@ -198,12 +200,14 @@ public final class ArrowSpawner extends Entity {
                 }
 
                 if (toAdd != null) {
-                    arrows[i] = toAdd;
+                    readArrows[i] = toAdd;
                 } else {
                     /* If the data isn't valid, a new EntityArrow is created to avoid null objects. */
-                    arrows[i] = new EntityTippedArrow(world);
+                    readArrows[i] = new EntityTippedArrow(world);
                 }
             }
+
+            arrows = readArrows;
         } else {
             MoreBows.modLog.error("Could not find saved EntityArrows for ArrowSpawner {} when loading from NBT data ({}).", this, compound);
             arrows = null;
