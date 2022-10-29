@@ -2,6 +2,7 @@ package iDiamondhunter.morebows.config;
 
 import org.jetbrains.annotations.NotNull;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import iDiamondhunter.morebows.MoreBows;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.LangKey;
@@ -23,6 +24,7 @@ public final class ConfigGeneral {
      * If false, frost arrows can be on fire.
      */
     @LangKey(MoreBows.MOD_ID + "." + "confGenFrostCold")
+    @SuppressFBWarnings(value = "MS_SHOULD_BE_FINAL")
     public static boolean frostArrowsShouldBeCold = true;
 
     /**
@@ -33,6 +35,7 @@ public final class ConfigGeneral {
      * TODO This never made much sense.
      */
     @LangKey(MoreBows.MOD_ID + "." + "confGenOldSlowdown")
+    @SuppressFBWarnings(value = "MS_SHOULD_BE_FINAL")
     public static boolean oldFrostArrowMobSlowdown = false;
 
     /**
@@ -41,6 +44,7 @@ public final class ConfigGeneral {
      * If false, render as snowballs.
      */
     @LangKey(MoreBows.MOD_ID + "." + "confGenOldRendering")
+    @SuppressFBWarnings(value = "MS_SHOULD_BE_FINAL")
     public static boolean oldFrostArrowRendering = false;
 
     /**
@@ -49,6 +53,7 @@ public final class ConfigGeneral {
      * See each enum constant for more information.
      */
     @LangKey(MoreBows.MOD_ID + "." + confMultiShotAmmo)
+    @SuppressFBWarnings(value = { "NP_NONNULL_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "MS_SHOULD_BE_FINAL" }, justification = "SpotBugs seems to be having trouble detecting the initialisation of the field here")
     public static @NotNull CustomArrowMultiShotType customArrowMultiShot = CustomArrowMultiShotType.AlwaysCustomArrows;
 
     /** Changes how multi-shot bows handle shooting additional arrows. */

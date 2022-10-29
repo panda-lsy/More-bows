@@ -3,6 +3,7 @@ package iDiamondhunter.morebows.entities;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import iDiamondhunter.morebows.MoreBows;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -47,6 +48,7 @@ public final class ArrowSpawner extends Entity {
      * @param shotVelocity the velocity of the stored arrows.
      * @param arrows       the stored arrows.
      */
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP2")
     public ArrowSpawner(World world, double posX, double posY, double posZ, float shotVelocity, EntityArrow[] arrows) {
         this(world);
         this.shotVelocity = shotVelocity;
@@ -141,7 +143,7 @@ public final class ArrowSpawner extends Entity {
                     arrows[i].posY += arrYDisp;
                     arrows[i].posX += arrXDisp;
                     arrows[i].posZ += arrZDisp;
-                    world.playSound(null, arrows[i].posX, arrows[i].posY, arrows[i].posZ, (i % 2) == 1 ? SoundEvents.ENTITY_ENDERMEN_TELEPORT : SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, soundVolume, soundPitch);
+                    world.playSound(null, arrows[i].posX, arrows[i].posY, arrows[i].posZ, (i % 2) != 0 ? SoundEvents.ENTITY_ENDERMEN_TELEPORT : SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, soundVolume, soundPitch);
                 }
             }
         }

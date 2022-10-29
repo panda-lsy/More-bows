@@ -24,6 +24,7 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'net.ltgt.errorprone' version '3.0.1'
+    id 'com.github.spotbugs' version '5.0.13'
 }
 
 // Reproducible builds! https://docs.gradle.org/4.9/userguide/working_with_files.html#sec:reproducible_archives
@@ -107,6 +108,10 @@ dependencies {
     // JetBrains null annotations
     compileOnly "org.jetbrains:annotations:23.0.0"
     proguardHack "org.jetbrains:annotations:23.0.0"
+
+    // SpotBugs annotations
+    compileOnly "com.github.spotbugs:spotbugs-annotations:4.7.3"
+    proguardHack "com.github.spotbugs:spotbugs-annotations:4.7.3"
 
     // Error Prone
     errorprone "com.google.errorprone:error_prone_core:2.4.0"
