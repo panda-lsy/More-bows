@@ -32,7 +32,7 @@ Descriptions taken from [iDiamondhunter's page for the mod](https://www.minecraf
 
 ### Building:
 
-The buildscript for this mod uses a fairly standard Gradle 7.x + ForgeGradle 5.1.x combination. A Java 11 JDK and a Java 8 JDK is required to build the mod.
+The buildscript for this mod uses a fairly standard Gradle 7.x + ForgeGradle 5.1.x combination. A Java 11+ JDK and a Java 8 JDK are required to build the mod.
 
 ### Licence:
 
