@@ -253,13 +253,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
                     } else if (inBlock == Blocks.SNOW_LAYER) {
                         int currentSnowLevel = 8;
 
-                        while (inBlock == Blocks.SNOW_LAYER) {
-                            currentSnowLevel = inBlockState.<Integer>getValue(BlockSnow.LAYERS);
-
-                            if (currentSnowLevel <= 7) {
-                                break;
-                            }
-
+                        while ((inBlock == Blocks.SNOW_LAYER) && ((currentSnowLevel = inBlockState.<Integer>getValue(BlockSnow.LAYERS)) > 7)) {
                             inBlockPos = inBlockPos.up();
                             inBlockState = world.getBlockState(inBlockPos);
                             inBlock = inBlockState.getBlock();
