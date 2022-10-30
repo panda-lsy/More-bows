@@ -370,7 +370,7 @@ final class CustomBow extends ItemBow {
                             }
 
                             if ((i > 0) && (arr.shootingEntity != null)) {
-                                final double negate = ((i % 2) * 2) - 1;
+                                final double negate = ((i & 1) << 1) - 1;
                                 arr.posX += (arr.shootingEntity.rotationYaw / 180.0) * negate;
                             }
 

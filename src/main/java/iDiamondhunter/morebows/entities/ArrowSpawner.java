@@ -146,7 +146,7 @@ public final class ArrowSpawner extends Entity {
                     arrow.posY += arrYDisp;
                     arrow.posX += arrXDisp;
                     arrow.posZ += arrZDisp;
-                    world.playSound(null, arrow.posX, arrow.posY, arrow.posZ, (i % 2) != 0 ? SoundEvents.ENTITY_ENDERMEN_TELEPORT : SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, soundVolume, soundPitch);
+                    world.playSound(null, arrow.posX, arrow.posY, arrow.posZ, (i & 1) != 0 ? SoundEvents.ENTITY_ENDERMEN_TELEPORT : SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, soundVolume, soundPitch);
                 }
             }
         }
