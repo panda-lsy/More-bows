@@ -74,13 +74,7 @@ final class CustomBow extends ItemBow {
         this.multiShot = multiShot;
         this.powerDiv = powerDiv;
         this.rarity = rarity;
-        addPropertyOverride(new ResourceLocation("pull"), (ItemStack bow, World world, EntityLivingBase entity) -> {
-            if (entity == null) {
-                return 0.0F;
-            }
-
-            return (bowMaxUseDuration - entity.getItemInUseCount()) / powerDiv;
-        });
+        addPropertyOverride(new ResourceLocation("pull"), (ItemStack bow, World world, EntityLivingBase entity) -> (entity == null ? 0.0F : (bowMaxUseDuration - entity.getItemInUseCount()) / powerDiv));
     }
 
     /** TODO review */
@@ -110,11 +104,7 @@ final class CustomBow extends ItemBow {
      */
     @Override
     public IRarity getForgeRarity(ItemStack stack) {
-        if (rarity == EnumRarity.COMMON) {
-            return super.getForgeRarity(stack);
-        }
-
-        return rarity;
+        return rarity == EnumRarity.COMMON ? super.getForgeRarity(stack) : rarity;
     }
 
     /**

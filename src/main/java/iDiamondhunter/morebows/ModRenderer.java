@@ -49,15 +49,7 @@ final class ModRenderer extends RenderArrow<CustomArrow> {
     @Override
     @Nullable
     protected ResourceLocation getEntityTexture(CustomArrow entity) {
-        if (entity.type != ARROW_TYPE_FROST) {
-            return ARROWS;
-        }
-
-        if (!oldFrostArrowRendering) {
-            return BLOCKS;
-        }
-
-        return null;
+        return entity.type != ARROW_TYPE_FROST ? ARROWS : !oldFrostArrowRendering ? BLOCKS : null;
     }
 
 }

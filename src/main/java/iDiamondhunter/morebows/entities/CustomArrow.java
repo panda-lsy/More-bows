@@ -114,12 +114,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
             break;
 
         case ARROW_TYPE_FIRE:
-            if (isBurning()) {
-                part = EnumParticleTypes.FLAME;
-            } else {
-                part = EnumParticleTypes.SMOKE_NORMAL;
-            }
-
+            part = isBurning() ? EnumParticleTypes.FLAME : EnumParticleTypes.SMOKE_NORMAL;
             amount = 5;
             randDisp = true;
             velocity = 0.05;
