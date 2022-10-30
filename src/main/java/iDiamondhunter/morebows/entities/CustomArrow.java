@@ -251,7 +251,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
                     } else if (inBlock == Blocks.SNOW_LAYER) {
                         int currentSnowLevel = 8;
 
-                        while ((inBlock == Blocks.SNOW_LAYER) && ((currentSnowLevel = inBlockState.<Integer>getValue(BlockSnow.LAYERS)) > 7)) {
+                        for (int upCount = 0; (upCount < 1024) && (inBlock == Blocks.SNOW_LAYER) && ((currentSnowLevel = inBlockState.<Integer>getValue(BlockSnow.LAYERS)) > 7); upCount++) {
                             inBlockPos = inBlockPos.up();
                             inBlockState = world.getBlockState(inBlockPos);
                             inBlock = inBlockState.getBlock();
