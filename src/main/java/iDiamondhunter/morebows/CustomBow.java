@@ -45,7 +45,7 @@ final class CustomBow extends ItemBow {
 
     /* Bow instance variables */
     /** The type of arrows this bow shoots. */
-    @MagicConstant(intValues = {ARROW_TYPE_NOT_CUSTOM, ARROW_TYPE_ENDER, ARROW_TYPE_FIRE, ARROW_TYPE_FROST})
+    @MagicConstant(intValues = { ARROW_TYPE_NOT_CUSTOM, ARROW_TYPE_ENDER, ARROW_TYPE_FIRE, ARROW_TYPE_FROST })
     private final byte bowType;
 
     /** The damage multiplier of the bow. */
