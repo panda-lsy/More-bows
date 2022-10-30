@@ -178,8 +178,7 @@ final class CustomBow extends ItemBow {
             }
 
             if (ConfigGeneral.customArrowMultiShot == CustomArrowMultiShotType.UseAmountShot) {
-                // TODO use usedAmmo = Math.min(ammoCount, maxAmmo)?
-                usedAmmo = ammoCount > maxAmmo ? maxAmmo : ammoCount;
+                usedAmmo = Math.min(ammoCount, maxAmmo);
                 shotArrows = usedAmmo;
             } else {
                 usedAmmo = 1;

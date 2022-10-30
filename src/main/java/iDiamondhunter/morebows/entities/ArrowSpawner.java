@@ -20,8 +20,10 @@ import net.minecraft.world.World;
  */
 public final class ArrowSpawner extends Entity {
 
+    private static final EntityArrow[] NO_ARROWS = {};
+
     /** The arrows to spawn. */
-    private @NotNull EntityArrow @NotNull [] arrows = new EntityArrow[0];
+    private @NotNull EntityArrow @NotNull [] arrows = NO_ARROWS;
 
     /** The stored shot velocity. */
     private float shotVelocity;
@@ -216,7 +218,7 @@ public final class ArrowSpawner extends Entity {
             arrows = readArrows;
         } else {
             MoreBows.modLog.error("Could not find saved EntityArrows for ArrowSpawner {} when loading from NBT data ({}).", this, compound);
-            arrows = new EntityArrow[0];
+            arrows = NO_ARROWS;
         }
     }
 
