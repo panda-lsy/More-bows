@@ -1,5 +1,7 @@
 package iDiamondhunter.morebows.config;
 
+import com.google.errorprone.annotations.CompileTimeConstant;
+
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import iDiamondhunter.morebows.MoreBows;
 import net.minecraftforge.common.config.Config;
@@ -43,9 +45,11 @@ public final class ConfigBows {
 
     /* Default values for bow construction. */
     /** Default values for bow construction: the default damage multiplier. */
+    @CompileTimeConstant
     private static final double noDamageMult = 1.0;
 
     /** Default values for bow construction: the default power divisor. */
+    @CompileTimeConstant
     private static final float defaultPowerDiv = 20.0F;
 
     /* Bow stats. */

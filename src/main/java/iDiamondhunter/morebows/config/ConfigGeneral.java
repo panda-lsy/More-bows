@@ -2,6 +2,8 @@ package iDiamondhunter.morebows.config;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.google.errorprone.annotations.CompileTimeConstant;
+
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import iDiamondhunter.morebows.MoreBows;
 import net.minecraftforge.common.config.Config;
@@ -59,6 +61,7 @@ public final class ConfigGeneral {
 
     }
 
+    @CompileTimeConstant
     private static final String confMultiShotAmmo = "confMultiShotAmmo";
 
     /**

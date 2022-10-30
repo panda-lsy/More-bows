@@ -115,6 +115,8 @@ dependencies {
 
     // Error Prone
     errorprone "com.google.errorprone:error_prone_core:2.16"
+    compileOnly "com.google.errorprone:error_prone_annotations:2.16"
+    proguardHack "com.google.errorprone:error_prone_annotations:2.16"
 }
 
 jar.finalizedBy('reobfJar')

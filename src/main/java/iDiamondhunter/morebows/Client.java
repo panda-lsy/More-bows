@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
@@ -52,11 +53,12 @@ public final class Client extends MoreBows implements IRenderFactory<CustomArrow
      */
     @SubscribeEvent
     public void FOV(FOVUpdateEvent event) {
-        final Item eventItem = event.getEntity().getActiveItemStack().getItem();
+        final EntityPlayer eventPlayer = event.getEntity();
+        final Item eventItem = eventPlayer.getActiveItemStack().getItem();
 
         if (eventItem instanceof CustomBow) {
             float finalFov = event.getFov();
-            final float itemUseCount = bowMaxUseDuration - event.getEntity().getItemInUseCount();
+            final float itemUseCount = bowMaxUseDuration - eventPlayer.getItemInUseCount();
             /*
              * First, we have to reverse the standard bow zoom.
              * Minecraft helpfully applies the standard bow zoom
@@ -102,11 +104,11 @@ public final class Client extends MoreBows implements IRenderFactory<CustomArrow
     @Override
     protected void register() {
         super.register();
-        /** Registration of custom renderers */
+        // Registration of custom renderers
         RenderingRegistry.registerEntityRenderingHandler(CustomArrow.class, new Client());
     }
 
-    // TODO review
+    /** TODO review */
     @SubscribeEvent
     public void registerModels(ModelRegistryEvent event) {
         for (final Item item : getAllItems()) {

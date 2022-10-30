@@ -21,7 +21,7 @@ import net.minecraft.world.World;
 public final class ArrowSpawner extends Entity {
 
     /** The arrows to spawn. */
-    private @Nullable EntityArrow @NotNull [] arrows;
+    private @NotNull EntityArrow @NotNull [] arrows = new EntityArrow[0];
 
     /** The stored shot velocity. */
     private float shotVelocity;
@@ -49,7 +49,7 @@ public final class ArrowSpawner extends Entity {
      * @param arrows       the stored arrows.
      */
     @SuppressFBWarnings("EI_EXPOSE_REP2")
-    public ArrowSpawner(World worldIn, double posX, double posY, double posZ, float shotVelocity, EntityArrow[] arrows) {
+    public ArrowSpawner(World worldIn, double posX, double posY, double posZ, float shotVelocity, @NotNull EntityArrow @NotNull [] arrows) {
         this(worldIn);
         this.shotVelocity = shotVelocity;
         this.posX = posX;
@@ -79,7 +79,7 @@ public final class ArrowSpawner extends Entity {
         if (!world.isRemote) {
             if (ticksExisted == 1) {
                 /* Check that the arrows exist before accessing them. */
-                if ((arrows == null) || (arrows.length == 0)) {
+                if (arrows.length == 0) {
                     MoreBows.modLog.error("No arrows in ArrowSpawner!");
                     setDead();
                     return;
@@ -89,9 +89,12 @@ public final class ArrowSpawner extends Entity {
                 world.spawnEntity(arrows[0]);
             }
 
-            if ((ticksExisted == 61) && (arrows != null)) {
-                for (int i = 1; i < arrows.length; ++i) {
-                    world.spawnEntity(arrows[i]);
+            if (ticksExisted == 61) {
+                final int arrLength = arrows.length;
+
+                for (int i = 1; i < arrLength; ++i) {
+                    final @NotNull EntityArrow arrow = arrows[i];
+                    world.spawnEntity(arrow);
                     final double arrYDisp;
                     final double arrXDisp;
                     final double arrZDisp;
@@ -140,10 +143,10 @@ public final class ArrowSpawner extends Entity {
                         break;
                     }
 
-                    arrows[i].posY += arrYDisp;
-                    arrows[i].posX += arrXDisp;
-                    arrows[i].posZ += arrZDisp;
-                    world.playSound(null, arrows[i].posX, arrows[i].posY, arrows[i].posZ, (i % 2) != 0 ? SoundEvents.ENTITY_ENDERMEN_TELEPORT : SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, soundVolume, soundPitch);
+                    arrow.posY += arrYDisp;
+                    arrow.posX += arrXDisp;
+                    arrow.posZ += arrZDisp;
+                    world.playSound(null, arrow.posX, arrow.posY, arrow.posZ, (i % 2) != 0 ? SoundEvents.ENTITY_ENDERMEN_TELEPORT : SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, soundVolume, soundPitch);
                 }
             }
         }
@@ -165,11 +168,11 @@ public final class ArrowSpawner extends Entity {
         if (compound.hasKey("arrows", 10)) {
             final NBTTagCompound arrowsTag = compound.getCompoundTag("arrows");
             final int arrowsAmount = arrowsTag.getSize();
-            final EntityArrow[] readArrows = new EntityArrow[arrowsAmount];
+            final @NotNull EntityArrow @NotNull [] readArrows = new EntityArrow[arrowsAmount];
 
             for (int i = 0; i < arrowsAmount; i++) {
                 final String arrTagName = "arrow" + i;
-                EntityArrow toAdd;
+                @Nullable EntityArrow toAdd;
 
                 if (arrowsTag.hasKey(arrTagName, 10)) {
                     final NBTTagCompound currentArrow = arrowsTag.getCompoundTag(arrTagName);
@@ -213,7 +216,7 @@ public final class ArrowSpawner extends Entity {
             arrows = readArrows;
         } else {
             MoreBows.modLog.error("Could not find saved EntityArrows for ArrowSpawner {} when loading from NBT data ({}).", this, compound);
-            arrows = null;
+            arrows = new EntityArrow[0];
         }
     }
 
@@ -227,43 +230,34 @@ public final class ArrowSpawner extends Entity {
         compound.setByte("ticksExisted", (byte) ticksExisted);
         /* Save the shot velocity */
         compound.setFloat("shotVelocity", shotVelocity);
+        /*
+         * This compound tag will contain the saved NBT data
+         * from each arrow in the "arrows" array.
+         */
+        final NBTTagCompound arrowsTag = new NBTTagCompound();
+        /* An over-engineered system to save an arbitrary amount of entities. */
+        final int arrLength = arrows.length;
 
-        if (arrows != null) {
-            /*
-             * This compound tag will contain the saved NBT data
-             * from each arrow in the "arrows" array.
-             */
-            final NBTTagCompound arrowsTag = new NBTTagCompound();
+        for (int i = 0; i < arrLength; i++) {
+            /* This is a temporary NBT tag variable, to store the NBT data for arrows[i]. */
+            NBTTagCompound arrTag;
 
-            /* An over-engineered system to save an arbitrary amount of entities. */
-            for (int i = 0; i < arrows.length; i++) {
-                /* This is a temporary NBT tag variable, to store the NBT data for arrows[i]. */
-                NBTTagCompound arrTag;
-
-                try {
-                    final EntityArrow currentArrow = arrows[i];
-
-                    if (currentArrow != null) {
-                        arrTag = currentArrow.serializeNBT();
-                    } else {
-                        MoreBows.modLog.error("An arrow was null when trying to serialize the NBT data of an ArrowSpawner.");
-                        arrTag = new EntityTippedArrow(world).serializeNBT();
-                    }
-                } catch (final Exception e) {
-                    /* Some mods don't properly register entities. */
-                    MoreBows.modLog.error("An error occurred when trying to serialize the NBT data of {}. This is likely due to an error made by the mod that added the type of arrow that was being shot ({}).", arrows[i], arrows[i].getClass(), e);
-                    arrTag = new EntityTippedArrow(world).serializeNBT();
-                }
-
-                /*
-                 * The NBT for arrows[i] is then stored as a sub tag
-                 * of the compound tag arrowsTag.
-                 */
-                arrowsTag.setTag("arrow" + i, arrTag);
+            try {
+                arrTag = arrows[i].serializeNBT();
+            } catch (final Exception e) {
+                /* Some mods don't properly register entities. */
+                MoreBows.modLog.error("An error occurred when trying to serialize the NBT data of {}. This is likely due to an error made by the mod that added the type of arrow that was being shot ({}).", arrows[i], arrows[i].getClass(), e);
+                arrTag = new EntityTippedArrow(world).serializeNBT();
             }
 
-            compound.setTag("arrows", arrowsTag);
+            /*
+             * The NBT for arrows[i] is then stored as a sub tag
+             * of the compound tag arrowsTag.
+             */
+            arrowsTag.setTag("arrow" + i, arrTag);
         }
+
+        compound.setTag("arrows", arrowsTag);
     }
 
 }

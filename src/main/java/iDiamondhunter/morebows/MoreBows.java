@@ -7,6 +7,8 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.google.errorprone.annotations.CompileTimeConstant;
+
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import iDiamondhunter.morebows.config.ConfigBows;
 import iDiamondhunter.morebows.entities.ArrowSpawner;
@@ -40,9 +42,11 @@ import net.minecraftforge.oredict.OreDictionary;
 public class MoreBows {
 
     /** The mod ID of More Bows. */
+    @CompileTimeConstant
     public static final String MOD_ID = "morebows";
 
     /** Used for naming items. */
+    @CompileTimeConstant
     private static final String modSeparator = "morebows:";
 
     /** Mod proxy. TODO This is super janky, see if it's possible to remove this */
@@ -65,49 +69,71 @@ public class MoreBows {
      * Arrow type:
      * An arrow that is not a custom arrow.
      */
+    @CompileTimeConstant
     public static final byte ARROW_TYPE_NOT_CUSTOM = 0;
     /**
      * Arrow type:
      * A "particle arrow", used by the ender bow.
      */
+    @CompileTimeConstant
     public static final byte ARROW_TYPE_ENDER = 1;
     /**
      * Arrow type:
      * A fire arrow, used by the fire bow.
      */
+    @CompileTimeConstant
     public static final byte ARROW_TYPE_FIRE = 2;
     /**
      * Arrow type:
      * A frost arrow, used by the frost bow.
      */
+    @CompileTimeConstant
     public static final byte ARROW_TYPE_FROST = 3;
 
     /** The maximum amount of time (in ticks) that a bow can be used for. */
-    public static final int bowMaxUseDuration = 72000;
+    @CompileTimeConstant
+    static final int bowMaxUseDuration = 72000;
 
     /* Names of bows. */
+    @CompileTimeConstant
     private static final String DiamondBowName = "diamond_bow";
+    @CompileTimeConstant
     private static final String GoldBowName = "gold_bow";
+    @CompileTimeConstant
     private static final String EnderBowName = "ender_bow";
+    @CompileTimeConstant
     private static final String StoneBowName = "stone_bow";
+    @CompileTimeConstant
     private static final String IronBowName = "iron_bow";
+    @CompileTimeConstant
     private static final String MultiBowName = "multi_bow";
+    @CompileTimeConstant
     private static final String FlameBowName = "flame_bow";
+    @CompileTimeConstant
     private static final String FrostBowName = "frost_bow";
 
     /* Translation keys for bows. */
+    @CompileTimeConstant
     public static final String DiamondBowTransKey = MOD_ID + "." + DiamondBowName;
+    @CompileTimeConstant
     public static final String GoldBowTransKey = MOD_ID + "." + GoldBowName;
+    @CompileTimeConstant
     public static final String EnderBowTransKey = MOD_ID + "." + EnderBowName;
+    @CompileTimeConstant
     public static final String StoneBowTransKey = MOD_ID + "." + StoneBowName;
+    @CompileTimeConstant
     public static final String IronBowTransKey = MOD_ID + "." + IronBowName;
+    @CompileTimeConstant
     public static final String MultiBowTransKey = MOD_ID + "." + MultiBowName;
+    @CompileTimeConstant
     public static final String FlameBowTransKey = MOD_ID + "." + FlameBowName;
+    @CompileTimeConstant
     public static final String FrostBowTransKey = MOD_ID + "." + FrostBowName;
 
     /* Default values for bow construction */
 
     /** Default values for bow construction: the default type of arrow a bow shoots. */
+    @CompileTimeConstant
     private static final byte defaultArrowType = ARROW_TYPE_NOT_CUSTOM;
 
     /*
@@ -150,7 +176,7 @@ public class MoreBows {
      *
      * @return an array of all bow items
      */
-    static Item[] getAllItems() {
+    static @NotNull Item @NotNull [] getAllItems() {
         if (allItems == null) {
             DiamondBow = new CustomBow(ConfigBows.DiamondBow.confBowDurability, defaultArrowType, ConfigBows.DiamondBow.confBowDamageMult, false, ConfigBows.DiamondBow.confBowDrawbackDiv, EnumRarity.RARE).setTranslationKey(DiamondBowTransKey).setRegistryName(modSeparator + DiamondBowName);
             EnderBow = new CustomBow(ConfigBows.EnderBow.confBowDurability, ARROW_TYPE_ENDER, ConfigBows.EnderBow.confBowDamageMult, true, ConfigBows.EnderBow.confBowDrawbackDiv, EnumRarity.EPIC).setTranslationKey(EnderBowTransKey).setRegistryName(modSeparator + EnderBowName);

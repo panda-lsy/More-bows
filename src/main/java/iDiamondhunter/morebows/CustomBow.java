@@ -2,9 +2,12 @@ package iDiamondhunter.morebows;
 
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_ENDER;
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_FIRE;
+import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_FROST;
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_NOT_CUSTOM;
 import static iDiamondhunter.morebows.MoreBows.bowMaxUseDuration;
 
+import org.intellij.lang.annotations.MagicConstant;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import iDiamondhunter.morebows.config.ConfigGeneral;
@@ -42,6 +45,7 @@ final class CustomBow extends ItemBow {
 
     /* Bow instance variables */
     /** The type of arrows this bow shoots. */
+    @MagicConstant(intValues = {ARROW_TYPE_NOT_CUSTOM, ARROW_TYPE_ENDER, ARROW_TYPE_FIRE, ARROW_TYPE_FROST})
     private final byte bowType;
 
     /** The damage multiplier of the bow. */
@@ -54,7 +58,7 @@ final class CustomBow extends ItemBow {
     final float powerDiv;
 
     /** The rarity of the bow. */
-    private final EnumRarity rarity;
+    private final @NotNull EnumRarity rarity;
 
     /**
      * A more customizable bow than the vanilla one.
@@ -67,14 +71,14 @@ final class CustomBow extends ItemBow {
      * @param powerDiv   The power divisor of this bow. Influences drawback speed.
      * @param rarity     The rarity of this bow.
      */
-    CustomBow(int maxDamage, byte bowType, double damageMult, boolean multiShot, float powerDiv, EnumRarity rarity) {
+    CustomBow(int maxDamage, @MagicConstant(intValues = {ARROW_TYPE_NOT_CUSTOM, ARROW_TYPE_ENDER, ARROW_TYPE_FIRE, ARROW_TYPE_FROST}) byte bowType, double damageMult, boolean multiShot, float powerDiv, @NotNull EnumRarity rarity) {
         setMaxDamage(maxDamage);
         this.bowType = bowType;
         this.damageMult = damageMult;
         this.multiShot = multiShot;
         this.powerDiv = powerDiv;
         this.rarity = rarity;
-        addPropertyOverride(new ResourceLocation("pull"), (ItemStack bow, World world, EntityLivingBase entity) -> (entity == null ? 0.0F : (bowMaxUseDuration - entity.getItemInUseCount()) / powerDiv));
+        addPropertyOverride(new ResourceLocation("pull"), (ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) -> (entityIn == null ? 0.0F : (bowMaxUseDuration - entityIn.getItemInUseCount()) / powerDiv));
     }
 
     /** TODO review */
@@ -174,6 +178,7 @@ final class CustomBow extends ItemBow {
             }
 
             if (ConfigGeneral.customArrowMultiShot == CustomArrowMultiShotType.UseAmountShot) {
+                // TODO use usedAmmo = Math.min(ammoCount, maxAmmo)?
                 usedAmmo = ammoCount > maxAmmo ? maxAmmo : ammoCount;
                 shotArrows = usedAmmo;
             } else {
@@ -192,7 +197,7 @@ final class CustomBow extends ItemBow {
                 }
 
                 final ItemArrow arrow = (ItemArrow) (ammo.getItem() instanceof ItemArrow ? ammo.getItem() : Items.ARROW);
-                final EntityArrow[] arrs;
+                final @NotNull EntityArrow @NotNull [] arrs;
 
                 /*
                  * Create the arrows to fire.
@@ -224,7 +229,7 @@ final class CustomBow extends ItemBow {
                     if (bowType == ARROW_TYPE_ENDER) { // Ender bow
                         arrs = new EntityArrow[shotArrows];
 
-                        for (int i = 0; i < arrs.length; ++i) {
+                        for (int i = 0; i < shotArrows; ++i) {
                             final float velocityChoice;
 
                             switch (i) {
@@ -263,7 +268,7 @@ final class CustomBow extends ItemBow {
                     } else {
                         arrs = new EntityArrow[shotArrows];
 
-                        for (int i = 0; i < arrs.length; ++i) {
+                        for (int i = 0; i < shotArrows; ++i) {
                             final float velocityChoice;
 
                             switch (i) {
@@ -345,8 +350,9 @@ final class CustomBow extends ItemBow {
                     if (bowType == ARROW_TYPE_ENDER) { // Ender bow
                         worldIn.spawnEntity(new ArrowSpawner(worldIn, player.posX, player.posY, player.posZ, shotVelocity, arrs));
                     } else { // Multi bow
-                        for (int i = 0; i < arrs.length; ++i) {
-                            worldIn.spawnEntity(arrs[i]);
+                        for (int i = 0; i < shotArrows; ++i) {
+                            final @NotNull EntityArrow arr = arrs[i];
+                            worldIn.spawnEntity(arr);
                             final double damageMultiChoice;
 
                             switch (i) {
@@ -363,12 +369,12 @@ final class CustomBow extends ItemBow {
                                 break;
                             }
 
-                            if ((i > 0) && (arrs[i].shootingEntity != null)) {
+                            if ((i > 0) && (arr.shootingEntity != null)) {
                                 final double negate = ((i % 2) * 2) - 1;
-                                arrs[i].posX += (arrs[i].shootingEntity.rotationYaw / 180.0) * negate;
+                                arr.posX += (arr.shootingEntity.rotationYaw / 180.0) * negate;
                             }
 
-                            arrs[i].setDamage(arrs[i].getDamage() * damageMultiChoice);
+                            arr.setDamage(arr.getDamage() * damageMultiChoice);
                         }
                     }
                 } else { // Other bows

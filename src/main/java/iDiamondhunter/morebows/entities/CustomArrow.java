@@ -48,6 +48,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
      * Don't use this.
      * TODO I think I can't remove these constructors, but I'm not sure.
      *
+     * @deprecated Don't use this
      * @param worldIn used in super construction
      */
     @SuppressWarnings("unused")
@@ -59,6 +60,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
      * Don't use this.
      * TODO I think I can't remove these constructors, but I'm not sure.
      *
+     * @deprecated Don't use this
      * @param worldIn used in super construction
      * @param x       used in super construction
      * @param y       used in super construction
@@ -73,6 +75,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
      * Don't use this.
      * TODO I think I can't remove these constructors, but I'm not sure.
      *
+     * @deprecated Don't use this
      * @param worldIn used in super construction
      * @param shooter used in super construction
      */
