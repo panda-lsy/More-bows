@@ -127,7 +127,7 @@ public final class CustomBow extends BowItem {
                 ammo = new ItemStack(Items.ARROW);
             }
 
-            final int charge = this.getMaxUseTime(stack) - remainingUseTicks;
+            final int charge = getMaxUseTime(stack) - remainingUseTicks;
             float shotVelocity = charge / powerDiv;
             shotVelocity = ((shotVelocity * shotVelocity) + (shotVelocity * 2.0F)) / 3.0F;
 
@@ -141,7 +141,7 @@ public final class CustomBow extends BowItem {
             final int usedAmmo;
             final int shotArrows;
             final int maxAmmo;
-            /** TODO Review */
+            /* TODO Review */
             final Random playerRandom = player.getRandom();
 
             if (multiShot) {

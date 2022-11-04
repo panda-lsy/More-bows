@@ -24,8 +24,8 @@ public abstract class AbstractClientPlayerEntityMixin extends PlayerEntity {
     /** Zoom in the FOV when a CustomBow is in use. */
     @ModifyVariable(method = "getFovMultiplier()F", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;lerp(FFF)F", shift = At.Shift.BEFORE), ordinal = 0)
     private float getFovMultiplierMixin(float finalFov) {
-        if (this.isUsingItem() && this.getActiveItem().getItem() instanceof final CustomBow bow) {
-            final int itemUseCount = this.getItemUseTime();
+        if (isUsingItem() && getActiveItem().getItem() instanceof final CustomBow bow) {
+            final int itemUseCount = getItemUseTime();
             float customBow = itemUseCount / bow.powerDiv;
 
             if (customBow > 1.0F) {

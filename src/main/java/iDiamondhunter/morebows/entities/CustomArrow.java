@@ -44,7 +44,7 @@ public final class CustomArrow extends ArrowEntity {
     @Override
     protected void initDataTracker() {
         super.initDataTracker();
-        this.dataTracker.startTracking(trackedType, ARROW_TYPE_NOT_CUSTOM);
+        dataTracker.startTracking(trackedType, ARROW_TYPE_NOT_CUSTOM);
     }
 
     /**
@@ -99,7 +99,7 @@ public final class CustomArrow extends ArrowEntity {
      */
     public CustomArrow(World worldIn, LivingEntity shooter, byte type) {
         super(worldIn, shooter);
-        this.dataTracker.set(trackedType, type);
+        dataTracker.set(trackedType, type);
     }
 
     /**
@@ -112,7 +112,7 @@ public final class CustomArrow extends ArrowEntity {
     @Override
     @Environment(EnvType.CLIENT)
     public boolean isCritical() {
-        return (this.dataTracker.get(trackedType) != ARROW_TYPE_FROST) && super.isCritical();
+        return (dataTracker.get(trackedType) != ARROW_TYPE_FROST) && super.isCritical();
         /*
          * Obviously, you're just a bad shot :D
          * This is a hack to prevent the vanilla crit particles from displaying
@@ -129,7 +129,7 @@ public final class CustomArrow extends ArrowEntity {
     public void tick() {
         super.tick();
 
-        if (this.dataTracker.get(trackedType) == ARROW_TYPE_FROST) {
+        if (dataTracker.get(trackedType) == ARROW_TYPE_FROST) {
             if ((age == 1) && MoreBows.configGeneralInst.frostArrowsShouldBeCold) {
                 // TODO Fix
                 //isImmuneToFire = true;
@@ -174,7 +174,7 @@ public final class CustomArrow extends ArrowEntity {
                  * or "freezing" the water it's in by setting the block to ice.
                  */
                 if (inGroundTime == 65) {
-                    BlockPos inBlockPos = this.getBlockPos();
+                    BlockPos inBlockPos = getBlockPos();
                     BlockState inBlockState = world.getBlockState(inBlockPos);
                     Block inBlock = inBlockState.getBlock();
                     final BlockState defaultSnowState = Blocks.SNOW.getDefaultState();
@@ -226,7 +226,7 @@ public final class CustomArrow extends ArrowEntity {
                     discard();
                 }
             } else if (super.isCritical()) {
-                final Vec3d currentVelocity = this.getVelocity();
+                final Vec3d currentVelocity = getVelocity();
                 final double motionX = currentVelocity.x;
                 final double motionY = currentVelocity.y;
                 final double motionZ = currentVelocity.z;
@@ -246,7 +246,7 @@ public final class CustomArrow extends ArrowEntity {
     @Override
     public void readCustomDataFromNbt(NbtCompound compound) {
         super.readCustomDataFromNbt(compound);
-        this.dataTracker.set(trackedType, compound.getByte("type"));
+        dataTracker.set(trackedType, compound.getByte("type"));
     }
 
     /**
@@ -257,7 +257,7 @@ public final class CustomArrow extends ArrowEntity {
     @Override
     public void writeCustomDataToNbt(NbtCompound compound) {
         super.writeCustomDataToNbt(compound);
-        compound.putByte("type", this.dataTracker.get(trackedType));
+        compound.putByte("type", dataTracker.get(trackedType));
     }
 
 }
