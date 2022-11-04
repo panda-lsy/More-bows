@@ -1,31 +1,35 @@
 package iDiamondhunter.morebows.config;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+import org.jetbrains.annotations.NotNull;
+
 import com.google.errorprone.annotations.CompileTimeConstant;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import iDiamondhunter.morebows.MoreBows;
-import net.minecraftforge.common.config.Config;
-import net.minecraftforge.common.config.Config.LangKey;
-import net.minecraftforge.common.config.Config.RequiresMcRestart;
+import net.fabricmc.loader.api.FabricLoader;
 
 /** Bow stats config settings. */
-@LangKey(MoreBows.MOD_ID + "." + "confCatBow")
-@Config(modid = MoreBows.MOD_ID, category = "bows", name = MoreBows.MOD_ID + "_bowstats")
 public final class ConfigBows {
+
+    private static final Gson OUTPUT_GSON = new GsonBuilder().setPrettyPrinting().create();
 
     /** Data class for bow stats. Forge uses each field as config settings. */
     public static class BowConfig {
 
         /** The configured bow durability. */
-        @LangKey(MoreBows.MOD_ID + "." + "confBowDurability")
         public int confBowDurability;
 
         /** The configured bow damage multiplier. */
-        @LangKey(MoreBows.MOD_ID + "." + "confBowDamageMult")
         public double confBowDamageMult;
 
         /** The configured bow drawback divisor. */
-        @LangKey(MoreBows.MOD_ID + "." + "confBowDrawbackDiv")
         public float confBowDrawbackDiv;
 
         /**
@@ -54,55 +58,96 @@ public final class ConfigBows {
 
     /* Bow stats. */
     /** Diamond bow stats. */
-    @LangKey("item." + MoreBows.DiamondBowTransKey + ".name")
-    @RequiresMcRestart
     @SuppressFBWarnings("MS_SHOULD_BE_FINAL")
-    public static BowConfig DiamondBow = new BowConfig(1016, 2.25, 6.0F);
+    public BowConfig DiamondBow = new BowConfig(1016, 2.25, 6.0F);
 
     /** Ender bow stats. */
-    @LangKey("item." + MoreBows.EnderBowTransKey + ".name")
-    @RequiresMcRestart
     @SuppressFBWarnings("MS_SHOULD_BE_FINAL")
-    public static BowConfig EnderBow = new BowConfig(215, noDamageMult, 22.0F);
+    public BowConfig EnderBow = new BowConfig(215, noDamageMult, 22.0F);
 
     /** Flame bow stats. */
-    @LangKey("item." + MoreBows.FlameBowTransKey + ".name")
-    @RequiresMcRestart
     @SuppressFBWarnings("MS_SHOULD_BE_FINAL")
-    public static BowConfig FlameBow = new BowConfig(576, 2.0, 15.0F);
+    public BowConfig FlameBow = new BowConfig(576, 2.0, 15.0F);
 
     /** Frost bow stats. */
-    @LangKey("item." + MoreBows.FrostBowTransKey + ".name")
-    @RequiresMcRestart
     @SuppressFBWarnings("MS_SHOULD_BE_FINAL")
-    public static BowConfig FrostBow = new BowConfig(550, noDamageMult, 26.0F);
+    public BowConfig FrostBow = new BowConfig(550, noDamageMult, 26.0F);
 
     /** Gold bow stats. */
-    @LangKey("item." + MoreBows.GoldBowTransKey + ".name")
-    @RequiresMcRestart
     @SuppressFBWarnings("MS_SHOULD_BE_FINAL")
-    public static BowConfig GoldBow = new BowConfig(68, 2.5, 6.0F);
+    public BowConfig GoldBow = new BowConfig(68, 2.5, 6.0F);
 
     /** Iron bow stats. */
-    @LangKey("item." + MoreBows.IronBowTransKey + ".name")
-    @RequiresMcRestart
     @SuppressFBWarnings("MS_SHOULD_BE_FINAL")
-    public static BowConfig IronBow = new BowConfig(550, 1.5, 17.0F);
+    public BowConfig IronBow = new BowConfig(550, 1.5, 17.0F);
 
     /** Multi bow stats. */
-    @LangKey("item." + MoreBows.MultiBowTransKey + ".name")
-    @RequiresMcRestart
     @SuppressFBWarnings("MS_SHOULD_BE_FINAL")
-    public static BowConfig MultiBow = new BowConfig(550, noDamageMult, 13.0F);
+    public BowConfig MultiBow = new BowConfig(550, noDamageMult, 13.0F);
 
     /** Stone bow stats. */
-    @LangKey("item." + MoreBows.StoneBowTransKey + ".name")
-    @RequiresMcRestart
     @SuppressFBWarnings("MS_SHOULD_BE_FINAL")
-    public static BowConfig StoneBow = new BowConfig(484, 1.15, defaultPowerDiv);
+    public BowConfig StoneBow = new BowConfig(484, 1.15, defaultPowerDiv);
 
     private ConfigBows() {
         // Empty private constructor to hide default constructor
+    }
+
+    public BowConfig[] getAllBowConfigs() {
+        return new BowConfig[] {
+                   DiamondBow,
+                   EnderBow,
+                   FlameBow,
+                   FrostBow,
+                   GoldBow,
+                   IronBow,
+                   MultiBow,
+                   StoneBow
+               };
+    }
+
+    // TODO very bad
+    public String[] getBowNames() {
+        return new String[] {
+                   MoreBows.DiamondBowName,
+                   MoreBows.EnderBowName,
+                   MoreBows.FlameBowName,
+                   MoreBows.FrostBowName,
+                   MoreBows.GoldBowName,
+                   MoreBows.IronBowName,
+                   MoreBows.MultiBowName,
+                   MoreBows.StoneBowName
+               };
+    }
+
+    public static ConfigBows getDefaultConfig() {
+        return new ConfigBows();
+    }
+
+    public static void writeConfig(ConfigBows config) {
+        final Path configPath = FabricLoader.getInstance().getConfigDir().resolve(MoreBows.MOD_ID + "_bowstats.json");
+
+        try {
+            Files.writeString(configPath, OUTPUT_GSON.toJson(config));
+        } catch (final IOException e) {
+            MoreBows.modLog.error("Error while writing config to file", e);
+        }
+    }
+
+    public static @NotNull ConfigBows readConfig() {
+        final Path configPath = FabricLoader.getInstance().getConfigDir().resolve(MoreBows.MOD_ID + "_bowstats.json");
+        @NotNull ConfigBows loadedConfig = new ConfigBows();
+
+        if (configPath.toFile().exists()) {
+            try {
+                loadedConfig = OUTPUT_GSON.fromJson(Files.readString(configPath), ConfigBows.class);
+            } catch (JsonSyntaxException | IOException e) {
+                MoreBows.modLog.error("Error while reading config from file", e);
+                loadedConfig = new ConfigBows();
+            }
+        }
+
+        return loadedConfig;
     }
 
 }

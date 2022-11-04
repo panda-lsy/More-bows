@@ -1,0 +1,23 @@
+{
+  "result": {
+    "item": "morebows:stone_bow"
+  },
+  "pattern": [
+    " DC", "ABC", " DC"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": {
+      "tag": "c:string"
+    },
+    "D": {
+      "tag": "c:stone"
+    },
+    "A": {
+      "tag": "c:wooden_rods"
+    },
+    "B": {
+      "tag": "c:bows"
+    }
+  }
+}

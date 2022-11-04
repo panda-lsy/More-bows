@@ -1,6 +1,6 @@
 {
     "parent": "morebows:item/flame_bow",
     "textures": {
-        "layer0": "morebows:items/flame_bow_pulling_2"
+        "layer0": "morebows:item/flame_bow_pulling_2"
     }
 }

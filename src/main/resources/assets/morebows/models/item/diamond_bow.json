@@ -1,7 +1,7 @@
 {
       "parent": "minecraft:item/bow",
       "textures": {
-          "layer0": "morebows:items/diamond_bow"
+          "layer0": "morebows:item/diamond_bow"
       },
     "overrides": [
         {

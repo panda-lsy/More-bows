@@ -1,0 +1,30 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "morebows:frost_bow"
+    ]
+  },
+  "criteria": {
+    "has_ibow": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [{
+          "tag": "c:iron_bows"
+        }]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "morebows:frost_bow"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_ibow",
+      "has_the_recipe"
+    ]
+  ]
+}

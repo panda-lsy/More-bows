@@ -1,8 +1,8 @@
 # More Bows: Restrung!
 
 [![CurseForge downloads badge](http://cf.way2muchnoise.eu/full_466902_downloads.svg "CurseForge downloads")](https://www.curseforge.com/minecraft/mc-mods/more-bows-restrung)
-[![Licence badge](https://img.shields.io/github/license/NeRdTheNed/More-bows "Licence")](https://github.com/NeRdTheNed/More-bows/blob/forge-1.12.2/LICENSE)
-[![Java SE version compatibility badge](https://img.shields.io/badge/Java%20SE-8-orange?logo=java "Java SE version compatibility")](https://en.wikipedia.org/wiki/Java_version_history#Java_8)
+[![Licence badge](https://img.shields.io/github/license/NeRdTheNed/More-bows "Licence")](https://github.com/NeRdTheNed/More-bows/blob/fabric-1.19.x/LICENSE)
+[![Java SE version compatibility badge](https://img.shields.io/badge/Java%20SE-17-orange?logo=java "Java SE version compatibility")](https://en.wikipedia.org/wiki/Java_version_history#Java_17)
 
 <p align="center">
     <picture>
@@ -15,7 +15,7 @@
 
 More Bows: Restrung is a port / continuation of the More Bows mod, which was originally created by GaussFire, and maintained & updated by iDiamondhunter until Risugami's ModLoader was no longer updated. This port aims to faithfully re-create the original mod, while fixing some bugs, introducing some quality-of-life changes, and adding cut ideas.
 
-_This branch of More Bows: Restrung targets Forge for Minecraft 1.12.2!_
+_This branch of More Bows: Restrung targets Fabric for Minecraft 1.19.x!_
 
 ### Original descriptions of each bow (not currently 100% accurate!):
 
@@ -32,7 +32,7 @@ Descriptions taken from [iDiamondhunter's page for the mod](https://www.minecraf
 
 ### Building:
 
-The buildscript for this mod uses a fairly standard Gradle 7.x + ForgeGradle 5.1.x combination. A Java 11+ JDK and a Java 8 JDK are required to build the mod.
+TODO
 
 ### Licence:
 
@@ -57,6 +57,6 @@ As iDiamondhunter ["removed the copyrights" from this mod](https://www.minecraft
     <picture>
         <source srcset="https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-320.webp 320w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-480.webp 480w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-600.webp 600w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-768.webp 768w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-900.webp 900w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-1024.webp 1024w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs.webp" type="image/webp">
         <source srcset="https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-320.png 320w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-480.png 480w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-600.png 600w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-768.png 768w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-900.png 900w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs-1024.png 1024w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs.png" type="image/png">
-        <img src="https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs.png" alt="A screenshot of a player shooting pigs with the Ender bow" title="A mod for 1.12.2 in 2022? When pigs fly..." style='height: 100%; width: 100%; object-fit: contain'/>
+        <img src="https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/ScreenshotShootingPigs/ScreenshotShootingPigs.png" alt="A screenshot of a player shooting pigs with the Ender bow" title="A fabric port to 1.19.2 seems pretty reasonable honestly, I&#39m not sure how to make a joke about pigs flying here." style='height: 100%; width: 100%; object-fit: contain'/>
     </picture>
 </p>

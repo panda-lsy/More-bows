@@ -1,0 +1,20 @@
+{
+  "result": {
+    "item": "morebows:iron_bow"
+  },
+  "pattern": [
+    " AC", "ABC", " AC"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": {
+      "tag": "c:string"
+    },
+    "A": {
+      "tag": "c:iron_ingots"
+    },
+    "B": {
+      "tag": "c:bows"
+    }
+  }
+}

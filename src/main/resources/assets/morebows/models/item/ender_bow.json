@@ -23,6 +23,6 @@
     ],
     "parent": "minecraft:item/bow",
     "textures": {
-        "layer0": "morebows:items/ender_bow"
+        "layer0": "morebows:item/ender_bow"
     }
 }

@@ -1,17 +1,21 @@
 package iDiamondhunter.morebows.config;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 import org.jetbrains.annotations.NotNull;
 
 import com.google.errorprone.annotations.CompileTimeConstant;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import iDiamondhunter.morebows.MoreBows;
-import net.minecraftforge.common.config.Config;
-import net.minecraftforge.common.config.Config.LangKey;
+import net.fabricmc.loader.api.FabricLoader;
 
 /** General config settings. */
-@LangKey(MoreBows.MOD_ID + "." + "confCatGen")
-@Config(modid = MoreBows.MOD_ID)
 public final class ConfigGeneral {
 
     /** Changes how multi-shot bows handle shooting additional arrows. */
@@ -61,6 +65,8 @@ public final class ConfigGeneral {
 
     }
 
+    private static final Gson OUTPUT_GSON = new GsonBuilder().setPrettyPrinting().create();
+
     @CompileTimeConstant
     private static final String confMultiShotAmmo = "confMultiShotAmmo";
 
@@ -69,9 +75,8 @@ public final class ConfigGeneral {
      * If true, frost arrows extinguish fire from Entities that are on fire.
      * If false, frost arrows can be on fire.
      */
-    @LangKey(MoreBows.MOD_ID + "." + "confGenFrostCold")
     @SuppressFBWarnings("MS_SHOULD_BE_FINAL")
-    public static boolean frostArrowsShouldBeCold = true;
+    public boolean frostArrowsShouldBeCold = true;
 
     /**
      * MoreBows config setting:
@@ -80,30 +85,53 @@ public final class ConfigGeneral {
      * If false, frost arrows apply the slowness potion effect on hit.
      * TODO This never made much sense.
      */
-    @LangKey(MoreBows.MOD_ID + "." + "confGenOldSlowdown")
     @SuppressFBWarnings("MS_SHOULD_BE_FINAL")
-    public static boolean oldFrostArrowMobSlowdown = false;
+    public boolean oldFrostArrowMobSlowdown = false;
 
     /**
      * MoreBows config setting:
      * If true, render frost arrows as "snow cubes".
      * If false, render as snowballs.
      */
-    @LangKey(MoreBows.MOD_ID + "." + "confGenOldRendering")
     @SuppressFBWarnings("MS_SHOULD_BE_FINAL")
-    public static boolean oldFrostArrowRendering = false;
+    public boolean oldFrostArrowRendering = false;
 
     /**
      * MoreBows config setting:
      * Changes how multi-shot bows handle shooting additional arrows.
      * See each enum constant for more information.
      */
-    @LangKey(MoreBows.MOD_ID + "." + confMultiShotAmmo)
     @SuppressFBWarnings(value = { "NP_NONNULL_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "MS_SHOULD_BE_FINAL" }, justification = "SpotBugs seems to be having trouble detecting the initialisation of the field here")
-    public static @NotNull CustomArrowMultiShotType customArrowMultiShot = CustomArrowMultiShotType.AlwaysCustomArrows;
+    public @NotNull CustomArrowMultiShotType customArrowMultiShot = CustomArrowMultiShotType.AlwaysCustomArrows;
 
     private ConfigGeneral() {
         // Empty private constructor to hide default constructor
+    }
+
+    public static void writeConfig(ConfigGeneral config) {
+        final Path configPath = FabricLoader.getInstance().getConfigDir().resolve(MoreBows.MOD_ID + "_general.json");
+
+        try {
+            Files.writeString(configPath, OUTPUT_GSON.toJson(config));
+        } catch (final IOException e) {
+            MoreBows.modLog.error("Error while writing config to file", e);
+        }
+    }
+
+    public static @NotNull ConfigGeneral readConfig() {
+        final Path configPath = FabricLoader.getInstance().getConfigDir().resolve(MoreBows.MOD_ID + "_general.json");
+        @NotNull ConfigGeneral loadedConfig = new ConfigGeneral();
+
+        if (configPath.toFile().exists()) {
+            try {
+                loadedConfig = OUTPUT_GSON.fromJson(Files.readString(configPath), ConfigGeneral.class);
+            } catch (JsonSyntaxException | IOException e) {
+                MoreBows.modLog.error("Error while reading config from file", e);
+                loadedConfig = new ConfigGeneral();
+            }
+        }
+
+        return loadedConfig;
     }
 
 }

@@ -1,32 +1,27 @@
 package iDiamondhunter.morebows.entities;
 
-import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_ENDER;
-import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_FIRE;
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_FROST;
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_NOT_CUSTOM;
-import static iDiamondhunter.morebows.config.ConfigGeneral.frostArrowsShouldBeCold;
-import static iDiamondhunter.morebows.config.ConfigGeneral.oldFrostArrowRendering;
-
-import org.jetbrains.annotations.Nullable;
 
 import iDiamondhunter.morebows.MoreBows;
-import io.netty.buffer.ByteBuf;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockSnow;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.SnowBlock;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.projectile.ArrowEntity;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.world.event.GameEvent;
 
 /**
  * This entity is a custom arrow.
@@ -34,7 +29,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * is handled in the MoreBows class with SubscribeEvents.
  * TODO much of this is out of date
  */
-public final class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnData {
+public final class CustomArrow extends ArrowEntity {
 
     /** If this is the first time this arrow has hit a block. */
     private boolean firstBlockHit = true;
@@ -42,7 +37,15 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
      * The type of this arrow. In an ideal world, this would be final,
      * but this is not an ideal world. See readSpawnData.
      */
-    public byte type = ARROW_TYPE_NOT_CUSTOM;
+    //public byte type = ARROW_TYPE_NOT_CUSTOM;
+
+    private static final TrackedData<Byte> trackedType = DataTracker.registerData(CustomArrow.class, TrackedDataHandlerRegistry.BYTE);
+
+    @Override
+    protected void initDataTracker() {
+        super.initDataTracker();
+        this.dataTracker.startTracking(trackedType, ARROW_TYPE_NOT_CUSTOM);
+    }
 
     /**
      * Don't use this.
@@ -51,9 +54,10 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
      * @deprecated Don't use this
      * @param worldIn used in super construction
      */
+    @Deprecated
     @SuppressWarnings("unused")
-    public CustomArrow(World worldIn) {
-        super(worldIn);
+    public CustomArrow(EntityType<? extends CustomArrow> entityType, World worldIn) {
+        super(entityType, worldIn);
     }
 
     /**
@@ -66,6 +70,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
      * @param y       used in super construction
      * @param z       used in super construction
      */
+    @Deprecated
     @SuppressWarnings("unused")
     public CustomArrow(World worldIn, double x, double y, double z) {
         super(worldIn, x, y, z);
@@ -79,8 +84,9 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
      * @param worldIn used in super construction
      * @param shooter used in super construction
      */
+    @Deprecated
     @SuppressWarnings("unused")
-    public CustomArrow(World worldIn, EntityLivingBase shooter) {
+    public CustomArrow(World worldIn, LivingEntity shooter) {
         super(worldIn, shooter);
     }
 
@@ -91,67 +97,9 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
      * @param shooter used in super construction
      * @param type    the type of arrow
      */
-    public CustomArrow(World worldIn, EntityLivingBase shooter, byte type) {
+    public CustomArrow(World worldIn, LivingEntity shooter, byte type) {
         super(worldIn, shooter);
-        this.type = type;
-    }
-
-    /**
-     * Creates the particle effects when a custom arrow hits an entity.
-     *
-     * @param living the entity
-     */
-    @Override
-    protected void arrowHit(EntityLivingBase living) {
-        final EnumParticleTypes part;
-        final int amount;
-        final double velocity;
-        final boolean randDisp;
-
-        switch (type) {
-        case ARROW_TYPE_ENDER:
-            part = EnumParticleTypes.PORTAL;
-            amount = 3;
-            randDisp = true;
-            velocity = 1.0;
-            break;
-
-        case ARROW_TYPE_FIRE:
-            part = isBurning() ? EnumParticleTypes.FLAME : EnumParticleTypes.SMOKE_NORMAL;
-            amount = 5;
-            randDisp = true;
-            velocity = 0.05;
-            break;
-
-        case ARROW_TYPE_FROST:
-            part = EnumParticleTypes.WATER_SPLASH;
-            amount = 1;
-            randDisp = false;
-            velocity = 0.01;
-            break;
-
-        default:
-            part = EnumParticleTypes.SUSPENDED_DEPTH;
-            amount = 20;
-            randDisp = true;
-            velocity = 0.0;
-            break;
-        }
-
-        // TODO replace with client-side method
-        for (int i = 0; i < amount; i++) {
-            MoreBows.tryPart(world, living, part, randDisp, velocity);
-        }
-    }
-
-    /**
-     * Gets the (default) arrow stack.
-     *
-     * @return the arrow stack
-     */
-    @Override
-    protected ItemStack getArrowStack() {
-        return new ItemStack(Items.ARROW);
+        this.dataTracker.set(trackedType, type);
     }
 
     /**
@@ -162,9 +110,9 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
      * @return true if critical (mostly)
      */
     @Override
-    @SideOnly(Side.CLIENT)
-    public boolean getIsCritical() {
-        return (type != ARROW_TYPE_FROST) && super.getIsCritical();
+    @Environment(EnvType.CLIENT)
+    public boolean isCritical() {
+        return (this.dataTracker.get(trackedType) != ARROW_TYPE_FROST) && super.isCritical();
         /*
          * Obviously, you're just a bad shot :D
          * This is a hack to prevent the vanilla crit particles from displaying
@@ -178,31 +126,33 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
 
     /** TODO review a bunch of this logic, some of it should be updated. */
     @Override
-    public void onUpdate() {
-        super.onUpdate();
+    public void tick() {
+        super.tick();
 
-        if (type == ARROW_TYPE_FROST) {
-            if ((ticksExisted == 1) && frostArrowsShouldBeCold) {
-                isImmuneToFire = true;
+        if (this.dataTracker.get(trackedType) == ARROW_TYPE_FROST) {
+            if ((age == 1) && MoreBows.configGeneralInst.frostArrowsShouldBeCold) {
+                // TODO Fix
+                //isImmuneToFire = true;
                 extinguish();
             }
 
-            if (timeInGround > 0) {
-                if (timeInGround == 1) {
-                    pickupStatus = PickupStatus.DISALLOWED;
+            if (inGroundTime > 0) {
+                if (inGroundTime == 1) {
+                    pickupType = PickupPermission.DISALLOWED;
                 }
 
                 /*
                  * Shrinks the size of the frost arrow if it's in the ground,
                  * and the mod is in old rendering mode.
                  */
-                if (firstBlockHit && world.isRemote && oldFrostArrowRendering) {
-                    setSize(0.1F, 0.1F);
+                if (firstBlockHit && world.isClient && MoreBows.configGeneralInst.oldFrostArrowRendering) {
+                    // TODO fix
+                    //setSize(0.1F, 0.1F);
                     firstBlockHit = false;
                 }
 
-                if (timeInGround <= 3) {
-                    world.spawnParticle(EnumParticleTypes.SNOWBALL, posX, posY, posZ, 0.0, 0.0, 0.0);
+                if (inGroundTime <= 3) {
+                    world.addParticle(ParticleTypes.ITEM_SNOWBALL, getX(), getY(), getZ(), 0.0, 0.0, 0.0);
                 }
 
                 /*
@@ -215,18 +165,19 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
                  * }
                  * </pre>
                  */
-                if (timeInGround <= 31) {
-                    world.spawnParticle(EnumParticleTypes.WATER_SPLASH, posX, posY, posZ, 0.0, 0.0, 0.0);
+                if (inGroundTime <= 31) {
+                    world.addParticle(ParticleTypes.SPLASH, getX(), getY(), getZ(), 0.0, 0.0, 0.0);
                 }
 
                 /*
                  * Responsible for adding snow layers on top the block the arrow hits,
                  * or "freezing" the water it's in by setting the block to ice.
                  */
-                if (timeInGround == 65) {
-                    BlockPos inBlockPos = new BlockPos(this);
-                    IBlockState inBlockState = world.getBlockState(inBlockPos);
+                if (inGroundTime == 65) {
+                    BlockPos inBlockPos = this.getBlockPos();
+                    BlockState inBlockState = world.getBlockState(inBlockPos);
                     Block inBlock = inBlockState.getBlock();
+                    final BlockState defaultSnowState = Blocks.SNOW.getDefaultState();
 
                     /*
                      * If this arrow is inside an air block,
@@ -239,39 +190,49 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
                      * If this arrow is inside water, replace the water with ice.
                      */
 
-                    if (inBlock.isAir(inBlockState, world, inBlockPos) && Blocks.SNOW_LAYER.canPlaceBlockAt(world, inBlockPos)) {
-                        world.setBlockState(inBlockPos, Blocks.SNOW_LAYER.getDefaultState());
+                    if (inBlockState.isAir() && defaultSnowState.canPlaceAt(world, inBlockPos)) {
+                        world.setBlockState(inBlockPos, defaultSnowState);
+                        world.emitGameEvent(GameEvent.BLOCK_PLACE, inBlockPos, GameEvent.Emitter.of(this, defaultSnowState));
                     } else if (inBlock == Blocks.WATER) {
                         /*
                          * TODO Check if the earlier event or this one is the correct one.
                          * Consider using world.canBlockFreezeWater(inBlockPos).
                          * Also: bouncy arrow on ice, a bit like stone skimming? Could be cool.
                          */
-                        world.setBlockState(inBlockPos, Blocks.ICE.getDefaultState());
-                    } else if (inBlock == Blocks.SNOW_LAYER) {
+                        final BlockState defaultIce = Blocks.ICE.getDefaultState();
+                        world.setBlockState(inBlockPos, defaultIce);
+                        world.emitGameEvent(GameEvent.BLOCK_CHANGE, inBlockPos, GameEvent.Emitter.of(this, defaultIce));
+                    } else if (inBlock == Blocks.SNOW) {
                         int currentSnowLevel = 8;
 
-                        for (int upCount = 0; (upCount < 1024) && (inBlock == Blocks.SNOW_LAYER) && ((currentSnowLevel = inBlockState.<Integer>getValue(BlockSnow.LAYERS)) > 7); upCount++) {
+                        for (int upCount = 0; (upCount < 1024) && (inBlock == Blocks.SNOW) && ((currentSnowLevel = inBlockState.<Integer>get(SnowBlock.LAYERS)) > 7); upCount++) {
                             inBlockPos = inBlockPos.up();
                             inBlockState = world.getBlockState(inBlockPos);
                             inBlock = inBlockState.getBlock();
                         }
 
                         if (currentSnowLevel < 8) {
-                            final IBlockState extraSnow = inBlockState.withProperty(BlockSnow.LAYERS, currentSnowLevel + 1);
+                            final BlockState extraSnow = inBlockState.with(SnowBlock.LAYERS, currentSnowLevel + 1);
                             world.setBlockState(inBlockPos, extraSnow, 10);
-                        } else if (inBlock.isAir(inBlockState, world, inBlockPos) && Blocks.SNOW_LAYER.canPlaceBlockAt(world, inBlockPos)) {
-                            world.setBlockState(inBlockPos, Blocks.SNOW_LAYER.getDefaultState());
+                            world.emitGameEvent(GameEvent.BLOCK_CHANGE, inBlockPos, GameEvent.Emitter.of(this, extraSnow));
+                        } else if (inBlockState.isAir() && defaultSnowState.canPlaceAt(world, inBlockPos)) {
+                            world.setBlockState(inBlockPos, defaultSnowState);
+                            world.emitGameEvent(GameEvent.BLOCK_PLACE, inBlockPos, GameEvent.Emitter.of(this, defaultSnowState));
                         }
                     }
                 }
 
-                if (timeInGround >= 65) {
-                    setDead();
+                if (inGroundTime >= 65) {
+                    discard();
                 }
-            } else if (super.getIsCritical()) {
+            } else if (super.isCritical()) {
+                final Vec3d currentVelocity = this.getVelocity();
+                final double motionX = currentVelocity.x;
+                final double motionY = currentVelocity.y;
+                final double motionZ = currentVelocity.z;
+
                 for (int i = 0; i < 4; ++i) {
-                    world.spawnParticle(EnumParticleTypes.WATER_SPLASH, posX + ((motionX * i) / 4.0), posY + ((motionY * i) / 4.0), posZ + ((motionZ * i) / 4.0), -motionX, -motionY + 0.2, -motionZ);
+                    world.addParticle(ParticleTypes.SPLASH, getX() + ((motionX * i) / 4.0), getY() + ((motionY * i) / 4.0), getZ() + ((motionZ * i) / 4.0), -motionX, -motionY + 0.2, -motionZ);
                 }
             }
         }
@@ -283,24 +244,9 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
      * @param compound the NBT tag
      */
     @Override
-    public void readEntityFromNBT(NBTTagCompound compound) {
-        super.readEntityFromNBT(compound);
-        type = compound.getByte("type");
-    }
-
-    /**
-     * Used to set the arrow type and the shooting entity on the client side
-     * when spawning a CustomArrow.
-     */
-    @Override
-    public void readSpawnData(ByteBuf additionalData) {
-        type = additionalData.readByte();
-        /* See NetHandlerPlayClient.handleSpawnObject (line 470). */
-        final @Nullable Entity shooter = world.getEntityByID(additionalData.readInt());
-
-        if (shooter instanceof EntityLivingBase) {
-            shootingEntity = shooter;
-        }
+    public void readCustomDataFromNbt(NbtCompound compound) {
+        super.readCustomDataFromNbt(compound);
+        this.dataTracker.set(trackedType, compound.getByte("type"));
     }
 
     /**
@@ -309,19 +255,9 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
      * @param compound the NBT tag
      */
     @Override
-    public void writeEntityToNBT(NBTTagCompound compound) {
-        super.writeEntityToNBT(compound);
-        compound.setByte("type", type);
-    }
-
-    /**
-     * Used to send the arrow type and the shooting entity to the client
-     * when spawning a CustomArrow.
-     */
-    @Override
-    public void writeSpawnData(ByteBuf buffer) {
-        buffer.writeByte(type);
-        buffer.writeInt(shootingEntity != null ? shootingEntity.getEntityId() : -1);
+    public void writeCustomDataToNbt(NbtCompound compound) {
+        super.writeCustomDataToNbt(compound);
+        compound.putByte("type", this.dataTracker.get(trackedType));
     }
 
 }

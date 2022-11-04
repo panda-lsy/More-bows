@@ -6,9 +6,7 @@
 -dontskipnonpubliclibraryclassmembers
 -forceprocessing
 
-# We're a bit oldschool
-
--target 1.8
+-target 17
 
 # TODO Figure out how to do this but for annotations
 
@@ -16,10 +14,10 @@
 #-adaptresourcefilenames
 #-adaptresourcefilecontents
 
-# Keep all methods that overrides a super method, or methods that are an event handler.
+# Keep all methods that overrides a super method.
 
 -keepclassmembers,allowobfuscation class * {
-    @java.lang.Override,cpw.mods.fml.common.eventhandler.SubscribeEvent,cpw.mods.fml.common.Mod$EventHandler <methods>;
+    @java.lang.Override <methods>;
 }
 
 # Keep all classes with public methods
@@ -30,15 +28,15 @@
 
 # ProGuard really wants to remove the mod instance and sided proxies. This stops it from doing that.
 
--keepclassmembers,allowobfuscation class * {
-    private static iDiamondhunter.morebows.MoreBows inst;
-    private static iDiamondhunter.morebows.MoreBows proxy;
-}
+#-keepclassmembers,allowobfuscation class * {
+#    private static iDiamondhunter.morebows.MoreBows inst;
+#    private static iDiamondhunter.morebows.MoreBows proxy;
+#}
 
 # These two classes are referred to in String constants inside of annotations. TODO see above (around -adaptclassstrings).
 
--keepnames,allowoptimization public class iDiamondhunter.morebows.Client
--keepnames,allowoptimization public class iDiamondhunter.morebows.MoreBows
+#-keepnames,allowoptimization public class iDiamondhunter.morebows.Client
+#-keepnames,allowoptimization public class iDiamondhunter.morebows.MoreBows
 
 # Keep config entry names
 -keepclassmembernames public class iDiamondhunter.morebows.config.* {
@@ -51,11 +49,34 @@
 
 # Annotations and generic method signatures are kept, as Forge uses them for reflection.
 
--keepattributes RuntimeVisibleAnnotations,Signature
+#-keepattributes RuntimeVisibleAnnotations,Signature
+#-keepattributes RuntimeVisibleAnnotations,RuntimeInvisibleAnnotations,Signature
+-keepattributes *Annotation*
 
 # Repackage all classes into iDiamondhunter.morebows
 
--repackageclasses iDiamondhunter.morebows
+#-repackageclasses iDiamondhunter.morebows
+
+# Mixins
+
+-keepclassmembers,allowoptimization,allowobfuscation public class iDiamondhunter.morebows.mixin.AbstractClientPlayerEntityMixin {
+    private float getFovMultiplierMixin(float);
+}
+
+-keepclassmembers,allowoptimization,allowobfuscation public class iDiamondhunter.morebows.mixin.HeldItemRendererMixin {
+    private float *;
+    <methods>;
+}
+
+# TODO
+-keep public class iDiamondhunter.morebows.mixin.HeldItemRendererMixin
+-keep public class iDiamondhunter.morebows.mixin.AbstractClientPlayerEntityMixin
+-keep public class iDiamondhunter.morebows.MoreBows
+-keep public class iDiamondhunter.morebows.Client
+-keep public class iDiamondhunter.morebows.modmenu.ModMenuCompat
+
+# Needed to prevent ProGuard from changing a method signature
+-optimizations !method/removal/parameter
 
 # Bonus optimisations
 

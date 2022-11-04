@@ -1,0 +1,23 @@
+{
+  "result": {
+    "item": "morebows:ender_bow"
+  },
+  "pattern": [
+    "CD", "AB", "CD"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": {
+      "tag": "c:gold_ingots"
+    },
+    "D": {
+      "tag": "c:ender_pearls"
+    },
+    "A": {
+      "tag": "c:ender_eyes"
+    },
+    "B": {
+      "tag": "c:iron_bows"
+    }
+  }
+}

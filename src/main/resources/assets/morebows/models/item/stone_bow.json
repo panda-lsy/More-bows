@@ -23,6 +23,6 @@
     ],
     "parent": "minecraft:item/bow",
     "textures": {
-        "layer0": "morebows:items/stone_bow"
+        "layer0": "morebows:item/stone_bow"
     }
 }

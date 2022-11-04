@@ -1,63 +1,49 @@
 package iDiamondhunter.morebows;
 
-import static iDiamondhunter.morebows.config.ConfigGeneral.frostArrowsShouldBeCold;
-import static iDiamondhunter.morebows.config.ConfigGeneral.oldFrostArrowMobSlowdown;
-
-import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.errorprone.annotations.CompileTimeConstant;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import iDiamondhunter.morebows.config.ConfigBows;
+import iDiamondhunter.morebows.config.ConfigGeneral;
 import iDiamondhunter.morebows.entities.ArrowSpawner;
 import iDiamondhunter.morebows.entities.CustomArrow;
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.EntityBlaze;
-import net.minecraft.init.Items;
-import net.minecraft.item.EnumRarity;
+import net.minecraft.entity.EntityDimensions;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnGroup;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.particle.ParticleEffect;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.Rarity;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.EntityEntry;
-import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
-import net.minecraftforge.oredict.OreDictionary;
 
 /** If you're reading this, I'm very sorry you have to deal with my code. */
-@Mod(modid = MoreBows.MOD_ID, version = "${version}", updateJSON = "https://nerdthened.github.io/More-bows/update.json")
-public class MoreBows {
+public class MoreBows implements ModInitializer {
 
     /** The mod ID of More Bows. */
     @CompileTimeConstant
     public static final String MOD_ID = "morebows";
 
-    /** Used for naming items. */
-    @CompileTimeConstant
-    private static final String modSeparator = "morebows:";
-
-    /** Mod proxy. TODO This is super janky, see if it's possible to remove this */
-    @SidedProxy(clientSide = "iDiamondhunter.morebows.Client", serverSide = "iDiamondhunter.morebows.MoreBows")
-    @SuppressWarnings("NullAway.Init")
-    private static MoreBows proxy;
-
     /** The mod log. */
+    public static final Logger modLog = LoggerFactory.getLogger(MOD_ID);
+
     @SuppressWarnings("NullAway.Init")
     @SuppressFBWarnings("MS_CANNOT_BE_FINAL")
-    public static Logger modLog;
+    public static ConfigBows configBowsInst;
+
+    @SuppressWarnings("NullAway.Init")
+    @SuppressFBWarnings("MS_CANNOT_BE_FINAL")
+    public static ConfigGeneral configGeneralInst;
 
     /*
      * Hardcoded magic numbers, because Enums (as they are classes)
@@ -96,39 +82,21 @@ public class MoreBows {
 
     /* Names of bows. */
     @CompileTimeConstant
-    private static final String DiamondBowName = "diamond_bow";
+    public static final String DiamondBowName = "diamond_bow";
     @CompileTimeConstant
-    private static final String GoldBowName = "gold_bow";
+    public static final String GoldBowName = "gold_bow";
     @CompileTimeConstant
-    private static final String EnderBowName = "ender_bow";
+    public static final String EnderBowName = "ender_bow";
     @CompileTimeConstant
-    private static final String StoneBowName = "stone_bow";
+    public static final String StoneBowName = "stone_bow";
     @CompileTimeConstant
-    private static final String IronBowName = "iron_bow";
+    public static final String IronBowName = "iron_bow";
     @CompileTimeConstant
-    private static final String MultiBowName = "multi_bow";
+    public static final String MultiBowName = "multi_bow";
     @CompileTimeConstant
-    private static final String FlameBowName = "flame_bow";
+    public static final String FlameBowName = "flame_bow";
     @CompileTimeConstant
-    private static final String FrostBowName = "frost_bow";
-
-    /* Translation keys for bows. */
-    @CompileTimeConstant
-    public static final String DiamondBowTransKey = MOD_ID + "." + DiamondBowName;
-    @CompileTimeConstant
-    public static final String GoldBowTransKey = MOD_ID + "." + GoldBowName;
-    @CompileTimeConstant
-    public static final String EnderBowTransKey = MOD_ID + "." + EnderBowName;
-    @CompileTimeConstant
-    public static final String StoneBowTransKey = MOD_ID + "." + StoneBowName;
-    @CompileTimeConstant
-    public static final String IronBowTransKey = MOD_ID + "." + IronBowName;
-    @CompileTimeConstant
-    public static final String MultiBowTransKey = MOD_ID + "." + MultiBowName;
-    @CompileTimeConstant
-    public static final String FlameBowTransKey = MOD_ID + "." + FlameBowName;
-    @CompileTimeConstant
-    public static final String FrostBowTransKey = MOD_ID + "." + FrostBowName;
+    public static final String FrostBowName = "frost_bow";
 
     /* Default values for bow construction */
 
@@ -164,9 +132,17 @@ public class MoreBows {
     @SuppressWarnings("NullAway.Init")
     private static Item[] allItems;
 
-    /* EntityEntryBuilders. */
-    private static final @NotNull EntityEntry customArrowEntry = EntityEntryBuilder.create().entity(CustomArrow.class).id("custom_arrow", 1).name("Custom arrow").tracker(64, 20, true).build();
-    private static final @NotNull EntityEntry arrowSpawnerEntry = EntityEntryBuilder.create().entity(ArrowSpawner.class).id("arrow_spawner", 2).name("Arrow spawner").tracker(-1, Integer.MAX_VALUE, false).build();
+    public static final EntityType<ArrowSpawner> ARROW_SPAWNER = Registry.register(
+                Registry.ENTITY_TYPE,
+                new Identifier(MOD_ID, "arrow_spawner"),
+                FabricEntityTypeBuilder.<ArrowSpawner>create(SpawnGroup.MISC, ArrowSpawner::new).dimensions(EntityDimensions.fixed(0.0F, 0.0F)).fireImmune().trackRangeChunks(1).trackedUpdateRate(1).build()
+            );
+
+    public static final EntityType<CustomArrow> CUSTOM_ARROW = Registry.register(
+                Registry.ENTITY_TYPE,
+                new Identifier(MOD_ID, "custom_arrow"),
+                FabricEntityTypeBuilder.<CustomArrow>create(SpawnGroup.MISC, CustomArrow::new).dimensions(EntityDimensions.fixed(0.5F, 0.5F)).trackRangeChunks(4).trackedUpdateRate(20).build()
+            );
 
     /**
      * Constructs the array of all bow items if it hasn't been constructed,
@@ -178,14 +154,14 @@ public class MoreBows {
      */
     static @NotNull Item @NotNull [] getAllItems() {
         if (allItems == null) {
-            DiamondBow = new CustomBow(ConfigBows.DiamondBow.confBowDurability, defaultArrowType, ConfigBows.DiamondBow.confBowDamageMult, false, ConfigBows.DiamondBow.confBowDrawbackDiv, EnumRarity.RARE).setTranslationKey(DiamondBowTransKey).setRegistryName(modSeparator + DiamondBowName);
-            EnderBow = new CustomBow(ConfigBows.EnderBow.confBowDurability, ARROW_TYPE_ENDER, ConfigBows.EnderBow.confBowDamageMult, true, ConfigBows.EnderBow.confBowDrawbackDiv, EnumRarity.EPIC).setTranslationKey(EnderBowTransKey).setRegistryName(modSeparator + EnderBowName);
-            FlameBow = new CustomBow(ConfigBows.FlameBow.confBowDurability, ARROW_TYPE_FIRE, ConfigBows.FlameBow.confBowDamageMult, false, ConfigBows.FlameBow.confBowDrawbackDiv, EnumRarity.UNCOMMON).setTranslationKey(FlameBowTransKey).setRegistryName(modSeparator + FlameBowName);
-            FrostBow = new CustomBow(ConfigBows.FrostBow.confBowDurability, ARROW_TYPE_FROST, ConfigBows.FrostBow.confBowDamageMult, false, ConfigBows.FrostBow.confBowDrawbackDiv, EnumRarity.COMMON).setTranslationKey(FrostBowTransKey).setRegistryName(modSeparator + FrostBowName);
-            GoldBow = new CustomBow(ConfigBows.GoldBow.confBowDurability, defaultArrowType, ConfigBows.GoldBow.confBowDamageMult, false, ConfigBows.GoldBow.confBowDrawbackDiv, EnumRarity.UNCOMMON).setTranslationKey(GoldBowTransKey).setRegistryName(modSeparator + GoldBowName);
-            IronBow = new CustomBow(ConfigBows.IronBow.confBowDurability, defaultArrowType, ConfigBows.IronBow.confBowDamageMult, false, ConfigBows.IronBow.confBowDrawbackDiv, EnumRarity.COMMON).setTranslationKey(IronBowTransKey).setRegistryName(modSeparator + IronBowName);
-            MultiBow = new CustomBow(ConfigBows.MultiBow.confBowDurability, ARROW_TYPE_NOT_CUSTOM, ConfigBows.MultiBow.confBowDamageMult, true, ConfigBows.MultiBow.confBowDrawbackDiv, EnumRarity.RARE).setTranslationKey(MultiBowTransKey).setRegistryName(modSeparator + MultiBowName);
-            StoneBow = new CustomBow(ConfigBows.StoneBow.confBowDurability, defaultArrowType, ConfigBows.StoneBow.confBowDamageMult, false, ConfigBows.StoneBow.confBowDrawbackDiv, EnumRarity.COMMON).setTranslationKey(StoneBowTransKey).setRegistryName(modSeparator + StoneBowName);
+            DiamondBow = new CustomBow(new FabricItemSettings().group(ItemGroup.COMBAT).maxDamage(configBowsInst.DiamondBow.confBowDurability).rarity(Rarity.RARE), defaultArrowType, configBowsInst.DiamondBow.confBowDamageMult, false, configBowsInst.DiamondBow.confBowDrawbackDiv);
+            GoldBow = new CustomBow(new FabricItemSettings().group(ItemGroup.COMBAT).maxDamage(configBowsInst.GoldBow.confBowDurability).rarity(Rarity.UNCOMMON), defaultArrowType, configBowsInst.GoldBow.confBowDamageMult, false, configBowsInst.GoldBow.confBowDrawbackDiv);
+            EnderBow = new CustomBow(new FabricItemSettings().group(ItemGroup.COMBAT).maxDamage(configBowsInst.EnderBow.confBowDurability).rarity(Rarity.EPIC), ARROW_TYPE_ENDER, configBowsInst.EnderBow.confBowDamageMult, true, configBowsInst.EnderBow.confBowDrawbackDiv);
+            StoneBow = new CustomBow(new FabricItemSettings().group(ItemGroup.COMBAT).maxDamage(configBowsInst.StoneBow.confBowDurability).rarity(Rarity.COMMON), defaultArrowType, configBowsInst.StoneBow.confBowDamageMult, false, configBowsInst.StoneBow.confBowDrawbackDiv);
+            IronBow = new CustomBow(new FabricItemSettings().group(ItemGroup.COMBAT).maxDamage(configBowsInst.IronBow.confBowDurability).rarity(Rarity.COMMON), defaultArrowType, configBowsInst.IronBow.confBowDamageMult, false, configBowsInst.IronBow.confBowDrawbackDiv);
+            MultiBow = new CustomBow(new FabricItemSettings().group(ItemGroup.COMBAT).maxDamage(configBowsInst.MultiBow.confBowDurability).rarity(Rarity.RARE), ARROW_TYPE_NOT_CUSTOM, configBowsInst.MultiBow.confBowDamageMult, true, configBowsInst.MultiBow.confBowDrawbackDiv);
+            FlameBow = new CustomBow(new FabricItemSettings().group(ItemGroup.COMBAT).maxDamage(configBowsInst.FlameBow.confBowDurability).rarity(Rarity.UNCOMMON), ARROW_TYPE_FIRE, configBowsInst.FlameBow.confBowDamageMult, false, configBowsInst.FlameBow.confBowDrawbackDiv);
+            FrostBow = new CustomBow(new FabricItemSettings().group(ItemGroup.COMBAT).maxDamage(configBowsInst.FrostBow.confBowDurability).rarity(Rarity.COMMON), ARROW_TYPE_FROST, configBowsInst.FrostBow.confBowDamageMult, false, configBowsInst.FrostBow.confBowDrawbackDiv);
             allItems = new Item[] { DiamondBow, EnderBow, FlameBow, FrostBow, GoldBow, IronBow, MultiBow, StoneBow };
         }
 
@@ -209,119 +185,52 @@ public class MoreBows {
      *                 around the entity.
      * @param velocity The velocity of spawned particles.
      */
-    public static void tryPart(World world, Entity entity, EnumParticleTypes part, boolean randDisp, double velocity) {
-        if (!world.isRemote) {
+    public static <T extends ParticleEffect> void tryPart(World world, Entity entity, T part, boolean randDisp, double velocity) {
+        if (!world.isClient) {
             // final int amount = 1;
             final double xDisp;
             final double yDisp;
             final double zDisp;
 
             if (randDisp) {
-                xDisp = (world.rand.nextFloat() * entity.width * 2.0F) - entity.width;
-                yDisp = 0.5 + (world.rand.nextFloat() * entity.height);
-                zDisp = (world.rand.nextFloat() * entity.width * 2.0F) - entity.width;
+                xDisp = (world.random.nextFloat() * entity.getWidth() * 2.0F) - entity.getWidth();
+                yDisp = 0.5 + (world.random.nextFloat() * entity.getHeight());
+                zDisp = (world.random.nextFloat() * entity.getWidth() * 2.0F) - entity.getWidth();
             } else {
                 xDisp = 0.0;
                 yDisp = 0.5;
                 zDisp = 0.0;
             }
 
-            ((WorldServer) world).spawnParticle(part, entity.posX, entity.posY, entity.posZ, 1, xDisp, yDisp, zDisp, velocity);
+            ((ServerWorld) world).spawnParticles(part, entity.getX(), entity.getY(), entity.getZ(), 1, xDisp, yDisp, zDisp, velocity);
         }
     }
 
-    /**
-     * Handles custom effects from the frost arrow.
-     * TODO see if this can be done inside CustomArrow
-     *
-     * @param event the event
-     */
-    @SubscribeEvent
-    public final void arrHurt(LivingHurtEvent event) {
-        final @Nullable Entity source = event.getSource().getImmediateSource();
-
-        if ((source instanceof CustomArrow) && (((CustomArrow) source).type == ARROW_TYPE_FROST)) {
-            final EntityLivingBase living = event.getEntityLiving();
-
-            if (frostArrowsShouldBeCold) {
-                if (living instanceof EntityBlaze) {
-                    event.setAmount(event.getAmount() * 3.0F);
-                }
-
-                living.extinguish();
-            }
-
-            if (!oldFrostArrowMobSlowdown) {
-                final @Nullable Potion slow = Potion.getPotionFromResourceLocation("slowness");
-
-                if (slow != null) {
-                    living.addPotionEffect(new PotionEffect(slow, 300, 2));
-                }
-            } else {
-                living.setInWeb();
-            }
-        }
+    @Override
+    public void onInitialize() {
+        // TODO better code
+        readConfigs();
+        getAllItems();
+        registerBow(DiamondBow, DiamondBowName);
+        registerBow(GoldBow, GoldBowName);
+        registerBow(EnderBow, EnderBowName);
+        registerBow(StoneBow, StoneBowName);
+        registerBow(IronBow, IronBowName);
+        registerBow(MultiBow, MultiBowName);
+        registerBow(FlameBow, FlameBowName);
+        registerBow(FrostBow, FrostBowName);
+        // TODO fuel burn times?
     }
 
-    /**
-     * This method handles setting up the mod.
-     *
-     * @param event the event
-     */
-    @EventHandler
-    @SuppressFBWarnings("ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD")
-    public final void init(FMLPreInitializationEvent event) {
-        modLog = event.getModLog();
-        proxy.register();
-        MinecraftForge.EVENT_BUS.register(proxy);
+    private static void readConfigs() {
+        configBowsInst = ConfigBows.readConfig();
+        ConfigBows.writeConfig(configBowsInst);
+        configGeneralInst = ConfigGeneral.readConfig();
+        ConfigGeneral.writeConfig(configGeneralInst);
     }
 
-    /**
-     * This was once used to register anything needed
-     * both client side and server side,
-     * but it looks like it's not needed for server-side registration anymore.
-     * TODO probably remove
-     */
-    void register() {
-        // This space left unintentionally blank?
-    }
-
-    /**
-     * Register entities.
-     * TODO review
-     *
-     * @param event the RegistryEvent
-     */
-    @SubscribeEvent
-    public final void registerEntities(RegistryEvent.Register<EntityEntry> event) {
-        event.getRegistry().registerAll(customArrowEntry, arrowSpawnerEntry);
-    }
-
-    /**
-     * Register items and OreDictionary entries.
-     * TODO review
-     *
-     * @param event the RegistryEvent
-     */
-    @SubscribeEvent
-    public final void registerItems(RegistryEvent.Register<Item> event) {
-        event.getRegistry().registerAll(getAllItems());
-
-        /*
-         * Apparently, you should register to the OreDictionary in this event.
-         * I don't make the rules.
-         * TODO create a config setting to use WILDCARD_VALUE or not
-         */
-        for (final Item item : getAllItems()) {
-            OreDictionary.registerOre("bow", new ItemStack(item, 1, OreDictionary.WILDCARD_VALUE));
-        }
-
-        // Register the Vanilla bow
-        OreDictionary.registerOre("bow", new ItemStack(Items.BOW, 1, OreDictionary.WILDCARD_VALUE));
-        // Register to hypothetically useful ore names
-        OreDictionary.registerOre("bowDiamond", new ItemStack(DiamondBow, 1, OreDictionary.WILDCARD_VALUE));
-        OreDictionary.registerOre("bowGold", new ItemStack(GoldBow, 1, OreDictionary.WILDCARD_VALUE));
-        OreDictionary.registerOre("bowIron", new ItemStack(IronBow, 1, OreDictionary.WILDCARD_VALUE));
+    public void registerBow(Item bow, String name) {
+        Registry.register(Registry.ITEM, new Identifier(MOD_ID, name), bow);
     }
 
 }

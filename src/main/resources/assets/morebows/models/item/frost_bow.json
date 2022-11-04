@@ -23,6 +23,6 @@
     ],
     "parent": "minecraft:item/bow",
     "textures": {
-        "layer0": "morebows:items/frost_bow"
+        "layer0": "morebows:item/frost_bow"
     }
 }

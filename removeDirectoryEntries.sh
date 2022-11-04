@@ -6,6 +6,11 @@ for file in ./build/libs/*.jar
 do
   unzip "$file" -d ./build/libs/temp
   rm "$file"
+  for jsonFile in ./build/libs/temp/**.json
+  do
+    jq -c . < "$jsonFile" > "$jsonFile-tempOut"
+    mv "$jsonFile-tempOut" "$jsonFile"
+  done
   # TODO replace this with standard zip
   advzip "$file" --shrink-store --pedantic -a ./build/libs/temp/**
   rm -rf ./build/libs/temp/

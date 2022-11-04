@@ -1,6 +1,6 @@
 {
     "parent": "morebows:item/diamond_bow",
     "textures": {
-        "layer0": "morebows:items/diamond_bow_pulling_1"
+        "layer0": "morebows:item/diamond_bow_pulling_1"
     }
 }
