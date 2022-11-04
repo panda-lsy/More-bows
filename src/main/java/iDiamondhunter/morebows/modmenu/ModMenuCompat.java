@@ -9,11 +9,7 @@ public class ModMenuCompat implements ModMenuApi {
 
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        if (FabricLoader.getInstance().isModLoaded("cloth-config")) {
-            return ConfigScreen::moreBowsConfigScreen;
-        }
-
-        return ModMenuApi.super.getModConfigScreenFactory();
+        return FabricLoader.getInstance().isModLoaded("cloth-config") ? ConfigScreen::moreBowsConfigScreen : ModMenuApi.super.getModConfigScreenFactory();
     }
 
 }

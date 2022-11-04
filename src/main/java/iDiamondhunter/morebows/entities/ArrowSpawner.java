@@ -196,12 +196,8 @@ public final class ArrowSpawner extends Entity {
                     toAdd = null;
                 }
 
-                if (toAdd != null) {
-                    readArrows[i] = toAdd;
-                } else {
-                    /* If the data isn't valid, a new PersistentProjectileEntity is created to avoid null objects. */
-                    readArrows[i] = new ArrowEntity(world, getX(), getY(), getZ());
-                }
+                /* If the data isn't valid, a new PersistentProjectileEntity is created to avoid null objects. */
+                readArrows[i] = toAdd != null ? toAdd : new ArrowEntity(world, getX(), getY(), getZ());
             }
 
             arrows = readArrows;
