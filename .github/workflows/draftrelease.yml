@@ -7,7 +7,7 @@ on:
   push:
     # Sequence of patterns matched against refs/tags
     tags:
-      - 'v*1.19.x' # Push events to matching v*+1.19.x
+      - 'v*1.19.x.fabric' # Push events to matching v*1.19.x.fabric
 
 jobs:
   build:
@@ -40,8 +40,8 @@ jobs:
         run: bash removeDirectoryEntries.sh
       - name: Run strip-nondeterminism on built .jar files
         run: strip-nondeterminism build/libs/*.jar
-      - name: Run advzip (-i 99999) on built .jar files
-        run: advzip --shrink-insane -kzi 99999 -p build/libs/*.jar
+      - name: Run advzip (-i 9999) on built .jar files
+        run: advzip --shrink-insane -kzi 9999 -p build/libs/*.jar
         # TODO Everything is now outdated
       - name: Draft release
         id: create_release
