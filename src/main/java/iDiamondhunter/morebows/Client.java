@@ -12,7 +12,7 @@ public final class Client extends MoreBows implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         EntityRendererRegistry.register(MoreBows.ARROW_SPAWNER, EmptyEntityRenderer::new);
-        //EntityRendererRegistry.register(MoreBows.CUSTOM_ARROW, FlyingItemEntityRenderer::new);
+        EntityRendererRegistry.register(MoreBows.CUSTOM_ARROW, CustomArrowRenderer::new);
 
         for (final Item bow : getAllItems()) {
             ModelPredicateProviderRegistry.register(bow, new Identifier("pull"), (stack, world, entity, seed) -> (entity == null ? 0.0F : entity.getActiveItem() != stack ? 0.0F : (stack.getMaxUseTime() - entity.getItemUseTimeLeft()) / ((CustomBow) stack.getItem()).powerDiv));

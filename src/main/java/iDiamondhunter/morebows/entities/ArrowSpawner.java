@@ -176,7 +176,7 @@ public final class ArrowSpawner extends Entity {
                          */
                         final @Nullable Entity savedEntity = EntityType.getEntityFromNbt(currentArrow, world).orElse(null);
 
-                        if (savedEntity instanceof PersistentProjectileEntity savedEntityProjectile) {
+                        if (savedEntity instanceof final PersistentProjectileEntity savedEntityProjectile) {
                             toAdd = savedEntityProjectile;
                         } else {
                             MoreBows.modLog.error("The saved NBT data for arrow {} for ArrowSpawner {} ({}) was not able to spawn an PersistentProjectileEntity (spawned Entity was {}).", i, this, currentArrow, savedEntity);

@@ -11,11 +11,14 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.SnowBlock;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.FlyingItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.projectile.ArrowEntity;
+import net.minecraft.entity.projectile.PersistentProjectileEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
@@ -29,7 +32,7 @@ import net.minecraft.world.event.GameEvent;
  * is handled in the MoreBows class with SubscribeEvents.
  * TODO much of this is out of date
  */
-public final class CustomArrow extends ArrowEntity {
+public final class CustomArrow extends PersistentProjectileEntity implements FlyingItemEntity {
 
     /** If this is the first time this arrow has hit a block. */
     private boolean firstBlockHit = true;
@@ -39,7 +42,7 @@ public final class CustomArrow extends ArrowEntity {
      */
     //public byte type = ARROW_TYPE_NOT_CUSTOM;
 
-    private static final TrackedData<Byte> trackedType = DataTracker.registerData(CustomArrow.class, TrackedDataHandlerRegistry.BYTE);
+    public static final TrackedData<Byte> trackedType = DataTracker.registerData(CustomArrow.class, TrackedDataHandlerRegistry.BYTE);
 
     @Override
     protected void initDataTracker() {
@@ -73,7 +76,7 @@ public final class CustomArrow extends ArrowEntity {
     @Deprecated
     @SuppressWarnings("unused")
     public CustomArrow(World worldIn, double x, double y, double z) {
-        super(worldIn, x, y, z);
+        super(MoreBows.CUSTOM_ARROW, x, y, z, worldIn);
     }
 
     /**
@@ -87,7 +90,7 @@ public final class CustomArrow extends ArrowEntity {
     @Deprecated
     @SuppressWarnings("unused")
     public CustomArrow(World worldIn, LivingEntity shooter) {
-        super(worldIn, shooter);
+        super(MoreBows.CUSTOM_ARROW, shooter, worldIn);
     }
 
     /**
@@ -98,7 +101,7 @@ public final class CustomArrow extends ArrowEntity {
      * @param type    the type of arrow
      */
     public CustomArrow(World worldIn, LivingEntity shooter, byte type) {
-        super(worldIn, shooter);
+        super(MoreBows.CUSTOM_ARROW, shooter, worldIn);
         dataTracker.set(trackedType, type);
     }
 
@@ -258,6 +261,16 @@ public final class CustomArrow extends ArrowEntity {
     public void writeCustomDataToNbt(NbtCompound compound) {
         super.writeCustomDataToNbt(compound);
         compound.putByte("type", dataTracker.get(trackedType));
+    }
+
+    @Override
+    public ItemStack getStack() {
+        return new ItemStack(Items.SNOWBALL);
+    }
+
+    @Override
+    protected ItemStack asItemStack() {
+        return new ItemStack(Items.ARROW);
     }
 
 }
