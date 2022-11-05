@@ -22,17 +22,17 @@ public class CustomArrowRenderer extends ProjectileEntityRenderer<CustomArrow> {
 
     @Override
     public void render(CustomArrow persistentProjectileEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i) {
-        if (persistentProjectileEntity.getDataTracker().get(CustomArrow.trackedType) == MoreBows.ARROW_TYPE_FROST) {
+        if ((persistentProjectileEntity.getDataTracker().get(CustomArrow.trackedType) == MoreBows.ARROW_TYPE_FROST) && !MoreBows.configGeneralInst.oldFrostArrowRendering) {
             snow.render(persistentProjectileEntity, f, g, matrixStack, vertexConsumerProvider, i);
         } else {
+            // TODO Implement old cube rendering
             super.render(persistentProjectileEntity, f, g, matrixStack, vertexConsumerProvider, i);
         }
-
     }
 
     @Override
     public Identifier getTexture(CustomArrow persistentProjectileEntity) {
-        return (persistentProjectileEntity.getDataTracker().get(CustomArrow.trackedType) == MoreBows.ARROW_TYPE_FROST) ? SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE : ARROWS;
+        return ((persistentProjectileEntity.getDataTracker().get(CustomArrow.trackedType) == MoreBows.ARROW_TYPE_FROST) && !MoreBows.configGeneralInst.oldFrostArrowRendering) ? SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE : ARROWS;
     }
 
 }
