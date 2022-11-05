@@ -34,18 +34,11 @@ import net.minecraft.world.event.GameEvent;
  */
 public final class CustomArrow extends PersistentProjectileEntity implements FlyingItemEntity {
 
-    /** If this is the first time this arrow has hit a block. */
-    private boolean firstBlockHit = true;
-
     /** The type of this arrow. */
     public static final TrackedData<Byte> trackedType = DataTracker.registerData(CustomArrow.class, TrackedDataHandlerRegistry.BYTE);
 
-    /** Initializes the data tracker. Used to track the arrow's type. */
-    @Override
-    protected void initDataTracker() {
-        super.initDataTracker();
-        dataTracker.startTracking(trackedType, ARROW_TYPE_NOT_CUSTOM);
-    }
+    /** If this is the first time this arrow has hit a block. */
+    private boolean firstBlockHit = true;
 
     /**
      * Don't use this.
@@ -98,6 +91,36 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
     }
 
     /**
+     * Returns an itemstack of {@link net.minecraft.item.Items#ARROW
+     * the default arrow item}.
+     *
+     * @return an itemstack of {@link net.minecraft.item.Items#ARROW
+     *         the default arrow item}
+     */
+    @Override
+    protected ItemStack asItemStack() {
+        return new ItemStack(Items.ARROW);
+    }
+
+    /**
+     * Used to render frost arrows as snowballs.
+     *
+     * @return an itemstack of {@link net.minecraft.item.Items#SNOWBALL
+     *         the default snowball item}
+     */
+    @Override
+    public ItemStack getStack() {
+        return new ItemStack(Items.SNOWBALL);
+    }
+
+    /** Initializes the data tracker. Used to track the arrow's type. */
+    @Override
+    protected void initDataTracker() {
+        super.initDataTracker();
+        dataTracker.startTracking(trackedType, ARROW_TYPE_NOT_CUSTOM);
+    }
+
+    /**
      * This may not accurately return whether an arrow is critical or not.
      * This is to hide crit particle trails,
      * when a custom arrow has a custom particle trail.
@@ -117,6 +140,17 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
          * the arrow isn't critical. I've made this only effect client-side logic,
          * which means that things like critical hits still function.
          */
+    }
+
+    /**
+     * Read the CustomArrow from NBT.
+     *
+     * @param nbt the NBT tag
+     */
+    @Override
+    public void readCustomDataFromNbt(NbtCompound nbt) {
+        super.readCustomDataFromNbt(nbt);
+        dataTracker.set(trackedType, nbt.getByte("type"));
     }
 
     /** TODO review a bunch of this logic, some of it should be updated. */
@@ -234,17 +268,6 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
     }
 
     /**
-     * Read the CustomArrow from NBT.
-     *
-     * @param nbt the NBT tag
-     */
-    @Override
-    public void readCustomDataFromNbt(NbtCompound nbt) {
-        super.readCustomDataFromNbt(nbt);
-        dataTracker.set(trackedType, nbt.getByte("type"));
-    }
-
-    /**
      * Write the CustomArrow to NBT.
      *
      * @param nbt the NBT tag
@@ -253,29 +276,6 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
         nbt.putByte("type", dataTracker.get(trackedType));
-    }
-
-    /**
-     * Used to render frost arrows as snowballs.
-     *
-     * @return an itemstack of {@link net.minecraft.item.Items#SNOWBALL
-     *         the default snowball item}
-     */
-    @Override
-    public ItemStack getStack() {
-        return new ItemStack(Items.SNOWBALL);
-    }
-
-    /**
-     * Returns an itemstack of {@link net.minecraft.item.Items#ARROW
-     * the default arrow item}.
-     *
-     * @return an itemstack of {@link net.minecraft.item.Items#ARROW
-     *         the default arrow item}
-     */
-    @Override
-    protected ItemStack asItemStack() {
-        return new ItemStack(Items.ARROW);
     }
 
 }

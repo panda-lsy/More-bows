@@ -17,8 +17,6 @@ import net.fabricmc.loader.api.FabricLoader;
 /** Bow stats config settings. */
 public final class ConfigBows {
 
-    private static final Gson OUTPUT_GSON = new GsonBuilder().setPrettyPrinting().create();
-
     /** Data class for bow stats. */
     public static class BowConfig {
 
@@ -46,6 +44,8 @@ public final class ConfigBows {
 
     }
 
+    private static final Gson OUTPUT_GSON = new GsonBuilder().setPrettyPrinting().create();
+
     /* Default values for bow construction. */
     /** Default values for bow construction: the default damage multiplier. */
     @CompileTimeConstant
@@ -54,6 +54,70 @@ public final class ConfigBows {
     /** Default values for bow construction: the default power divisor. */
     @CompileTimeConstant
     private static final float defaultPowerDiv = 20.0F;
+
+    /**
+     * TODO bad code
+     *
+     * @deprecated bad code
+     * @return all bow names
+     */
+    public static String[] getBowNames() {
+        return new String[] {
+                   MoreBows.DiamondBowName,
+                   MoreBows.EnderBowName,
+                   MoreBows.FlameBowName,
+                   MoreBows.FrostBowName,
+                   MoreBows.GoldBowName,
+                   MoreBows.IronBowName,
+                   MoreBows.MultiBowName,
+                   MoreBows.StoneBowName
+               };
+    }
+
+    /**
+     * Gets the default config settings.
+     *
+     * @return the default config settings
+     */
+    public static ConfigBows getDefaultConfig() {
+        return new ConfigBows();
+    }
+
+    /**
+     * Reads the config settings from the config folder.
+     *
+     * @return the read config settings
+     */
+    public static @NotNull ConfigBows readConfig() {
+        final Path configPath = FabricLoader.getInstance().getConfigDir().resolve(MoreBows.MOD_ID + "_bowstats.json");
+        @NotNull ConfigBows loadedConfig = new ConfigBows();
+
+        if (configPath.toFile().exists()) {
+            try {
+                loadedConfig = OUTPUT_GSON.fromJson(Files.readString(configPath), ConfigBows.class);
+            } catch (JsonSyntaxException | IOException e) {
+                MoreBows.modLog.error("Error while reading config from file", e);
+                loadedConfig = new ConfigBows();
+            }
+        }
+
+        return loadedConfig;
+    }
+
+    /**
+     * Writes the config settings to the config folder.
+     *
+     * @param config the config to write
+     */
+    public static void writeConfig(ConfigBows config) {
+        final Path configPath = FabricLoader.getInstance().getConfigDir().resolve(MoreBows.MOD_ID + "_bowstats.json");
+
+        try {
+            Files.writeString(configPath, OUTPUT_GSON.toJson(config));
+        } catch (final IOException e) {
+            MoreBows.modLog.error("Error while writing config to file", e);
+        }
+    }
 
     /* Bow stats. */
     /** Diamond bow stats. */
@@ -101,70 +165,6 @@ public final class ConfigBows {
                    MultiBow,
                    StoneBow
                };
-    }
-
-    /**
-     * TODO bad code
-     *
-     * @deprecated bad code
-     * @return all bow names
-     */
-    public static String[] getBowNames() {
-        return new String[] {
-                   MoreBows.DiamondBowName,
-                   MoreBows.EnderBowName,
-                   MoreBows.FlameBowName,
-                   MoreBows.FrostBowName,
-                   MoreBows.GoldBowName,
-                   MoreBows.IronBowName,
-                   MoreBows.MultiBowName,
-                   MoreBows.StoneBowName
-               };
-    }
-
-    /**
-     * Gets the default config settings.
-     *
-     * @return the default config settings
-     */
-    public static ConfigBows getDefaultConfig() {
-        return new ConfigBows();
-    }
-
-    /**
-     * Writes the config settings to the config folder.
-     *
-     * @param config the config to write
-     */
-    public static void writeConfig(ConfigBows config) {
-        final Path configPath = FabricLoader.getInstance().getConfigDir().resolve(MoreBows.MOD_ID + "_bowstats.json");
-
-        try {
-            Files.writeString(configPath, OUTPUT_GSON.toJson(config));
-        } catch (final IOException e) {
-            MoreBows.modLog.error("Error while writing config to file", e);
-        }
-    }
-
-    /**
-     * Reads the config settings from the config folder.
-     *
-     * @return the read config settings
-     */
-    public static @NotNull ConfigBows readConfig() {
-        final Path configPath = FabricLoader.getInstance().getConfigDir().resolve(MoreBows.MOD_ID + "_bowstats.json");
-        @NotNull ConfigBows loadedConfig = new ConfigBows();
-
-        if (configPath.toFile().exists()) {
-            try {
-                loadedConfig = OUTPUT_GSON.fromJson(Files.readString(configPath), ConfigBows.class);
-            } catch (JsonSyntaxException | IOException e) {
-                MoreBows.modLog.error("Error while reading config from file", e);
-                loadedConfig = new ConfigBows();
-            }
-        }
-
-        return loadedConfig;
     }
 
 }

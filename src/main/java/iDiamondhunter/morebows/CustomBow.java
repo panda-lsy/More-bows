@@ -41,6 +41,33 @@ public final class CustomBow extends BowItem {
     private static final ItemStack defaultAmmo = new ItemStack(Items.ARROW);
     private static final ArrowItem defaultArrow = (ArrowItem) Items.ARROW;
 
+    /** TODO review */
+    private static PersistentProjectileEntity arrowHelper(World world, PlayerEntity player, float velocity, ItemStack ammo, ArrowItem arrow) {
+        final PersistentProjectileEntity entityarrow = arrow.createArrow(world, ammo, player);
+        return arrowHelperHelper(player, velocity, entityarrow);
+    }
+
+    /** TODO review */
+    private static PersistentProjectileEntity arrowHelperHelper(PlayerEntity player, float velocity, PersistentProjectileEntity entityarrow) {
+        entityarrow.setVelocity(player, player.getPitch(), player.getYaw(), 0.0f, velocity, 1.0f);
+        return entityarrow;
+    }
+
+    /** TODO review */
+    private static PersistentProjectileEntity customArrowHelper(World world, PlayerEntity player, float velocity, byte arrType) {
+        final PersistentProjectileEntity entityarrow = new CustomArrow(world, player, arrType);
+        return arrowHelperHelper(player, velocity, entityarrow);
+    }
+
+    /** TODO review */
+    private static PersistentProjectileEntity possiblyCustomArrowHelper(World world, PlayerEntity player, float velocity, ItemStack ammo, ArrowItem arrow, byte arrType) {
+        if (arrow == Items.ARROW) {
+            return customArrowHelper(world, player, velocity, arrType);
+        }
+
+        return arrowHelper(world, player, velocity, ammo, arrow);
+    }
+
     /* Bow instance variables */
     /** The type of arrows this bow shoots. */
     @MagicConstant(intValues = { ARROW_TYPE_NOT_CUSTOM, ARROW_TYPE_ENDER, ARROW_TYPE_FIRE, ARROW_TYPE_FROST })
@@ -71,37 +98,6 @@ public final class CustomBow extends BowItem {
         this.damageMult = damageMult;
         this.multiShot = multiShot;
         this.powerDiv = powerDiv;
-    }
-
-    /** TODO review */
-    private static PersistentProjectileEntity arrowHelper(World world, PlayerEntity player, float velocity, ItemStack ammo, ArrowItem arrow) {
-        final PersistentProjectileEntity entityarrow = arrow.createArrow(world, ammo, player);
-        return arrowHelperHelper(player, velocity, entityarrow);
-    }
-
-    /** TODO review */
-    private static PersistentProjectileEntity arrowHelperHelper(PlayerEntity player, float velocity, PersistentProjectileEntity entityarrow) {
-        entityarrow.setVelocity(player, player.getPitch(), player.getYaw(), 0.0f, velocity, 1.0f);
-        return entityarrow;
-    }
-
-    /** TODO review */
-    private static PersistentProjectileEntity customArrowHelper(World world, PlayerEntity player, float velocity, byte arrType) {
-        final PersistentProjectileEntity entityarrow = new CustomArrow(world, player, arrType);
-        return arrowHelperHelper(player, velocity, entityarrow);
-    }
-
-    /**
-     * This method creates particles when left-clicking with an ender bow.
-     * TODO probably replace with client-side function
-     */
-    @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        if (bowType == ARROW_TYPE_ENDER) {
-            MoreBows.tryPart(user.world, user, ParticleTypes.PORTAL, true, 1.0);
-        }
-
-        return super.use(world, user, hand);
     }
 
     /**
@@ -354,13 +350,17 @@ public final class CustomBow extends BowItem {
         }
     }
 
-    /** TODO review */
-    private static PersistentProjectileEntity possiblyCustomArrowHelper(World world, PlayerEntity player, float velocity, ItemStack ammo, ArrowItem arrow, byte arrType) {
-        if (arrow == Items.ARROW) {
-            return customArrowHelper(world, player, velocity, arrType);
+    /**
+     * This method creates particles when left-clicking with an ender bow.
+     * TODO probably replace with client-side function
+     */
+    @Override
+    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+        if (bowType == ARROW_TYPE_ENDER) {
+            MoreBows.tryPart(user.world, user, ParticleTypes.PORTAL, true, 1.0);
         }
 
-        return arrowHelper(world, player, velocity, ammo, arrow);
+        return super.use(world, user, hand);
     }
 
 }

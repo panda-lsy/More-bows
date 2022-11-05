@@ -167,6 +167,24 @@ public final class MoreBows implements ModInitializer {
     }
 
     /**
+     * Reads the mod configs.
+     */
+    private static void readConfigs() {
+        configBowsInst = ConfigBows.readConfig();
+        configGeneralInst = ConfigGeneral.readConfig();
+    }
+
+    /**
+     * Registers a bow.
+     *
+     * @param bow  the bow
+     * @param name the name of the bow
+     */
+    private static void registerBow(Item bow, String name) {
+        Registry.register(Registry.ITEM, new Identifier(MOD_ID, name), bow);
+    }
+
+    /**
      * This method attempts to spawn a particle on the server world.
      * It first checks if the provided world is a client or a server.
      * If it is a client world, it doesn't do anything.
@@ -222,24 +240,6 @@ public final class MoreBows implements ModInitializer {
         registerBow(FlameBow, FlameBowName);
         registerBow(FrostBow, FrostBowName);
         // TODO fuel burn times?
-    }
-
-    /**
-     * Reads the mod configs.
-     */
-    private static void readConfigs() {
-        configBowsInst = ConfigBows.readConfig();
-        configGeneralInst = ConfigGeneral.readConfig();
-    }
-
-    /**
-     * Registers a bow.
-     *
-     * @param bow  the bow
-     * @param name the name of the bow
-     */
-    private static void registerBow(Item bow, String name) {
-        Registry.register(Registry.ITEM, new Identifier(MOD_ID, name), bow);
     }
 
 }

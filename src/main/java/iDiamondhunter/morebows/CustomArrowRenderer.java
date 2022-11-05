@@ -22,6 +22,11 @@ final class CustomArrowRenderer extends ProjectileEntityRenderer<CustomArrow> {
     }
 
     @Override
+    public Identifier getTexture(CustomArrow entity) {
+        return ((entity.getDataTracker().get(CustomArrow.trackedType) == MoreBows.ARROW_TYPE_FROST) && !MoreBows.configGeneralInst.oldFrostArrowRendering) ? SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE : ARROWS;
+    }
+
+    @Override
     public void render(CustomArrow entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
         if ((entity.getDataTracker().get(CustomArrow.trackedType) == MoreBows.ARROW_TYPE_FROST) && !MoreBows.configGeneralInst.oldFrostArrowRendering) {
             snow.render(entity, yaw, tickDelta, matrices, vertexConsumers, light);
@@ -29,11 +34,6 @@ final class CustomArrowRenderer extends ProjectileEntityRenderer<CustomArrow> {
             // TODO Implement old cube rendering
             super.render(entity, yaw, tickDelta, matrices, vertexConsumers, light);
         }
-    }
-
-    @Override
-    public Identifier getTexture(CustomArrow entity) {
-        return ((entity.getDataTracker().get(CustomArrow.trackedType) == MoreBows.ARROW_TYPE_FROST) && !MoreBows.configGeneralInst.oldFrostArrowRendering) ? SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE : ARROWS;
     }
 
 }

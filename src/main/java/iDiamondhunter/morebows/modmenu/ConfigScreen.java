@@ -16,10 +16,6 @@ import net.minecraft.text.Text;
 /** TODO This is horrible. */
 final class ConfigScreen {
 
-    private ConfigScreen() {
-        // Empty private constructor to hide default constructor
-    }
-
     static Screen moreBowsConfigScreen (Screen parent) {
         final ConfigBuilder moreBowsConfigBuilder = ConfigBuilder.create().setParentScreen(parent).setTitle(Text.translatable("morebows.confTitle"));
         // General settings
@@ -96,6 +92,10 @@ final class ConfigScreen {
             ConfigGeneral.writeConfig(MoreBows.configGeneralInst);
         });
         return moreBowsConfigBuilder.build();
+    }
+
+    private ConfigScreen() {
+        // Empty private constructor to hide default constructor
     }
 
 }

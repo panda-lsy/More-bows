@@ -64,6 +64,95 @@ public final class ArrowSpawner extends Entity {
         this.arrows = arrows;
     }
 
+    /**
+     * Creates the spawn packet.
+     * TODO review
+     *
+     * @return the packet
+     */
+    @Override
+    public Packet<?> createSpawnPacket() {
+        return new EntitySpawnS2CPacket(this);
+    }
+
+    /**
+     * Initializes the data tracker, not that ArrowSpawner uses it.
+     * TODO review
+     */
+    @Override
+    protected void initDataTracker() {
+        // This method left intentionally blank
+    }
+
+    /**
+     * This method reads the entity specific data from saved NBT data,
+     * including the stored arrows.
+     * TODO Clean-up code
+     *
+     * @param nbt the NBT compound tag to read from
+     */
+    @Override
+    protected void readCustomDataFromNbt(NbtCompound nbt) {
+        /* Restore the saved amount of ticks that this entity has existed for */
+        age = nbt.getByte("age");
+        /* Restore the saved shot velocity */
+        shotVelocity = nbt.getFloat("shotVelocity");
+
+        /* An over-engineered system to load an arbitrary amount of entities. */
+        if (nbt.contains("arrows", 10)) {
+            final NbtCompound arrowsTag = nbt.getCompound("arrows");
+            final int arrowsAmount = arrowsTag.getSize();
+            final @NotNull PersistentProjectileEntity @NotNull [] readArrows = new PersistentProjectileEntity[arrowsAmount];
+
+            for (int i = 0; i < arrowsAmount; i++) {
+                final String arrTagName = "arrow" + i;
+                @Nullable PersistentProjectileEntity toAdd;
+
+                if (arrowsTag.contains(arrTagName, 10)) {
+                    final NbtCompound currentArrow = arrowsTag.getCompound(arrTagName);
+
+                    try {
+                        /*
+                         * Assuming the data from the written NBT tag is valid,
+                         * arrows[i] is set to an arrow created by calling
+                         * createEntityFromNBT with the saved NBT data.
+                         */
+                        final @Nullable Entity savedEntity = EntityType.getEntityFromNbt(currentArrow, world).orElse(null);
+
+                        if (savedEntity instanceof final PersistentProjectileEntity savedEntityProjectile) {
+                            toAdd = savedEntityProjectile;
+                        } else {
+                            MoreBows.modLog.error("The saved NBT data for arrow {} for ArrowSpawner {} ({}) was not able to spawn an PersistentProjectileEntity (spawned Entity was {}).", i, this, currentArrow, savedEntity);
+
+                            if (savedEntity != null) {
+                                savedEntity.discard();
+                            }
+
+                            toAdd = null;
+                        }
+                    } catch (final Exception e) {
+                        /* Catch any errors thrown when trying to load arrows from NBT. */
+                        MoreBows.modLog.error("An error occurred when trying to spawn an arrow from saved NBT data ({}).", currentArrow, e);
+                        toAdd = null;
+                    }
+                } else {
+                    toAdd = null;
+                }
+
+                /*
+                 * If the data isn't valid, a new PersistentProjectileEntity is created
+                 * to avoid null objects.
+                 */
+                readArrows[i] = toAdd != null ? toAdd : new ArrowEntity(world, getX(), getY(), getZ());
+            }
+
+            arrows = readArrows;
+        } else {
+            MoreBows.modLog.error("Could not find saved arrows for ArrowSpawner {} when loading from NBT data ({}).", this, nbt);
+            arrows = NO_ARROWS;
+        }
+    }
+
     @Override
     public void tick() {
         // Executed first, to prevent weird edge cases
@@ -139,95 +228,6 @@ public final class ArrowSpawner extends Entity {
                     world.playSound(null, arrow.getX(), arrow.getY(), arrow.getZ(), (i & 1) != 0 ? SoundEvents.ENTITY_ENDERMAN_TELEPORT : SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, soundVolume, soundPitch);
                 }
             }
-        }
-    }
-
-    /**
-     * Initializes the data tracker, not that ArrowSpawner uses it.
-     * TODO review
-     */
-    @Override
-    protected void initDataTracker() {
-        // This method left intentionally blank
-    }
-
-    /**
-     * Creates the spawn packet.
-     * TODO review
-     *
-     * @return the packet
-     */
-    @Override
-    public Packet<?> createSpawnPacket() {
-        return new EntitySpawnS2CPacket(this);
-    }
-
-    /**
-     * This method reads the entity specific data from saved NBT data,
-     * including the stored arrows.
-     * TODO Clean-up code
-     *
-     * @param nbt the NBT compound tag to read from
-     */
-    @Override
-    protected void readCustomDataFromNbt(NbtCompound nbt) {
-        /* Restore the saved amount of ticks that this entity has existed for */
-        age = nbt.getByte("age");
-        /* Restore the saved shot velocity */
-        shotVelocity = nbt.getFloat("shotVelocity");
-
-        /* An over-engineered system to load an arbitrary amount of entities. */
-        if (nbt.contains("arrows", 10)) {
-            final NbtCompound arrowsTag = nbt.getCompound("arrows");
-            final int arrowsAmount = arrowsTag.getSize();
-            final @NotNull PersistentProjectileEntity @NotNull [] readArrows = new PersistentProjectileEntity[arrowsAmount];
-
-            for (int i = 0; i < arrowsAmount; i++) {
-                final String arrTagName = "arrow" + i;
-                @Nullable PersistentProjectileEntity toAdd;
-
-                if (arrowsTag.contains(arrTagName, 10)) {
-                    final NbtCompound currentArrow = arrowsTag.getCompound(arrTagName);
-
-                    try {
-                        /*
-                         * Assuming the data from the written NBT tag is valid,
-                         * arrows[i] is set to an arrow created by calling
-                         * createEntityFromNBT with the saved NBT data.
-                         */
-                        final @Nullable Entity savedEntity = EntityType.getEntityFromNbt(currentArrow, world).orElse(null);
-
-                        if (savedEntity instanceof final PersistentProjectileEntity savedEntityProjectile) {
-                            toAdd = savedEntityProjectile;
-                        } else {
-                            MoreBows.modLog.error("The saved NBT data for arrow {} for ArrowSpawner {} ({}) was not able to spawn an PersistentProjectileEntity (spawned Entity was {}).", i, this, currentArrow, savedEntity);
-
-                            if (savedEntity != null) {
-                                savedEntity.discard();
-                            }
-
-                            toAdd = null;
-                        }
-                    } catch (final Exception e) {
-                        /* Catch any errors thrown when trying to load arrows from NBT. */
-                        MoreBows.modLog.error("An error occurred when trying to spawn an arrow from saved NBT data ({}).", currentArrow, e);
-                        toAdd = null;
-                    }
-                } else {
-                    toAdd = null;
-                }
-
-                /*
-                 * If the data isn't valid, a new PersistentProjectileEntity is created
-                 * to avoid null objects.
-                 */
-                readArrows[i] = toAdd != null ? toAdd : new ArrowEntity(world, getX(), getY(), getZ());
-            }
-
-            arrows = readArrows;
-        } else {
-            MoreBows.modLog.error("Could not find saved arrows for ArrowSpawner {} when loading from NBT data ({}).", this, nbt);
-            arrows = NO_ARROWS;
         }
     }
 

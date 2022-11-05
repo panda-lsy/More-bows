@@ -70,6 +70,42 @@ public final class ConfigGeneral {
     private static final String confMultiShotAmmo = "confMultiShotAmmo";
 
     /**
+     * Reads the config settings from the config folder.
+     *
+     * @return the read config settings
+     */
+    public static @NotNull ConfigGeneral readConfig() {
+        final Path configPath = FabricLoader.getInstance().getConfigDir().resolve(MoreBows.MOD_ID + "_general.json");
+        @NotNull ConfigGeneral loadedConfig = new ConfigGeneral();
+
+        if (configPath.toFile().exists()) {
+            try {
+                loadedConfig = OUTPUT_GSON.fromJson(Files.readString(configPath), ConfigGeneral.class);
+            } catch (JsonSyntaxException | IOException e) {
+                MoreBows.modLog.error("Error while reading config from file", e);
+                loadedConfig = new ConfigGeneral();
+            }
+        }
+
+        return loadedConfig;
+    }
+
+    /**
+     * Writes the config settings to the config folder.
+     *
+     * @param config the config to write
+     */
+    public static void writeConfig(ConfigGeneral config) {
+        final Path configPath = FabricLoader.getInstance().getConfigDir().resolve(MoreBows.MOD_ID + "_general.json");
+
+        try {
+            Files.writeString(configPath, OUTPUT_GSON.toJson(config));
+        } catch (final IOException e) {
+            MoreBows.modLog.error("Error while writing config to file", e);
+        }
+    }
+
+    /**
      * MoreBows config setting:
      * If true, frost arrows extinguish fire from Entities that are on fire.
      * If false, frost arrows can be on fire.
@@ -101,42 +137,6 @@ public final class ConfigGeneral {
 
     private ConfigGeneral() {
         // Empty private constructor to hide default constructor
-    }
-
-    /**
-     * Writes the config settings to the config folder.
-     *
-     * @param config the config to write
-     */
-    public static void writeConfig(ConfigGeneral config) {
-        final Path configPath = FabricLoader.getInstance().getConfigDir().resolve(MoreBows.MOD_ID + "_general.json");
-
-        try {
-            Files.writeString(configPath, OUTPUT_GSON.toJson(config));
-        } catch (final IOException e) {
-            MoreBows.modLog.error("Error while writing config to file", e);
-        }
-    }
-
-    /**
-     * Reads the config settings from the config folder.
-     *
-     * @return the read config settings
-     */
-    public static @NotNull ConfigGeneral readConfig() {
-        final Path configPath = FabricLoader.getInstance().getConfigDir().resolve(MoreBows.MOD_ID + "_general.json");
-        @NotNull ConfigGeneral loadedConfig = new ConfigGeneral();
-
-        if (configPath.toFile().exists()) {
-            try {
-                loadedConfig = OUTPUT_GSON.fromJson(Files.readString(configPath), ConfigGeneral.class);
-            } catch (JsonSyntaxException | IOException e) {
-                MoreBows.modLog.error("Error while reading config from file", e);
-                loadedConfig = new ConfigGeneral();
-            }
-        }
-
-        return loadedConfig;
     }
 
 }
