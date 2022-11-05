@@ -5,7 +5,7 @@ import com.terraformersmc.modmenu.api.ModMenuApi;
 
 import net.fabricmc.loader.api.FabricLoader;
 
-public class ModMenuCompat implements ModMenuApi {
+public final class ModMenuCompat implements ModMenuApi {
 
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {

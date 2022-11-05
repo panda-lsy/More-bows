@@ -14,9 +14,13 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 
 /** TODO This is horrible */
-public class ConfigScreen {
+final class ConfigScreen {
 
-    public static Screen moreBowsConfigScreen (Screen parent) {
+    private ConfigScreen() {
+        // Empty private constructor to hide default constructor
+    }
+
+    static Screen moreBowsConfigScreen (Screen parent) {
         final ConfigBuilder moreBowsConfigBuilder = ConfigBuilder.create().setParentScreen(parent).setTitle(Text.translatable("morebows.confTitle"));
         // General settings
         final ConfigCategory general = moreBowsConfigBuilder.getOrCreateCategory(Text.translatable("morebows.confCatGen"));

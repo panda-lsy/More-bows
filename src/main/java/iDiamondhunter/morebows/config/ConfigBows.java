@@ -11,7 +11,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import iDiamondhunter.morebows.MoreBows;
 import net.fabricmc.loader.api.FabricLoader;
 
@@ -58,35 +57,27 @@ public final class ConfigBows {
 
     /* Bow stats. */
     /** Diamond bow stats. */
-    @SuppressFBWarnings("MS_SHOULD_BE_FINAL")
     public final BowConfig DiamondBow = new BowConfig(1016, 2.25, 6.0F);
 
     /** Ender bow stats. */
-    @SuppressFBWarnings("MS_SHOULD_BE_FINAL")
     public final BowConfig EnderBow = new BowConfig(215, noDamageMult, 22.0F);
 
     /** Flame bow stats. */
-    @SuppressFBWarnings("MS_SHOULD_BE_FINAL")
     public final BowConfig FlameBow = new BowConfig(576, 2.0, 15.0F);
 
     /** Frost bow stats. */
-    @SuppressFBWarnings("MS_SHOULD_BE_FINAL")
     public final BowConfig FrostBow = new BowConfig(550, noDamageMult, 26.0F);
 
     /** Gold bow stats. */
-    @SuppressFBWarnings("MS_SHOULD_BE_FINAL")
     public final BowConfig GoldBow = new BowConfig(68, 2.5, 6.0F);
 
     /** Iron bow stats. */
-    @SuppressFBWarnings("MS_SHOULD_BE_FINAL")
     public final BowConfig IronBow = new BowConfig(550, 1.5, 17.0F);
 
     /** Multi bow stats. */
-    @SuppressFBWarnings("MS_SHOULD_BE_FINAL")
     public final BowConfig MultiBow = new BowConfig(550, noDamageMult, 13.0F);
 
     /** Stone bow stats. */
-    @SuppressFBWarnings("MS_SHOULD_BE_FINAL")
     public final BowConfig StoneBow = new BowConfig(484, 1.15, defaultPowerDiv);
 
     private ConfigBows() {

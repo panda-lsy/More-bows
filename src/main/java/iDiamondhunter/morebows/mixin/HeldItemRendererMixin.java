@@ -15,10 +15,17 @@ import net.minecraft.util.Hand;
 @Mixin(HeldItemRenderer.class)
 public abstract class HeldItemRendererMixin {
 
+    /** Dummy constructor. */
+    @SuppressWarnings("unused")
+    private HeldItemRendererMixin() {
+        // Empty private constructor to hide default constructor
+    }
+
     /**
      * renderFirstPersonItem uses a hardcoded value when rendering the bow draw back animation.
      * TODO This is not a good Mixin.
      */
+    @SuppressWarnings("unused")
     @ModifyConstant(method = "renderFirstPersonItem", constant = @Constant(floatValue = 20.0f))
     private float modifyBowDiv(float div, AbstractClientPlayerEntity player, float tickDelta, float pitch, Hand hand, float swingProgress, ItemStack item, float equipProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
         if (item.getItem() instanceof final CustomBow bow) {

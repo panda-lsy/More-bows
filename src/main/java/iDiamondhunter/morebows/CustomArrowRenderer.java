@@ -9,13 +9,13 @@ import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
-public class CustomArrowRenderer extends ProjectileEntityRenderer<CustomArrow> {
+final class CustomArrowRenderer extends ProjectileEntityRenderer<CustomArrow> {
 
     private static final Identifier ARROWS = new Identifier("textures/entity/projectiles/arrow.png");
 
     private final FlyingItemEntityRenderer<CustomArrow> snow;
 
-    protected CustomArrowRenderer(Context ctx) {
+    CustomArrowRenderer(Context ctx) {
         super(ctx);
         snow = new FlyingItemEntityRenderer<>(ctx);
     }

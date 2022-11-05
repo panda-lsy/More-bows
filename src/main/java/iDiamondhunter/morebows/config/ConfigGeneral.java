@@ -11,7 +11,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import iDiamondhunter.morebows.MoreBows;
 import net.fabricmc.loader.api.FabricLoader;
 
@@ -75,7 +74,6 @@ public final class ConfigGeneral {
      * If true, frost arrows extinguish fire from Entities that are on fire.
      * If false, frost arrows can be on fire.
      */
-    @SuppressFBWarnings("MS_SHOULD_BE_FINAL")
     public boolean frostArrowsShouldBeCold = true;
 
     /**
@@ -85,7 +83,6 @@ public final class ConfigGeneral {
      * If false, frost arrows apply the slowness potion effect on hit.
      * TODO This never made much sense.
      */
-    @SuppressFBWarnings("MS_SHOULD_BE_FINAL")
     public boolean oldFrostArrowMobSlowdown = false;
 
     /**
@@ -93,7 +90,6 @@ public final class ConfigGeneral {
      * If true, render frost arrows as "snow cubes".
      * If false, render as snowballs.
      */
-    @SuppressFBWarnings("MS_SHOULD_BE_FINAL")
     public boolean oldFrostArrowRendering = false;
 
     /**
@@ -101,7 +97,6 @@ public final class ConfigGeneral {
      * Changes how multi-shot bows handle shooting additional arrows.
      * See each enum constant for more information.
      */
-    @SuppressFBWarnings(value = { "NP_NONNULL_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR", "MS_SHOULD_BE_FINAL" }, justification = "SpotBugs seems to be having trouble detecting the initialisation of the field here")
     public @NotNull CustomArrowMultiShotType customArrowMultiShot = CustomArrowMultiShotType.AlwaysCustomArrows;
 
     private ConfigGeneral() {

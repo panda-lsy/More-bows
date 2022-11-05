@@ -57,9 +57,7 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
      * @deprecated Don't use this
      * @param worldIn used in super construction
      */
-    @Deprecated
-    @SuppressWarnings("unused")
-    public CustomArrow(EntityType<? extends CustomArrow> entityType, World worldIn) {
+    public CustomArrow(EntityType<CustomArrow> entityType, World worldIn) {
         super(entityType, worldIn);
     }
 
@@ -73,8 +71,6 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
      * @param y       used in super construction
      * @param z       used in super construction
      */
-    @Deprecated
-    @SuppressWarnings("unused")
     public CustomArrow(World worldIn, double x, double y, double z) {
         super(MoreBows.CUSTOM_ARROW, x, y, z, worldIn);
     }
@@ -87,8 +83,6 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
      * @param worldIn used in super construction
      * @param shooter used in super construction
      */
-    @Deprecated
-    @SuppressWarnings("unused")
     public CustomArrow(World worldIn, LivingEntity shooter) {
         super(MoreBows.CUSTOM_ARROW, shooter, worldIn);
     }

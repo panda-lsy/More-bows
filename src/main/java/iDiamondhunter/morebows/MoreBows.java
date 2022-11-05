@@ -28,7 +28,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 /** If you're reading this, I'm very sorry you have to deal with my code. */
-public class MoreBows implements ModInitializer {
+public final class MoreBows implements ModInitializer {
 
     /** The mod ID of More Bows. */
     @CompileTimeConstant
@@ -75,10 +75,6 @@ public class MoreBows implements ModInitializer {
      */
     @CompileTimeConstant
     public static final byte ARROW_TYPE_FROST = 3;
-
-    /** The maximum amount of time (in ticks) that a bow can be used for. */
-    @CompileTimeConstant
-    static final int bowMaxUseDuration = 72000;
 
     /* Names of bows. */
     @CompileTimeConstant
@@ -185,7 +181,7 @@ public class MoreBows implements ModInitializer {
      *                 around the entity.
      * @param velocity The velocity of spawned particles.
      */
-    public static <T extends ParticleEffect> void tryPart(World world, Entity entity, T part, boolean randDisp, double velocity) {
+    static <T extends ParticleEffect> void tryPart(World world, Entity entity, T part, boolean randDisp, double velocity) {
         if (!world.isClient) {
             // final int amount = 1;
             final double xDisp;
@@ -224,12 +220,10 @@ public class MoreBows implements ModInitializer {
 
     private static void readConfigs() {
         configBowsInst = ConfigBows.readConfig();
-        ConfigBows.writeConfig(configBowsInst);
         configGeneralInst = ConfigGeneral.readConfig();
-        ConfigGeneral.writeConfig(configGeneralInst);
     }
 
-    public void registerBow(Item bow, String name) {
+    private static void registerBow(Item bow, String name) {
         Registry.register(Registry.ITEM, new Identifier(MOD_ID, name), bow);
     }
 

@@ -17,11 +17,13 @@ import net.minecraft.network.encryption.PlayerPublicKey;
 public abstract class AbstractClientPlayerEntityMixin extends PlayerEntity {
 
     /** Dummy constructor. */
-    public AbstractClientPlayerEntityMixin(ClientWorld world, GameProfile profile, @Nullable PlayerPublicKey publicKey) {
+    @SuppressWarnings("unused")
+    private AbstractClientPlayerEntityMixin(ClientWorld world, GameProfile profile, @Nullable PlayerPublicKey publicKey) {
         super(world, world.getSpawnPos(), world.getSpawnAngle(), profile, publicKey);
     }
 
     /** Zoom in the FOV when a CustomBow is in use. */
+    @SuppressWarnings("unused")
     @ModifyVariable(method = "getFovMultiplier()F", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;lerp(FFF)F", shift = At.Shift.BEFORE), ordinal = 0)
     private float getFovMultiplierMixin(float finalFov) {
         if (isUsingItem() && getActiveItem().getItem() instanceof final CustomBow bow) {
