@@ -13,16 +13,33 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.encryption.PlayerPublicKey;
 
+/**
+ * A mixin to {@link net.minecraft.client.network.AbstractClientPlayerEntity},
+ * to modify the player's FOV when drawing back a CustomBow.
+ */
 @Mixin(AbstractClientPlayerEntity.class)
 public abstract class AbstractClientPlayerEntityMixin extends PlayerEntity {
 
-    /** Dummy constructor. */
+    /**
+     * Dummy constructor.
+     *
+     * @param world     the world
+     * @param profile   the profile
+     * @param publicKey the public key
+     * @deprecated Why are you calling this? It's a mixin.
+     */
     @SuppressWarnings("unused")
     private AbstractClientPlayerEntityMixin(ClientWorld world, GameProfile profile, @Nullable PlayerPublicKey publicKey) {
         super(world, world.getSpawnPos(), world.getSpawnAngle(), profile, publicKey);
     }
 
-    /** Zoom in the FOV when a CustomBow is in use. */
+    /**
+     * Zoom in the FOV when a CustomBow is in use.
+     *
+     * @param finalFov the unadjusted FOV
+     * @return the adjusted FOV
+     * @deprecated Why are you calling this? It's a mixin.
+     */
     @SuppressWarnings("unused")
     @ModifyVariable(method = "getFovMultiplier()F", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;lerp(FFF)F", shift = At.Shift.BEFORE), ordinal = 0)
     private float getFovMultiplierMixin(float finalFov) {

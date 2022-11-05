@@ -37,10 +37,12 @@ public final class MoreBows implements ModInitializer {
     /** The mod log. */
     public static final Logger modLog = LoggerFactory.getLogger(MOD_ID);
 
+    /** The loaded bow stats config settings. */
     @SuppressWarnings("NullAway.Init")
     @SuppressFBWarnings("MS_CANNOT_BE_FINAL")
     public static ConfigBows configBowsInst;
 
+    /** The loaded general config settings. */
     @SuppressWarnings("NullAway.Init")
     @SuppressFBWarnings("MS_CANNOT_BE_FINAL")
     public static ConfigGeneral configGeneralInst;
@@ -174,6 +176,7 @@ public final class MoreBows implements ModInitializer {
      * The parameter randDisp can be set, which sets the particles position
      * to somewhere random close to the entity.
      *
+     * @param <T>      Particle effect generic type.
      * @param world    The world to attempt to spawn a particle in.
      * @param entity   The entity to spawn the particle at.
      * @param part     The particle type to spawn.
@@ -202,6 +205,9 @@ public final class MoreBows implements ModInitializer {
         }
     }
 
+    /**
+     * Common mod initialization code.
+     */
     @Override
     public void onInitialize() {
         // TODO better code
@@ -218,11 +224,20 @@ public final class MoreBows implements ModInitializer {
         // TODO fuel burn times?
     }
 
+    /**
+     * Reads the mod configs.
+     */
     private static void readConfigs() {
         configBowsInst = ConfigBows.readConfig();
         configGeneralInst = ConfigGeneral.readConfig();
     }
 
+    /**
+     * Registers a bow.
+     *
+     * @param bow  the bow
+     * @param name the name of the bow
+     */
     private static void registerBow(Item bow, String name) {
         Registry.register(Registry.ITEM, new Identifier(MOD_ID, name), bow);
     }

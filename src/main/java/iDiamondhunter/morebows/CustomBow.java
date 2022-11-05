@@ -108,10 +108,10 @@ public final class CustomBow extends BowItem {
      * This handles the process of shooting an arrow from this bow.
      * TODO Cleanup, document more
      *
-     * @param stack                 the ItemStack of the shot bow
-     * @param world                 the world the bow was shot in
-     * @param user                  the shooting entity
-     * @param remainingUseTicks     how long the bow has been in use for
+     * @param stack             the ItemStack of the shot bow
+     * @param world             the world the bow was shot in
+     * @param user              the shooting entity
+     * @param remainingUseTicks how long the bow has been in use for
      */
     @Override
     public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {

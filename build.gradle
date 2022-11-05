@@ -61,12 +61,6 @@ if (!build_release) {
     version += "-SNAPSHOT"
 }
 
-configurations {
-    // Another list of dependencies to use with ProGaurd, as ForgeGradle isn't happy about resolving it the normal way.
-    // I'm not happy about it either.
-    proguardHack
-}
-
 dependencies {
     // To change the versions see the gradle.properties file
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
@@ -75,31 +69,25 @@ dependencies {
 
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    //proguardHack "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     // Mod menu
     modCompileOnlyApi "com.terraformersmc:modmenu:4.0.6"
-    //proguardHack "com.terraformersmc:modmenu:4.0.6"
 
     // Cloth config
     modCompileOnlyApi "me.shedaniel.cloth:cloth-config-fabric:8.2.88"
-    //proguardHack "me.shedaniel.cloth:cloth-config-fabric:8.2.88"
 
     // NullAway
     annotationProcessor "com.uber.nullaway:nullaway:0.10.3"
 
     // JetBrains null annotations
     compileOnly "org.jetbrains:annotations:23.0.0"
-    proguardHack "org.jetbrains:annotations:23.0.0"
 
     // SpotBugs annotations
     compileOnly "com.github.spotbugs:spotbugs-annotations:4.7.3"
-    proguardHack "com.github.spotbugs:spotbugs-annotations:4.7.3"
 
     // Error Prone
     errorprone "com.google.errorprone:error_prone_core:2.16"
     compileOnly "com.google.errorprone:error_prone_annotations:2.16"
-    proguardHack "com.google.errorprone:error_prone_annotations:2.16"
 }
 
 //jar.finalizedBy('reobfJar')
@@ -154,7 +142,7 @@ task proguard(dependsOn: unmappedJar, type: ProGuardTask) {
     // TODO Fix
     outputs.upToDateWhen { false }
 
-    // Use the non-remapped .jar as the input file, because ForgeGradle has a convenient task to map it to obfuscated Minecraft class names for us when we're done optimising it
+    // Use the non-remapped .jar as the input file, because Loom has a convenient task to map it to obfuscated Minecraft class names for us when we're done optimising it
     injars "build/libs/" + rootProject.name + "-" + version + "-unmapped.jar"
     outjars "build/libs/" + rootProject.name + "-" + version + "-proguard-unmapped.jar"
 
@@ -164,9 +152,6 @@ task proguard(dependsOn: unmappedJar, type: ProGuardTask) {
     // Add relevant Minecraft libraries to ProGuard's list of libraries to obfuscate against.
     // TODO this is very janky
     libraryjars project.configurations.compileClasspath
-
-    // Add the dependencies to ProGuard's list of libraries to obfuscate against. I'd love a more sane way of doing this.
-    //libraryjars project.configurations.proguardHack
 
     // The rest of the configs are in this file
     configuration 'guard.pro'

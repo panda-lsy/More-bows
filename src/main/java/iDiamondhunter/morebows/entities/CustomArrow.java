@@ -30,20 +30,17 @@ import net.minecraft.world.event.GameEvent;
  * This entity is a custom arrow.
  * A large portion of logic around these arrows
  * is handled in the MoreBows class with SubscribeEvents.
- * TODO much of this is out of date
+ * TODO much of this is really out of date
  */
 public final class CustomArrow extends PersistentProjectileEntity implements FlyingItemEntity {
 
     /** If this is the first time this arrow has hit a block. */
     private boolean firstBlockHit = true;
-    /**
-     * The type of this arrow. In an ideal world, this would be final,
-     * but this is not an ideal world. See readSpawnData.
-     */
-    //public byte type = ARROW_TYPE_NOT_CUSTOM;
 
+    /** The type of this arrow. */
     public static final TrackedData<Byte> trackedType = DataTracker.registerData(CustomArrow.class, TrackedDataHandlerRegistry.BYTE);
 
+    /** Initializes the data tracker. Used to track the arrow's type. */
     @Override
     protected void initDataTracker() {
         super.initDataTracker();
@@ -54,8 +51,9 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
      * Don't use this.
      * TODO I think I can't remove these constructors, but I'm not sure.
      *
+     * @param entityType the entity type
+     * @param worldIn    used in super construction
      * @deprecated Don't use this
-     * @param worldIn used in super construction
      */
     public CustomArrow(EntityType<CustomArrow> entityType, World worldIn) {
         super(entityType, worldIn);
@@ -65,11 +63,11 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
      * Don't use this.
      * TODO I think I can't remove these constructors, but I'm not sure.
      *
-     * @deprecated Don't use this
      * @param worldIn used in super construction
      * @param x       used in super construction
      * @param y       used in super construction
      * @param z       used in super construction
+     * @deprecated Don't use this
      */
     public CustomArrow(World worldIn, double x, double y, double z) {
         super(MoreBows.CUSTOM_ARROW, x, y, z, worldIn);
@@ -79,9 +77,9 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
      * Don't use this.
      * TODO I think I can't remove these constructors, but I'm not sure.
      *
-     * @deprecated Don't use this
      * @param worldIn used in super construction
      * @param shooter used in super construction
+     * @deprecated Don't use this
      */
     public CustomArrow(World worldIn, LivingEntity shooter) {
         super(MoreBows.CUSTOM_ARROW, shooter, worldIn);
@@ -257,11 +255,24 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
         compound.putByte("type", dataTracker.get(trackedType));
     }
 
+    /**
+     * Used to render frost arrows as snowballs.
+     *
+     * @return an itemstack of {@link net.minecraft.item.Items#SNOWBALL
+     *         the default snowball item}
+     */
     @Override
     public ItemStack getStack() {
         return new ItemStack(Items.SNOWBALL);
     }
 
+    /**
+     * Returns an itemstack of {@link net.minecraft.item.Items#ARROW
+     * the default arrow item}.
+     *
+     * @return an itemstack of {@link net.minecraft.item.Items#ARROW
+     *         the default arrow item}
+     */
     @Override
     protected ItemStack asItemStack() {
         return new ItemStack(Items.ARROW);

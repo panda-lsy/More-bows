@@ -13,7 +13,7 @@ import me.shedaniel.clothconfig2.gui.entries.IntegerListEntry;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 
-/** TODO This is horrible */
+/** TODO This is horrible. */
 final class ConfigScreen {
 
     private ConfigScreen() {

@@ -52,7 +52,7 @@ public final class ConfigGeneral {
         }
 
         /**
-         * When Enums are used in Forge config annotations,
+         * When Enums are used for Cloth config settings,
          * the value of toString() is used as a language key.
          *
          * @return the language key
@@ -103,6 +103,11 @@ public final class ConfigGeneral {
         // Empty private constructor to hide default constructor
     }
 
+    /**
+     * Writes the config settings to the config folder.
+     *
+     * @param config the config to write
+     */
     public static void writeConfig(ConfigGeneral config) {
         final Path configPath = FabricLoader.getInstance().getConfigDir().resolve(MoreBows.MOD_ID + "_general.json");
 
@@ -113,6 +118,11 @@ public final class ConfigGeneral {
         }
     }
 
+    /**
+     * Reads the config settings from the config folder.
+     *
+     * @return the read config settings
+     */
     public static @NotNull ConfigGeneral readConfig() {
         final Path configPath = FabricLoader.getInstance().getConfigDir().resolve(MoreBows.MOD_ID + "_general.json");
         @NotNull ConfigGeneral loadedConfig = new ConfigGeneral();

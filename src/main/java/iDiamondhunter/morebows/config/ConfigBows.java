@@ -19,7 +19,7 @@ public final class ConfigBows {
 
     private static final Gson OUTPUT_GSON = new GsonBuilder().setPrettyPrinting().create();
 
-    /** Data class for bow stats. Forge uses each field as config settings. */
+    /** Data class for bow stats. */
     public static class BowConfig {
 
         /** The configured bow durability. */
@@ -84,6 +84,12 @@ public final class ConfigBows {
         // Empty private constructor to hide default constructor
     }
 
+    /**
+     * TODO bad code
+     *
+     * @deprecated bad code
+     * @return all bow configs
+     */
     public BowConfig[] getAllBowConfigs() {
         return new BowConfig[] {
                    DiamondBow,
@@ -97,7 +103,12 @@ public final class ConfigBows {
                };
     }
 
-    // TODO very bad
+    /**
+     * TODO bad code
+     *
+     * @deprecated bad code
+     * @return all bow names
+     */
     public String[] getBowNames() {
         return new String[] {
                    MoreBows.DiamondBowName,
@@ -111,10 +122,20 @@ public final class ConfigBows {
                };
     }
 
+    /**
+     * Gets the default config settings.
+     *
+     * @return the default config settings
+     */
     public static ConfigBows getDefaultConfig() {
         return new ConfigBows();
     }
 
+    /**
+     * Writes the config settings to the config folder.
+     *
+     * @param config the config to write
+     */
     public static void writeConfig(ConfigBows config) {
         final Path configPath = FabricLoader.getInstance().getConfigDir().resolve(MoreBows.MOD_ID + "_bowstats.json");
 
@@ -125,6 +146,11 @@ public final class ConfigBows {
         }
     }
 
+    /**
+     * Reads the config settings from the config folder.
+     *
+     * @return the read config settings
+     */
     public static @NotNull ConfigBows readConfig() {
         final Path configPath = FabricLoader.getInstance().getConfigDir().resolve(MoreBows.MOD_ID + "_bowstats.json");
         @NotNull ConfigBows loadedConfig = new ConfigBows();

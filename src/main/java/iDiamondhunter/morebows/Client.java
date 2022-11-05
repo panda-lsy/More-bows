@@ -7,8 +7,10 @@ import net.minecraft.client.render.entity.EmptyEntityRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 
+/** The client mod initializer. */
 public final class Client implements ClientModInitializer {
 
+    /** Client specific mod initialization code. */
     @Override
     public void onInitializeClient() {
         EntityRendererRegistry.register(MoreBows.ARROW_SPAWNER, EmptyEntityRenderer::new);

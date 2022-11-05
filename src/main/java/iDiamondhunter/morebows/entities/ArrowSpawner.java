@@ -31,6 +31,11 @@ public final class ArrowSpawner extends Entity {
     private float shotVelocity;
 
     /**
+     * Don't use this.
+     * TODO I think I can't remove these constructors, but I'm not sure.
+     *
+     * @deprecated Don't use this
+     * @param type    the type
      * @param worldIn the world to spawn in
      */
     public ArrowSpawner(EntityType<?> type, World worldIn) {
@@ -137,17 +142,33 @@ public final class ArrowSpawner extends Entity {
         }
     }
 
+    /**
+     * Initializes the data tracker, not that ArrowSpawner uses it.
+     * TODO review
+     */
     @Override
     protected void initDataTracker() {
-        // TODO Auto-generated method stub
+        // This method left intentionally blank
     }
 
+    /**
+     * Creates the spawn packet.
+     * TODO review
+     *
+     * @return the packet
+     */
     @Override
     public Packet<?> createSpawnPacket() {
-        // TODO Auto-generated method stub
         return new EntitySpawnS2CPacket(this);
     }
 
+    /**
+     * This method reads the entity specific data from saved NBT data,
+     * including the stored arrows.
+     * TODO Clean-up code
+     *
+     * @param compound the NBT compound tag to read from
+     */
     @Override
     protected void readCustomDataFromNbt(NbtCompound compound) {
         /* Restore the saved amount of ticks that this entity has existed for */
@@ -196,7 +217,10 @@ public final class ArrowSpawner extends Entity {
                     toAdd = null;
                 }
 
-                /* If the data isn't valid, a new PersistentProjectileEntity is created to avoid null objects. */
+                /*
+                 * If the data isn't valid, a new PersistentProjectileEntity is created
+                 * to avoid null objects.
+                 */
                 readArrows[i] = toAdd != null ? toAdd : new ArrowEntity(world, getX(), getY(), getZ());
             }
 
@@ -207,6 +231,12 @@ public final class ArrowSpawner extends Entity {
         }
     }
 
+    /**
+     * This method saves the entity specific data to NBT data,
+     * including the stored arrows.
+     *
+     * @param compound the NBT compound tag to write to
+     */
     @Override
     protected void writeCustomDataToNbt(NbtCompound compound) {
         /* Save the amount of ticks that this entity has existed for */

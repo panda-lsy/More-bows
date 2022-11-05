@@ -9,6 +9,7 @@ import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
+/** A custom EntityRenderer, to customize the rendering of frost arrows. */
 final class CustomArrowRenderer extends ProjectileEntityRenderer<CustomArrow> {
 
     private static final Identifier ARROWS = new Identifier("textures/entity/projectiles/arrow.png");
