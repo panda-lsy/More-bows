@@ -15,7 +15,8 @@ buildscript {
 
 plugins {
     id 'java-library'
-    id 'fabric-loom' version '1.0-SNAPSHOT'
+    // TODO Use Loom 1.1 when it's available. Loom 0.11 is being used because newer versions of Loom don't like my remap tasks.
+    id 'fabric-loom' version '0.11-SNAPSHOT'
     id 'maven-publish'
     id 'net.ltgt.errorprone' version '3.0.1'
     id 'com.github.spotbugs' version '5.0.13'
@@ -157,32 +158,18 @@ task proguard(dependsOn: unmappedJar, type: ProGuardTask) {
     configuration 'guard.pro'
 }
 
-/*
-// TODO This breaks loom, no idea how to make it work
-task remapProguardJar(type: RemapJarTask) {
-    //outputs.upToDateWhen { false }
-    dependsOn(proguard)
-    //mustRunAfter(proguard)
-    input.fileValue(proguard.outputs.files.singleFile)
-    archiveClassifier.set("proguard-mapped")
-}
-
-prepareRemapProguardJar.dependsOn(proguard)
-*/
-
 artifacts.add('archives', file(proguard.outputs.files.singleFile)) {
     type('jar')
     builtBy(proguard)
 }
 
 // TODO depends on loom implementation details I don't understand
-remapJar {
-    dependsOn(proguard)
+task remapProguardJar(dependsOn: proguard, type: RemapJarTask) {
+    outputs.upToDateWhen { false }
     input.fileValue(proguard.outputs.files.singleFile)
-    //archiveClassifier.set("debug")
 }
 
-prepareRemapJar.dependsOn(proguard)
+prepareRemapProguardJar.dependsOn(proguard)
 
 java {
     // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
@@ -192,8 +179,12 @@ java {
 }
 
 // TODO this is a bit dumb
-task deleteProGuardOutput(type: Delete, dependsOn: proguard) {
+task deleteProGuardOutput(type: Delete, dependsOn: remapProguardJar) {
     delete proguard.outputs.files.singleFile
+}
+
+remapJar {
+    classifier = "debug"
 }
 
 build.finalizedBy(cleanUnmappedJar, deleteProGuardOutput)
