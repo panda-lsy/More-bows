@@ -164,9 +164,22 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
     /** TODO review a bunch of this logic, some of it should be updated. */
     @Override
     public void tick() {
+        final byte arrType = dataTracker.get(trackedType);
+
+        if ((arrType == ARROW_TYPE_FROST) && super.isCritical()) {
+            final Vec3d currentVelocity = getVelocity();
+            final double motionX = currentVelocity.x;
+            final double motionY = currentVelocity.y;
+            final double motionZ = currentVelocity.z;
+
+            for (int i = 0; i < 4; ++i) {
+                world.addParticle(ParticleTypes.SPLASH, getX() + ((motionX * i) / 4.0), getY() + ((motionY * i) / 4.0), getZ() + ((motionZ * i) / 4.0), -motionX, -motionY + 0.2, -motionZ);
+            }
+        }
+
         super.tick();
 
-        if (dataTracker.get(trackedType) == ARROW_TYPE_FROST) {
+        if (arrType == ARROW_TYPE_FROST) {
             if ((age == 1) && MoreBows.configGeneralInst.frostArrowsShouldBeCold) {
                 // TODO Fix
                 //isImmuneToFire = true;
@@ -261,15 +274,6 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
 
                 if (inGroundTime >= 65) {
                     discard();
-                }
-            } else if (super.isCritical()) {
-                final Vec3d currentVelocity = getVelocity();
-                final double motionX = currentVelocity.x;
-                final double motionY = currentVelocity.y;
-                final double motionZ = currentVelocity.z;
-
-                for (int i = 0; i < 4; ++i) {
-                    world.addParticle(ParticleTypes.SPLASH, getX() + ((motionX * i) / 4.0), getY() + ((motionY * i) / 4.0), getZ() + ((motionZ * i) / 4.0), -motionX, -motionY + 0.2, -motionZ);
                 }
             }
         }
