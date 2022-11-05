@@ -16,24 +16,24 @@ final class CustomArrowRenderer extends ProjectileEntityRenderer<CustomArrow> {
 
     private final FlyingItemEntityRenderer<CustomArrow> snow;
 
-    CustomArrowRenderer(Context ctx) {
-        super(ctx);
-        snow = new FlyingItemEntityRenderer<>(ctx);
+    CustomArrowRenderer(Context context) {
+        super(context);
+        snow = new FlyingItemEntityRenderer<>(context);
     }
 
     @Override
-    public void render(CustomArrow persistentProjectileEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i) {
-        if ((persistentProjectileEntity.getDataTracker().get(CustomArrow.trackedType) == MoreBows.ARROW_TYPE_FROST) && !MoreBows.configGeneralInst.oldFrostArrowRendering) {
-            snow.render(persistentProjectileEntity, f, g, matrixStack, vertexConsumerProvider, i);
+    public void render(CustomArrow entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+        if ((entity.getDataTracker().get(CustomArrow.trackedType) == MoreBows.ARROW_TYPE_FROST) && !MoreBows.configGeneralInst.oldFrostArrowRendering) {
+            snow.render(entity, yaw, tickDelta, matrices, vertexConsumers, light);
         } else {
             // TODO Implement old cube rendering
-            super.render(persistentProjectileEntity, f, g, matrixStack, vertexConsumerProvider, i);
+            super.render(entity, yaw, tickDelta, matrices, vertexConsumers, light);
         }
     }
 
     @Override
-    public Identifier getTexture(CustomArrow persistentProjectileEntity) {
-        return ((persistentProjectileEntity.getDataTracker().get(CustomArrow.trackedType) == MoreBows.ARROW_TYPE_FROST) && !MoreBows.configGeneralInst.oldFrostArrowRendering) ? SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE : ARROWS;
+    public Identifier getTexture(CustomArrow entity) {
+        return ((entity.getDataTracker().get(CustomArrow.trackedType) == MoreBows.ARROW_TYPE_FROST) && !MoreBows.configGeneralInst.oldFrostArrowRendering) ? SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE : ARROWS;
     }
 
 }

@@ -17,7 +17,7 @@ import net.minecraft.util.Hand;
  * to modify the drawback speed of a CustomBow.
  */
 @Mixin(HeldItemRenderer.class)
-public abstract class HeldItemRendererMixin {
+public final class HeldItemRendererMixin {
 
     /**
      * Dummy constructor.

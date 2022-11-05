@@ -35,11 +35,11 @@ public final class ArrowSpawner extends Entity {
      * TODO I think I can't remove these constructors, but I'm not sure.
      *
      * @deprecated Don't use this
-     * @param type    the type
-     * @param worldIn the world to spawn in
+     * @param type  the type
+     * @param world the world to spawn in
      */
-    public ArrowSpawner(EntityType<?> type, World worldIn) {
-        super(type, worldIn);
+    public ArrowSpawner(EntityType<?> type, World world) {
+        super(type, world);
         /*noClip = true;
         preventEntitySpawning = false;
         isImmuneToFire = true;*/
@@ -167,18 +167,18 @@ public final class ArrowSpawner extends Entity {
      * including the stored arrows.
      * TODO Clean-up code
      *
-     * @param compound the NBT compound tag to read from
+     * @param nbt the NBT compound tag to read from
      */
     @Override
-    protected void readCustomDataFromNbt(NbtCompound compound) {
+    protected void readCustomDataFromNbt(NbtCompound nbt) {
         /* Restore the saved amount of ticks that this entity has existed for */
-        age = compound.getByte("age");
+        age = nbt.getByte("age");
         /* Restore the saved shot velocity */
-        shotVelocity = compound.getFloat("shotVelocity");
+        shotVelocity = nbt.getFloat("shotVelocity");
 
         /* An over-engineered system to load an arbitrary amount of entities. */
-        if (compound.contains("arrows", 10)) {
-            final NbtCompound arrowsTag = compound.getCompound("arrows");
+        if (nbt.contains("arrows", 10)) {
+            final NbtCompound arrowsTag = nbt.getCompound("arrows");
             final int arrowsAmount = arrowsTag.getSize();
             final @NotNull PersistentProjectileEntity @NotNull [] readArrows = new PersistentProjectileEntity[arrowsAmount];
 
@@ -226,7 +226,7 @@ public final class ArrowSpawner extends Entity {
 
             arrows = readArrows;
         } else {
-            MoreBows.modLog.error("Could not find saved PersistentProjectileEntitys for ArrowSpawner {} when loading from NBT data ({}).", this, compound);
+            MoreBows.modLog.error("Could not find saved arrows for ArrowSpawner {} when loading from NBT data ({}).", this, nbt);
             arrows = NO_ARROWS;
         }
     }
@@ -235,14 +235,14 @@ public final class ArrowSpawner extends Entity {
      * This method saves the entity specific data to NBT data,
      * including the stored arrows.
      *
-     * @param compound the NBT compound tag to write to
+     * @param nbt the NBT compound tag to write to
      */
     @Override
-    protected void writeCustomDataToNbt(NbtCompound compound) {
+    protected void writeCustomDataToNbt(NbtCompound nbt) {
         /* Save the amount of ticks that this entity has existed for */
-        compound.putByte("age", (byte) age);
+        nbt.putByte("age", (byte) age);
         /* Save the shot velocity */
-        compound.putFloat("shotVelocity", shotVelocity);
+        nbt.putFloat("shotVelocity", shotVelocity);
         /*
          * This compound tag will contain the saved NBT data
          * from each arrow in the "arrows" array.
@@ -274,7 +274,7 @@ public final class ArrowSpawner extends Entity {
             arrowsTag.put("arrow" + i, arrTag);
         }
 
-        compound.put("arrows", arrowsTag);
+        nbt.put("arrows", arrowsTag);
     }
 
 }

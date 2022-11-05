@@ -52,48 +52,48 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
      * TODO I think I can't remove these constructors, but I'm not sure.
      *
      * @param entityType the entity type
-     * @param worldIn    used in super construction
+     * @param world      used in super construction
      * @deprecated Don't use this
      */
-    public CustomArrow(EntityType<CustomArrow> entityType, World worldIn) {
-        super(entityType, worldIn);
+    public CustomArrow(EntityType<CustomArrow> entityType, World world) {
+        super(entityType, world);
     }
 
     /**
      * Don't use this.
      * TODO I think I can't remove these constructors, but I'm not sure.
      *
-     * @param worldIn used in super construction
-     * @param x       used in super construction
-     * @param y       used in super construction
-     * @param z       used in super construction
+     * @param world used in super construction
+     * @param x     used in super construction
+     * @param y     used in super construction
+     * @param z     used in super construction
      * @deprecated Don't use this
      */
-    public CustomArrow(World worldIn, double x, double y, double z) {
-        super(MoreBows.CUSTOM_ARROW, x, y, z, worldIn);
+    public CustomArrow(World world, double x, double y, double z) {
+        super(MoreBows.CUSTOM_ARROW, x, y, z, world);
     }
 
     /**
      * Don't use this.
      * TODO I think I can't remove these constructors, but I'm not sure.
      *
-     * @param worldIn used in super construction
-     * @param shooter used in super construction
+     * @param world used in super construction
+     * @param owner used in super construction
      * @deprecated Don't use this
      */
-    public CustomArrow(World worldIn, LivingEntity shooter) {
-        super(MoreBows.CUSTOM_ARROW, shooter, worldIn);
+    public CustomArrow(World world, LivingEntity owner) {
+        super(MoreBows.CUSTOM_ARROW, owner, world);
     }
 
     /**
      * A constructor that gives the CustomArrow an ArrowType.
      *
-     * @param worldIn used in super construction
-     * @param shooter used in super construction
-     * @param type    the type of arrow
+     * @param world used in super construction
+     * @param owner used in super construction
+     * @param type  the type of arrow
      */
-    public CustomArrow(World worldIn, LivingEntity shooter, byte type) {
-        super(MoreBows.CUSTOM_ARROW, shooter, worldIn);
+    public CustomArrow(World world, LivingEntity owner, byte type) {
+        super(MoreBows.CUSTOM_ARROW, owner, world);
         dataTracker.set(trackedType, type);
     }
 
@@ -236,23 +236,23 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
     /**
      * Read the CustomArrow from NBT.
      *
-     * @param compound the NBT tag
+     * @param nbt the NBT tag
      */
     @Override
-    public void readCustomDataFromNbt(NbtCompound compound) {
-        super.readCustomDataFromNbt(compound);
-        dataTracker.set(trackedType, compound.getByte("type"));
+    public void readCustomDataFromNbt(NbtCompound nbt) {
+        super.readCustomDataFromNbt(nbt);
+        dataTracker.set(trackedType, nbt.getByte("type"));
     }
 
     /**
      * Write the CustomArrow to NBT.
      *
-     * @param compound the NBT tag
+     * @param nbt the NBT tag
      */
     @Override
-    public void writeCustomDataToNbt(NbtCompound compound) {
-        super.writeCustomDataToNbt(compound);
-        compound.putByte("type", dataTracker.get(trackedType));
+    public void writeCustomDataToNbt(NbtCompound nbt) {
+        super.writeCustomDataToNbt(nbt);
+        nbt.putByte("type", dataTracker.get(trackedType));
     }
 
     /**

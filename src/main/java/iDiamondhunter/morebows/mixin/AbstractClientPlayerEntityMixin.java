@@ -23,14 +23,14 @@ public abstract class AbstractClientPlayerEntityMixin extends PlayerEntity {
     /**
      * Dummy constructor.
      *
-     * @param world     the world
-     * @param profile   the profile
-     * @param publicKey the public key
+     * @param world       the world
+     * @param gameProfile the profile
+     * @param publicKey   the public key
      * @deprecated Why are you calling this? It's a mixin.
      */
     @SuppressWarnings("unused")
-    private AbstractClientPlayerEntityMixin(ClientWorld world, GameProfile profile, @Nullable PlayerPublicKey publicKey) {
-        super(world, world.getSpawnPos(), world.getSpawnAngle(), profile, publicKey);
+    private AbstractClientPlayerEntityMixin(ClientWorld world, GameProfile gameProfile, @Nullable PlayerPublicKey publicKey) {
+        super(world, world.getSpawnPos(), world.getSpawnAngle(), gameProfile, publicKey);
     }
 
     /**

@@ -109,7 +109,7 @@ public final class ConfigBows {
      * @deprecated bad code
      * @return all bow names
      */
-    public String[] getBowNames() {
+    public static String[] getBowNames() {
         return new String[] {
                    MoreBows.DiamondBowName,
                    MoreBows.EnderBowName,

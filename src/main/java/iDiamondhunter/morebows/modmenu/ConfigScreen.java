@@ -57,7 +57,7 @@ final class ConfigScreen {
         final ConfigCategory bowStats = moreBowsConfigBuilder.getOrCreateCategory(Text.translatable("morebows.confCatBow"));
         final BowConfig[] allBows = MoreBows.configBowsInst.getAllBowConfigs();
         final BowConfig[] defaultBows = ConfigBows.getDefaultConfig().getAllBowConfigs();
-        final String[] allBowNames = MoreBows.configBowsInst.getBowNames();
+        final String[] allBowNames = ConfigBows.getBowNames();
 
         for (int i = 0; i < allBows.length; i++) {
             final BowConfig bowConfig = allBows[i];

@@ -74,20 +74,20 @@ public final class CustomBow extends BowItem {
     }
 
     /** TODO review */
-    private PersistentProjectileEntity arrowHelper(World world, PlayerEntity player, float velocity, ItemStack ammo, ArrowItem arrow) {
+    private static PersistentProjectileEntity arrowHelper(World world, PlayerEntity player, float velocity, ItemStack ammo, ArrowItem arrow) {
         final PersistentProjectileEntity entityarrow = arrow.createArrow(world, ammo, player);
         return arrowHelperHelper(player, velocity, entityarrow);
     }
 
     /** TODO review */
-    private PersistentProjectileEntity arrowHelperHelper(PlayerEntity player, float velocity, PersistentProjectileEntity entityarrow) {
+    private static PersistentProjectileEntity arrowHelperHelper(PlayerEntity player, float velocity, PersistentProjectileEntity entityarrow) {
         entityarrow.setVelocity(player, player.getPitch(), player.getYaw(), 0.0f, velocity, 1.0f);
         return entityarrow;
     }
 
     /** TODO review */
-    private PersistentProjectileEntity customArrowHelper(World world, PlayerEntity player, float velocity) {
-        final PersistentProjectileEntity entityarrow = new CustomArrow(world, player, bowType);
+    private static PersistentProjectileEntity customArrowHelper(World world, PlayerEntity player, float velocity, byte arrType) {
+        final PersistentProjectileEntity entityarrow = new CustomArrow(world, player, arrType);
         return arrowHelperHelper(player, velocity, entityarrow);
     }
 
@@ -217,10 +217,10 @@ public final class CustomBow extends BowItem {
                             };
 
                             if (i > 0) {
-                                arrs[i] = possiblyCustomArrowHelper(world, player, velocityChoice, useAmmo, useArrow);
+                                arrs[i] = possiblyCustomArrowHelper(world, player, velocityChoice, useAmmo, useArrow, bowType);
                                 arrs[i].pickupType = pickStatus;
                             } else {
-                                arrs[i] = possiblyCustomArrowHelper(world, player, velocityChoice, ammo, arrow);
+                                arrs[i] = possiblyCustomArrowHelper(world, player, velocityChoice, ammo, arrow, bowType);
                             }
                         }
                     } else {
@@ -251,7 +251,7 @@ public final class CustomBow extends BowItem {
                      */
                     arrs = new PersistentProjectileEntity[] { arrowHelper(world, player, shotVelocity * (2.0F * 1.5F), ammo, arrow) };
                 } else { // Bows that shoot only one custom arrow, currently only frost / fire bows
-                    arrs = new PersistentProjectileEntity[] { possiblyCustomArrowHelper(world, player, shotVelocity * (2.0F * 1.5F), ammo, arrow) };
+                    arrs = new PersistentProjectileEntity[] { possiblyCustomArrowHelper(world, player, shotVelocity * (2.0F * 1.5F), ammo, arrow, bowType) };
                 }
 
                 if (infiniteAmmo || (player.getAbilities().creativeMode && (ammo.isOf(Items.SPECTRAL_ARROW) || ammo.isOf(Items.TIPPED_ARROW)))) {
@@ -355,9 +355,9 @@ public final class CustomBow extends BowItem {
     }
 
     /** TODO review */
-    private PersistentProjectileEntity possiblyCustomArrowHelper(World world, PlayerEntity player, float velocity, ItemStack ammo, ArrowItem arrow) {
+    private static PersistentProjectileEntity possiblyCustomArrowHelper(World world, PlayerEntity player, float velocity, ItemStack ammo, ArrowItem arrow, byte arrType) {
         if (arrow == Items.ARROW) {
-            return customArrowHelper(world, player, velocity);
+            return customArrowHelper(world, player, velocity, arrType);
         }
 
         return arrowHelper(world, player, velocity, ammo, arrow);
