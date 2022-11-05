@@ -82,7 +82,7 @@ public final class ConfigGeneral {
             try {
                 loadedConfig = OUTPUT_GSON.fromJson(Files.readString(configPath), ConfigGeneral.class);
             } catch (JsonSyntaxException | IOException e) {
-                MoreBows.modLog.error("Error while reading config from file", e);
+                MoreBows.modLog.error("Error while reading general config from file", e);
                 loadedConfig = new ConfigGeneral();
             }
         }
@@ -101,7 +101,7 @@ public final class ConfigGeneral {
         try {
             Files.writeString(configPath, OUTPUT_GSON.toJson(config));
         } catch (final IOException e) {
-            MoreBows.modLog.error("Error while writing config to file", e);
+            MoreBows.modLog.error("Error while writing general config to file", e);
         }
     }
 

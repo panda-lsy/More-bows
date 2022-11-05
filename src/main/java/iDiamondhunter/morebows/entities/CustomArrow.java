@@ -1,5 +1,7 @@
 package iDiamondhunter.morebows.entities;
 
+import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_ENDER;
+import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_FIRE;
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_FROST;
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_NOT_CUSTOM;
 
@@ -10,17 +12,23 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.SnowBlock;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.FlyingItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.mob.BlazeEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -265,6 +273,72 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
                 }
             }
         }
+    }
+
+    @Override
+    protected void onEntityHit(EntityHitResult entityHitResult) {
+        final byte arrType = dataTracker.get(trackedType);
+        final Entity entityHit = entityHitResult.getEntity();
+
+        if ((arrType == ARROW_TYPE_FROST) ) {
+            if (MoreBows.configGeneralInst.frostArrowsShouldBeCold) {
+                if (entityHit instanceof BlazeEntity) {
+                    setDamage(getDamage() * 3);
+                }
+
+                entityHit.extinguish();
+            }
+
+            if (entityHit instanceof final LivingEntity entityHitLiving) {
+                if (!MoreBows.configGeneralInst.oldFrostArrowMobSlowdown) {
+                    entityHitLiving.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 300, 2));
+                } else {
+                    entityHitLiving.slowMovement(Blocks.COBWEB.getDefaultState(), new Vec3d(0.25, 0.05f, 0.25));
+                }
+            }
+        }
+
+        final DefaultParticleType part;
+        final int amount;
+        final double velocity;
+        final boolean randDisp;
+
+        switch (arrType) {
+            case ARROW_TYPE_ENDER -> {
+                part = ParticleTypes.PORTAL;
+                amount = 3;
+                randDisp = true;
+                velocity = 1.0;
+            }
+
+            case ARROW_TYPE_FIRE -> {
+                part = isOnFire() ? ParticleTypes.FLAME : ParticleTypes.SMOKE;
+                amount = 5;
+                randDisp = true;
+                velocity = 0.05;
+            }
+
+            case ARROW_TYPE_FROST -> {
+                part = ParticleTypes.SPLASH;
+                amount = 1;
+                randDisp = false;
+                velocity = 0.01;
+            }
+
+            default -> {
+                part = ParticleTypes.EXPLOSION;
+                amount = 20;
+                randDisp = true;
+                velocity = 0.0;
+            }
+        }
+
+        // TODO replace with client-side method
+        for (int i = 0; i < amount; i++) {
+            MoreBows.tryPart(world, entityHit, part, randDisp, velocity);
+        }
+
+        super.onEntityHit(entityHitResult);
     }
 
     /**

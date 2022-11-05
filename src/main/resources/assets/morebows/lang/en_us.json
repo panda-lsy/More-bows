@@ -20,7 +20,7 @@
     "morebows.confGenFrostCold": "Frost arrows should be cold",
     "morebows.confGenFrostCold.tooltip": "If this is enabled, frost arrows will deal triple damage to Blazes, and extinguish Entities that are on fire.\nEnabling this also prevents frost arrows from being on fire.",
     "morebows.confGenOldRendering": "Old frost arrow rendering",
-    "morebows.confGenOldRendering.tooltip": "If this is enabled, frost arrows will render as cubes.",
+    "morebows.confGenOldRendering.tooltip": "If this is enabled, frost arrows will render as arrows.",
     "morebows.confGenOldSlowdown": "Old frost arrow mob slowdown",
     "morebows.confGenOldSlowdown.tooltip": "If this is enabled, frost arrows will slow Entities down by pretending to have set them in a web for one tick.\nIf this is disabled, frost arrows apply the slowness potion effect on hit.",
     "morebows.confMultiShotAmmo": "Multi-shot bow ammo use",

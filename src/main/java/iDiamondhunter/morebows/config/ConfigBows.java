@@ -96,7 +96,7 @@ public final class ConfigBows {
             try {
                 loadedConfig = OUTPUT_GSON.fromJson(Files.readString(configPath), ConfigBows.class);
             } catch (JsonSyntaxException | IOException e) {
-                MoreBows.modLog.error("Error while reading config from file", e);
+                MoreBows.modLog.error("Error while reading bow stats config from file", e);
                 loadedConfig = new ConfigBows();
             }
         }
@@ -115,7 +115,7 @@ public final class ConfigBows {
         try {
             Files.writeString(configPath, OUTPUT_GSON.toJson(config));
         } catch (final IOException e) {
-            MoreBows.modLog.error("Error while writing config to file", e);
+            MoreBows.modLog.error("Error while writing bow stats config to file", e);
         }
     }
 

@@ -202,7 +202,7 @@ public final class MoreBows implements ModInitializer {
      *                 around the entity.
      * @param velocity The velocity of spawned particles.
      */
-    static <T extends ParticleEffect> void tryPart(World world, Entity entity, T part, boolean randDisp, double velocity) {
+    public static <T extends ParticleEffect> void tryPart(World world, Entity entity, T part, boolean randDisp, double velocity) {
         if (!world.isClient) {
             // final int amount = 1;
             final double xDisp;
