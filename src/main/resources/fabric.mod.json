@@ -5,7 +5,8 @@
         "NeRd"
     ],
     "contact": {
-        "homepage": "https://github.com/NeRdTheNed/More-bows",
+        "homepage": "https://nerdthened.github.io/More-bows/",
+        "issues": "https://github.com/NeRdTheNed/More-bows/issues",
         "sources": "https://github.com/NeRdTheNed/More-bows"
     },
     "depends": {
@@ -38,5 +39,13 @@
     ],
     "name": "More Bows Restrung",
     "schemaVersion": 1,
-    "version": "${version}"
+    "version": "${version}",
+    "custom": {
+        "modmenu": {
+            "links": {
+                "morebows.curseforge": "https://www.curseforge.com/minecraft/mc-mods/more-bows-restrung",
+                "morebows.modrinth": "https://modrinth.com/mod/more-bows-restrung"
+            }
+        }
+    }
 }
