@@ -15,8 +15,7 @@ buildscript {
 
 plugins {
     id 'java-library'
-    // TODO Use Loom 1.1 when it's available. Loom 0.11 is being used because newer versions of Loom don't like my remap tasks.
-    id 'fabric-loom' version '0.11-SNAPSHOT'
+    id 'fabric-loom' version '1.0-SNAPSHOT'
     id 'maven-publish'
     id 'net.ltgt.errorprone' version '3.0.1'
     id 'com.github.spotbugs' version '5.0.13'
