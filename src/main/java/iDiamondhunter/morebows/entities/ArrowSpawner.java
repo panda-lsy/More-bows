@@ -40,9 +40,8 @@ public final class ArrowSpawner extends Entity {
      */
     public ArrowSpawner(EntityType<?> type, World world) {
         super(type, world);
-        /*noClip = true;
-        preventEntitySpawning = false;
-        isImmuneToFire = true;*/
+        noClip = true;
+        setInvisible(true);
     }
 
     /**
@@ -82,6 +81,11 @@ public final class ArrowSpawner extends Entity {
     @Override
     protected void initDataTracker() {
         // This method left intentionally blank
+    }
+
+    @Override
+    public boolean shouldRender(double distance) {
+        return false;
     }
 
     /**
