@@ -2,7 +2,7 @@
 
 [![CurseForge downloads badge](http://cf.way2muchnoise.eu/full_466902_downloads.svg "CurseForge downloads")](https://www.curseforge.com/minecraft/mc-mods/more-bows-restrung)
 [![Licence badge](https://img.shields.io/github/license/NeRdTheNed/More-bows "Licence")](https://github.com/NeRdTheNed/More-bows/blob/fabric-1.19.x/LICENSE)
-[![Java SE version compatibility badge](https://img.shields.io/badge/Java%20SE-17-orange?logo=java "Java SE version compatibility")](https://en.wikipedia.org/wiki/Java_version_history#Java_17)
+[![Java SE version compatibility badge](https://img.shields.io/badge/Java%20SE-16-orange?logo=java "Java SE version compatibility")](https://en.wikipedia.org/wiki/Java_version_history#Java_16)
 
 <p align="center">
     <picture>
