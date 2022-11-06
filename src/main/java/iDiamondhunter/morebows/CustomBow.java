@@ -31,6 +31,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
+import net.minecraftforge.common.IRarity;
 
 /**
  * This entire class is a huge hack. I'm ashamed of myself.
@@ -106,8 +107,8 @@ final class CustomBow extends ItemBow {
      * @return the item rarity
      */
     @Override
-    public EnumRarity getRarity(ItemStack stack) {
-        return rarity == EnumRarity.COMMON ? super.getRarity(stack) : rarity;
+    public IRarity getForgeRarity(ItemStack stack) {
+        return rarity == EnumRarity.COMMON ? super.getForgeRarity(stack) : rarity;
     }
 
     /**

@@ -38,7 +38,7 @@ import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
 import net.minecraftforge.oredict.OreDictionary;
 
 /** If you're reading this, I'm very sorry you have to deal with my code. */
-@Mod(modid = MoreBows.MOD_ID, version = "${version}", updateJSON = "https://nerdthened.github.io/More-bows/update.json")
+@Mod(dependencies = "required-after:forge@[14.23.5.2816,);", modid = MoreBows.MOD_ID, version = "${version}", updateJSON = "https://nerdthened.github.io/More-bows/update.json")
 public class MoreBows {
 
     /** The mod ID of More Bows. */
