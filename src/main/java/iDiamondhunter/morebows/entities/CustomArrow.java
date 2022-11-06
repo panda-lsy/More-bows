@@ -32,7 +32,6 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraft.world.event.GameEvent;
 
 /**
  * This entity is a custom arrow.
@@ -242,7 +241,6 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
 
                     if (inBlockState.isAir() && defaultSnowState.canPlaceAt(world, inBlockPos)) {
                         world.setBlockState(inBlockPos, defaultSnowState);
-                        world.emitGameEvent(GameEvent.BLOCK_PLACE, inBlockPos, GameEvent.Emitter.of(this, defaultSnowState));
                     } else if (inBlock == Blocks.WATER) {
                         /*
                          * TODO Check if the earlier event or this one is the correct one.
@@ -251,7 +249,6 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
                          */
                         final BlockState defaultIce = Blocks.ICE.getDefaultState();
                         world.setBlockState(inBlockPos, defaultIce);
-                        world.emitGameEvent(GameEvent.BLOCK_CHANGE, inBlockPos, GameEvent.Emitter.of(this, defaultIce));
                     } else if (inBlock == Blocks.SNOW) {
                         int currentSnowLevel = 8;
 
@@ -264,10 +261,8 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
                         if (currentSnowLevel < 8) {
                             final BlockState extraSnow = inBlockState.with(SnowBlock.LAYERS, currentSnowLevel + 1);
                             world.setBlockState(inBlockPos, extraSnow, 10);
-                            world.emitGameEvent(GameEvent.BLOCK_CHANGE, inBlockPos, GameEvent.Emitter.of(this, extraSnow));
                         } else if (inBlockState.isAir() && defaultSnowState.canPlaceAt(world, inBlockPos)) {
                             world.setBlockState(inBlockPos, defaultSnowState);
-                            world.emitGameEvent(GameEvent.BLOCK_PLACE, inBlockPos, GameEvent.Emitter.of(this, defaultSnowState));
                         }
                     }
                 }

@@ -15,7 +15,7 @@
 
 More Bows: Restrung is a port / continuation of the More Bows mod, which was originally created by GaussFire, and maintained & updated by iDiamondhunter until Risugami's ModLoader was no longer updated. This port aims to faithfully re-create the original mod, while fixing some bugs, introducing some quality-of-life changes, and adding cut ideas.
 
-_This branch of More Bows: Restrung targets Fabric for Minecraft 1.19.x!_
+_This branch of More Bows: Restrung targets Fabric for Minecraft 1.18.x!_
 
 ### Original descriptions of each bow (not currently 100% accurate!):
 

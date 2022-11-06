@@ -1,6 +1,5 @@
 package iDiamondhunter.morebows.mixin;
 
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -11,7 +10,6 @@ import iDiamondhunter.morebows.CustomBow;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.encryption.PlayerPublicKey;
 
 /**
  * A mixin to {@link net.minecraft.client.network.AbstractClientPlayerEntity},
@@ -29,8 +27,8 @@ public abstract class AbstractClientPlayerEntityMixin extends PlayerEntity {
      * @deprecated Why are you calling this? It's a mixin.
      */
     @SuppressWarnings("unused")
-    private AbstractClientPlayerEntityMixin(ClientWorld world, GameProfile gameProfile, @Nullable PlayerPublicKey publicKey) {
-        super(world, world.getSpawnPos(), world.getSpawnAngle(), gameProfile, publicKey);
+    private AbstractClientPlayerEntityMixin(ClientWorld world, GameProfile profile) {
+        super(world, world.getSpawnPos(), world.getSpawnAngle(), profile);
     }
 
     /**

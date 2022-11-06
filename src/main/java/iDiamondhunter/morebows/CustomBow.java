@@ -5,6 +5,8 @@ import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_FIRE;
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_FROST;
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_NOT_CUSTOM;
 
+import java.util.Random;
+
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,7 +30,6 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
 /**
