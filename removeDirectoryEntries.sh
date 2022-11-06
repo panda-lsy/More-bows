@@ -6,7 +6,7 @@ for file in ./build/libs/*.jar
 do
   unzip "$file" -d ./build/libs/temp
   rm "$file"
-  for jsonFile in ./build/libs/temp/**/mcmod.info
+  for jsonFile in ./build/libs/temp/**mcmod.info
   do
     jq -c . < "$jsonFile" > "$jsonFile-tempOut"
     mv "$jsonFile-tempOut" "$jsonFile"
