@@ -8,7 +8,11 @@ do
   rm "$file"
   for jsonFile in ./build/libs/temp/**mcmod.info
   do
-    jq -c . < "$jsonFile" > "$jsonFile-tempOut"
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+      jq -c . < "$jsonFile" | gsed -z '$ s/\n$//' > "$jsonFile-tempOut"
+    else
+      jq -c . < "$jsonFile" | sed -z '$ s/\n$//' > "$jsonFile-tempOut"
+    fi
     mv "$jsonFile-tempOut" "$jsonFile"
   done
   # TODO replace this with standard zip
