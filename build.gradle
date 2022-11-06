@@ -16,7 +16,7 @@ buildscript {
         classpath ('com.anatawa12.forge:ForgeGradle:1.2-1.0.+') {
             changing = true
         }
-        classpath 'com.guardsquare:proguard-gradle:7.1.1'
+        classpath 'com.guardsquare:proguard-gradle:7.2.2'
     }
 }
 
@@ -34,7 +34,7 @@ tasks.withType(AbstractArchiveTask) {
 apply plugin: 'java'
 apply plugin: 'forge'
 
-// TODO Re-add compilation with the Java 6 toolchain, removed due to build issues
+// TODO Re-add compilation with the Java 7 toolchain, removed due to build issues
 
 /*
 // To use Java toolchains, sourceCompatibility & targetCompatibility need to be not set.
@@ -44,21 +44,22 @@ sourceCompatibility = null
 targetCompatibility = null
 */
 
-// Defines a Java 6 compatible JDK. This is used to get properties requiring a reference to a JDK (rt.jar etc).
+// Defines a Java 7 compatible JDK. Java 6 would be ideal, but it isn't usable on my computer anymore :(
+// This is used to get properties requiring a reference to a JDK (rt.jar etc).
 // Unofficially, the codebase of MoreBows attempts to retain Java 5 compatibility, for ease of backports in the future, but Gradle doesn't support building with Java 5 in toolchains yet. I should make a bug report about it at some point...
 def compiler = javaToolchains.compilerFor {
-    languageVersion = JavaLanguageVersion.of(6)
+    languageVersion = JavaLanguageVersion.of(7)
 }
 
 /*
-// Tells Gradle to use the previously defined Java 6 compatible JDK.
+// Tells Gradle to use the previously defined Java 7 compatible JDK.
 java {
     toolchain {
         compiler
     }
 }
 
-// Tells Gradle to always compile with the previously defined Java 6 compatible JDK.
+// Tells Gradle to always compile with the previously defined Java 7 compatible JDK.
 tasks.withType(JavaCompile).configureEach {
     javaCompiler = compiler
 }
