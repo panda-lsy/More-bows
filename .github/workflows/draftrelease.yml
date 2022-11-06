@@ -1,13 +1,13 @@
 # This workflow will build a Java project with Gradle
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
 
-name: Java CI with Gradle (Fabric 1.18.x - draft release)
+name: Java CI with Gradle (Fabric 1.17.x - draft release)
 
 on:
   push:
     # Sequence of patterns matched against refs/tags
     tags:
-      - 'v*1.18.x.fabric' # Push events to matching v*1.18.x.fabric
+      - 'v*1.17.x.fabric' # Push events to matching v*1.17.x.fabric
 
 jobs:
   build:

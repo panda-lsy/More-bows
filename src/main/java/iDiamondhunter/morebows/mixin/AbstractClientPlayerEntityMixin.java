@@ -39,8 +39,8 @@ public abstract class AbstractClientPlayerEntityMixin extends PlayerEntity {
      * @deprecated Why are you calling this? It's a mixin.
      */
     @SuppressWarnings("unused")
-    @ModifyVariable(method = "getFovMultiplier()F", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;lerp(FFF)F", shift = At.Shift.BEFORE), ordinal = 0)
-    private float getFovMultiplierMixin(float finalFov) {
+    @ModifyVariable(method = "getSpeed()F", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;lerp(FFF)F", shift = At.Shift.BEFORE), ordinal = 0)
+    private float getSpeedMixin(float finalFov) {
         if (isUsingItem() && getActiveItem().getItem() instanceof final CustomBow bow) {
             final int itemUseCount = getItemUseTime();
             float customBow = itemUseCount / bow.powerDiv;

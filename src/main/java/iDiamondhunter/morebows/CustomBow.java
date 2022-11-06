@@ -50,7 +50,7 @@ public final class CustomBow extends BowItem {
 
     /** TODO review */
     private static PersistentProjectileEntity arrowHelperHelper(PlayerEntity player, float velocity, PersistentProjectileEntity entityarrow) {
-        entityarrow.setVelocity(player, player.getPitch(), player.getYaw(), 0.0f, velocity, 1.0f);
+        entityarrow.setProperties(player, player.getPitch(), player.getYaw(), 0.0f, velocity, 1.0f);
         return entityarrow;
     }
 
