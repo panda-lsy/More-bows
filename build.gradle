@@ -71,10 +71,10 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     // Mod menu
-    modCompileOnlyApi "com.terraformersmc:modmenu:2.0.16"
+    modCompileOnlyApi "com.terraformersmc:modmenu:3.2.4"
 
     // Cloth config
-    modCompileOnlyApi "me.shedaniel.cloth:cloth-config-fabric:5.3.63"
+    modCompileOnlyApi "me.shedaniel.cloth:cloth-config-fabric:6.4.90"
 
     // NullAway
     annotationProcessor "com.uber.nullaway:nullaway:0.10.3"

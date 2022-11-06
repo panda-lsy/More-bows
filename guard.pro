@@ -60,7 +60,7 @@
 # Mixins
 
 -keepclassmembers,allowoptimization,allowobfuscation public class iDiamondhunter.morebows.mixin.AbstractClientPlayerEntityMixin {
-    private float getSpeedMixin(float);
+    private float getFovMultiplierMixin(float);
 }
 
 -keepclassmembers,allowoptimization,allowobfuscation public class iDiamondhunter.morebows.mixin.HeldItemRendererMixin {
