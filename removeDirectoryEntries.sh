@@ -9,7 +9,12 @@ do
   for jsonFile in ./build/libs/temp/**mcmod.info
   do
     if [[ "$OSTYPE" == "darwin"* ]]; then
-      jq -c . < "$jsonFile" | gsed -z '$ s/\n$//' > "$jsonFile-tempOut"
+      if ! command -v gsed &> /dev/null
+      then
+        echo "Please install GNU sed as gsed"
+      else
+        jq -c . < "$jsonFile" | gsed -z '$ s/\n$//' > "$jsonFile-tempOut"
+      fi
     else
       jq -c . < "$jsonFile" | sed -z '$ s/\n$//' > "$jsonFile-tempOut"
     fi

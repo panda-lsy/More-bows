@@ -32,7 +32,7 @@ Descriptions taken from [iDiamondhunter's page for the mod](https://www.minecraf
 
 ### Building:
 
-The Gradle build script resolves dependancies automatically, but it relies on having both a Java 6 compatible JDK installed (which Gradle builds the mod with) _and_ a Java 8 compatible JDK (or higher) installed (which Gradle itself runs on). This can be worked around by changing the Gradle build script to build the mod with a JDK that's compatible with one installed on the computer building this mod, although this could potentially result in slight differences or incompatibilities with truely ancient versions of Java. Note that ProGuard is used to output bytecode compatible with Java 5, so this might be a moot point.
+The Gradle build script resolves dependancies automatically, but it relies on having both a Java 7 compatible JDK installed (which Gradle builds the mod with) _and_ a Java 8 compatible JDK (or higher) installed (which Gradle itself runs on). This can be worked around by changing the Gradle build script to build the mod with a JDK that's compatible with one installed on the computer building this mod, although this could potentially result in slight differences or incompatibilities with truely ancient versions of Java. Note that ProGuard is used to output bytecode compatible with Java 5, so this might be a moot point.
 
 ### Licence:
 
