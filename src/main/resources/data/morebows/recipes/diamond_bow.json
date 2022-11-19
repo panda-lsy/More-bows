@@ -1,23 +1,25 @@
 {
-  "result": {
-    "item": "morebows:diamond_bow"
-  },
-  "pattern": [
-    " DC", "ABC", " DC"
-  ],
-  "type": "minecraft:crafting_shaped",
-  "key": {
-    "C": {
-      "tag": "c:string"
+    "key": {
+        "A": {
+            "tag": "c:iron_ingots"
+        },
+        "B": {
+            "tag": "c:bows"
+        },
+        "C": {
+            "tag": "c:string"
+        },
+        "D": {
+            "tag": "c:diamonds"
+        }
     },
-    "D": {
-      "tag": "c:diamonds"
+    "pattern": [
+        " DC",
+        "ABC",
+        " DC"
+    ],
+    "result": {
+        "item": "morebows:diamond_bow"
     },
-    "A": {
-      "tag": "c:iron_ingots"
-    },
-    "B": {
-      "tag": "c:bows"
-    }
-  }
+    "type": "minecraft:crafting_shaped"
 }

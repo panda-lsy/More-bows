@@ -1,20 +1,22 @@
 {
-  "result": {
-    "item": "morebows:iron_bow"
-  },
-  "pattern": [
-    " AC", "ABC", " AC"
-  ],
-  "type": "minecraft:crafting_shaped",
-  "key": {
-    "C": {
-      "tag": "c:string"
+    "key": {
+        "A": {
+            "tag": "c:iron_ingots"
+        },
+        "B": {
+            "tag": "c:bows"
+        },
+        "C": {
+            "tag": "c:string"
+        }
     },
-    "A": {
-      "tag": "c:iron_ingots"
+    "pattern": [
+        " AC",
+        "ABC",
+        " AC"
+    ],
+    "result": {
+        "item": "morebows:iron_bow"
     },
-    "B": {
-      "tag": "c:bows"
-    }
-  }
+    "type": "minecraft:crafting_shaped"
 }
