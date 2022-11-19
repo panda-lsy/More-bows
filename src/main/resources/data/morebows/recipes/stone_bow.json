@@ -1,16 +1,16 @@
 {
     "key": {
         "A": {
-            "tag": "c:wooden_rods"
+            "tag": "morebows:wooden_rods"
         },
         "B": {
-            "tag": "c:bows"
+            "tag": "morebows:bows"
         },
         "C": {
-            "tag": "c:string"
+            "tag": "morebows:string"
         },
         "D": {
-            "tag": "c:stone"
+            "tag": "morebows:stone"
         }
     },
     "pattern": [

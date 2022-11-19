@@ -4,7 +4,7 @@
             "conditions": {
                 "items": [
                     {
-                        "tag": "c:bows"
+                        "tag": "morebows:bows"
                     }
                 ]
             },

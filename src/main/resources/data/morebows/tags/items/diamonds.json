@@ -1,0 +1,21 @@
+{
+    "replace": false,
+    "values": [
+        {
+            "id": "#c:diamond",
+            "required": false
+        },
+        {
+            "id": "#c:diamonds",
+            "required": false
+        },
+        {
+            "id": "#c:gems/diamond",
+            "required": false
+        },
+        {
+            "id": "#c:gems/diamonds",
+            "required": false
+        }
+    ]
+}

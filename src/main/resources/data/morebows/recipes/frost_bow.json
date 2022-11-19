@@ -7,10 +7,10 @@
             "tag": "c:iron_bows"
         },
         "C": {
-            "tag": "c:string"
+            "tag": "morebows:string"
         },
         "D": {
-            "tag": "c:ice"
+            "tag": "morebows:ice"
         }
     },
     "pattern": [

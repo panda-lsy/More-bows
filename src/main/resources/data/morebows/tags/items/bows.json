@@ -1,0 +1,13 @@
+{
+    "replace": false,
+    "values": [
+        {
+            "id": "#c:bows",
+            "required": false
+        },
+        {
+            "id": "#c:tools/bows",
+            "required": false
+        }
+    ]
+}

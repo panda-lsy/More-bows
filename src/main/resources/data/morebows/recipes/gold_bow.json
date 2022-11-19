@@ -1,13 +1,13 @@
 {
     "key": {
         "A": {
-            "tag": "c:gold_ingots"
+            "tag": "morebows:gold_ingots"
         },
         "B": {
-            "tag": "c:bows"
+            "tag": "morebows:bows"
         },
         "C": {
-            "tag": "c:string"
+            "tag": "morebows:string"
         }
     },
     "pattern": [
