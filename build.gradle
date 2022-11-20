@@ -152,7 +152,7 @@ task processSource(type: Sync) {
 
     from('src/main/java') {
         filesMatching('iDiamondhunter/morebows/MoreBows.java') {
-            expand 'version': version
+            expand 'version': version, 'modName': modName, 'mcversion': minecraft_version
         }
     }
 

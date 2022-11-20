@@ -1,40 +1,44 @@
 {
-  "parent": "minecraft:recipes/root",
-  "rewards": {
-    "recipes": [
-      "morebows:multi_bow"
-    ]
-  },
-  "criteria": {
-    "has_ibow": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [{
-          "item": "morebows:iron_bow"
-        }]
-      }
+    "criteria": {
+        "has_ibow": {
+            "conditions": {
+                "items": [
+                    {
+                        "item": "morebows:iron_bow"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        },
+        "has_oredict_ibow": {
+            "conditions": {
+                "items": [
+                    {
+                        "ore": "bowIron",
+                        "type": "forge:ore_dict"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        },
+        "has_the_recipe": {
+            "conditions": {
+                "recipe": "morebows:multi_bow"
+            },
+            "trigger": "minecraft:recipe_unlocked"
+        }
     },
-    "has_oredict_ibow": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [{
-          "type": "forge:ore_dict",
-          "ore": "bowIron"
-        }]
-      }
-    },
-    "has_the_recipe": {
-      "trigger": "minecraft:recipe_unlocked",
-      "conditions": {
-        "recipe": "morebows:multi_bow"
-      }
+    "parent": "minecraft:recipes/root",
+    "requirements": [
+        [
+            "has_ibow",
+            "has_oredict_ibow",
+            "has_the_recipe"
+        ]
+    ],
+    "rewards": {
+        "recipes": [
+            "morebows:multi_bow"
+        ]
     }
-  },
-  "requirements": [
-    [
-      "has_ibow",
-      "has_oredict_ibow",
-      "has_the_recipe"
-    ]
-  ]
 }

@@ -1,22 +1,24 @@
 {
-  "result": {
-    "item": "morebows:multi_bow"
-  },
-  "pattern": [
-    " DC", "A C", " DC"
-  ],
-  "type": "minecraft:crafting_shaped",
-  "key": {
-    "C": {
-      "type": "forge:ore_dict",
-      "ore": "string"
+    "key": {
+        "A": {
+            "ore": "ingotIron",
+            "type": "forge:ore_dict"
+        },
+        "C": {
+            "ore": "string",
+            "type": "forge:ore_dict"
+        },
+        "D": {
+            "item": "#IBOW"
+        }
     },
-    "D": {
-      "item": "#IBOW"
+    "pattern": [
+        " DC",
+        "A C",
+        " DC"
+    ],
+    "result": {
+        "item": "morebows:multi_bow"
     },
-    "A": {
-      "type": "forge:ore_dict",
-      "ore": "ingotIron"
-    }
-  }
+    "type": "minecraft:crafting_shaped"
 }

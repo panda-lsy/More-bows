@@ -1,24 +1,26 @@
 {
-  "result": {
-    "item": "morebows:frost_bow"
-  },
-  "pattern": [
-    " DC", "ABC", " DC"
-  ],
-  "type": "minecraft:crafting_shaped",
-  "key": {
-    "C": {
-      "type": "forge:ore_dict",
-      "ore": "string"
+    "key": {
+        "A": {
+            "item": "#BALL"
+        },
+        "B": {
+            "item": "#IBOW"
+        },
+        "C": {
+            "ore": "string",
+            "type": "forge:ore_dict"
+        },
+        "D": {
+            "item": "#ICE"
+        }
     },
-    "D": {
-      "item": "#ICE"
+    "pattern": [
+        " DC",
+        "ABC",
+        " DC"
+    ],
+    "result": {
+        "item": "morebows:frost_bow"
     },
-    "A": {
-      "item": "#BALL"
-    },
-    "B": {
-      "item": "#IBOW"
-    }
-  }
+    "type": "minecraft:crafting_shaped"
 }

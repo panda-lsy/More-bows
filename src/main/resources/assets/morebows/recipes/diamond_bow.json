@@ -1,26 +1,28 @@
 {
-  "result": {
-    "item": "morebows:diamond_bow"
-  },
-  "pattern": [
-    " DC", "ABC", " DC"
-  ],
-  "type": "minecraft:crafting_shaped",
-  "key": {
-    "C": {
-      "type": "forge:ore_dict",
-      "ore": "string"
+    "key": {
+        "A": {
+            "ore": "ingotIron",
+            "type": "forge:ore_dict"
+        },
+        "B": {
+            "item": "#BOW"
+        },
+        "C": {
+            "ore": "string",
+            "type": "forge:ore_dict"
+        },
+        "D": {
+            "ore": "gemDiamond",
+            "type": "forge:ore_dict"
+        }
     },
-    "D": {
-      "type": "forge:ore_dict",
-      "ore": "gemDiamond"
+    "pattern": [
+        " DC",
+        "ABC",
+        " DC"
+    ],
+    "result": {
+        "item": "morebows:diamond_bow"
     },
-    "A": {
-      "type": "forge:ore_dict",
-      "ore": "ingotIron"
-    },
-    "B": {
-      "item": "#BOW"
-    }
-  }
+    "type": "minecraft:crafting_shaped"
 }

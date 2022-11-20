@@ -1,11 +1,5 @@
 [
     {
-        "modid": "morebows",
-        "name": "${modName}",
-        "description": "A port of the More Bows mod to 1.7.10 and above! This mod was originally created by GaussFire, and maintained + updated by iDiamondhunter. Ported by NeRd!",
-        "version": "${version}",
-        "mcversion": "${mcversion}",
-        "url": "https://github.com/NeRdTheNed/More-bows",
         "authorList": [
             "GaussFire",
             "iDiamondhunter",
@@ -13,6 +7,13 @@
             "NeRd"
         ],
         "credits": "GaussFire and iDiamondhunter, for making the mod and assets! Ninjamight, for making the mod logo!",
-        "logoFile": "mb.png"
+        "description": "A port of the More Bows mod to 1.7.10 and above! This mod was originally created by GaussFire, and maintained + updated by iDiamondhunter. Ported by NeRd!",
+        "logoFile": "mb.png",
+        "mcversion": "${mcversion}",
+        "modid": "morebows",
+        "name": "${modName}",
+        "updateJSON": "https://nerdthened.github.io/More-bows/update.json",
+        "url": "https://nerdthened.github.io/More-bows/",
+        "version": "${version}"
     }
 ]

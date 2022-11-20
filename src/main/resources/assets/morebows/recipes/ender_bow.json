@@ -1,25 +1,27 @@
 {
-  "result": {
-    "item": "morebows:ender_bow"
-  },
-  "pattern": [
-    "CD", "AB", "CD"
-  ],
-  "type": "minecraft:crafting_shaped",
-  "key": {
-    "C": {
-      "type": "forge:ore_dict",
-      "ore": "ingotGold"
+    "key": {
+        "A": {
+            "item": "#EYE"
+        },
+        "B": {
+            "item": "#IBOW"
+        },
+        "C": {
+            "ore": "ingotGold",
+            "type": "forge:ore_dict"
+        },
+        "D": {
+            "ore": "enderpearl",
+            "type": "forge:ore_dict"
+        }
     },
-    "D": {
-      "type": "forge:ore_dict",
-      "ore": "enderpearl"
+    "pattern": [
+        "CD",
+        "AB",
+        "CD"
+    ],
+    "result": {
+        "item": "morebows:ender_bow"
     },
-    "A": {
-      "item": "#EYE"
-    },
-    "B": {
-      "item": "#IBOW"
-    }
-  }
+    "type": "minecraft:crafting_shaped"
 }

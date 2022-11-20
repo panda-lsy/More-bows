@@ -1,26 +1,28 @@
 {
-  "result": {
-    "item": "morebows:stone_bow"
-  },
-  "pattern": [
-    " DC", "ABC", " DC"
-  ],
-  "type": "minecraft:crafting_shaped",
-  "key": {
-    "C": {
-      "type": "forge:ore_dict",
-      "ore": "string"
+    "key": {
+        "A": {
+            "ore": "stickWood",
+            "type": "forge:ore_dict"
+        },
+        "B": {
+            "item": "#BOW"
+        },
+        "C": {
+            "ore": "string",
+            "type": "forge:ore_dict"
+        },
+        "D": {
+            "ore": "stone",
+            "type": "forge:ore_dict"
+        }
     },
-    "D": {
-      "type": "forge:ore_dict",
-      "ore": "stone"
+    "pattern": [
+        " DC",
+        "ABC",
+        " DC"
+    ],
+    "result": {
+        "item": "morebows:stone_bow"
     },
-    "A": {
-      "type": "forge:ore_dict",
-      "ore": "stickWood"
-    },
-    "B": {
-      "item": "#BOW"
-    }
-  }
+    "type": "minecraft:crafting_shaped"
 }

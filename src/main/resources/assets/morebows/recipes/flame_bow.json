@@ -1,25 +1,27 @@
 {
-  "result": {
-    "item": "morebows:flame_bow"
-  },
-  "pattern": [
-    "CD", "AB", "CD"
-  ],
-  "type": "minecraft:crafting_shaped",
-  "key": {
-    "A": {
-      "type": "forge:ore_dict",
-      "ore": "ingotGold"
+    "key": {
+        "A": {
+            "ore": "ingotGold",
+            "type": "forge:ore_dict"
+        },
+        "B": {
+            "item": "#IBOW"
+        },
+        "C": {
+            "ore": "netherrack",
+            "type": "forge:ore_dict"
+        },
+        "D": {
+            "item": "#ROD"
+        }
     },
-    "D": {
-      "item": "#ROD"
+    "pattern": [
+        "CD",
+        "AB",
+        "CD"
+    ],
+    "result": {
+        "item": "morebows:flame_bow"
     },
-    "C": {
-      "type": "forge:ore_dict",
-      "ore": "netherrack"
-    },
-    "B": {
-      "item": "#IBOW"
-    }
-  }
+    "type": "minecraft:crafting_shaped"
 }
