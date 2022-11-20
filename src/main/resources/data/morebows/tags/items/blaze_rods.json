@@ -1,0 +1,13 @@
+{
+    "replace": false,
+    "values": [
+        {
+            "id": "#c:blaze_rods",
+            "required": false
+        },
+        {
+            "id": "#c:rods/blaze",
+            "required": false
+        }
+    ]
+}

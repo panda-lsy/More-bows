@@ -9,22 +9,27 @@
         "issues": "https://github.com/NeRdTheNed/More-bows/issues",
         "sources": "https://github.com/NeRdTheNed/More-bows"
     },
-    "depends": {
-        "fabric": "*",
-        "fabricloader": "*",
-        "minecraft": "1.18.x"
+    "custom": {
+        "modmenu": {
+            "links": {
+                "morebows.curseforge": "https://www.curseforge.com/minecraft/mc-mods/more-bows-restrung",
+                "morebows.modrinth": "https://modrinth.com/mod/more-bows-restrung"
+            }
+        }
     },
-    "recommends": {
-        "modmenu": "*",
-        "cloth-config": "*"
+    "depends": {
+        "fabric": ">=${fabric_version}",
+        "fabricloader": ">=${loader_version}",
+        "java": ">=17",
+        "minecraft": "1.18.2"
     },
     "description": "A port of the More Bows mod to 1.7.10 and above! This mod was originally created by GaussFire, and maintained + updated by iDiamondhunter. Ported by NeRd!",
     "entrypoints": {
-        "main": [
-            "iDiamondhunter.morebows.MoreBows"
-        ],
         "client": [
             "iDiamondhunter.morebows.Client"
+        ],
+        "main": [
+            "iDiamondhunter.morebows.MoreBows"
         ],
         "modmenu": [
             "iDiamondhunter.morebows.modmenu.ModMenuCompat"
@@ -38,14 +43,10 @@
         "morebows.mixins.json"
     ],
     "name": "More Bows Restrung",
+    "recommends": {
+        "cloth-config": ">=${cloth_config_version}",
+        "modmenu": ">=${modmenu_version}"
+    },
     "schemaVersion": 1,
-    "version": "${version}",
-    "custom": {
-        "modmenu": {
-            "links": {
-                "morebows.curseforge": "https://www.curseforge.com/minecraft/mc-mods/more-bows-restrung",
-                "morebows.modrinth": "https://modrinth.com/mod/more-bows-restrung"
-            }
-        }
-    }
+    "version": "${version}"
 }
