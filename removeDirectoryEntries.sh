@@ -8,7 +8,16 @@ do
   rm "$file"
   for jsonFile in ./build/libs/temp/**.json
   do
-    jq -c . < "$jsonFile" > "$jsonFile-tempOut"
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+      if ! command -v gsed &> /dev/null
+      then
+        echo "Please install GNU sed as gsed"
+      else
+        jq -c . < "$jsonFile" | gsed -z '$ s/\n$//' > "$jsonFile-tempOut"
+      fi
+    else
+      jq -c . < "$jsonFile" | sed -z '$ s/\n$//' > "$jsonFile-tempOut"
+    fi
     mv "$jsonFile-tempOut" "$jsonFile"
   done
   # TODO replace this with standard zip
