@@ -58,7 +58,7 @@ final def build_release = System.getenv("BUILD_RELEASE") == "true"
 // Add snapshot suffix to version if not building a release.
 // To build a release, set the environment variable BUILD_RELEASE to true.
 if (!build_release) {
-    version += "-SNAPSHOT"
+    version += ".SNAPSHOT"
 }
 
 dependencies {
