@@ -69,12 +69,21 @@ dependencies {
 
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}+${project.minecraft_version}"
+    //modImplementation(fabricApi.module("fabric-api-base", "${project.fabric_version}+${project.minecraft_version}"))
+    //modImplementation(fabricApi.module("fabric-object-builder-api-v1", "${project.fabric_version}+${project.minecraft_version}"))
+    //modImplementation(fabricApi.module("fabric-item-api-v1", "${project.fabric_version}+${project.minecraft_version}"))
+    //modImplementation(fabricApi.module("fabric-rendering-v1", "${project.fabric_version}+${project.minecraft_version}"))
+    //modImplementation(fabricApi.module("fabric-transitive-access-wideners-v1", "${project.fabric_version}+${project.minecraft_version}"))
 
     // Mod menu
-    modCompileOnlyApi "com.terraformersmc:modmenu:${project.modmenu_version}"
+    modCompileOnlyApi("com.terraformersmc:modmenu:${project.modmenu_version}") {
+        exclude(group: "net.fabricmc.fabric-api")
+    }
 
     // Cloth config
-    modCompileOnlyApi "me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}"
+    modCompileOnlyApi("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
+        exclude(group: "net.fabricmc.fabric-api")
+    }
 
     // NullAway
     annotationProcessor "com.uber.nullaway:nullaway:0.10.3"
