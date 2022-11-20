@@ -1,30 +1,32 @@
 {
-  "parent": "minecraft:recipes/root",
-  "rewards": {
-    "recipes": [
-      "morebows:diamond_bow"
-    ]
-  },
-  "criteria": {
-    "has_bow": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [{
-          "tag": "c:bows"
-        }]
-      }
+    "criteria": {
+        "has_bow": {
+            "conditions": {
+                "items": [
+                    {
+                        "tag": "morebows:bows"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        },
+        "has_the_recipe": {
+            "conditions": {
+                "recipe": "morebows:diamond_bow"
+            },
+            "trigger": "minecraft:recipe_unlocked"
+        }
     },
-    "has_the_recipe": {
-      "trigger": "minecraft:recipe_unlocked",
-      "conditions": {
-        "recipe": "morebows:diamond_bow"
-      }
+    "parent": "minecraft:recipes/root",
+    "requirements": [
+        [
+            "has_bow",
+            "has_the_recipe"
+        ]
+    ],
+    "rewards": {
+        "recipes": [
+            "morebows:diamond_bow"
+        ]
     }
-  },
-  "requirements": [
-    [
-      "has_bow",
-      "has_the_recipe"
-    ]
-  ]
 }

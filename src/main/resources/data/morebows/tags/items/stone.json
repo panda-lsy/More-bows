@@ -1,0 +1,13 @@
+{
+    "replace": false,
+    "values": [
+        {
+            "id": "#c:stone",
+            "required": false
+        },
+        {
+            "id": "#c:stones",
+            "required": false
+        }
+    ]
+}

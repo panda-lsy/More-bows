@@ -58,7 +58,7 @@ final def build_release = System.getenv("BUILD_RELEASE") == "true"
 // Add snapshot suffix to version if not building a release.
 // To build a release, set the environment variable BUILD_RELEASE to true.
 if (!build_release) {
-    version += "-SNAPSHOT"
+    version += ".SNAPSHOT"
 }
 
 dependencies {
@@ -68,13 +68,22 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     // Fabric API. This is technically optional, but you probably want it anyway.
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}+1.17"
+    //modImplementation(fabricApi.module("fabric-api-base", "${project.fabric_version}+${project.minecraft_version}"))
+    //modImplementation(fabricApi.module("fabric-object-builder-api-v1", "${project.fabric_version}+${project.minecraft_version}"))
+    //modImplementation(fabricApi.module("fabric-item-api-v1", "${project.fabric_version}+${project.minecraft_version}"))
+    //modImplementation(fabricApi.module("fabric-rendering-v1", "${project.fabric_version}+${project.minecraft_version}"))
+    //modImplementation(fabricApi.module("fabric-transitive-access-wideners-v1", "${project.fabric_version}+${project.minecraft_version}"))
 
     // Mod menu
-    modCompileOnlyApi "com.terraformersmc:modmenu:2.0.16"
+    modCompileOnlyApi("com.terraformersmc:modmenu:${project.modmenu_version}") {
+        exclude(group: "net.fabricmc.fabric-api")
+    }
 
     // Cloth config
-    modCompileOnlyApi "me.shedaniel.cloth:cloth-config-fabric:5.3.63"
+    modCompileOnlyApi("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
+        exclude(group: "net.fabricmc.fabric-api")
+    }
 
     // NullAway
     annotationProcessor "com.uber.nullaway:nullaway:0.10.3"
@@ -95,10 +104,14 @@ dependencies {
 processResources {
     // This will ensure that this task is redone when the versions change.
     inputs.property "version", project.mod_version
+    inputs.property "modmenu_version", project.modmenu_version
+    inputs.property "cloth_config_version", project.cloth_config_version
+    inputs.property "fabric_version", project.fabric_version
+    inputs.property "loader_version", project.loader_version
 
     // Replace values in only fabric.mod.json.
     filesMatching("fabric.mod.json") {
-        expand "version": project.mod_version
+        expand "version": project.mod_version, "modmenu_version": project.modmenu_version, "cloth_config_version": project.cloth_config_version, "fabric_version": project.fabric_version, "loader_version": project.loader_version
     }
 
     // Minify .json files in built .jar

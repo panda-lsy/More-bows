@@ -1,0 +1,29 @@
+{
+    "replace": false,
+    "values": [
+        {
+            "id": "#c:wood_rods",
+            "required": false
+        },
+        {
+            "id": "#c:wooden_rods",
+            "required": false
+        },
+        {
+            "id": "#c:wood_sticks",
+            "required": false
+        },
+        {
+            "id": "#c:wooden_sticks",
+            "required": false
+        },
+        {
+            "id": "#c:rods/wood",
+            "required": false
+        },
+        {
+            "id": "#c:rods/wooden",
+            "required": false
+        }
+    ]
+}

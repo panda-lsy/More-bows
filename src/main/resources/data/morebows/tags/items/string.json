@@ -1,0 +1,13 @@
+{
+    "replace": false,
+    "values": [
+        {
+            "id": "#c:string",
+            "required": false
+        },
+        {
+            "id": "#c:strings",
+            "required": false
+        }
+    ]
+}
