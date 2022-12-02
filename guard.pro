@@ -86,6 +86,12 @@
     public protected *;
 }
 
+# Airport Wi-fi hotfix
+# TODO fix this properly later
+-keep public class iDiamondhunter.morebows.** {
+    public protected *;
+}
+
 # Needed to prevent ProGuard from changing a method signature
 -optimizations !method/removal/parameter
 
