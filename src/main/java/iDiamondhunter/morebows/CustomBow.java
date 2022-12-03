@@ -5,6 +5,8 @@ import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_FIRE;
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_FROST;
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_NOT_CUSTOM;
 
+import iDiamondhunter.morebows.compat.NyfsQuiversCompat;
+import net.fabricmc.loader.api.FabricLoader;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -340,7 +342,7 @@ public final class CustomBow extends BowItem {
 
             if (!infiniteAmmo && !player.getAbilities().creativeMode) {
                 ammo.decrement(usedAmmo);
-
+                quiverCheck(stack, user);
                 if (ammo.isEmpty()) {
                     player.getInventory().removeOne(ammo);
                 }
@@ -363,4 +365,9 @@ public final class CustomBow extends BowItem {
         return super.use(world, user, hand);
     }
 
+    public void quiverCheck(ItemStack stack,LivingEntity user) {
+        if(FabricLoader.getInstance().isModLoaded("nyfsquiver")) {
+            NyfsQuiversCompat.drawFromQuiver(stack,user);
+        }
+    }
 }
