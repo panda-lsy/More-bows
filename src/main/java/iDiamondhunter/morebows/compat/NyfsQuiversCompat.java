@@ -14,7 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.Pair;
 
-/** This is required for Nyfs Quivers compatibility, as arrows are not removed from the quiver without this. */
+/** This is required for Nyf's Quivers compatibility, as arrows are not removed from the quiver without this. */
 public class NyfsQuiversCompat {
     public static void drawFromQuiver(PlayerEntity player, int amount) {
         final Optional<TrinketComponent> component = TrinketsApi.getTrinketComponent(player);

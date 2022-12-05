@@ -107,7 +107,7 @@ public final class ConfigGeneral {
 
     /**
      * MoreBows config setting:
-     * Enable Nyfs Quivers compatibility.
+     * Enable Nyf's Quivers compatibility.
      * This should only be disabled if it's causing issues.
      */
     public boolean nyfsQuiversCompatEnabled = true;

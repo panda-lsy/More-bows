@@ -343,7 +343,7 @@ public final class CustomBow extends BowItem {
             if (!infiniteAmmo && !player.getAbilities().creativeMode) {
                 ammo.decrement(usedAmmo);
 
-                // Nyfs Quivers compatibility
+                // Nyf's Quivers compatibility
                 if (!alwaysShoots && MoreBows.configGeneralInst.nyfsQuiversCompatEnabled && FabricLoader.getInstance().isModLoaded("nyfsquiver")) {
                     NyfsQuiversCompat.drawFromQuiver(player, usedAmmo);
                 }
