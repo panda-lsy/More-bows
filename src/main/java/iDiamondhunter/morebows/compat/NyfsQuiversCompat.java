@@ -1,6 +1,5 @@
 package iDiamondhunter.morebows.compat;
 
-import java.util.List;
 import java.util.Optional;
 
 import com.nyfaria.nyfsquiver.item.QuiverItem;
@@ -20,9 +19,7 @@ public class NyfsQuiversCompat {
         final Optional<TrinketComponent> component = TrinketsApi.getTrinketComponent(player);
 
         if (component.isPresent()) {
-            final List<Pair<SlotReference, ItemStack>> allEquipped = component.get().getAllEquipped();
-
-            for (final Pair<SlotReference, ItemStack> equipped : allEquipped) {
+            for (final Pair<SlotReference, ItemStack> equipped : component.get().getAllEquipped()) {
                 final ItemStack equippedTrinketItemStack = equipped.getRight();
 
                 if (equippedTrinketItemStack.getItem() instanceof QuiverItem) {
