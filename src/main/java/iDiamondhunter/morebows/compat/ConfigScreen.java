@@ -1,4 +1,4 @@
-package iDiamondhunter.morebows.modmenu;
+package iDiamondhunter.morebows.compat;
 
 import iDiamondhunter.morebows.MoreBows;
 import iDiamondhunter.morebows.config.ConfigBows;

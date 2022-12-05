@@ -32,7 +32,7 @@
             "iDiamondhunter.morebows.MoreBows"
         ],
         "modmenu": [
-            "iDiamondhunter.morebows.modmenu.ModMenuCompat"
+            "iDiamondhunter.morebows.compat.ModMenuCompat"
         ]
     },
     "environment": "*",

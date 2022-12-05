@@ -5,15 +5,15 @@ import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_FIRE;
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_FROST;
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_NOT_CUSTOM;
 
-import iDiamondhunter.morebows.compat.NyfsQuiversCompat;
-import net.fabricmc.loader.api.FabricLoader;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import iDiamondhunter.morebows.compat.NyfsQuiversCompat;
 import iDiamondhunter.morebows.config.ConfigGeneral.CustomArrowMultiShotType;
 import iDiamondhunter.morebows.entities.ArrowSpawner;
 import iDiamondhunter.morebows.entities.CustomArrow;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
@@ -342,7 +342,12 @@ public final class CustomBow extends BowItem {
 
             if (!infiniteAmmo && !player.getAbilities().creativeMode) {
                 ammo.decrement(usedAmmo);
-                quiverCheck(stack, user);
+
+                // Nyfs Quivers compatibility
+                if (!alwaysShoots && FabricLoader.getInstance().isModLoaded("nyfsquiver")) {
+                    NyfsQuiversCompat.drawFromQuiver(player, usedAmmo);
+                }
+
                 if (ammo.isEmpty()) {
                     player.getInventory().removeOne(ammo);
                 }
@@ -363,11 +368,5 @@ public final class CustomBow extends BowItem {
         }
 
         return super.use(world, user, hand);
-    }
-
-    public void quiverCheck(ItemStack stack,LivingEntity user) {
-        if(FabricLoader.getInstance().isModLoaded("nyfsquiver")) {
-            NyfsQuiversCompat.drawFromQuiver(stack,user);
-        }
     }
 }

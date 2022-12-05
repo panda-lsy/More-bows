@@ -73,7 +73,7 @@
 -keep public class iDiamondhunter.morebows.mixin.AbstractClientPlayerEntityMixin
 -keep public class iDiamondhunter.morebows.MoreBows
 -keep public class iDiamondhunter.morebows.Client
--keep public class iDiamondhunter.morebows.modmenu.ModMenuCompat
+-keep public class iDiamondhunter.morebows.compat.ModMenuCompat
 
 # Don't obfuscate CustomBow or any entity classes.
 # This does slightly increase the mod's file size, but it might help with mod compatibility.
