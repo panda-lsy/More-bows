@@ -86,13 +86,13 @@ dependencies {
     //modImplementation(fabricApi.module("fabric-transitive-access-wideners-v1", "${project.fabric_version}+${project.minecraft_version}"))
 
     // Mod menu
-    modCompileOnlyApi("com.terraformersmc:modmenu:${project.modmenu_version}") {
-        exclude(group: "net.fabricmc.fabric-api")
+    modCompileOnly("com.terraformersmc:modmenu:${project.modmenu_version}") {
+        transitive = false
     }
 
     // Cloth config
-    modCompileOnlyApi("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
-        exclude(group: "net.fabricmc.fabric-api")
+    modCompileOnly("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
+        transitive = false
     }
 
     // NullAway
@@ -108,10 +108,16 @@ dependencies {
     errorprone "com.google.errorprone:error_prone_core:2.16"
     compileOnly "com.google.errorprone:error_prone_annotations:2.16"
 
-//    // trinkets
-    modImplementation("dev.emi:trinkets:${project.trinkets_version}")
+    // Trinkets API, needed for Nyf's Quivers compatibility
+    modCompileOnly("dev.emi:trinkets:${project.trinkets_version}") {
+        exclude(group: "net.fabricmc.fabric-api")
+        exclude(group: "net.fabricmc")
+    }
 
-    modCompileOnly("curse.maven:nyfs-quivers-482731:4025816")
+    // Nyf's Quivers, needed for mod compatibility
+    modCompileOnly("curse.maven:nyfs-quivers-482731:4025816") {
+        transitive = false
+    }
 }
 
 //jar.finalizedBy('reobfJar')
