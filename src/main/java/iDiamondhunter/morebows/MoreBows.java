@@ -241,7 +241,7 @@ public final class MoreBows implements ModInitializer {
         registerBow(FrostBow, FrostBowName);
 
         if (!MoreBows.configGeneralInst.nyfsQuiversCompatEnabled) {
-            modLog.warn("You have disabled Nyf's Quivers compatibility features. Please don't do this unless More Bows is incompatible with the current version of Nyfs Quivers, as issues with arrows being duplicated happen otherwise.");
+            modLog.warn("You have disabled Nyf's Quivers compatibility features. Please don't do this unless More Bows is incompatible with the current version of Nyf's Quivers, as issues with arrows being duplicated happen otherwise.");
         }
 
         // TODO fuel burn times?
