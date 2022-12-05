@@ -284,7 +284,7 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
         final byte arrType = dataTracker.get(trackedType);
         final Entity entityHit = entityHitResult.getEntity();
 
-        if ((arrType == ARROW_TYPE_FROST) ) {
+        if (arrType == ARROW_TYPE_FROST) {
             if (MoreBows.configGeneralInst.frostArrowsShouldBeCold) {
                 if (entityHit instanceof BlazeEntity) {
                     setDamage(getDamage() * 3);

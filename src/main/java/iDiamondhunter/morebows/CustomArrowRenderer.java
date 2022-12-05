@@ -23,7 +23,7 @@ final class CustomArrowRenderer extends ProjectileEntityRenderer<CustomArrow> {
 
     @Override
     public Identifier getTexture(CustomArrow entity) {
-        return ((entity.getDataTracker().get(CustomArrow.trackedType) == MoreBows.ARROW_TYPE_FROST) && !MoreBows.configGeneralInst.oldFrostArrowRendering) ? SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE : ARROWS;
+        return (entity.getDataTracker().get(CustomArrow.trackedType) == MoreBows.ARROW_TYPE_FROST) && !MoreBows.configGeneralInst.oldFrostArrowRendering ? SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE : ARROWS;
     }
 
     @Override
