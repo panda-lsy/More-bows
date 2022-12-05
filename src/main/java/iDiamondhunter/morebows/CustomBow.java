@@ -25,6 +25,7 @@ import net.minecraft.item.BowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.recipe.Ingredient;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
@@ -84,18 +85,23 @@ public final class CustomBow extends BowItem {
     /** The drawback speed of the bow. */
     public final float powerDiv;
 
+    /** The material that can be used to repair this bow with */
+    private final Ingredient repairIngredient;
+
     /**
      * A more customizable bow than the vanilla one.
      *
-     * @param settings   The settings TODO
-     * @param bowType    The type of arrows this bow shoots.
-     *                   This also influences some behaviors of the bow as well.
-     * @param damageMult The multiplier to damage done by an arrow shot by this bow.
-     * @param multiShot  True if this bow shoots multiple arrows.
-     * @param powerDiv   The power divisor of this bow. Influences drawback speed.
+     * @param settings         The settings TODO
+     * @param repairIngredient The type of material that can be used to repair this bow with
+     * @param bowType          The type of arrows this bow shoots.
+     *                         This also influences some behaviors of the bow as well.
+     * @param damageMult       The multiplier to damage done by an arrow shot by this bow.
+     * @param multiShot        True if this bow shoots multiple arrows.
+     * @param powerDiv         The power divisor of this bow. Influences drawback speed.
      */
-    CustomBow(Settings settings, @MagicConstant(intValues = {ARROW_TYPE_NOT_CUSTOM, ARROW_TYPE_ENDER, ARROW_TYPE_FIRE, ARROW_TYPE_FROST}) byte bowType, double damageMult, boolean multiShot, float powerDiv) {
+    CustomBow(Settings settings, Ingredient repairIngredient, @MagicConstant(intValues = {ARROW_TYPE_NOT_CUSTOM, ARROW_TYPE_ENDER, ARROW_TYPE_FIRE, ARROW_TYPE_FROST}) byte bowType, double damageMult, boolean multiShot, float powerDiv) {
         super(settings);
+        this.repairIngredient = repairIngredient;
         this.bowType = bowType;
         this.damageMult = damageMult;
         this.multiShot = multiShot;
@@ -369,4 +375,10 @@ public final class CustomBow extends BowItem {
 
         return super.use(world, user, hand);
     }
+
+    @Override
+    public boolean canRepair(ItemStack stack, ItemStack ingredient) {
+        return repairIngredient.test(ingredient) || super.canRepair(stack, ingredient);
+    }
+
 }

@@ -21,7 +21,9 @@ import net.minecraft.entity.SpawnGroup;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.particle.ParticleEffect;
+import net.minecraft.recipe.Ingredient;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
 import net.minecraft.util.registry.Registry;
@@ -152,14 +154,20 @@ public final class MoreBows implements ModInitializer {
      */
     static @NotNull Item @NotNull [] getAllItems() {
         if (allItems == null) {
-            DiamondBow = new CustomBow(new FabricItemSettings().group(ItemGroup.COMBAT).maxDamage(configBowsInst.DiamondBow.confBowDurability).rarity(Rarity.RARE), defaultArrowType, configBowsInst.DiamondBow.confBowDamageMult, false, configBowsInst.DiamondBow.confBowDrawbackDiv);
-            GoldBow = new CustomBow(new FabricItemSettings().group(ItemGroup.COMBAT).maxDamage(configBowsInst.GoldBow.confBowDurability).rarity(Rarity.UNCOMMON), defaultArrowType, configBowsInst.GoldBow.confBowDamageMult, false, configBowsInst.GoldBow.confBowDrawbackDiv);
-            EnderBow = new CustomBow(new FabricItemSettings().group(ItemGroup.COMBAT).maxDamage(configBowsInst.EnderBow.confBowDurability).rarity(Rarity.EPIC), ARROW_TYPE_ENDER, configBowsInst.EnderBow.confBowDamageMult, true, configBowsInst.EnderBow.confBowDrawbackDiv);
-            StoneBow = new CustomBow(new FabricItemSettings().group(ItemGroup.COMBAT).maxDamage(configBowsInst.StoneBow.confBowDurability).rarity(Rarity.COMMON), defaultArrowType, configBowsInst.StoneBow.confBowDamageMult, false, configBowsInst.StoneBow.confBowDrawbackDiv);
-            IronBow = new CustomBow(new FabricItemSettings().group(ItemGroup.COMBAT).maxDamage(configBowsInst.IronBow.confBowDurability).rarity(Rarity.COMMON), defaultArrowType, configBowsInst.IronBow.confBowDamageMult, false, configBowsInst.IronBow.confBowDrawbackDiv);
-            MultiBow = new CustomBow(new FabricItemSettings().group(ItemGroup.COMBAT).maxDamage(configBowsInst.MultiBow.confBowDurability).rarity(Rarity.RARE), ARROW_TYPE_NOT_CUSTOM, configBowsInst.MultiBow.confBowDamageMult, true, configBowsInst.MultiBow.confBowDrawbackDiv);
-            FlameBow = new CustomBow(new FabricItemSettings().group(ItemGroup.COMBAT).maxDamage(configBowsInst.FlameBow.confBowDurability).rarity(Rarity.UNCOMMON).fireproof(), ARROW_TYPE_FIRE, configBowsInst.FlameBow.confBowDamageMult, false, configBowsInst.FlameBow.confBowDrawbackDiv);
-            FrostBow = new CustomBow(new FabricItemSettings().group(ItemGroup.COMBAT).maxDamage(configBowsInst.FrostBow.confBowDurability).rarity(Rarity.COMMON), ARROW_TYPE_FROST, configBowsInst.FrostBow.confBowDamageMult, false, configBowsInst.FrostBow.confBowDrawbackDiv);
+            final Ingredient diamonds = Ingredient.fromTag(TagKey.of(Registry.ITEM_KEY, new Identifier("morebows", "diamonds")));
+            final Ingredient gold = Ingredient.fromTag(TagKey.of(Registry.ITEM_KEY, new Identifier("morebows", "gold_ingots")));
+            final Ingredient enderPearls = Ingredient.fromTag(TagKey.of(Registry.ITEM_KEY, new Identifier("c", "ender_pearls")));
+            final Ingredient stone = Ingredient.fromTag(TagKey.of(Registry.ITEM_KEY, new Identifier("morebows", "stone")));
+            final Ingredient iron = Ingredient.fromTag(TagKey.of(Registry.ITEM_KEY, new Identifier("morebows", "iron_ingots")));
+            final Ingredient ice = Ingredient.fromTag(TagKey.of(Registry.ITEM_KEY, new Identifier("morebows", "ice")));
+            DiamondBow = new CustomBow(new FabricItemSettings().group(ItemGroup.COMBAT).maxDamage(configBowsInst.DiamondBow.confBowDurability).rarity(Rarity.RARE), diamonds, defaultArrowType, configBowsInst.DiamondBow.confBowDamageMult, false, configBowsInst.DiamondBow.confBowDrawbackDiv);
+            GoldBow = new CustomBow(new FabricItemSettings().group(ItemGroup.COMBAT).maxDamage(configBowsInst.GoldBow.confBowDurability).rarity(Rarity.UNCOMMON), gold, defaultArrowType, configBowsInst.GoldBow.confBowDamageMult, false, configBowsInst.GoldBow.confBowDrawbackDiv);
+            EnderBow = new CustomBow(new FabricItemSettings().group(ItemGroup.COMBAT).maxDamage(configBowsInst.EnderBow.confBowDurability).rarity(Rarity.EPIC), enderPearls, ARROW_TYPE_ENDER, configBowsInst.EnderBow.confBowDamageMult, true, configBowsInst.EnderBow.confBowDrawbackDiv);
+            StoneBow = new CustomBow(new FabricItemSettings().group(ItemGroup.COMBAT).maxDamage(configBowsInst.StoneBow.confBowDurability).rarity(Rarity.COMMON), stone, defaultArrowType, configBowsInst.StoneBow.confBowDamageMult, false, configBowsInst.StoneBow.confBowDrawbackDiv);
+            IronBow = new CustomBow(new FabricItemSettings().group(ItemGroup.COMBAT).maxDamage(configBowsInst.IronBow.confBowDurability).rarity(Rarity.COMMON), iron, defaultArrowType, configBowsInst.IronBow.confBowDamageMult, false, configBowsInst.IronBow.confBowDrawbackDiv);
+            MultiBow = new CustomBow(new FabricItemSettings().group(ItemGroup.COMBAT).maxDamage(configBowsInst.MultiBow.confBowDurability).rarity(Rarity.RARE), iron, ARROW_TYPE_NOT_CUSTOM, configBowsInst.MultiBow.confBowDamageMult, true, configBowsInst.MultiBow.confBowDrawbackDiv);
+            FlameBow = new CustomBow(new FabricItemSettings().group(ItemGroup.COMBAT).maxDamage(configBowsInst.FlameBow.confBowDurability).rarity(Rarity.UNCOMMON).fireproof(), gold, ARROW_TYPE_FIRE, configBowsInst.FlameBow.confBowDamageMult, false, configBowsInst.FlameBow.confBowDrawbackDiv);
+            FrostBow = new CustomBow(new FabricItemSettings().group(ItemGroup.COMBAT).maxDamage(configBowsInst.FrostBow.confBowDurability).rarity(Rarity.COMMON), ice, ARROW_TYPE_FROST, configBowsInst.FrostBow.confBowDamageMult, false, configBowsInst.FrostBow.confBowDrawbackDiv);
             allItems = new Item[] { DiamondBow, EnderBow, FlameBow, FrostBow, GoldBow, IronBow, MultiBow, StoneBow };
         }
 
