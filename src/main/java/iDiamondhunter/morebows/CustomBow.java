@@ -344,7 +344,7 @@ public final class CustomBow extends BowItem {
                 ammo.decrement(usedAmmo);
 
                 // Nyfs Quivers compatibility
-                if (!alwaysShoots && FabricLoader.getInstance().isModLoaded("nyfsquiver")) {
+                if (!alwaysShoots && MoreBows.configGeneralInst.nyfsQuiversCompatEnabled && FabricLoader.getInstance().isModLoaded("nyfsquiver")) {
                     NyfsQuiversCompat.drawFromQuiver(player, usedAmmo);
                 }
 
