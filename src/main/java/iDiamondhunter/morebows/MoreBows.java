@@ -154,12 +154,12 @@ public final class MoreBows implements ModInitializer {
      */
     static @NotNull Item @NotNull [] getAllItems() {
         if (allItems == null) {
-            final Ingredient diamonds = Ingredient.fromTag(TagKey.of(Registry.ITEM_KEY, new Identifier("morebows", "diamonds")));
-            final Ingredient gold = Ingredient.fromTag(TagKey.of(Registry.ITEM_KEY, new Identifier("morebows", "gold_ingots")));
+            final Ingredient diamonds = Ingredient.fromTag(TagKey.of(Registry.ITEM_KEY, new Identifier(MOD_ID, "diamonds")));
+            final Ingredient gold = Ingredient.fromTag(TagKey.of(Registry.ITEM_KEY, new Identifier(MOD_ID, "gold_ingots")));
             final Ingredient enderPearls = Ingredient.fromTag(TagKey.of(Registry.ITEM_KEY, new Identifier("c", "ender_pearls")));
-            final Ingredient stone = Ingredient.fromTag(TagKey.of(Registry.ITEM_KEY, new Identifier("morebows", "stone")));
-            final Ingredient iron = Ingredient.fromTag(TagKey.of(Registry.ITEM_KEY, new Identifier("morebows", "iron_ingots")));
-            final Ingredient ice = Ingredient.fromTag(TagKey.of(Registry.ITEM_KEY, new Identifier("morebows", "ice")));
+            final Ingredient stone = Ingredient.fromTag(TagKey.of(Registry.ITEM_KEY, new Identifier(MOD_ID, "stone")));
+            final Ingredient iron = Ingredient.fromTag(TagKey.of(Registry.ITEM_KEY, new Identifier(MOD_ID, "iron_ingots")));
+            final Ingredient ice = Ingredient.fromTag(TagKey.of(Registry.ITEM_KEY, new Identifier(MOD_ID, "ice")));
             DiamondBow = new CustomBow(new FabricItemSettings().group(ItemGroup.COMBAT).maxDamage(configBowsInst.DiamondBow.confBowDurability).rarity(Rarity.RARE), diamonds, defaultArrowType, configBowsInst.DiamondBow.confBowDamageMult, false, configBowsInst.DiamondBow.confBowDrawbackDiv);
             GoldBow = new CustomBow(new FabricItemSettings().group(ItemGroup.COMBAT).maxDamage(configBowsInst.GoldBow.confBowDurability).rarity(Rarity.UNCOMMON), gold, defaultArrowType, configBowsInst.GoldBow.confBowDamageMult, false, configBowsInst.GoldBow.confBowDrawbackDiv);
             EnderBow = new CustomBow(new FabricItemSettings().group(ItemGroup.COMBAT).maxDamage(configBowsInst.EnderBow.confBowDurability).rarity(Rarity.EPIC), enderPearls, ARROW_TYPE_ENDER, configBowsInst.EnderBow.confBowDamageMult, true, configBowsInst.EnderBow.confBowDrawbackDiv);
