@@ -44,6 +44,8 @@ public final class CustomBow extends BowItem {
     private static final ItemStack defaultAmmo = new ItemStack(Items.ARROW);
     private static final ArrowItem defaultArrow = (ArrowItem) Items.ARROW;
 
+    private static final boolean isNyfsQuiversPresent = FabricLoader.getInstance().isModLoaded("nyfsquiver");
+
     /** TODO review */
     private static PersistentProjectileEntity arrowHelper(World world, PlayerEntity player, float velocity, ItemStack ammo, ArrowItem arrow) {
         final PersistentProjectileEntity entityarrow = arrow.createArrow(world, ammo, player);
@@ -350,7 +352,7 @@ public final class CustomBow extends BowItem {
                 ammo.decrement(usedAmmo);
 
                 // Nyf's Quivers compatibility
-                if (!alwaysShoots && MoreBows.configGeneralInst.nyfsQuiversCompatEnabled && FabricLoader.getInstance().isModLoaded("nyfsquiver")) {
+                if (isNyfsQuiversPresent && !alwaysShoots && MoreBows.configGeneralInst.nyfsQuiversCompatEnabled) {
                     NyfsQuiversCompat.drawFromQuiver(player, usedAmmo);
                 }
 
