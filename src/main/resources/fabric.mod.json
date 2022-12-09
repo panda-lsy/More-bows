@@ -21,7 +21,7 @@
         "fabric": ">=${fabric_version}",
         "fabricloader": ">=${loader_version}",
         "java": ">=17",
-        "minecraft": "~1.19"
+        "minecraft": "1.19.2"
     },
     "description": "A port of the More Bows mod to 1.7.10 and above! This mod was originally created by GaussFire, and maintained + updated by iDiamondhunter. Ported by NeRd!",
     "entrypoints": {

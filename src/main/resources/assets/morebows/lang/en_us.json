@@ -7,7 +7,7 @@
     "item.morebows.iron_bow": "Iron Bow",
     "item.morebows.multi_bow": "Legia Bow",
     "item.morebows.stone_bow": "Reinforced Bow",
-    "modmenu.summaryTranslation.morebows": "More Bows for 1.19.2 and above!",
+    "modmenu.summaryTranslation.morebows": "More Bows for 1.19.2!",
     "morebows.confBowDamageMult": "Damage multiplier",
     "morebows.confBowDamageMult.tooltip": "The multiplier to the base damage of the bow. Higher is more damage.",
     "morebows.confBowDrawbackDiv": "Drawback divisor",

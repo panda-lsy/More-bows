@@ -1,7 +1,7 @@
 # More Bows: Restrung!
 
 [![CurseForge downloads badge](http://cf.way2muchnoise.eu/full_466902_downloads.svg "CurseForge downloads")](https://www.curseforge.com/minecraft/mc-mods/more-bows-restrung)
-[![Licence badge](https://img.shields.io/github/license/NeRdTheNed/More-bows "Licence")](https://github.com/NeRdTheNed/More-bows/blob/fabric-1.19.x/LICENSE)
+[![Licence badge](https://img.shields.io/github/license/NeRdTheNed/More-bows "Licence")](https://github.com/NeRdTheNed/More-bows/blob/fabric-1.19.2/LICENSE)
 [![Java SE version compatibility badge](https://img.shields.io/badge/Java%20SE-17-orange?logo=java "Java SE version compatibility")](https://en.wikipedia.org/wiki/Java_version_history#Java_17)
 
 <p align="center">
@@ -15,7 +15,7 @@
 
 More Bows: Restrung is a port / continuation of the More Bows mod, which was originally created by GaussFire, and maintained & updated by iDiamondhunter until Risugami's ModLoader was no longer updated. This port aims to faithfully re-create the original mod, while fixing some bugs, introducing some quality-of-life changes, and adding cut ideas.
 
-_This branch of More Bows: Restrung targets Fabric for Minecraft 1.19.x!_
+_This branch of More Bows: Restrung targets Fabric for Minecraft 1.19.2!_
 
 ### Original descriptions of each bow (not currently 100% accurate!):
 
