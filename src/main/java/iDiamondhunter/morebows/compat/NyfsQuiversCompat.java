@@ -15,6 +15,16 @@ import net.minecraft.util.Pair;
 
 /** This is required for Nyf's Quivers compatibility, as arrows are not removed from the quiver without this. */
 public final class NyfsQuiversCompat {
+    private NyfsQuiversCompat () {
+        // Empty private constructor to hide default constructor
+    }
+
+    /**
+     * Remove the given amount of arrows from a quiver
+     *
+     * @param player the player to remove the arrows from
+     * @param amount the amount of arrows to remove
+     */
     public static void drawFromQuiver(PlayerEntity player, int amount) {
         final Optional<TrinketComponent> component = TrinketsApi.getTrinketComponent(player);
 

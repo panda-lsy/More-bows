@@ -287,7 +287,7 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
         if (arrType == ARROW_TYPE_FROST) {
             if (MoreBows.configGeneralInst.frostArrowsShouldBeCold) {
                 if (entityHit instanceof BlazeEntity) {
-                    setDamage(getDamage() * 3);
+                    setDamage(getDamage() * 3.0);
                 }
 
                 entityHit.extinguish();
@@ -297,7 +297,7 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
                 if (!MoreBows.configGeneralInst.oldFrostArrowMobSlowdown) {
                     entityHitLiving.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 300, 2));
                 } else {
-                    entityHitLiving.slowMovement(Blocks.COBWEB.getDefaultState(), new Vec3d(0.25, 0.05f, 0.25));
+                    entityHitLiving.slowMovement(Blocks.COBWEB.getDefaultState(), new Vec3d(0.25, 0.05, 0.25));
                 }
             }
         }

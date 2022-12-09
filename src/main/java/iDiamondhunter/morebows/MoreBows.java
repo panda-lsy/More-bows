@@ -248,7 +248,7 @@ public final class MoreBows implements ModInitializer {
         registerBow(FlameBow, FlameBowName);
         registerBow(FrostBow, FrostBowName);
 
-        if (!MoreBows.configGeneralInst.nyfsQuiversCompatEnabled) {
+        if (!configGeneralInst.nyfsQuiversCompatEnabled) {
             modLog.warn("You have disabled Nyf's Quivers compatibility features. Please don't do this unless More Bows is incompatible with the current version of Nyf's Quivers, as issues with arrows being duplicated happen otherwise.");
         }
 

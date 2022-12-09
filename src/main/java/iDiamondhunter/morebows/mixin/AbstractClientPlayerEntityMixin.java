@@ -44,8 +44,7 @@ public abstract class AbstractClientPlayerEntityMixin extends PlayerEntity {
     @ModifyVariable(method = "getFovMultiplier()F", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;lerp(FFF)F", shift = At.Shift.BEFORE), ordinal = 0)
     private float getFovMultiplierMixin(float finalFov) {
         if (isUsingItem() && getActiveItem().getItem() instanceof final CustomBow bow) {
-            final int itemUseCount = getItemUseTime();
-            float customBow = itemUseCount / bow.powerDiv;
+            float customBow = getItemUseTime() / bow.powerDiv;
 
             if (customBow > 1.0F) {
                 customBow = 1.0F;

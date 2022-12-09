@@ -54,8 +54,9 @@ final class ConfigScreen {
         final BowConfig[] allBows = MoreBows.configBowsInst.getAllBowConfigs();
         final BowConfig[] defaultBows = ConfigBows.getDefaultConfig().getAllBowConfigs();
         final String[] allBowNames = ConfigBows.getBowNames();
+        final int length = allBows.length;
 
-        for (int i = 0; i < allBows.length; i++) {
+        for (int i = 0; i < length; i++) {
             final BowConfig bowConfig = allBows[i];
             final BowConfig defaultBowConfig = defaultBows[i];
             final String bowName = allBowNames[i];

@@ -10,6 +10,9 @@ import net.minecraft.util.Identifier;
 /** The client mod initializer. */
 public final class Client implements ClientModInitializer {
 
+    private static final Identifier PULL = new Identifier("pull");
+    private static final Identifier PULLING = new Identifier("pulling");
+
     /** Client specific mod initialization code. */
     @Override
     public void onInitializeClient() {
@@ -17,8 +20,8 @@ public final class Client implements ClientModInitializer {
         EntityRendererRegistry.register(MoreBows.CUSTOM_ARROW, CustomArrowRenderer::new);
 
         for (final Item bow : MoreBows.getAllItems()) {
-            ModelPredicateProviderRegistry.register(bow, new Identifier("pull"), (stack, world, entity, seed) -> (entity == null ? 0.0F : entity.getActiveItem() != stack ? 0.0F : (stack.getMaxUseTime() - entity.getItemUseTimeLeft()) / ((CustomBow) stack.getItem()).powerDiv));
-            ModelPredicateProviderRegistry.register(bow, new Identifier("pulling"), (stack, world, entity, seed) -> ((entity != null) && entity.isUsingItem() && (entity.getActiveItem() == stack) ? 1.0F : 0.0F));
+            ModelPredicateProviderRegistry.register(bow, PULL, (stack, world, entity, seed) -> (entity == null ? 0.0F : entity.getActiveItem() != stack ? 0.0F : (stack.getMaxUseTime() - entity.getItemUseTimeLeft()) / ((CustomBow) stack.getItem()).powerDiv));
+            ModelPredicateProviderRegistry.register(bow, PULLING, (stack, world, entity, seed) -> ((entity != null) && entity.isUsingItem() && (entity.getActiveItem() == stack) ? 1.0F : 0.0F));
         }
     }
 
