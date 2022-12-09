@@ -29,7 +29,5 @@
     "morebows.confMultiShotAmmo.AlwaysStandardArrows": "Use 1, shoot basic",
     "morebows.confMultiShotAmmo.UseAmountShot": "Use multiple",
     "morebows.confMultiShotAmmo.tooltip": "Changes how multi-shot bows handle shooting additional arrows. Possible options:\nUse 1 arrow, shoot multiple custom arrows\nUse 1 arrow, shoot multiple standard arrows\nUse as many arrows as possible, shoot used arrows",
-    "morebows.confTitle": "More Bows configuration settings",
-    "morebows.curseforge": "CurseForge",
-    "morebows.modrinth": "Modrinth"
+    "morebows.confTitle": "More Bows configuration settings"
 }
