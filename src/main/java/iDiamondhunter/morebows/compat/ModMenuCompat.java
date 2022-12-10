@@ -1,4 +1,4 @@
-package iDiamondhunter.morebows.modmenu;
+package iDiamondhunter.morebows.compat;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;

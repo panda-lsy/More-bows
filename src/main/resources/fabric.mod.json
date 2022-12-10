@@ -12,8 +12,8 @@
     "custom": {
         "modmenu": {
             "links": {
-                "morebows.curseforge": "https://www.curseforge.com/minecraft/mc-mods/more-bows-restrung",
-                "morebows.modrinth": "https://modrinth.com/mod/more-bows-restrung"
+                "modmenu.curseforge": "https://www.curseforge.com/minecraft/mc-mods/more-bows-restrung",
+                "modmenu.modrinth": "https://modrinth.com/mod/more-bows-restrung"
             }
         }
     },
@@ -32,7 +32,7 @@
             "iDiamondhunter.morebows.MoreBows"
         ],
         "modmenu": [
-            "iDiamondhunter.morebows.modmenu.ModMenuCompat"
+            "iDiamondhunter.morebows.compat.ModMenuCompat"
         ]
     },
     "environment": "*",

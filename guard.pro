@@ -10,7 +10,7 @@
 
 # TODO Figure out how to do this but for annotations
 
--adaptclassstrings
+#-adaptclassstrings
 #-adaptresourcefilenames
 #-adaptresourcefilecontents
 
@@ -73,7 +73,24 @@
 -keep public class iDiamondhunter.morebows.mixin.AbstractClientPlayerEntityMixin
 -keep public class iDiamondhunter.morebows.MoreBows
 -keep public class iDiamondhunter.morebows.Client
--keep public class iDiamondhunter.morebows.modmenu.ModMenuCompat
+-keep public class iDiamondhunter.morebows.compat.ModMenuCompat
+
+# Don't obfuscate CustomBow or any entity classes.
+# This does slightly increase the mod's file size, but it might help with mod compatibility.
+
+-keep public class iDiamondhunter.morebows.CustomBow {
+    public protected *;
+}
+
+-keep public class iDiamondhunter.morebows.entities.** {
+    public protected *;
+}
+
+# Airport Wi-fi hotfix
+# TODO fix this properly later
+-keep public class iDiamondhunter.morebows.** {
+    public protected *;
+}
 
 # Needed to prevent ProGuard from changing a method signature
 -optimizations !method/removal/parameter
