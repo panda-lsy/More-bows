@@ -12,7 +12,7 @@
 
 # TODO Figure out how to do this but for annotations
 
--adaptclassstrings
+#-adaptclassstrings
 #-adaptresourcefilenames
 #-adaptresourcefilecontents
 

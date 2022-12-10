@@ -25,6 +25,7 @@ import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.EnumParticleTypes;
@@ -43,6 +44,8 @@ final class CustomBow extends ItemBow {
     private static final ItemStack defaultAmmo = new ItemStack(Items.ARROW);
     private static final ItemArrow defaultArrow = (ItemArrow) Items.ARROW;
 
+    private static final ResourceLocation PULL = new ResourceLocation("pull");
+
     /* Bow instance variables */
     /** The type of arrows this bow shoots. */
     @MagicConstant(intValues = { ARROW_TYPE_NOT_CUSTOM, ARROW_TYPE_ENDER, ARROW_TYPE_FIRE, ARROW_TYPE_FROST })
@@ -60,6 +63,9 @@ final class CustomBow extends ItemBow {
     /** The rarity of the bow. */
     private final @NotNull EnumRarity rarity;
 
+    /** The material that can be used to repair this bow with */
+    private final Ingredient repairIngredient;
+
     /**
      * A more customizable bow than the vanilla one.
      *
@@ -70,15 +76,17 @@ final class CustomBow extends ItemBow {
      * @param multiShot  True if this bow shoots multiple arrows.
      * @param powerDiv   The power divisor of this bow. Influences drawback speed.
      * @param rarity     The rarity of this bow.
+     * @param repairIngredient TODO
      */
-    CustomBow(int maxDamage, @MagicConstant(intValues = {ARROW_TYPE_NOT_CUSTOM, ARROW_TYPE_ENDER, ARROW_TYPE_FIRE, ARROW_TYPE_FROST}) byte bowType, double damageMult, boolean multiShot, float powerDiv, @NotNull EnumRarity rarity) {
+    CustomBow(int maxDamage, @MagicConstant(intValues = {ARROW_TYPE_NOT_CUSTOM, ARROW_TYPE_ENDER, ARROW_TYPE_FIRE, ARROW_TYPE_FROST}) byte bowType, double damageMult, boolean multiShot, float powerDiv, @NotNull EnumRarity rarity, Ingredient repairIngredient) {
         setMaxDamage(maxDamage);
         this.bowType = bowType;
         this.damageMult = damageMult;
         this.multiShot = multiShot;
         this.powerDiv = powerDiv;
         this.rarity = rarity;
-        addPropertyOverride(new ResourceLocation("pull"), (ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) -> (entityIn == null ? 0.0F : (bowMaxUseDuration - entityIn.getItemInUseCount()) / powerDiv));
+        this.repairIngredient = repairIngredient;
+        addPropertyOverride(PULL, (ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) -> (entityIn == null ? 0.0F : (bowMaxUseDuration - entityIn.getItemInUseCount()) / powerDiv));
     }
 
     /** TODO review */
@@ -412,6 +420,11 @@ final class CustomBow extends ItemBow {
                 player.addStat(stat);
             }
         }
+    }
+
+    @Override
+    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
+        return repairIngredient.test(repair) || super.getIsRepairable(toRepair, repair);
     }
 
     /** TODO review */

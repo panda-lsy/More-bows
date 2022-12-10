@@ -16,10 +16,12 @@ import iDiamondhunter.morebows.entities.CustomArrow;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityBlaze;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
@@ -36,6 +38,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.OreIngredient;
 
 /** If you're reading this, I'm very sorry you have to deal with my code. */
 @Mod(dependencies = "required-after:forge@[14.23.5.2816,);", acceptedMinecraftVersions = "[${mcversion}]", acceptableRemoteVersions = "[1.0.2,1.1)", modid = MoreBows.MOD_ID, name = "${modName}", version = "${version}", updateJSON = "https://nerdthened.github.io/More-bows/update.json")
@@ -178,14 +181,20 @@ public class MoreBows {
      */
     static @NotNull Item @NotNull [] getAllItems() {
         if (allItems == null) {
-            DiamondBow = new CustomBow(ConfigBows.DiamondBow.confBowDurability, defaultArrowType, ConfigBows.DiamondBow.confBowDamageMult, false, ConfigBows.DiamondBow.confBowDrawbackDiv, EnumRarity.RARE).setTranslationKey(DiamondBowTransKey).setRegistryName(modSeparator + DiamondBowName);
-            EnderBow = new CustomBow(ConfigBows.EnderBow.confBowDurability, ARROW_TYPE_ENDER, ConfigBows.EnderBow.confBowDamageMult, true, ConfigBows.EnderBow.confBowDrawbackDiv, EnumRarity.EPIC).setTranslationKey(EnderBowTransKey).setRegistryName(modSeparator + EnderBowName);
-            FlameBow = new CustomBow(ConfigBows.FlameBow.confBowDurability, ARROW_TYPE_FIRE, ConfigBows.FlameBow.confBowDamageMult, false, ConfigBows.FlameBow.confBowDrawbackDiv, EnumRarity.UNCOMMON).setTranslationKey(FlameBowTransKey).setRegistryName(modSeparator + FlameBowName);
-            FrostBow = new CustomBow(ConfigBows.FrostBow.confBowDurability, ARROW_TYPE_FROST, ConfigBows.FrostBow.confBowDamageMult, false, ConfigBows.FrostBow.confBowDrawbackDiv, EnumRarity.COMMON).setTranslationKey(FrostBowTransKey).setRegistryName(modSeparator + FrostBowName);
-            GoldBow = new CustomBow(ConfigBows.GoldBow.confBowDurability, defaultArrowType, ConfigBows.GoldBow.confBowDamageMult, false, ConfigBows.GoldBow.confBowDrawbackDiv, EnumRarity.UNCOMMON).setTranslationKey(GoldBowTransKey).setRegistryName(modSeparator + GoldBowName);
-            IronBow = new CustomBow(ConfigBows.IronBow.confBowDurability, defaultArrowType, ConfigBows.IronBow.confBowDamageMult, false, ConfigBows.IronBow.confBowDrawbackDiv, EnumRarity.COMMON).setTranslationKey(IronBowTransKey).setRegistryName(modSeparator + IronBowName);
-            MultiBow = new CustomBow(ConfigBows.MultiBow.confBowDurability, ARROW_TYPE_NOT_CUSTOM, ConfigBows.MultiBow.confBowDamageMult, true, ConfigBows.MultiBow.confBowDrawbackDiv, EnumRarity.RARE).setTranslationKey(MultiBowTransKey).setRegistryName(modSeparator + MultiBowName);
-            StoneBow = new CustomBow(ConfigBows.StoneBow.confBowDurability, defaultArrowType, ConfigBows.StoneBow.confBowDamageMult, false, ConfigBows.StoneBow.confBowDrawbackDiv, EnumRarity.COMMON).setTranslationKey(StoneBowTransKey).setRegistryName(modSeparator + StoneBowName);
+            final Ingredient diamonds = new OreIngredient("gemDiamond");
+            final Ingredient gold = new OreIngredient("ingotGold");
+            final Ingredient enderPearls = new OreIngredient("enderpearl");
+            final Ingredient stone = new OreIngredient("stone");
+            final Ingredient iron = new OreIngredient("ingotIron");
+            final Ingredient ice = Ingredient.fromStacks(new ItemStack(Blocks.ICE, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(Blocks.FROSTED_ICE, 1, OreDictionary.WILDCARD_VALUE), new ItemStack(Blocks.PACKED_ICE, 1, OreDictionary.WILDCARD_VALUE));
+            DiamondBow = new CustomBow(ConfigBows.DiamondBow.confBowDurability, defaultArrowType, ConfigBows.DiamondBow.confBowDamageMult, false, ConfigBows.DiamondBow.confBowDrawbackDiv, EnumRarity.RARE, diamonds).setTranslationKey(DiamondBowTransKey).setRegistryName(modSeparator + DiamondBowName);
+            EnderBow = new CustomBow(ConfigBows.EnderBow.confBowDurability, ARROW_TYPE_ENDER, ConfigBows.EnderBow.confBowDamageMult, true, ConfigBows.EnderBow.confBowDrawbackDiv, EnumRarity.EPIC, enderPearls).setTranslationKey(EnderBowTransKey).setRegistryName(modSeparator + EnderBowName);
+            FlameBow = new CustomBow(ConfigBows.FlameBow.confBowDurability, ARROW_TYPE_FIRE, ConfigBows.FlameBow.confBowDamageMult, false, ConfigBows.FlameBow.confBowDrawbackDiv, EnumRarity.UNCOMMON, gold).setTranslationKey(FlameBowTransKey).setRegistryName(modSeparator + FlameBowName);
+            FrostBow = new CustomBow(ConfigBows.FrostBow.confBowDurability, ARROW_TYPE_FROST, ConfigBows.FrostBow.confBowDamageMult, false, ConfigBows.FrostBow.confBowDrawbackDiv, EnumRarity.COMMON, ice).setTranslationKey(FrostBowTransKey).setRegistryName(modSeparator + FrostBowName);
+            GoldBow = new CustomBow(ConfigBows.GoldBow.confBowDurability, defaultArrowType, ConfigBows.GoldBow.confBowDamageMult, false, ConfigBows.GoldBow.confBowDrawbackDiv, EnumRarity.UNCOMMON, gold).setTranslationKey(GoldBowTransKey).setRegistryName(modSeparator + GoldBowName);
+            IronBow = new CustomBow(ConfigBows.IronBow.confBowDurability, defaultArrowType, ConfigBows.IronBow.confBowDamageMult, false, ConfigBows.IronBow.confBowDrawbackDiv, EnumRarity.COMMON, iron).setTranslationKey(IronBowTransKey).setRegistryName(modSeparator + IronBowName);
+            MultiBow = new CustomBow(ConfigBows.MultiBow.confBowDurability, ARROW_TYPE_NOT_CUSTOM, ConfigBows.MultiBow.confBowDamageMult, true, ConfigBows.MultiBow.confBowDrawbackDiv, EnumRarity.RARE, iron).setTranslationKey(MultiBowTransKey).setRegistryName(modSeparator + MultiBowName);
+            StoneBow = new CustomBow(ConfigBows.StoneBow.confBowDurability, defaultArrowType, ConfigBows.StoneBow.confBowDamageMult, false, ConfigBows.StoneBow.confBowDrawbackDiv, EnumRarity.COMMON, stone).setTranslationKey(StoneBowTransKey).setRegistryName(modSeparator + StoneBowName);
             allItems = new Item[] { DiamondBow, EnderBow, FlameBow, FrostBow, GoldBow, IronBow, MultiBow, StoneBow };
         }
 
