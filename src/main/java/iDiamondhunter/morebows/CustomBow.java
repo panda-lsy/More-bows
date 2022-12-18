@@ -318,7 +318,9 @@ public final class CustomBow extends BowItem {
                             final @Nullable Entity arrOwner = arr.getOwner();
 
                             if ((i > 0) && (arrOwner != null)) {
-                                final double negate = ((i & 1) << 1) - 1;
+                                // This is probably slightly faster than ((i & 1) << 1) - 1 based on brief tests.
+                                // TODO proper benchmarks
+                                final double negate = ~((i << (Integer.SIZE - 1)) >> (Integer.SIZE - 2));
                                 final double newPosX = arr.getX() + ((arrOwner.getYaw() / 180.0) * negate);
                                 arr.refreshPositionAndAngles(newPosX, arr.getY(), arr.getZ(), arr.getYaw(), arr.getPitch());
                             }
