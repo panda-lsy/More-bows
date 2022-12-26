@@ -13,7 +13,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath ('com.anatawa12.forge:ForgeGradle:1.2-1.0.+') {
+        classpath ('com.anatawa12.forge:ForgeGradle:1.2-1.1.+') {
             changing = true
         }
         classpath 'com.guardsquare:proguard-gradle:7.2.2'
@@ -26,23 +26,13 @@ plugins {
 }
 
 // Reproducible builds! https://docs.gradle.org/4.9/userguide/working_with_files.html#sec:reproducible_archives
-tasks.withType(AbstractArchiveTask) {
+tasks.withType(AbstractArchiveTask).configureEach {
     preserveFileTimestamps = false
     reproducibleFileOrder = true
 }
 
 apply plugin: 'java'
 apply plugin: 'forge'
-
-// TODO Re-add compilation with the Java 7 toolchain, removed due to build issues
-
-/*
-// To use Java toolchains, sourceCompatibility & targetCompatibility need to be not set.
-// ForgeGradle sets these previously to build some Forge internals, as it targets Gradle 4.X and above.
-// This workaround sets them back to null. As this is a hack, any issues caused by this are my fault.
-sourceCompatibility = null
-targetCompatibility = null
-*/
 
 // Defines a Java 7 compatible JDK. Java 6 would be ideal, but it isn't usable on my computer anymore :(
 // This is used to get properties requiring a reference to a JDK (rt.jar etc).
@@ -51,7 +41,6 @@ def compiler = javaToolchains.compilerFor {
     languageVersion = JavaLanguageVersion.of(7)
 }
 
-/*
 // Tells Gradle to use the previously defined Java 7 compatible JDK.
 java {
     toolchain {
@@ -63,12 +52,6 @@ java {
 tasks.withType(JavaCompile).configureEach {
     javaCompiler = compiler
 }
-*/
-
-// TODO Remove once the above is fixed
-
-sourceCompatibility = 5
-targetCompatibility = 5
 
 import groovy.json.JsonSlurper
 import groovy.json.JsonOutput
@@ -110,7 +93,7 @@ processResources {
     }
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     // Ensures that the encoding of source files is set to UTF-8, see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
     options.encoding = "UTF-8"
 }
@@ -131,7 +114,7 @@ task unmappedJar(type: Jar) {
 task proguard(dependsOn: unmappedJar, type: proguard.gradle.ProGuardTask) {
     verbose
 
-    // Use the non-remapped .jar as the input file, because ForgeGradle has a convient task to map it to obfuscate Minecraft class names for us when we're done optimising it
+    // Use the non-remapped .jar as the input file, because ForgeGradle has a convenient task to map it to obfuscate Minecraft class names for us when we're done optimising it
     injars "build/libs/" + rootProject.name + "-" + version + "-unmapped.jar"
     outjars "build/libs/" + rootProject.name + "-" + version + ".jar"
 
