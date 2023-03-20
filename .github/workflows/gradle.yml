@@ -36,7 +36,7 @@ jobs:
           gradle-version: wrapper
           cache-read-only: ${{ github.ref != 'refs/heads/fabric-1.19.x' && github.ref != 'refs/heads/forge-1.12.2' && github.ref != 'refs/heads/forge-1.7.10' }}
           arguments: build --scan --stacktrace --warning-mode all
-      - name: Submit dependencies to Dependabot
+      - name: Submit dependencies to GitHub
         uses: mikepenz/gradle-dependency-submission@v0.8.5
       - name: Rezip mod .jar files to remove directory entries
         run: bash removeDirectoryEntries.sh
