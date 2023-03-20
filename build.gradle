@@ -16,7 +16,7 @@ buildscript {
         dependencies {
             classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
         }
-        classpath 'com.guardsquare:proguard-gradle:7.2.2'
+        classpath 'com.guardsquare:proguard-gradle:7.3.2'
     }
 }
 
@@ -105,20 +105,20 @@ dependencies {
     minecraft "net.minecraftforge:forge:${project.forge_version}"
 
     // NullAway
-    annotationProcessor "com.uber.nullaway:nullaway:0.10.3"
+    annotationProcessor "com.uber.nullaway:nullaway:0.10.10"
 
     // JetBrains null annotations
-    compileOnly "org.jetbrains:annotations:23.0.0"
-    proguardHack "org.jetbrains:annotations:23.0.0"
+    compileOnly "org.jetbrains:annotations:24.0.1"
+    proguardHack "org.jetbrains:annotations:24.0.1"
 
     // SpotBugs annotations
     compileOnly "com.github.spotbugs:spotbugs-annotations:4.7.3"
     proguardHack "com.github.spotbugs:spotbugs-annotations:4.7.3"
 
     // Error Prone
-    errorprone "com.google.errorprone:error_prone_core:2.16"
-    compileOnly "com.google.errorprone:error_prone_annotations:2.16"
-    proguardHack "com.google.errorprone:error_prone_annotations:2.16"
+    errorprone "com.google.errorprone:error_prone_core:2.18.0"
+    compileOnly "com.google.errorprone:error_prone_annotations:2.18.0"
+    proguardHack "com.google.errorprone:error_prone_annotations:2.18.0"
 }
 
 jar.finalizedBy('reobfJar')
