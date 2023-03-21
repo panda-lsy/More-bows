@@ -17,7 +17,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 /** This entity is a custom arrow. A large portion of logic around these arrows is handled in the MoreBows class with SubscribeEvents. */
 public final class CustomArrow extends EntityArrow implements IEntityAdditionalSpawnData {
@@ -158,9 +157,9 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
                 /** Responsible for adding snow layers on top the block the arrow hits, or "freezing" the water it's in by setting the block to ice. */
                 if (inTicks == 64) {
                     final int floorPosX = MathHelper.floor_double(posX);
-                    final int floorPosY = MathHelper.floor_double(posY);
+                    int floorPosY = MathHelper.floor_double(posY);
                     final int floorPosZ = MathHelper.floor_double(posZ);
-                    final Block inBlock = worldObj.getBlock(floorPosX, floorPosY, floorPosZ);
+                    Block inBlock = worldObj.getBlock(floorPosX, floorPosY, floorPosZ);
 
                     /*
                      * If this arrow is inside an air block, and there is a block underneath it with a solid surface, place a snow layer on top of that block.
@@ -168,21 +167,28 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
                      * If this arrow is inside water, replace the water with ice.
                      */
 
-                    if ((inBlock == Blocks.air) && worldObj.getBlock(floorPosX, floorPosY - 1, floorPosZ).isSideSolid(worldObj, floorPosX, floorPosY - 1, floorPosZ, ForgeDirection.UP)) {
+                    if (inBlock.isAir(worldObj, floorPosX, floorPosY, floorPosZ) && Blocks.snow_layer.canPlaceBlockAt(worldObj, floorPosX, floorPosY, floorPosZ)) {
                         worldObj.setBlock(floorPosX, floorPosY, floorPosZ, Blocks.snow_layer);
-                    } else if (inBlock == Blocks.snow_layer) {
-                        final int layerMeta = worldObj.getBlockMetadata(floorPosX, floorPosY, floorPosZ);
-                        final int currentSnowLevel = layerMeta & 7;
-
-                        if ((currentSnowLevel <= 6) && worldObj.checkNoEntityCollision(inBlock.getCollisionBoundingBoxFromPool(worldObj, floorPosX, floorPosY, floorPosZ))) {
-                            worldObj.setBlockMetadataWithNotify(floorPosX, floorPosY, floorPosZ, (currentSnowLevel + 1) | (layerMeta & -8), 2);
-                        }
                     } else if (inBlock == Blocks.water) {
                         /*
                          * TODO Check if the earlier event or this one is the correct one.
                          * Also: bouncy arrow on ice, a bit like stone skimming? Could be cool.
                          */
                         worldObj.setBlock(floorPosX, floorPosY, floorPosZ, Blocks.ice);
+                    } else if (inBlock == Blocks.snow_layer) {
+                        int layerMeta = 0;
+                        int currentSnowLevel = 7;
+
+                        for (int upCount = 0; (upCount < 1024) && (inBlock == Blocks.snow_layer) && ((currentSnowLevel = (layerMeta = worldObj.getBlockMetadata(floorPosX, floorPosY, floorPosZ)) & 7) >= 7); upCount++) {
+                            floorPosY++;
+                            inBlock = worldObj.getBlock(floorPosX, floorPosY, floorPosZ);
+                        }
+
+                        if (currentSnowLevel <= 6) {
+                            worldObj.setBlockMetadataWithNotify(floorPosX, floorPosY, floorPosZ, (currentSnowLevel + 1) | (layerMeta & -8), 2);
+                        } else if (inBlock.isAir(worldObj, floorPosX, floorPosY, floorPosZ) && Blocks.snow_layer.canPlaceBlockAt(worldObj, floorPosX, floorPosY, floorPosZ)) {
+                            worldObj.setBlock(floorPosX, floorPosY, floorPosZ, Blocks.snow_layer);
+                        }
                     }
                 }
 
