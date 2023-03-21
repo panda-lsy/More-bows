@@ -34,13 +34,8 @@ public final class CustomBow extends ItemBow {
     /* Bow instance variables */
     private final byte bowType;
     private final double damageMult;
-    /**
-     * The amount of time it takes to switch bow icons when the bow is being drawn back.
-     * TODO This is not a great solution.
-     */
-    public final byte[] iconTimes;
     private final boolean multiShot;
-    private final float powerDiv;
+    final float powerDiv;
     private final EnumRarity rarity;
 
     /* Icon related variables */
@@ -53,22 +48,20 @@ public final class CustomBow extends ItemBow {
      * @param maxDamage  The maximum damage a bow can do.
      * @param bowType    The type of arrows this bow shoots. This also influences behaviors of the bow as well.
      * @param damageMult The multiplier to damage done by an arrow shot by this bow.
-     * @param iconTimes  The amount of time it takes to switch bow icons when the bow is being drawn back. TODO This is not a great solution.
      * @param multiShot  A dirty, dirty hack, indicating if this bow shoots multiple arrows or not.
      * @param powerDiv   The power divisor of this bow. TODO document better.
      * @param rarity     The rarity of this bow.
      */
-    public CustomBow(int maxDamage, byte bowType, double damageMult, byte[] iconTimes, boolean multiShot, float powerDiv, EnumRarity rarity) {
+    public CustomBow(int maxDamage, byte bowType, double damageMult, boolean multiShot, float powerDiv, EnumRarity rarity) {
         setMaxDamage(maxDamage);
         this.bowType = bowType;
         this.damageMult = damageMult;
-        this.iconTimes = iconTimes;
         this.multiShot = multiShot;
         this.powerDiv = powerDiv;
         this.rarity = rarity;
     }
 
-    /** This returns the bow sprite for a given duration of drawing the bow back. TODO This is still a bit janky. Remove this message when you're certain this is a good way to do it. */
+    /** This returns the bow sprite for a given duration of drawing the bow back. */
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(ItemStack stack, int i, EntityPlayer player, ItemStack useItem, int useRem) {
@@ -76,13 +69,13 @@ public final class CustomBow extends ItemBow {
             return itemIcon;
         }
 
-        useRem = bowMaxUseDuration - useRem;
+        final float pull = (bowMaxUseDuration - useRem) / powerDiv;
 
-        if (useRem >= iconTimes[0]) {
+        if (pull >= 0.9) {
             return icons[2];
         }
 
-        if (useRem > iconTimes[1]) {
+        if (pull > 0.65) {
             return icons[1];
         }
 

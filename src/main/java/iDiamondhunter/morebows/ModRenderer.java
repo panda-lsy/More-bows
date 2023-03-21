@@ -82,11 +82,7 @@ public final class ModRenderer extends RenderEntity implements IItemRenderer {
                 GL11.glRotatef(-8.0F, 1.0F, 0.0F, 0.0F);
                 GL11.glTranslatef(-0.9F, 0.2F, 0.0F);
                 final float ticks = bowMaxUseDuration - ((useTicks - partialTicks) + 1.0F);
-                /**
-                 * In the normal first person renderer, this is hardcoded to be "float divTicks = ticks / 20.0F".
-                 * See iDiamondhunter.morebows.Client.fov for why this is used instead.
-                 */
-                float divTicks = ticks / (((CustomBow) stack.getItem()).iconTimes[0] * 1.1F);
+                float divTicks = ticks / ((CustomBow) stack.getItem()).powerDiv;
                 divTicks = ((divTicks * divTicks) + (divTicks * 2.0F)) / 3.0F;
 
                 if (divTicks > 1.0F) {
