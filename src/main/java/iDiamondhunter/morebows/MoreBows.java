@@ -27,6 +27,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.oredict.OreDictionary;
@@ -35,6 +36,32 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 /** If you're reading this, I'm very sorry you have to deal with my code. */
 @Mod(modid = MoreBows.MOD_ID, guiFactory = "iDiamondhunter.morebows.Client" /* Note: Forge likes to complain if there isn't something assigned to the "version" property when loading. It should get overwritten by the actual version in the mcmod.info file. */)
 public class MoreBows {
+    /** Data class for bow stats. */
+    public static final class BowConfig {
+
+        /** The configured bow durability. */
+        final int confBowDurability;
+
+        /** The configured bow damage multiplier. */
+        final double confBowDamageMult;
+
+        /** The configured bow drawback divisor. */
+        final float confBowDrawbackDiv;
+
+        /**
+         * Creates configuration settings for a bow.
+         *
+         * @param confBowDurability  The default bow durability.
+         * @param confBowDamageMult  The default bow damage multiplier.
+         * @param confBowDrawbackDiv The default bow drawback divisor.
+         */
+        BowConfig(int confBowDurability, double confBowDamageMult, float confBowDrawbackDiv) {
+            this.confBowDurability = confBowDurability;
+            this.confBowDamageMult = confBowDamageMult;
+            this.confBowDrawbackDiv = confBowDrawbackDiv;
+        }
+
+    }
 
     /** The mod ID of More Bows */
     public static final String MOD_ID = "MoreBows";
@@ -54,7 +81,7 @@ public class MoreBows {
     public static Logger modLog;
 
     /** MoreBows config */
-    public static Configuration config;
+    private static Configuration config;
     /** MoreBows config setting: If true, frost arrows extinguish fire from Entities that are on fire. If false, frost arrows can be on fire. */
     public static boolean frostArrowsShouldBeCold;
     /** MoreBows config setting: If true, frost arrows slow Entities down by pretending to have set them in a web for one tick. If false, frost arrows apply the slowness potion effect on hit. */
@@ -102,6 +129,17 @@ public class MoreBows {
     private static final String MultiBowName = "MultiBow";
     private static final String StoneBowName = "StoneBow";
 
+    static final String[] BowNames = {
+        DiamondBowName,
+        EnderBowName,
+        FlameBowName,
+        FrostBowName,
+        GoldBowName,
+        IronBowName,
+        MultiBowName,
+        StoneBowName
+    };
+
     /* Default values for bow construction */
     /** Default values for bow construction: the default damage multiplier. */
     private static final double noDamageMult = 1.0D;
@@ -110,22 +148,115 @@ public class MoreBows {
     /** Default values for bow construction: the default type of arrow a bow shoots. */
     private static final byte defaultArrowType = ARROW_TYPE_NOT_CUSTOM;
 
+    /* Bow stats. */
+
+    private static final BowConfig[] DefaultBowConfigs = {
+        /** Diamond bow stats. */
+        new BowConfig(1016, 2.25, 6.0F),
+
+        /** Ender bow stats. */
+        new BowConfig(215, noDamageMult, 22.0F),
+
+        /** Flame bow stats. */
+        new BowConfig(576, 2.0, 15.0F),
+
+        /** Frost bow stats. */
+        new BowConfig(550, noDamageMult, 26.0F),
+
+        /** Gold bow stats. */
+        new BowConfig(68, 2.5, 6.0F),
+
+        /** Iron bow stats. */
+        new BowConfig(550, 1.5, 17.0F),
+
+        /** Multi bow stats. */
+        new BowConfig(550, noDamageMult, 13.0F),
+
+        /** Stone bow stats. */
+        new BowConfig(484, 1.15, defaultPowerDiv)
+    };
+
+    private static final BowConfig[] BowConfigs = new BowConfig[DefaultBowConfigs.length];
+
     /* Bow items. */
-    protected static final Item DiamondBow = new CustomBow(1016, defaultArrowType, 2.25D, false, 6.0F, EnumRarity.rare).setUnlocalizedName(DiamondBowName).setTextureName(modSeparator + DiamondBowName);
-    protected static final Item EnderBow = new CustomBow(215, ARROW_TYPE_ENDER, noDamageMult, true, 22.0F, EnumRarity.epic).setUnlocalizedName(EnderBowName).setTextureName(modSeparator + EnderBowName);
-    protected static final Item FlameBow = new CustomBow(576, ARROW_TYPE_FIRE, 2.0D, false, 15.0F, EnumRarity.uncommon).setUnlocalizedName(FlameBowName).setTextureName(modSeparator + FlameBowName);
-    protected static final Item FrostBow = new CustomBow(550, ARROW_TYPE_FROST, noDamageMult, false, 26.0F, EnumRarity.common).setUnlocalizedName(FrostBowName).setTextureName(modSeparator + FrostBowName);
-    protected static final Item GoldBow = new CustomBow(68, defaultArrowType, 2.5D, false, 6.0F, EnumRarity.uncommon).setUnlocalizedName(GoldBowName).setTextureName(modSeparator + GoldBowName);
-    protected static final Item IronBow = new CustomBow(550, defaultArrowType, 1.5D, false, 17.0F, EnumRarity.common).setUnlocalizedName(IronBowName).setTextureName(modSeparator + IronBowName);
-    protected static final Item MultiBow = new CustomBow(550, ARROW_TYPE_NOT_CUSTOM, noDamageMult, true, 13.0F, EnumRarity.rare).setUnlocalizedName(MultiBowName).setTextureName(modSeparator + MultiBowName);
-    protected static final Item StoneBow = new CustomBow(484, defaultArrowType, 1.15D, false, defaultPowerDiv, EnumRarity.common).setUnlocalizedName(StoneBowName).setTextureName(modSeparator + StoneBowName);
+    protected static Item DiamondBow;
+    protected static Item EnderBow;
+    protected static Item FlameBow;
+    protected static Item FrostBow;
+    protected static Item GoldBow;
+    protected static Item IronBow;
+    protected static Item MultiBow;
+    protected static Item StoneBow;
+
+    private static Item[] allItems;
+
+    private static Item[] getAllItems() {
+        if (allItems == null) {
+            DiamondBow = new CustomBow(BowConfigs[0].confBowDurability, defaultArrowType, BowConfigs[0].confBowDamageMult, false, BowConfigs[0].confBowDrawbackDiv, EnumRarity.rare).setUnlocalizedName(DiamondBowName).setTextureName(modSeparator + DiamondBowName);
+            EnderBow = new CustomBow(BowConfigs[1].confBowDurability, ARROW_TYPE_ENDER, BowConfigs[1].confBowDamageMult, true, BowConfigs[1].confBowDrawbackDiv, EnumRarity.epic).setUnlocalizedName(EnderBowName).setTextureName(modSeparator + EnderBowName);
+            FlameBow = new CustomBow(BowConfigs[2].confBowDurability, ARROW_TYPE_FIRE, BowConfigs[2].confBowDamageMult, false, BowConfigs[2].confBowDrawbackDiv, EnumRarity.uncommon).setUnlocalizedName(FlameBowName).setTextureName(modSeparator + FlameBowName);
+            FrostBow = new CustomBow(BowConfigs[3].confBowDurability, ARROW_TYPE_FROST, BowConfigs[3].confBowDamageMult, false, BowConfigs[3].confBowDrawbackDiv, EnumRarity.common).setUnlocalizedName(FrostBowName).setTextureName(modSeparator + FrostBowName);
+            GoldBow = new CustomBow(BowConfigs[4].confBowDurability, defaultArrowType, BowConfigs[4].confBowDamageMult, false, BowConfigs[4].confBowDrawbackDiv, EnumRarity.uncommon).setUnlocalizedName(GoldBowName).setTextureName(modSeparator + GoldBowName);
+            IronBow = new CustomBow(BowConfigs[5].confBowDurability, defaultArrowType, BowConfigs[5].confBowDamageMult, false, BowConfigs[5].confBowDrawbackDiv, EnumRarity.common).setUnlocalizedName(IronBowName).setTextureName(modSeparator + IronBowName);
+            MultiBow = new CustomBow(BowConfigs[6].confBowDurability, ARROW_TYPE_NOT_CUSTOM, BowConfigs[6].confBowDamageMult, true, BowConfigs[6].confBowDrawbackDiv, EnumRarity.rare).setUnlocalizedName(MultiBowName).setTextureName(modSeparator + MultiBowName);
+            StoneBow = new CustomBow(BowConfigs[7].confBowDurability, defaultArrowType, BowConfigs[7].confBowDamageMult, false, BowConfigs[7].confBowDrawbackDiv, EnumRarity.common).setUnlocalizedName(StoneBowName).setTextureName(modSeparator + StoneBowName);
+            allItems = new Item[] { DiamondBow, EnderBow, FlameBow, FrostBow, GoldBow, IronBow, MultiBow, StoneBow };
+        }
+
+        return allItems;
+    }
+
+    private static final String confCatBows = "bows";
+
+    static Property getFrostArrowsShouldBeColdProp() {
+        return config.get(Configuration.CATEGORY_GENERAL, "frostArrowsShouldBeCold", true);
+    }
+
+    static Property getOldFrostArrowMobSlowdownProp() {
+        return config.get(Configuration.CATEGORY_GENERAL, "oldFrostArrowMobSlowdown", false);
+    }
+
+    static Property getOldFrostArrowRenderingProp() {
+        return config.get(Configuration.CATEGORY_GENERAL, "oldFrostArrowRendering", false);
+    }
+
+    static Property getUseAmmoForShotArrowsProp() {
+        return config.get(Configuration.CATEGORY_GENERAL, "useAmmoForShotArrows", false);
+    }
+
+    static Property getConfBowDamageMultProp(String bowName, int i) {
+        return config.get(confCatBows + "." + bowName, "confBowDamageMult", DefaultBowConfigs[i].confBowDamageMult);
+    }
+
+    static Property getConfBowDurabilityProp(String bowName, int i) {
+        return config.get(confCatBows + "." + bowName, "confBowDurability", DefaultBowConfigs[i].confBowDurability);
+    }
+
+    static Property getConfBowDrawbackDivProp(String bowName, int i) {
+        return config.get(confCatBows + "." + bowName, "confBowDrawbackDiv", DefaultBowConfigs[i].confBowDrawbackDiv);
+    }
 
     /** This method syncs the config file with the Configuration, as well as syncing any config related variables. */
-    private static final void conf() {
-        frostArrowsShouldBeCold = config.get(Configuration.CATEGORY_GENERAL, "frostArrowsShouldBeCold", true).getBoolean();
-        oldFrostArrowMobSlowdown = config.get(Configuration.CATEGORY_GENERAL, "oldFrostArrowMobSlowdown", false).getBoolean();
-        oldFrostArrowRendering = config.get(Configuration.CATEGORY_GENERAL, "oldFrostArrowRendering", false).getBoolean();
-        useAmmoForShotArrows = config.get(Configuration.CATEGORY_GENERAL, "useAmmoForShotArrows", false).getBoolean();
+    private static void conf() {
+        frostArrowsShouldBeCold = getFrostArrowsShouldBeColdProp().getBoolean();
+        oldFrostArrowMobSlowdown = getOldFrostArrowMobSlowdownProp().getBoolean();
+        oldFrostArrowRendering = getOldFrostArrowRenderingProp().getBoolean();
+        useAmmoForShotArrows = getUseAmmoForShotArrowsProp().getBoolean();
+        final int length = BowNames.length;
+
+        for (int i = 0; i < length; i++) {
+            final String bowName = BowNames[i];
+            final Property confBowDurabilityProp = getConfBowDurabilityProp(bowName, i);
+            final Property confBowDamageMultProp = getConfBowDamageMultProp(bowName, i);
+            final Property confBowDrawbackDivProp = getConfBowDrawbackDivProp(bowName, i);
+
+            if (confBowDurabilityProp.isDefault() && confBowDamageMultProp.isDefault() && confBowDrawbackDivProp.isDefault()) {
+                BowConfigs[i] = DefaultBowConfigs[i];
+            } else {
+                BowConfigs[i] = new BowConfig(confBowDurabilityProp.getInt(), confBowDamageMultProp.getDouble(), (float) confBowDrawbackDivProp.getDouble());
+            }
+        }
+
         config.save();
     }
 
@@ -267,6 +398,7 @@ public class MoreBows {
 
     /** This method registers all mod content for a given side. Server side, it registers items, recipes, and entities. Client side, it also registers custom renderers. */
     protected void register() {
+        getAllItems();
         /* Item registration */
         GameRegistry.registerItem(DiamondBow, DiamondBowName);
         GameRegistry.registerItem(EnderBow, EnderBowName);

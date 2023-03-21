@@ -1,22 +1,25 @@
 package iDiamondhunter.morebows;
 
-import static net.minecraftforge.common.config.Configuration.CATEGORY_GENERAL;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import cpw.mods.fml.client.IModGuiFactory;
+import cpw.mods.fml.client.config.DummyConfigElement.DummyCategoryElement;
 import cpw.mods.fml.client.config.GuiConfig;
+import cpw.mods.fml.client.config.IConfigElement;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.RenderTickEvent;
 import iDiamondhunter.morebows.entities.CustomArrow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.resources.I18n;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent.Pre;
-import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.ConfigElement;
+import net.minecraftforge.common.config.Property;
 
 /**
  * Handles almost all general client side only code. Client is also the client proxy.
@@ -32,28 +35,40 @@ public final class Client extends MoreBows implements IModGuiFactory {
      * TODO see if this can be removed.
      */
     public static final class Config extends GuiConfig {
-        /**
-         * Returns a new Config with all child elements of whatever's in the default config category.
-         * This might break in the future, at which point something like this should be implemented:
-         *
-         * <pre>
-         * {@code
-         * private static String[] wantedProperties = new String[] { "oldFrostArrowRendering" };
-         *
-         * private static List<IConfigElement> getConfigElements() {
-         *     final List<IConfigElement> list = new ArrayList<IConfigElement>();
-         *     for (final String propName : wantedProperties) {
-         *         list.add(new ConfigElement<Boolean>(MoreBows.config.get(Configuration.CATEGORY_GENERAL, propName, false)));
-         *     }
-         *     return list;
-         * }
-         * }
-         * </pre>
-         *
-         * @param g the previous screen.
-         */
         public Config(GuiScreen g) {
-            super(g, new ConfigElement<ConfigCategory>(MoreBows.config.getCategory(CATEGORY_GENERAL)).getChildElements(), MOD_ID, false, false, /* GuiConfig.getAbridgedConfigPath(MoreBows.config.toString()) */ MOD_ID);
+            super(g, getConfigElements(), MOD_ID, false, false, I18n.format("morebows.confTitle"));
+        }
+
+        @SuppressWarnings({ "rawtypes", "unchecked" })
+        private static List<IConfigElement> getConfigElements() {
+            final List<IConfigElement> list = new ArrayList<IConfigElement>();
+            final List<IConfigElement<DummyCategoryElement>> bowConfs = new ArrayList<IConfigElement<DummyCategoryElement>>();
+            final int length = BowNames.length;
+
+            for (int i = 0; i < length; i++) {
+                final List<IConfigElement> bowConf = new ArrayList<IConfigElement>();
+                final String bowName = BowNames[i];
+                final String transKey = "item." + bowName + ".name";
+                final Property confBowDamageMultProp = getConfBowDamageMultProp(bowName, i);
+                final Property confBowDurabilityProp = getConfBowDurabilityProp(bowName, i);
+                final Property confBowDrawbackDivProp = getConfBowDrawbackDivProp(bowName, i);
+                confBowDamageMultProp.setRequiresMcRestart(true);
+                confBowDurabilityProp.setRequiresMcRestart(true);
+                confBowDrawbackDivProp.setRequiresMcRestart(true);
+                bowConf.add(new ConfigElement(confBowDamageMultProp));
+                bowConf.add(new ConfigElement(confBowDurabilityProp));
+                bowConf.add(new ConfigElement(confBowDrawbackDivProp));
+                bowConfs.add(new DummyCategoryElement<DummyCategoryElement>(bowName, transKey, bowConf));
+            }
+
+            list.add(new DummyCategoryElement("confCatBowList", "confCatBow", bowConfs));
+            final List<IConfigElement> generalSettings = new ArrayList<IConfigElement>();
+            generalSettings.add(new ConfigElement<Boolean>(getFrostArrowsShouldBeColdProp()));
+            generalSettings.add(new ConfigElement<Boolean>(getOldFrostArrowMobSlowdownProp()));
+            generalSettings.add(new ConfigElement<Boolean>(getOldFrostArrowRenderingProp()));
+            generalSettings.add(new ConfigElement<Boolean>(getUseAmmoForShotArrowsProp()));
+            list.add(new DummyCategoryElement("confCatGenList", "confCatGen", generalSettings));
+            return list;
         }
     }
 
@@ -138,20 +153,5 @@ public final class Client extends MoreBows implements IModGuiFactory {
     public Set<RuntimeOptionCategoryElement> runtimeGuiCategories() {
         return null;
     }
-
-    /**
-     * TODO Possibly implement something like this but more compatible.
-     *
-     * <pre>
-     * {@code
-     * {@literal @}SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
-     * public void guiChange(GuiOpenEvent event) {
-     *     if (event.gui instanceof GuiIngameModOptions) {
-     *         event.gui = new Config(null);
-     *     }
-     * }
-     * }
-     * </pre>
-     */
 
 }
