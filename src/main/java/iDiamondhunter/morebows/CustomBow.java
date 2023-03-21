@@ -145,7 +145,7 @@ public final class CustomBow extends ItemBow {
             if (bowType == ARROW_TYPE_ENDER) { // Ender bow
                 arrs = new EntityArrow[] {
                     new CustomArrow(world, player, shotVelocity * 2.0F, ARROW_TYPE_ENDER),
-                    new CustomArrow(world, player, shotVelocity * 1F, ARROW_TYPE_ENDER),
+                    new CustomArrow(world, player, shotVelocity * 1.0F, ARROW_TYPE_ENDER),
                     new CustomArrow(world, player, shotVelocity * 1.2F, ARROW_TYPE_ENDER),
                     new CustomArrow(world, player, shotVelocity * 1.5F, ARROW_TYPE_ENDER),
                     new CustomArrow(world, player, shotVelocity * 1.75F, ARROW_TYPE_ENDER),
