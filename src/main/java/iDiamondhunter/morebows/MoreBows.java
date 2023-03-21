@@ -300,8 +300,8 @@ public class MoreBows {
         OreDictionary.registerOre("snowball", Items.snowball);
         OreDictionary.registerOre("string", Items.string);
         /* Entity registration */
-        EntityRegistry.registerModEntity(ArrowSpawner.class, "ArrowSpawner", 1, MoreBows.inst, /** As the player can never see an ArrowSpawner and all of the logic for it is handled server-side, there's no reason to send any tracking updates. */ -1, Integer.MAX_VALUE, false);
-        EntityRegistry.registerModEntity(CustomArrow.class, "CustomArrow", 2, MoreBows.inst, 64, 20, true);
+        EntityRegistry.registerModEntity(ArrowSpawner.class, "ArrowSpawner", 1, inst, /** As the player can never see an ArrowSpawner and all the logic for it is handled server-side, there's no reason to send any tracking updates. */ -1, Integer.MAX_VALUE, false);
+        EntityRegistry.registerModEntity(CustomArrow.class, "CustomArrow", 2, inst, 64, 20, true);
     }
 
 }
