@@ -1,5 +1,7 @@
 package iDiamondhunter.morebows;
 
+import org.apache.logging.log4j.Logger;
+
 import cpw.mods.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
@@ -47,6 +49,9 @@ public class MoreBows {
     /** Mod proxy. TODO This is super janky, see if it's possible to remove this */
     @SidedProxy(clientSide = "iDiamondhunter.morebows.Client", serverSide = "iDiamondhunter.morebows.MoreBows")
     private static MoreBows proxy;
+
+    /** The mod log. */
+    public static Logger modLog;
 
     /** MoreBows config */
     public static Configuration config;
@@ -248,6 +253,7 @@ public class MoreBows {
      */
     @EventHandler
     public final void init(FMLPreInitializationEvent event) {
+        modLog = event.getModLog();
         config = new Configuration(event.getSuggestedConfigurationFile());
         conf();
         proxy.register();
