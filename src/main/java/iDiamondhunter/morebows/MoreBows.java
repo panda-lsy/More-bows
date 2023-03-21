@@ -61,6 +61,8 @@ public class MoreBows {
     public static boolean oldFrostArrowMobSlowdown;
     /** MoreBows config setting: If true, render frost arrows as snow cubes. If false, render as snowballs. */
     public static boolean oldFrostArrowRendering;
+    /** MoreBows config setting: If true, use as many arrows as possible, and shoot used arrows. If false, use 1 arrow, and shoot multiple arrows. */
+    public static boolean useAmmoForShotArrows;
 
     /*
      * Hardcoded magic numbers, because Enums (as they're classes) require a large amount of file space, and I'm targeting 64kb as the compiled .jar size.
@@ -123,6 +125,7 @@ public class MoreBows {
         frostArrowsShouldBeCold = config.get(Configuration.CATEGORY_GENERAL, "frostArrowsShouldBeCold", true).getBoolean();
         oldFrostArrowMobSlowdown = config.get(Configuration.CATEGORY_GENERAL, "oldFrostArrowMobSlowdown", false).getBoolean();
         oldFrostArrowRendering = config.get(Configuration.CATEGORY_GENERAL, "oldFrostArrowRendering", false).getBoolean();
+        useAmmoForShotArrows = config.get(Configuration.CATEGORY_GENERAL, "useAmmoForShotArrows", false).getBoolean();
         config.save();
     }
 

@@ -12,3 +12,5 @@ oldFrostArrowMobSlowdown.tooltip=If this is enabled, frost arrows will slow Enti
 oldFrostArrowMobSlowdown=Old frost arrow mob slowdown
 oldFrostArrowRendering.tooltip=If this is enabled, frost arrows will render as cubes.
 oldFrostArrowRendering=Old frost arrow rendering
+useAmmoForShotArrows.tooltip=Changes how multi-shot bows handle shooting additional arrows. If this is enabled, use as many arrows as possible, and shoot used arrows. If this is disabled, use 1 arrow, and shoot multiple arrows.
+useAmmoForShotArrows=Use ammo for the amount of shot arrows

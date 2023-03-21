@@ -131,40 +131,120 @@ public final class CustomBow extends ItemBow {
 
         /** Flag to indicate that the player is in Creative mode or has infinity on this bow */
         final boolean infiniteArrows = player.capabilities.isCreativeMode || (EnchantmentHelper.getEnchantmentLevel(Enchantment.infinity.effectId, stack) > 0);
+        ItemStack ammo = null;
+        int ammoSlot = -1;
+
+        if (player.inventory.hasItem(Items.arrow)) {
+            final int length = player.inventory.mainInventory.length;
+
+            for (int i = 0; i < length; ++i) {
+                if ((player.inventory.mainInventory[i] != null) && (player.inventory.mainInventory[i].getItem() == Items.arrow)) {
+                    ammo = player.inventory.mainInventory[i];
+                    ammoSlot = i;
+                    break;
+                }
+            }
+        }
+
+        if (ammo == null) {
+            ammo = new ItemStack(Items.arrow, 64);
+        }
+
+        final int ammoCount = infiniteArrows ? 64 : ammo.stackSize;
+        final int usedAmmo;
+        final int shotArrows;
+        final int maxAmmo;
+
+        if (multiShot) {
+            if (bowType == ARROW_TYPE_ENDER) {
+                maxAmmo = 6;
+            } else {
+                maxAmmo = !world.isRemote && (itemRand.nextInt(4) == 0) ? 3 : 2;
+            }
+        } else {
+            maxAmmo = 1;
+        }
+
+        if (MoreBows.useAmmoForShotArrows) {
+            usedAmmo = ammoCount > maxAmmo ? maxAmmo : ammoCount;
+            shotArrows = usedAmmo;
+        } else {
+            usedAmmo = 1;
+            shotArrows = maxAmmo;
+        }
+
         final EntityArrow[] arrs;
 
         // Create the arrows to fire
         if (multiShot) { // Bows that shoot multiple arrows
-            if (bowType == ARROW_TYPE_ENDER) { // Ender bow
-                arrs = new EntityArrow[] {
-                    new CustomArrow(world, player, shotVelocity * 2.0F, ARROW_TYPE_ENDER),
-                    new CustomArrow(world, player, shotVelocity * 1.0F, ARROW_TYPE_ENDER),
-                    new CustomArrow(world, player, shotVelocity * 1.2F, ARROW_TYPE_ENDER),
-                    new CustomArrow(world, player, shotVelocity * 1.5F, ARROW_TYPE_ENDER),
-                    new CustomArrow(world, player, shotVelocity * 1.75F, ARROW_TYPE_ENDER),
-                    new CustomArrow(world, player, shotVelocity * 1.825F, ARROW_TYPE_ENDER)
-                };
-                arrs[1].canBePickedUp = 2;
-                arrs[2].canBePickedUp = 2;
-                arrs[3].canBePickedUp = 2;
-                arrs[4].canBePickedUp = 2;
-                arrs[5].canBePickedUp = 2;
-            } else {
-                if (itemRand.nextInt(4) == 0) { // Multi bow
-                    arrs = new EntityArrow[] {
-                        new EntityArrow(world, player, shotVelocity * 2.0F),
-                        new EntityArrow(world, player, shotVelocity * 1.65F),
-                        new EntityArrow(world, player, shotVelocity * 1.275F)
-                    };
-                    arrs[2].canBePickedUp = 2;
-                } else {
-                    arrs = new EntityArrow[] {
-                        new EntityArrow(world, player, shotVelocity * 2.0F),
-                        new EntityArrow(world, player, shotVelocity * 1.65F)
-                    };
-                }
+            final int pickupStatus = (MoreBows.useAmmoForShotArrows) && !infiniteArrows ? 1 : 2;
 
-                arrs[1].canBePickedUp = 2;
+            if (bowType == ARROW_TYPE_ENDER) { // Ender bow
+                arrs = new EntityArrow[shotArrows];
+
+                for (int i = 0; i < shotArrows; ++i) {
+                    final float velocityChoice;
+
+                    switch (i) {
+                    case 1:
+                        velocityChoice = shotVelocity * 1.0F;
+                        break;
+
+                    case 2:
+                        velocityChoice = shotVelocity * 1.2F;
+                        break;
+
+                    case 3:
+                        velocityChoice = shotVelocity * 1.5F;
+                        break;
+
+                    case 4:
+                        velocityChoice = shotVelocity * 1.75F;
+                        break;
+
+                    case 5:
+                        velocityChoice = shotVelocity * 1.825F;
+                        break;
+
+                    default:
+                        velocityChoice = shotVelocity * 2.0F;
+                        break;
+                    }
+
+                    if (i > 0) {
+                        arrs[i] = new CustomArrow(world, player, velocityChoice, ARROW_TYPE_ENDER);
+                        arrs[i].canBePickedUp = pickupStatus;
+                    } else {
+                        arrs[i] = new CustomArrow(world, player, velocityChoice, ARROW_TYPE_ENDER);
+                    }
+                }
+            } else {
+                arrs = new EntityArrow[shotArrows];
+
+                for (int i = 0; i < shotArrows; ++i) {
+                    final float velocityChoice;
+
+                    switch (i) {
+                    case 1:
+                        velocityChoice = shotVelocity * 1.65F;
+                        break;
+
+                    case 2:
+                        velocityChoice = shotVelocity * 1.275F;
+                        break;
+
+                    default:
+                        velocityChoice = shotVelocity * 2.0F;
+                        break;
+                    }
+
+                    if (i > 0) {
+                        arrs[i] = new EntityArrow(world, player, velocityChoice);
+                        arrs[i].canBePickedUp = pickupStatus;
+                    } else {
+                        arrs[i] = new EntityArrow(world, player, velocityChoice);
+                    }
+                }
             }
         } else if (bowType == ARROW_TYPE_NOT_CUSTOM) { // "Standard" style bows that do not shoot multiple arrows or have a custom arrow type. Note to self: this is after the multi-arrow bows due to the multi bow having arrows of a normal type.
             arrs = new EntityArrow[] { new EntityArrow(world, player, shotVelocity * 2.0F) };
@@ -210,7 +290,11 @@ public final class CustomBow extends ItemBow {
         }
 
         if (!infiniteArrows) {
-            player.inventory.consumeInventoryItem(Items.arrow);
+            ammo.stackSize -= usedAmmo;
+
+            if ((ammo.stackSize <= 0) && (ammoSlot >= 0)) {
+                player.inventory.mainInventory[ammoSlot] = null;
+            }
         }
 
         stack.damageItem(1, player);
@@ -221,40 +305,31 @@ public final class CustomBow extends ItemBow {
                 if (bowType == ARROW_TYPE_ENDER) { // Ender bow
                     world.spawnEntityInWorld(new ArrowSpawner(world, player.posX, player.posY, player.posZ, shotVelocity, arrs));
                 } else { // Multi bow
-                    world.spawnEntityInWorld(arrs[0]);
-                    world.spawnEntityInWorld(arrs[1]);
-                    /**
-                     * This was some code that checked the rotationYaw of the shooting player, but didn't change anything.
-                     * TODO figure out which is supposed to be changed and to what
-                     *
-                     * <pre>
-                     * if (arrs[1].shootingEntity.rotationYaw > 180) {
-                     *     arrs[1].posX = arrs[1].posX + (arrs[1].shootingEntity.rotationYaw / 180);
-                     * } else {
-                     *     arrs[1].posX = arrs[1].posX + (arrs[1].shootingEntity.rotationYaw / 180);
-                     * }
-                     * </pre>
-                     */
-                    arrs[1].posX = arrs[1].posX + (arrs[1].shootingEntity.rotationYaw / 180.0F);
-                    arrs[0].setDamage(arrs[0].getDamage() * 1.5D);
-                    arrs[1].setDamage(arrs[1].getDamage() * 1.3D);
+                    for (int i = 0; i < shotArrows; ++i) {
+                        final EntityArrow arr = arrs[i];
+                        world.spawnEntityInWorld(arr);
+                        final double damageMultiChoice;
 
-                    if (arrs.length > 2) {
-                        world.spawnEntityInWorld(arrs[2]);
-                        /**
-                         * This was some code that checked the rotationYaw of the shooting player, but didn't change anything.
-                         * TODO figure out which is supposed to be changed and to what
-                         *
-                         * <pre>
-                         * if (arrs[2].shootingEntity.rotationYaw > 180) {
-                         *     arrs[2].posX = arrs[2].posX - (arrs[2].shootingEntity.rotationYaw / 180);
-                         * } else {
-                         *     arrs[2].posX = arrs[2].posX - (arrs[2].shootingEntity.rotationYaw / 180);
-                         * }
-                         * </pre>
-                         */
-                        arrs[2].posX = arrs[2].posX - (arrs[2].shootingEntity.rotationYaw / 180.0F);
-                        arrs[2].setDamage(arrs[2].getDamage() * 1.15D);
+                        switch (i) {
+                        case 1:
+                            damageMultiChoice = 1.3;
+                            break;
+
+                        case 2:
+                            damageMultiChoice = 1.15;
+                            break;
+
+                        default:
+                            damageMultiChoice = 1.5;
+                            break;
+                        }
+
+                        if ((i > 0) && (arr.shootingEntity != null)) {
+                            final double negate = ((i & 1) << 1) - 1;
+                            arr.posX += (arr.shootingEntity.rotationYaw / 180.0) * negate;
+                        }
+
+                        arr.setDamage(arr.getDamage() * damageMultiChoice);
                     }
                 }
             } else { // Other bows
@@ -267,9 +342,12 @@ public final class CustomBow extends ItemBow {
         // Play the "bow shot" sound
         if (multiShot && (bowType != ARROW_TYPE_ENDER)) { // Multi bow
             world.playSoundAtEntity(player, "random.bow", 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
-            world.playSoundEffect(player.posX + (player.rotationYaw / 180.0F), player.posY, player.posZ, "random.bow", 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
 
-            if (arrs.length > 2) {
+            if (shotArrows > 1) {
+                world.playSoundEffect(player.posX + (player.rotationYaw / 180.0F), player.posY, player.posZ, "random.bow", 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
+            }
+
+            if (shotArrows > 2) {
                 world.playSoundEffect(player.posX - (player.rotationYaw / 180.0F), player.posY, player.posZ, "random.bow", 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
             }
         } else { // Other bows
