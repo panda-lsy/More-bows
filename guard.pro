@@ -51,7 +51,7 @@
 
 #-keepattributes RuntimeVisibleAnnotations,Signature
 #-keepattributes RuntimeVisibleAnnotations,RuntimeInvisibleAnnotations,Signature
--keepattributes *Annotation*
+-keepattributes RuntimeVisibleAnnotations,RuntimeInvisibleAnnotations,RuntimeVisibleParameterAnnotations
 
 # Repackage all classes into iDiamondhunter.morebows
 
