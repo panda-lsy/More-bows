@@ -192,14 +192,20 @@ public class MoreBows {
 
     private static Item[] getAllItems() {
         if (allItems == null) {
-            DiamondBow = new CustomBow(BowConfigs[0].confBowDurability, defaultArrowType, BowConfigs[0].confBowDamageMult, false, BowConfigs[0].confBowDrawbackDiv, EnumRarity.rare).setUnlocalizedName(DiamondBowName).setTextureName(modSeparator + DiamondBowName);
-            EnderBow = new CustomBow(BowConfigs[1].confBowDurability, ARROW_TYPE_ENDER, BowConfigs[1].confBowDamageMult, true, BowConfigs[1].confBowDrawbackDiv, EnumRarity.epic).setUnlocalizedName(EnderBowName).setTextureName(modSeparator + EnderBowName);
-            FlameBow = new CustomBow(BowConfigs[2].confBowDurability, ARROW_TYPE_FIRE, BowConfigs[2].confBowDamageMult, false, BowConfigs[2].confBowDrawbackDiv, EnumRarity.uncommon).setUnlocalizedName(FlameBowName).setTextureName(modSeparator + FlameBowName);
-            FrostBow = new CustomBow(BowConfigs[3].confBowDurability, ARROW_TYPE_FROST, BowConfigs[3].confBowDamageMult, false, BowConfigs[3].confBowDrawbackDiv, EnumRarity.common).setUnlocalizedName(FrostBowName).setTextureName(modSeparator + FrostBowName);
-            GoldBow = new CustomBow(BowConfigs[4].confBowDurability, defaultArrowType, BowConfigs[4].confBowDamageMult, false, BowConfigs[4].confBowDrawbackDiv, EnumRarity.uncommon).setUnlocalizedName(GoldBowName).setTextureName(modSeparator + GoldBowName);
-            IronBow = new CustomBow(BowConfigs[5].confBowDurability, defaultArrowType, BowConfigs[5].confBowDamageMult, false, BowConfigs[5].confBowDrawbackDiv, EnumRarity.common).setUnlocalizedName(IronBowName).setTextureName(modSeparator + IronBowName);
-            MultiBow = new CustomBow(BowConfigs[6].confBowDurability, ARROW_TYPE_NOT_CUSTOM, BowConfigs[6].confBowDamageMult, true, BowConfigs[6].confBowDrawbackDiv, EnumRarity.rare).setUnlocalizedName(MultiBowName).setTextureName(modSeparator + MultiBowName);
-            StoneBow = new CustomBow(BowConfigs[7].confBowDurability, defaultArrowType, BowConfigs[7].confBowDamageMult, false, BowConfigs[7].confBowDrawbackDiv, EnumRarity.common).setUnlocalizedName(StoneBowName).setTextureName(modSeparator + StoneBowName);
+            final ItemStack diamonds = new ItemStack(Items.diamond, 1, net.minecraftforge.oredict.OreDictionary.WILDCARD_VALUE);
+            final ItemStack gold = new ItemStack(Items.gold_ingot, 1, net.minecraftforge.oredict.OreDictionary.WILDCARD_VALUE);
+            final ItemStack enderPearls = new ItemStack(Items.ender_pearl, 1, net.minecraftforge.oredict.OreDictionary.WILDCARD_VALUE);
+            final ItemStack stone = new ItemStack(Item.getItemFromBlock(Blocks.stone), 1, net.minecraftforge.oredict.OreDictionary.WILDCARD_VALUE);
+            final ItemStack iron = new ItemStack(Items.iron_ingot, 1, net.minecraftforge.oredict.OreDictionary.WILDCARD_VALUE);
+            final ItemStack ice = new ItemStack(Item.getItemFromBlock(Blocks.ice), 1, net.minecraftforge.oredict.OreDictionary.WILDCARD_VALUE);
+            DiamondBow = new CustomBow(BowConfigs[0].confBowDurability, defaultArrowType, BowConfigs[0].confBowDamageMult, false, BowConfigs[0].confBowDrawbackDiv, EnumRarity.rare, diamonds).setUnlocalizedName(DiamondBowName).setTextureName(modSeparator + DiamondBowName);
+            EnderBow = new CustomBow(BowConfigs[1].confBowDurability, ARROW_TYPE_ENDER, BowConfigs[1].confBowDamageMult, true, BowConfigs[1].confBowDrawbackDiv, EnumRarity.epic, enderPearls).setUnlocalizedName(EnderBowName).setTextureName(modSeparator + EnderBowName);
+            FlameBow = new CustomBow(BowConfigs[2].confBowDurability, ARROW_TYPE_FIRE, BowConfigs[2].confBowDamageMult, false, BowConfigs[2].confBowDrawbackDiv, EnumRarity.uncommon, gold).setUnlocalizedName(FlameBowName).setTextureName(modSeparator + FlameBowName);
+            FrostBow = new CustomBow(BowConfigs[3].confBowDurability, ARROW_TYPE_FROST, BowConfigs[3].confBowDamageMult, false, BowConfigs[3].confBowDrawbackDiv, EnumRarity.common, ice).setUnlocalizedName(FrostBowName).setTextureName(modSeparator + FrostBowName);
+            GoldBow = new CustomBow(BowConfigs[4].confBowDurability, defaultArrowType, BowConfigs[4].confBowDamageMult, false, BowConfigs[4].confBowDrawbackDiv, EnumRarity.uncommon, gold).setUnlocalizedName(GoldBowName).setTextureName(modSeparator + GoldBowName);
+            IronBow = new CustomBow(BowConfigs[5].confBowDurability, defaultArrowType, BowConfigs[5].confBowDamageMult, false, BowConfigs[5].confBowDrawbackDiv, EnumRarity.common, iron).setUnlocalizedName(IronBowName).setTextureName(modSeparator + IronBowName);
+            MultiBow = new CustomBow(BowConfigs[6].confBowDurability, ARROW_TYPE_NOT_CUSTOM, BowConfigs[6].confBowDamageMult, true, BowConfigs[6].confBowDrawbackDiv, EnumRarity.rare, iron).setUnlocalizedName(MultiBowName).setTextureName(modSeparator + MultiBowName);
+            StoneBow = new CustomBow(BowConfigs[7].confBowDurability, defaultArrowType, BowConfigs[7].confBowDamageMult, false, BowConfigs[7].confBowDrawbackDiv, EnumRarity.common, stone).setUnlocalizedName(StoneBowName).setTextureName(modSeparator + StoneBowName);
             allItems = new Item[] { DiamondBow, EnderBow, FlameBow, FrostBow, GoldBow, IronBow, MultiBow, StoneBow };
         }
 

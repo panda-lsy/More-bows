@@ -24,6 +24,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
+import net.minecraftforge.oredict.OreDictionary;
 
 /**
  * This entire class is a huge hack. I'm ashamed of myself. And yes, this is important to document.
@@ -37,6 +38,7 @@ public final class CustomBow extends ItemBow {
     private final boolean multiShot;
     final float powerDiv;
     private final EnumRarity rarity;
+    private final ItemStack repairIngredient;
 
     /* Icon related variables */
     @SideOnly(Side.CLIENT)
@@ -51,14 +53,16 @@ public final class CustomBow extends ItemBow {
      * @param multiShot  A dirty, dirty hack, indicating if this bow shoots multiple arrows or not.
      * @param powerDiv   The power divisor of this bow. TODO document better.
      * @param rarity     The rarity of this bow.
+     * @param repairIngredient TODO
      */
-    public CustomBow(int maxDamage, byte bowType, double damageMult, boolean multiShot, float powerDiv, EnumRarity rarity) {
+    public CustomBow(int maxDamage, byte bowType, double damageMult, boolean multiShot, float powerDiv, EnumRarity rarity, ItemStack repairIngredient) {
         setMaxDamage(maxDamage);
         this.bowType = bowType;
         this.damageMult = damageMult;
         this.multiShot = multiShot;
         this.powerDiv = powerDiv;
         this.rarity = rarity;
+        this.repairIngredient = repairIngredient;
     }
 
     /** This returns the bow sprite for a given duration of drawing the bow back. */
@@ -80,6 +84,11 @@ public final class CustomBow extends ItemBow {
         }
 
         return icons[0];
+    }
+
+    @Override
+    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
+        return OreDictionary.itemMatches(repairIngredient, repair, false) || super.getIsRepairable(toRepair, repair);
     }
 
     /** EnumAction.none is returned, as the bow is rendered by a custom IItemRenderer which effectively applies a tweaked version of EnumAction.bow. See ModRenderer. */
