@@ -21,7 +21,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.IItemRenderer;
 
 /**
- * This class is comprised of two parts: an entity renderer that renders CustomArrow Entities, and an IItemRenderer for the CustomBow item.
+ * This class consists of two parts: an entity renderer that renders CustomArrow Entities, and an IItemRenderer for the CustomBow item.
  * CustomArrow rendering:
  * If the CustomArrow is of type FROST, it renders as a snowball, or a default Entity cube depending on the value of MoreBows.oldFrostArrowRendering.
  * If it's not of type FROST, it renders as an arrow.
@@ -33,8 +33,8 @@ import net.minecraftforge.client.IItemRenderer;
 public final class ModRenderer extends RenderEntity implements IItemRenderer {
 
     /** Not sure if this is a super cursed hack, of if it's actually the best way to do this... */
-    private final static Render arrow = RenderManager.instance.getEntityClassRenderObject(EntityArrow.class);
-    private final static Render snow = RenderManager.instance.getEntityClassRenderObject(EntitySnowball.class);
+    private static final Render arrow = RenderManager.instance.getEntityClassRenderObject(EntityArrow.class);
+    private static final Render snow = RenderManager.instance.getEntityClassRenderObject(EntitySnowball.class);
 
     @Override
     public void doRender(Entity e, double a, double b, double c, float d, float f) {
@@ -56,7 +56,7 @@ public final class ModRenderer extends RenderEntity implements IItemRenderer {
     /**
      * This method is mainly responsible for transforming the CustomBow before rendering occurs.
      * This handles two cases:
-     * - First person player rendering ("draw back" animation, bow shake, perspective transformation etc)
+     * - First person player rendering ("draw back" animation, bow shake, perspective transformation etc.)
      * - Any entity that holds a bow (moving the bow to the right position in the hands of the Entity)
      */
     public void renderItem(ItemRenderType type, ItemStack stack, Object... data) {
@@ -109,7 +109,7 @@ public final class ModRenderer extends RenderEntity implements IItemRenderer {
                 GL11.glTranslatef(0.0F, 0.5F, 0.0F);
                 /** Probably relative scaling for FOV reasons */
                 // GL11.glScalef(1.0F, 1.0F, tickFOV);
-                GL11.glScalef(1.0F, 1.0F, (1.0F + (divTicks * 0.2F)));
+                GL11.glScalef(1.0F, 1.0F, 1.0F + (divTicks * 0.2F));
                 /** Does it look like I know what I'm doing to you? */
                 GL11.glTranslatef(0.0F, -0.5F, 0.0F);
                 GL11.glRotatef(50.0F, 0.0F, 1.0F, 0.0F);
@@ -121,7 +121,7 @@ public final class ModRenderer extends RenderEntity implements IItemRenderer {
              * Minecraft is hardcoded to only do this for items which are equal to the bow item, so we have to do it manually.
              */
             /* Checks if the entity we're rendering our bow with is a witch */
-            final boolean isWitch = (entity instanceof EntityWitch);
+            final boolean isWitch = entity instanceof EntityWitch;
 
             // final float scale = 3.0F - (1.0F / 3.0F); // a more precise representation of 1 / 0.375F, or 2.6666667F
             if (isWitch) {

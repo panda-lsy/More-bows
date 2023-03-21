@@ -99,7 +99,7 @@ public class MoreBows {
     /// ** Default values for bow construction: the default speed at which icons change. */
     // private static final byte[] defaultIconTimes = { 18, 13 };
     /** Default values for bow construction: the default damage multiplier. */
-    private static final double noDamageMult = 1D;
+    private static final double noDamageMult = 1.0D;
     /** Default values for bow construction: the default power divisor (TODO document better) */
     private static final float defaultPowerDiv = 20.0F;
     /** Default values for bow construction: the default type of arrow a bow shoots. */
@@ -148,9 +148,9 @@ public class MoreBows {
                 yDisp = 0.5D + (world.rand.nextFloat() * entity.height);
                 zDisp = (world.rand.nextFloat() * entity.width * 2.0F) - entity.width;
             } else {
-                xDisp = 0;
+                xDisp = 0.0;
                 yDisp = 0.5D;
-                zDisp = 0;
+                zDisp = 0.0;
             }
 
             ((WorldServer) world).func_147487_a(part, entity.posX, entity.posY, entity.posZ, 1, xDisp, yDisp, zDisp, velocity);
@@ -164,7 +164,7 @@ public class MoreBows {
      */
     @SubscribeEvent
     public final void arrHit(LivingAttackEvent event) {
-        if ((!event.entity.worldObj.isRemote) && (event.source.getSourceOfDamage() instanceof CustomArrow)) {
+        if (!event.entity.worldObj.isRemote && (event.source.getSourceOfDamage() instanceof CustomArrow)) {
             final CustomArrow arr = (CustomArrow) event.source.getSourceOfDamage();
             final String part;
             final int amount;
@@ -176,16 +176,11 @@ public class MoreBows {
                 part = "portal";
                 amount = 3;
                 randDisp = true;
-                velocity = 1;
+                velocity = 1.0;
                 break;
 
             case ARROW_TYPE_FIRE:
-                if (arr.isBurning()) {
-                    part = "flame";
-                } else {
-                    part = "smoke";
-                }
-
+                part = arr.isBurning() ? "flame" : "smoke";
                 amount = 5;
                 randDisp = true;
                 velocity = 0.05;
@@ -202,7 +197,7 @@ public class MoreBows {
                 part = "depthsuspend";
                 amount = 20;
                 randDisp = true;
-                velocity = 0;
+                velocity = 0.0;
                 break;
             }
 
@@ -222,7 +217,7 @@ public class MoreBows {
         if ((event.source.getSourceOfDamage() instanceof CustomArrow) && (((CustomArrow) event.source.getSourceOfDamage()).type == ARROW_TYPE_FROST)) {
             if (frostArrowsShouldBeCold) {
                 if (event.entityLiving instanceof EntityBlaze) {
-                    event.ammount *= 3;
+                    event.ammount *= 3.0F;
                 }
 
                 event.entity.extinguish();

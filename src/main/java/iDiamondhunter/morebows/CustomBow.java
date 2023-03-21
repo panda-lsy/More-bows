@@ -51,7 +51,7 @@ public final class CustomBow extends ItemBow {
      * A more customizable bow than the vanilla one.
      *
      * @param maxDamage  The maximum damage a bow can do.
-     * @param bowType    The type of arrows this bow shoots. This also influences some of the behaviors of the bow as well.
+     * @param bowType    The type of arrows this bow shoots. This also influences behaviors of the bow as well.
      * @param damageMult The multiplier to damage done by an arrow shot by this bow.
      * @param iconTimes  The amount of time it takes to switch bow icons when the bow is being drawn back. TODO This is not a great solution.
      * @param multiShot  A dirty, dirty hack, indicating if this bow shoots multiple arrows or not.
@@ -100,11 +100,11 @@ public final class CustomBow extends ItemBow {
         return rarity;
     }
 
-    /** This method creates particles when left clicking with an ender bow. */
+    /** This method creates particles when left-clicking with an ender bow. */
     @Override
     public boolean onEntitySwing(EntityLivingBase player, ItemStack stack) {
         if (bowType == ARROW_TYPE_ENDER) {
-            MoreBows.tryPart(player.worldObj, player, "portal", true, 1);
+            MoreBows.tryPart(player.worldObj, player, "portal", true, 1.0);
         }
 
         return false;
@@ -113,7 +113,7 @@ public final class CustomBow extends ItemBow {
     /** This handles the process of shooting an arrow from this bow. TODO Cleanup, document more */
     @Override
     public void onPlayerStoppedUsing(ItemStack stack, World world, EntityPlayer player, int useRem) {
-        final ArrowLooseEvent event = new ArrowLooseEvent(player, stack, (bowMaxUseDuration - useRem));
+        final ArrowLooseEvent event = new ArrowLooseEvent(player, stack, bowMaxUseDuration - useRem);
         MinecraftForge.EVENT_BUS.post(event);
 
         if (event.isCanceled()) {
@@ -186,10 +186,11 @@ public final class CustomBow extends ItemBow {
         // Set up flags for adding enchantment effects / other modifiers
         final int power = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, stack);
         final int knockback = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, stack);
-        final boolean flame = (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack) > 0);
-
+        final boolean flame = EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack) > 0;
         // Add enchantment effects / other modifiers to each arrow
-        for (int i = 0; i < arrs.length; ++i) {
+        final int arrsLength = arrs.length;
+
+        for (int i = 0; i < arrsLength; ++i) {
             if (isCrit) { /* setIsCritical calls dataWatcher methods, avoid calling it unless needed. */
                 arrs[i].setIsCritical(true);
             }
@@ -241,7 +242,7 @@ public final class CustomBow extends ItemBow {
                      * }
                      * </pre>
                      */
-                    arrs[1].posX = arrs[1].posX + (arrs[1].shootingEntity.rotationYaw / 180);
+                    arrs[1].posX = arrs[1].posX + (arrs[1].shootingEntity.rotationYaw / 180.0F);
                     arrs[0].setDamage(arrs[0].getDamage() * 1.5D);
                     arrs[1].setDamage(arrs[1].getDamage() * 1.3D);
 
@@ -259,12 +260,12 @@ public final class CustomBow extends ItemBow {
                          * }
                          * </pre>
                          */
-                        arrs[2].posX = arrs[2].posX - (arrs[2].shootingEntity.rotationYaw / 180);
+                        arrs[2].posX = arrs[2].posX - (arrs[2].shootingEntity.rotationYaw / 180.0F);
                         arrs[2].setDamage(arrs[2].getDamage() * 1.15D);
                     }
                 }
             } else { // Other bows
-                for (int i = 0; i < arrs.length; ++i) {
+                for (int i = 0; i < arrsLength; ++i) {
                     world.spawnEntityInWorld(arrs[i]);
                 }
             }
@@ -273,10 +274,10 @@ public final class CustomBow extends ItemBow {
         // Play the "bow shot" sound
         if (multiShot && (bowType != ARROW_TYPE_ENDER)) { // Multi bow
             world.playSoundAtEntity(player, "random.bow", 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
-            world.playSoundEffect(player.posX + (player.rotationYaw / 180), player.posY, player.posZ, "random.bow", 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
+            world.playSoundEffect(player.posX + (player.rotationYaw / 180.0F), player.posY, player.posZ, "random.bow", 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
 
             if (arrs.length > 2) {
-                world.playSoundEffect(player.posX - (player.rotationYaw / 180), player.posY, player.posZ, "random.bow", 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
+                world.playSoundEffect(player.posX - (player.rotationYaw / 180.0F), player.posY, player.posZ, "random.bow", 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
             }
         } else { // Other bows
             world.playSoundAtEntity(player, "random.bow", 1.0F, (1.0F / ((itemRand.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
@@ -290,8 +291,9 @@ public final class CustomBow extends ItemBow {
         itemIcon = iconReg.registerIcon(getIconString() + "1"); // redo with off-by-one error fixed
         // this.iconArray = new IIcon[this.bowPullIconNameArray.length];
         icons = new IIcon[3];
+        final int length = icons.length;
 
-        for (int i = 0; i < icons.length; ++i) {
+        for (int i = 0; i < length; ++i) {
             // this.iconArray[i] = iconRegistry.registerIcon(this.getIconString() + "_" + this.bowPullIconNameArray[i]);
             icons[i] = iconReg.registerIcon(getIconString() + (i + 2)); // awful hack, icons start from 2 here
             // this.iconArray[i] = iconRegistry.registerIcon(this.bowPullIconNameArray[i]);

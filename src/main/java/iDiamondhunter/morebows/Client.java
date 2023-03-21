@@ -61,7 +61,7 @@ public final class Client extends MoreBows implements IModGuiFactory {
      * Hack used by ModRenderer. This value is set to the partialTicks of a RenderHandEvent.
      * This value is needed by ModRenderer to render the bow!
      */
-    public static float partialTicks = 0;
+    public static float partialTicks;
 
     /**
      * Poses the arms of a player when drawing back a CustomBow, displaying the "bow aiming" animation.

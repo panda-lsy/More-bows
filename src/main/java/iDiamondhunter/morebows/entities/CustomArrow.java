@@ -95,7 +95,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
     @Override
     @SideOnly(Side.CLIENT)
     public boolean getIsCritical() {
-        return type == ARROW_TYPE_FROST ? false : super.getIsCritical();
+        return (type != ARROW_TYPE_FROST) && super.getIsCritical();
         /**
          * Obviously, you're just a bad shot :D
          * This is a hack to prevent the vanilla crit particles from displaying for frost arrows, so that they can have a custom particle trail.
@@ -117,7 +117,7 @@ public final class CustomArrow extends EntityArrow implements IEntityAdditionalS
 
             /**
              * Hack to determine when the arrow has hit the ground. inGround is a private field.
-             * Access transformers can be used for this, but they're are annoying to deal with and they aren't always safe.
+             * Access transformers can be used for this, but they're annoying to deal with, and they aren't always safe.
              * However, instead we can take advantage of the fact that arrowShake is always set to 7 after an arrow has hit the ground.
              * inTicks is used to store this information.
              */
