@@ -6,7 +6,7 @@ for file in ./build/libs/*.jar
 do
   unzip "$file" -d ./build/libs/temp
   rm "$file"
-  for jsonFile in ./build/libs/temp/**.json
+  find ./build/libs/temp/ \( -iname '*.json' -o -iname '*.info' \) -type f -print0 | while IFS= read -r -d $'\0' jsonFile
   do
     if [[ "$OSTYPE" == "darwin"* ]]; then
       if ! command -v gsed &> /dev/null
