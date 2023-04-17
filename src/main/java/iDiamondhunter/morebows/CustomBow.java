@@ -126,7 +126,7 @@ public final class CustomBow extends BowItem {
         }
 
         final boolean alwaysShoots = player.getAbilities().creativeMode || (EnchantmentHelper.getLevel(Enchantments.INFINITY, stack) > 0);
-        ItemStack ammo = player.getArrowType(stack);
+        ItemStack ammo = player.getProjectileType(stack);
 
         if (!ammo.isEmpty() || alwaysShoots) {
             if (ammo.isEmpty()) {
