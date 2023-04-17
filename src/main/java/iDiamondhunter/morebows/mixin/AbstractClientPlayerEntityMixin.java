@@ -23,7 +23,6 @@ public abstract class AbstractClientPlayerEntityMixin extends PlayerEntity {
      *
      * @param world       the world
      * @param gameProfile the profile
-     * @param publicKey   the public key
      * @deprecated Why are you calling this? It's a mixin.
      */
     @SuppressWarnings("unused")
