@@ -15,7 +15,7 @@ buildscript {
 
 plugins {
     id 'java-library'
-    id 'fabric-loom' version '1.0-SNAPSHOT'
+    id 'fabric-loom' version '1.1-SNAPSHOT'
     id 'maven-publish'
     id 'net.ltgt.errorprone' version '3.0.1'
     id 'com.github.spotbugs' version '5.0.14'
@@ -107,6 +107,12 @@ dependencies {
     // Error Prone
     errorprone "com.google.errorprone:error_prone_core:2.18.0"
     compileOnly "com.google.errorprone:error_prone_annotations:2.18.0"
+
+    // Components API, needed for Nyf's Quivers compatibility
+    modCompileOnly("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.components_api_version}") {
+        exclude(group: "net.fabricmc.fabric-api")
+        exclude(group: "net.fabricmc")
+    }
 
     // Trinkets API, needed for Nyf's Quivers compatibility
     modCompileOnly("dev.emi:trinkets:${project.trinkets_version}") {
@@ -203,8 +209,6 @@ task remapProguardJar(dependsOn: proguard, type: RemapJarTask) {
     outputs.upToDateWhen { false }
     inputFile.fileValue(proguard.outputs.files.singleFile)
 }
-
-prepareRemapProguardJar.dependsOn(proguard)
 
 java {
     // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
