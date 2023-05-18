@@ -374,7 +374,7 @@ public final class CustomBow extends BowItem {
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         if (bowType == ARROW_TYPE_ENDER) {
-            MoreBows.tryPart(user.world, user, ParticleTypes.PORTAL, true, 1.0);
+            MoreBows.tryPart(world, user, ParticleTypes.PORTAL, true, 1.0);
         }
 
         return super.use(world, user, hand);

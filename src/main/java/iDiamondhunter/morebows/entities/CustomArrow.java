@@ -173,7 +173,7 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
             final double motionZ = currentVelocity.z;
 
             for (int i = 0; i < 4; ++i) {
-                world.addParticle(ParticleTypes.SPLASH, getX() + ((motionX * i) / 4.0), getY() + ((motionY * i) / 4.0), getZ() + ((motionZ * i) / 4.0), -motionX, -motionY + 0.2, -motionZ);
+                getWorld().addParticle(ParticleTypes.SPLASH, getX() + ((motionX * i) / 4.0), getY() + ((motionY * i) / 4.0), getZ() + ((motionZ * i) / 4.0), -motionX, -motionY + 0.2, -motionZ);
             }
         }
 
@@ -195,14 +195,14 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
                  * Shrinks the size of the frost arrow if it's in the ground,
                  * and the mod is in old rendering mode.
                  */
-                if (firstBlockHit && world.isClient && MoreBows.configGeneralInst.oldFrostArrowRendering) {
+                if (firstBlockHit && getWorld().isClient && MoreBows.configGeneralInst.oldFrostArrowRendering) {
                     // TODO fix
                     //setSize(0.1F, 0.1F);
                     firstBlockHit = false;
                 }
 
                 if (inGroundTime <= 3) {
-                    world.addParticle(ParticleTypes.ITEM_SNOWBALL, getX(), getY(), getZ(), 0.0, 0.0, 0.0);
+                    getWorld().addParticle(ParticleTypes.ITEM_SNOWBALL, getX(), getY(), getZ(), 0.0, 0.0, 0.0);
                 }
 
                 /*
@@ -216,7 +216,7 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
                  * </pre>
                  */
                 if (inGroundTime <= 31) {
-                    world.addParticle(ParticleTypes.SPLASH, getX(), getY(), getZ(), 0.0, 0.0, 0.0);
+                    getWorld().addParticle(ParticleTypes.SPLASH, getX(), getY(), getZ(), 0.0, 0.0, 0.0);
                 }
 
                 /*
@@ -225,7 +225,7 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
                  */
                 if (inGroundTime == 65) {
                     BlockPos inBlockPos = getBlockPos();
-                    BlockState inBlockState = world.getBlockState(inBlockPos);
+                    BlockState inBlockState = getWorld().getBlockState(inBlockPos);
                     Block inBlock = inBlockState.getBlock();
                     final BlockState defaultSnowState = Blocks.SNOW.getDefaultState();
 
@@ -240,9 +240,9 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
                      * If this arrow is inside water, replace the water with ice.
                      */
 
-                    if (inBlockState.isAir() && defaultSnowState.canPlaceAt(world, inBlockPos)) {
-                        world.setBlockState(inBlockPos, defaultSnowState);
-                        world.emitGameEvent(GameEvent.BLOCK_PLACE, inBlockPos, GameEvent.Emitter.of(this, defaultSnowState));
+                    if (inBlockState.isAir() && defaultSnowState.canPlaceAt(getWorld(), inBlockPos)) {
+                        getWorld().setBlockState(inBlockPos, defaultSnowState);
+                        getWorld().emitGameEvent(GameEvent.BLOCK_PLACE, inBlockPos, GameEvent.Emitter.of(this, defaultSnowState));
                     } else if (inBlock == Blocks.WATER) {
                         /*
                          * TODO Check if the earlier event or this one is the correct one.
@@ -250,24 +250,24 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
                          * Also: bouncy arrow on ice, a bit like stone skimming? Could be cool.
                          */
                         final BlockState defaultIce = Blocks.ICE.getDefaultState();
-                        world.setBlockState(inBlockPos, defaultIce);
-                        world.emitGameEvent(GameEvent.BLOCK_CHANGE, inBlockPos, GameEvent.Emitter.of(this, defaultIce));
+                        getWorld().setBlockState(inBlockPos, defaultIce);
+                        getWorld().emitGameEvent(GameEvent.BLOCK_CHANGE, inBlockPos, GameEvent.Emitter.of(this, defaultIce));
                     } else if (inBlock == Blocks.SNOW) {
                         int currentSnowLevel = 8;
 
                         for (int upCount = 0; (upCount < 1024) && (inBlock == Blocks.SNOW) && ((currentSnowLevel = inBlockState.<Integer>get(SnowBlock.LAYERS)) > 7); upCount++) {
                             inBlockPos = inBlockPos.up();
-                            inBlockState = world.getBlockState(inBlockPos);
+                            inBlockState = getWorld().getBlockState(inBlockPos);
                             inBlock = inBlockState.getBlock();
                         }
 
                         if (currentSnowLevel < 8) {
                             final BlockState extraSnow = inBlockState.with(SnowBlock.LAYERS, currentSnowLevel + 1);
-                            world.setBlockState(inBlockPos, extraSnow, 10);
-                            world.emitGameEvent(GameEvent.BLOCK_CHANGE, inBlockPos, GameEvent.Emitter.of(this, extraSnow));
-                        } else if (inBlockState.isAir() && defaultSnowState.canPlaceAt(world, inBlockPos)) {
-                            world.setBlockState(inBlockPos, defaultSnowState);
-                            world.emitGameEvent(GameEvent.BLOCK_PLACE, inBlockPos, GameEvent.Emitter.of(this, defaultSnowState));
+                            getWorld().setBlockState(inBlockPos, extraSnow, 10);
+                            getWorld().emitGameEvent(GameEvent.BLOCK_CHANGE, inBlockPos, GameEvent.Emitter.of(this, extraSnow));
+                        } else if (inBlockState.isAir() && defaultSnowState.canPlaceAt(getWorld(), inBlockPos)) {
+                            getWorld().setBlockState(inBlockPos, defaultSnowState);
+                            getWorld().emitGameEvent(GameEvent.BLOCK_PLACE, inBlockPos, GameEvent.Emitter.of(this, defaultSnowState));
                         }
                     }
                 }
@@ -339,7 +339,7 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
 
         // TODO replace with client-side method
         for (int i = 0; i < amount; i++) {
-            MoreBows.tryPart(world, entityHit, part, randDisp, velocity);
+            MoreBows.tryPart(getWorld(), entityHit, part, randDisp, velocity);
         }
 
         super.onEntityHit(entityHitResult);

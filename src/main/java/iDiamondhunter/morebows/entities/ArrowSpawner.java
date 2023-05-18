@@ -122,7 +122,7 @@ public final class ArrowSpawner extends Entity {
                          * arrows[i] is set to an arrow created by calling
                          * createEntityFromNBT with the saved NBT data.
                          */
-                        final @Nullable Entity savedEntity = EntityType.getEntityFromNbt(currentArrow, world).orElse(null);
+                        final @Nullable Entity savedEntity = EntityType.getEntityFromNbt(currentArrow, getWorld()).orElse(null);
 
                         if (savedEntity instanceof final PersistentProjectileEntity savedEntityProjectile) {
                             toAdd = savedEntityProjectile;
@@ -148,7 +148,7 @@ public final class ArrowSpawner extends Entity {
                  * If the data isn't valid, a new PersistentProjectileEntity is created
                  * to avoid null objects.
                  */
-                readArrows[i] = toAdd != null ? toAdd : new ArrowEntity(world, getX(), getY(), getZ());
+                readArrows[i] = toAdd != null ? toAdd : new ArrowEntity(getWorld(), getX(), getY(), getZ());
             }
 
             arrows = readArrows;
@@ -165,6 +165,8 @@ public final class ArrowSpawner extends Entity {
             discard();
             return;
         }
+
+        World world = getWorld();
 
         if (!world.isClient) {
             if (age == 1) {
@@ -268,7 +270,7 @@ public final class ArrowSpawner extends Entity {
                 /* Some mods don't properly register entities. */
                 MoreBows.modLog.error("An error occurred when trying to serialize the NBT data of {}. This is likely due to an error made by the mod that added the type of arrow that was being shot ({}).", arrows[i], arrows[i].getClass(), e);
                 final NbtCompound toSave = new NbtCompound();
-                new ArrowEntity(world, getX(), getY(), getZ()).saveNbt(toSave);
+                new ArrowEntity(getWorld(), getX(), getY(), getZ()).saveNbt(toSave);
                 arrTag = toSave;
             }
 
