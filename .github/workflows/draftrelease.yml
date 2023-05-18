@@ -7,7 +7,7 @@ on:
   push:
     # Sequence of patterns matched against refs/tags
     tags:
-      - 'v*1.20.x.fabric' # Push events to matching v*1.20.x.fabric
+      - 'v*1.20.x.fabric-cursed' # Push events to matching v*1.20.x.fabric
 
 jobs:
   build:
