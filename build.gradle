@@ -15,9 +15,9 @@ buildscript {
 
 plugins {
     id 'java-library'
-    id 'fabric-loom' version '1.1-SNAPSHOT'
+    id 'fabric-loom' version '1.2-SNAPSHOT'
     id 'maven-publish'
-    id 'net.ltgt.errorprone' version '3.0.1'
+    id 'net.ltgt.errorprone' version '3.1.0'
     id 'com.github.spotbugs' version '5.0.14'
 }
 
@@ -107,8 +107,8 @@ dependencies {
     compileOnly "com.github.spotbugs:spotbugs-annotations:4.7.3"
 
     // Error Prone
-    errorprone "com.google.errorprone:error_prone_core:2.18.0"
-    compileOnly "com.google.errorprone:error_prone_annotations:2.18.0"
+    errorprone "com.google.errorprone:error_prone_core:2.19.1"
+    compileOnly "com.google.errorprone:error_prone_annotations:2.19.1"
 
     // Components API, needed for Nyf's Quivers compatibility
     modCompileOnly("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.components_api_version}") {
