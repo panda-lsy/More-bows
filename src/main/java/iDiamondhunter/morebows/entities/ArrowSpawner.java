@@ -166,7 +166,7 @@ public final class ArrowSpawner extends Entity {
             return;
         }
 
-        World world = getWorld();
+        final World world = getWorld();
 
         if (!world.isClient) {
             if (age == 1) {

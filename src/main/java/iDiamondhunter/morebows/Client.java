@@ -15,7 +15,7 @@ public final class Client implements ClientModInitializer {
     public void onInitializeClient() {
         final Identifier pull = new Identifier("pull");
         final Identifier pulling = new Identifier("pulling");
-        final ClampedModelPredicateProvider pullProvider = (stack, world, entity, seed) -> (entity == null || entity.getActiveItem() != stack ? 0.0F : (stack.getMaxUseTime() - entity.getItemUseTimeLeft()) / ((CustomBow) stack.getItem()).powerDiv);
+        final ClampedModelPredicateProvider pullProvider = (stack, world, entity, seed) -> ((entity == null) || (entity.getActiveItem() != stack) ? 0.0F : (stack.getMaxUseTime() - entity.getItemUseTimeLeft()) / ((CustomBow) stack.getItem()).powerDiv);
         final ClampedModelPredicateProvider pullingProvider = (stack, world, entity, seed) -> ((entity != null) && entity.isUsingItem() && (entity.getActiveItem() == stack) ? 1.0F : 0.0F);
         EntityRendererRegistry.register(MoreBows.ARROW_SPAWNER, EmptyEntityRenderer::new);
         EntityRendererRegistry.register(MoreBows.CUSTOM_ARROW, CustomArrowRenderer::new);
