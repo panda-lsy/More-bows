@@ -37,7 +37,7 @@ jobs:
           cache-disabled: true
           arguments: build --scan --stacktrace --warning-mode all
       - name: Submit dependencies to GitHub
-        uses: mikepenz/gradle-dependency-submission@v0.8.5
+        uses: mikepenz/gradle-dependency-submission@v0.8.6
       - name: Rezip mod .jar files to remove directory entries
         run: bash removeDirectoryEntries.sh
       - name: Run strip-nondeterminism on built .jar files
