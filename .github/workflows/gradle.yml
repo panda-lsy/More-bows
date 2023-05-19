@@ -52,6 +52,8 @@ jobs:
         run: for file in ./build/libs/*.jar; do ./ci-tools/ect-ubuntu-x86-64 -99 --disable-png -strip -zip $file; done
       - name: Run ECT (-30060) on built .jar files
         run: for file in ./build/libs/*.jar; do ./ci-tools/ect-ubuntu-x86-64 -30060 --disable-png -strip -zip $file; done
+      - name: Run ECT (-90032) on built .jar files
+        run: for file in ./build/libs/*.jar; do ./ci-tools/ect-ubuntu-x86-64 -90032 --disable-png -strip -zip $file; done
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
