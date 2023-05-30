@@ -1,8 +1,9 @@
 ---
 layout: default
+title: More Bows Recipes
 ---
 
-<h1>More Bows Recipes</h1>
+<h2>More Bows Recipes</h2>
 
 {% assign image_files = site.static_files | where: "isRecipe", true | sort: 'basename' %}
 {% for img in image_files %}
