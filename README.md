@@ -15,7 +15,7 @@
 
 More Bows: Restrung is a port / continuation of the More Bows mod, which was originally created by GaussFire, and maintained & updated by iDiamondhunter until Risugami's ModLoader was no longer updated. This port aims to faithfully re-create the original mod, while fixing some bugs, introducing some quality-of-life changes, and adding cut ideas.
 
-_This branch of More Bows: Restrung targets Fabric for Minecraft 1.17.x!_
+_This branch of More Bows: Restrung targets Forge for Minecraft 1.16.x!_
 
 ### Original descriptions of each bow (not currently 100% accurate!):
 
@@ -46,10 +46,7 @@ As iDiamondhunter ["removed the copyrights" from this mod](https://www.minecraft
 
 <p align="center">
     <picture>
-        <source srcset="https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/1-12-2/1-12-2-600.jxl 600w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/1-12-2/1-12-2-768.jxl 768w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/1-12-2/1-12-2-900.jxl 900w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/1-12-2/1-12-2-1024.jxl 1024w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/1-12-2/1-12-2.jxl" type="image/jxl">
-        <source srcset="https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/1-12-2/1-12-2-600.webp 600w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/1-12-2/1-12-2-768.webp 768w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/1-12-2/1-12-2-900.webp 900w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/1-12-2/1-12-2-1024.webp 1024w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/1-12-2/1-12-2.webp" type="image/webp">
-        <source srcset="https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/1-12-2/1-12-2-600.png 600w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/1-12-2/1-12-2-768.png 768w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/1-12-2/1-12-2-900.png 900w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/1-12-2/1-12-2-1024.png 1024w, https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/1-12-2/1-12-2.png" type="image/png">
-        <img src="https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/1-12-2/1-12-2.png" alt="CurseForge user ballo5068s: when 1.12.2 version" title="1.12.2 is the new 1.7.10." style='height: 100%; width: 100%; object-fit: contain'/>
+        <img src="https://raw.githubusercontent.com/NeRdTheNed/More-bows/gh-pages/images/optimised/1-16/Link_56.png" alt="CurseForge user Link_56: Will there be a mode overhaul on version 1.16.5?" title="Mode, modes, and have fun!" style='height: 100%; width: 100%; object-fit: contain'/>
     </picture>
 </p>
 
