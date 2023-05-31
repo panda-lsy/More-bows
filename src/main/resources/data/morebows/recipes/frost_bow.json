@@ -1,10 +1,10 @@
 {
     "key": {
         "A": {
-            "tag": "c:snowballs"
+            "tag": "forge:snowballs"
         },
         "B": {
-            "tag": "c:iron_bows"
+            "tag": "forge:iron_bows"
         },
         "C": {
             "tag": "morebows:string"

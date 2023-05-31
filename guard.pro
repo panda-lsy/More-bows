@@ -6,7 +6,9 @@
 -dontskipnonpubliclibraryclassmembers
 -forceprocessing
 
--target 16
+# We're a bit oldschool
+
+-target 1.8
 
 # TODO Figure out how to do this but for annotations
 
@@ -17,7 +19,7 @@
 # Keep all methods that overrides a super method.
 
 -keepclassmembers,allowobfuscation class * {
-    @java.lang.Override <methods>;
+    @java.lang.Override,net.minecraftforge.fml.common.Mod.EventBusSubscriber,net.minecraftforge.fml.common.Mod,net.minecraftforge.eventbus.api.SubscribeEvent <methods>;
 }
 
 # Keep all classes with public methods
@@ -49,9 +51,7 @@
 
 # Annotations and generic method signatures are kept, as Forge uses them for reflection.
 
-#-keepattributes RuntimeVisibleAnnotations,Signature
-#-keepattributes RuntimeVisibleAnnotations,RuntimeInvisibleAnnotations,Signature
--keepattributes RuntimeVisibleAnnotations,RuntimeInvisibleAnnotations,RuntimeVisibleParameterAnnotations
+-keepattributes RuntimeVisibleAnnotations,Signature
 
 # Repackage all classes into iDiamondhunter.morebows
 
@@ -59,18 +59,18 @@
 
 # Mixins
 
--keepclassmembers,allowoptimization,allowobfuscation public class iDiamondhunter.morebows.mixin.AbstractClientPlayerEntityMixin {
-    private float getSpeedMixin(float);
-}
+#-keepclassmembers,allowoptimization,allowobfuscation public class iDiamondhunter.morebows.mixin.AbstractClientPlayerEntityMixin {
+#    private float getSpeedMixin(float);
+#}
 
--keepclassmembers,allowoptimization,allowobfuscation public class iDiamondhunter.morebows.mixin.HeldItemRendererMixin {
-    private float *;
-    <methods>;
-}
+#-keepclassmembers,allowoptimization,allowobfuscation public class iDiamondhunter.morebows.mixin.HeldItemRendererMixin {
+#    private float *;
+#    <methods>;
+#}
 
 # TODO
--keep public class iDiamondhunter.morebows.mixin.HeldItemRendererMixin
--keep public class iDiamondhunter.morebows.mixin.AbstractClientPlayerEntityMixin
+#-keep public class iDiamondhunter.morebows.mixin.HeldItemRendererMixin
+#-keep public class iDiamondhunter.morebows.mixin.AbstractClientPlayerEntityMixin
 -keep public class iDiamondhunter.morebows.MoreBows
 -keep public class iDiamondhunter.morebows.Client
 -keep public class iDiamondhunter.morebows.compat.ModMenuCompat

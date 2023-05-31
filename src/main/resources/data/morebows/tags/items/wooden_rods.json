@@ -2,27 +2,27 @@
     "replace": false,
     "values": [
         {
-            "id": "#c:wood_rods",
+            "id": "#forge:wood_rods",
             "required": false
         },
         {
-            "id": "#c:wooden_rods",
+            "id": "#forge:wooden_rods",
             "required": false
         },
         {
-            "id": "#c:wood_sticks",
+            "id": "#forge:wood_sticks",
             "required": false
         },
         {
-            "id": "#c:wooden_sticks",
+            "id": "#forge:wooden_sticks",
             "required": false
         },
         {
-            "id": "#c:rods/wood",
+            "id": "#forge:rods/wood",
             "required": false
         },
         {
-            "id": "#c:rods/wooden",
+            "id": "#forge:rods/wooden",
             "required": false
         }
     ]

@@ -6,11 +6,11 @@
             "required": false
         },
         {
-            "id": "#c:ice",
+            "id": "#forge:ice",
             "required": false
         },
         {
-            "id": "#c:ices",
+            "id": "#forge:ices",
             "required": false
         }
     ]

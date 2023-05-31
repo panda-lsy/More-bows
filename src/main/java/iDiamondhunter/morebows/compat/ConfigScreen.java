@@ -1,23 +1,12 @@
 package iDiamondhunter.morebows.compat;
 
-import iDiamondhunter.morebows.MoreBows;
-import iDiamondhunter.morebows.config.ConfigBows;
-import iDiamondhunter.morebows.config.ConfigBows.BowConfig;
-import iDiamondhunter.morebows.config.ConfigGeneral;
-import me.shedaniel.clothconfig2.api.ConfigBuilder;
-import me.shedaniel.clothconfig2.api.ConfigCategory;
-import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
-import me.shedaniel.clothconfig2.gui.entries.DoubleListEntry;
-import me.shedaniel.clothconfig2.gui.entries.FloatListEntry;
-import me.shedaniel.clothconfig2.gui.entries.IntegerListEntry;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.text.TranslatableText;
 
 /** TODO This is horrible. */
 final class ConfigScreen {
 
     static Screen moreBowsConfigScreen (Screen parent) {
-        final ConfigBuilder moreBowsConfigBuilder = ConfigBuilder.create().setParentScreen(parent).setTitle(new TranslatableText("morebows.confTitle"));
+        /*final ConfigBuilder moreBowsConfigBuilder = ConfigBuilder.create().setParentScreen(parent).setTitle(new TranslatableText("morebows.confTitle"));
         // General settings
         final ConfigCategory general = moreBowsConfigBuilder.getOrCreateCategory(new TranslatableText("morebows.confCatGen"));
         // frostArrowsShouldBeCold
@@ -92,7 +81,8 @@ final class ConfigScreen {
             ConfigBows.writeConfig(MoreBows.configBowsInst);
             ConfigGeneral.writeConfig(MoreBows.configGeneralInst);
         });
-        return moreBowsConfigBuilder.build();
+        return moreBowsConfigBuilder.build();*/
+        return parent;
     }
 
     private ConfigScreen() {

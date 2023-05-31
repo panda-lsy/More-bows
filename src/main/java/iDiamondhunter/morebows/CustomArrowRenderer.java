@@ -1,34 +1,36 @@
 package iDiamondhunter.morebows;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
+
 import iDiamondhunter.morebows.entities.CustomArrow;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.EntityRendererFactory.Context;
-import net.minecraft.client.render.entity.FlyingItemEntityRenderer;
-import net.minecraft.client.render.entity.ProjectileEntityRenderer;
-import net.minecraft.client.texture.SpriteAtlasTexture;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.entity.ArrowRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.SpriteRenderer;
+import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.util.ResourceLocation;
 
 /** A custom EntityRenderer, to customize the rendering of frost arrows. */
-final class CustomArrowRenderer extends ProjectileEntityRenderer<CustomArrow> {
+final class CustomArrowRenderer extends ArrowRenderer<CustomArrow> {
 
-    private static final Identifier ARROWS = new Identifier("textures/entity/projectiles/arrow.png");
+    private static final ResourceLocation ARROWS = new ResourceLocation("textures/entity/projectiles/arrow.png");
 
-    private final FlyingItemEntityRenderer<CustomArrow> snow;
+    private final SpriteRenderer<CustomArrow> snow;
 
-    CustomArrowRenderer(Context context) {
+    CustomArrowRenderer(EntityRendererManager context) {
         super(context);
-        snow = new FlyingItemEntityRenderer<>(context);
+        snow = new SpriteRenderer<>(context, Minecraft.getInstance().getItemRenderer());
     }
 
     @Override
-    public Identifier getTexture(CustomArrow entity) {
-        return (entity.getDataTracker().get(CustomArrow.trackedType) == MoreBows.ARROW_TYPE_FROST) && !MoreBows.configGeneralInst.oldFrostArrowRendering ? SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE : ARROWS;
+    public ResourceLocation getTextureLocation(CustomArrow entity) {
+        return (entity.getEntityData().get(CustomArrow.trackedType) == MoreBows.ARROW_TYPE_FROST) && !MoreBows.configGeneralInst.oldFrostArrowRendering ? AtlasTexture.LOCATION_BLOCKS : ARROWS;
     }
 
     @Override
-    public void render(CustomArrow entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
-        if ((entity.getDataTracker().get(CustomArrow.trackedType) == MoreBows.ARROW_TYPE_FROST) && !MoreBows.configGeneralInst.oldFrostArrowRendering) {
+    public void render(CustomArrow entity, float yaw, float tickDelta, MatrixStack matrices, IRenderTypeBuffer vertexConsumers, int light) {
+        if ((entity.getEntityData().get(CustomArrow.trackedType) == MoreBows.ARROW_TYPE_FROST) && !MoreBows.configGeneralInst.oldFrostArrowRendering) {
             snow.render(entity, yaw, tickDelta, matrices, vertexConsumers, light);
         } else {
             // TODO Implement old cube rendering

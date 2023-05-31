@@ -12,30 +12,29 @@ import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import iDiamondhunter.morebows.compat.NyfsQuiversCompat;
 import iDiamondhunter.morebows.config.ConfigGeneral.CustomArrowMultiShotType;
 import iDiamondhunter.morebows.entities.ArrowSpawner;
 import iDiamondhunter.morebows.entities.CustomArrow;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.PersistentProjectileEntity;
+import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.ArrowItem;
 import net.minecraft.item.BowItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.stat.Stats;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.stats.Stats;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Lazy;
-import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Lazy;
 
 /**
  * This entire class is a huge hack. I'm ashamed of myself.
@@ -47,28 +46,28 @@ public final class CustomBow extends BowItem {
     private static final ItemStack defaultAmmo = new ItemStack(Items.ARROW);
     private static final ArrowItem defaultArrow = (ArrowItem) Items.ARROW;
 
-    private static final boolean isNyfsQuiversPresent = FabricLoader.getInstance().isModLoaded("nyfsquivers") || FabricLoader.getInstance().isModLoaded("nyfsquiver");
+    //private static final boolean isNyfsQuiversPresent = FabricLoader.getInstance().isModLoaded("nyfsquivers") || FabricLoader.getInstance().isModLoaded("nyfsquiver");
 
     /** TODO review */
-    private static PersistentProjectileEntity arrowHelper(World world, PlayerEntity player, float velocity, ItemStack ammo, ArrowItem arrow) {
-        final PersistentProjectileEntity entityarrow = arrow.createArrow(world, ammo, player);
+    private static AbstractArrowEntity arrowHelper(World world, PlayerEntity player, float velocity, ItemStack ammo, ArrowItem arrow) {
+        final AbstractArrowEntity entityarrow = arrow.createArrow(world, ammo, player);
         return arrowHelperHelper(player, velocity, entityarrow);
     }
 
     /** TODO review */
-    private static PersistentProjectileEntity arrowHelperHelper(PlayerEntity player, float velocity, PersistentProjectileEntity entityarrow) {
-        entityarrow.setProperties(player, player.getPitch(), player.getYaw(), 0.0f, velocity, 1.0f);
+    private static AbstractArrowEntity arrowHelperHelper(PlayerEntity player, float velocity, AbstractArrowEntity entityarrow) {
+        entityarrow.shootFromRotation(player, player.xRot, player.yRot, 0.0f, velocity, 1.0f);
         return entityarrow;
     }
 
     /** TODO review */
-    private static PersistentProjectileEntity customArrowHelper(World world, PlayerEntity player, float velocity, byte arrType) {
-        final PersistentProjectileEntity entityarrow = new CustomArrow(world, player, arrType);
+    private static AbstractArrowEntity customArrowHelper(World world, PlayerEntity player, float velocity, byte arrType) {
+        final AbstractArrowEntity entityarrow = new CustomArrow(world, player, arrType);
         return arrowHelperHelper(player, velocity, entityarrow);
     }
 
     /** TODO review */
-    private static PersistentProjectileEntity possiblyCustomArrowHelper(World world, PlayerEntity player, float velocity, ItemStack ammo, ArrowItem arrow, byte arrType) {
+    private static AbstractArrowEntity possiblyCustomArrowHelper(World world, PlayerEntity player, float velocity, ItemStack ammo, ArrowItem arrow, byte arrType) {
         if (arrow == Items.ARROW) {
             return customArrowHelper(world, player, velocity, arrType);
         }
@@ -104,9 +103,9 @@ public final class CustomBow extends BowItem {
      * @param multiShot        True if this bow shoots multiple arrows.
      * @param powerDiv         The power divisor of this bow. Influences drawback speed.
      */
-    CustomBow(Settings settings, Supplier<Ingredient> repairIngredient, @MagicConstant(intValues = {ARROW_TYPE_NOT_CUSTOM, ARROW_TYPE_ENDER, ARROW_TYPE_FIRE, ARROW_TYPE_FROST}) byte bowType, double damageMult, boolean multiShot, float powerDiv) {
+    CustomBow(Item.Properties settings, Supplier<Ingredient> repairIngredient, @MagicConstant(intValues = {ARROW_TYPE_NOT_CUSTOM, ARROW_TYPE_ENDER, ARROW_TYPE_FIRE, ARROW_TYPE_FROST}) byte bowType, double damageMult, boolean multiShot, float powerDiv) {
         super(settings);
-        this.repairIngredient = new Lazy<>(repairIngredient);
+        this.repairIngredient = Lazy.concurrentOf(repairIngredient);
         this.bowType = bowType;
         this.damageMult = damageMult;
         this.multiShot = multiShot;
@@ -123,20 +122,21 @@ public final class CustomBow extends BowItem {
      * @param remainingUseTicks how long the bow has been in use for
      */
     @Override
-    public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
-        if (!(user instanceof final PlayerEntity player)) {
+    public void releaseUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
+        if (!(user instanceof PlayerEntity)) {
             return;
         }
 
-        final boolean alwaysShoots = player.getAbilities().creativeMode || (EnchantmentHelper.getLevel(Enchantments.INFINITY, stack) > 0);
-        ItemStack ammo = player.getArrowType(stack);
+        final PlayerEntity player = (PlayerEntity) user;
+        final boolean alwaysShoots = player.abilities.instabuild || (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, stack) > 0);
+        ItemStack ammo = player.getProjectile(stack);
 
         if (!ammo.isEmpty() || alwaysShoots) {
             if (ammo.isEmpty()) {
                 ammo = new ItemStack(Items.ARROW);
             }
 
-            final int charge = getMaxUseTime(stack) - remainingUseTicks;
+            final int charge = getUseDuration(stack) - remainingUseTicks;
             float shotVelocity = charge / powerDiv;
             shotVelocity = ((shotVelocity * shotVelocity) + (shotVelocity * 2.0F)) / 3.0F;
 
@@ -145,7 +145,8 @@ public final class CustomBow extends BowItem {
             }
 
             // TODO merge with alwaysShoots somehow
-            final boolean infiniteAmmo = alwaysShoots && ammo.isOf(Items.ARROW);
+            //final boolean infiniteAmmo = alwaysShoots && ammo.isOf(Items.ARROW);
+            final boolean infiniteAmmo = player.abilities.instabuild || ((ammo.getItem() instanceof ArrowItem) && ((ArrowItem)ammo.getItem()).isInfinite(ammo, stack, player));
             final int ammoCount = infiniteAmmo ? 64 : ammo.getCount();
             final int usedAmmo;
             final int shotArrows;
@@ -171,7 +172,7 @@ public final class CustomBow extends BowItem {
                 shotArrows = maxAmmo;
             }
 
-            if (!world.isClient) {
+            if (!world.isClientSide) {
                 final boolean isCrit;
 
                 if (shotVelocity >= 1.0F) {
@@ -182,7 +183,7 @@ public final class CustomBow extends BowItem {
                 }
 
                 final ArrowItem arrow = (ArrowItem) (ammo.getItem() instanceof ArrowItem ? ammo.getItem() : Items.ARROW);
-                final @NotNull PersistentProjectileEntity @NotNull [] arrs;
+                final @NotNull AbstractArrowEntity @NotNull [] arrs;
 
                 /*
                  * Create the arrows to fire.
@@ -201,7 +202,7 @@ public final class CustomBow extends BowItem {
                 if (multiShot) { // Bows that shoot multiple arrows
                     final ItemStack useAmmo;
                     final ArrowItem useArrow;
-                    final PersistentProjectileEntity.PickupPermission pickStatus = (MoreBows.configGeneralInst.customArrowMultiShot == CustomArrowMultiShotType.UseAmountShot) && !infiniteAmmo ? PersistentProjectileEntity.PickupPermission.ALLOWED : PersistentProjectileEntity.PickupPermission.CREATIVE_ONLY;
+                    final AbstractArrowEntity.PickupStatus pickStatus = (MoreBows.configGeneralInst.customArrowMultiShot == CustomArrowMultiShotType.UseAmountShot) && !infiniteAmmo ? AbstractArrowEntity.PickupStatus.ALLOWED : AbstractArrowEntity.PickupStatus.CREATIVE_ONLY;
 
                     if (MoreBows.configGeneralInst.customArrowMultiShot == CustomArrowMultiShotType.AlwaysStandardArrows) {
                         useAmmo = defaultAmmo;
@@ -212,40 +213,67 @@ public final class CustomBow extends BowItem {
                     }
 
                     if (bowType == ARROW_TYPE_ENDER) { // Ender bow
-                        arrs = new PersistentProjectileEntity[shotArrows];
+                        arrs = new AbstractArrowEntity[shotArrows];
 
                         for (int i = 0; i < shotArrows; ++i) {
+                            final float velocityChoice;
 
-                            final float velocityChoice = switch (i) {
-                                case 1 -> shotVelocity * (1.0F * 1.5F);
-                                case 2 -> shotVelocity * (1.2F * 1.5F);
-                                case 3 -> shotVelocity * (1.5F * 1.5F);
-                                case 4 -> shotVelocity * (1.75F * 1.5F);
-                                case 5 -> shotVelocity * (1.825F * 1.5F);
-                                default -> shotVelocity * (2.0F * 1.5F);
-                            };
+                            switch (i) {
+                            case 1:
+                                velocityChoice = shotVelocity * (1.0F * 1.5F);
+                                break;
+
+                            case 2:
+                                velocityChoice = shotVelocity * (1.2F * 1.5F);
+                                break;
+
+                            case 3:
+                                velocityChoice = shotVelocity * (1.5F * 1.5F);
+                                break;
+
+                            case 4:
+                                velocityChoice = shotVelocity * (1.75F * 1.5F);
+                                break;
+
+                            case 5:
+                                velocityChoice = shotVelocity * (1.825F * 1.5F);
+                                break;
+
+                            default:
+                                velocityChoice = shotVelocity * (2.0F * 1.5F);
+                                break;
+                            }
 
                             if (i > 0) {
                                 arrs[i] = possiblyCustomArrowHelper(world, player, velocityChoice, useAmmo, useArrow, bowType);
-                                arrs[i].pickupType = pickStatus;
+                                arrs[i].pickup = pickStatus;
                             } else {
                                 arrs[i] = possiblyCustomArrowHelper(world, player, velocityChoice, ammo, arrow, bowType);
                             }
                         }
                     } else {
-                        arrs = new PersistentProjectileEntity[shotArrows];
+                        arrs = new AbstractArrowEntity[shotArrows];
 
                         for (int i = 0; i < shotArrows; ++i) {
+                            final float velocityChoice;
 
-                            final float velocityChoice = switch (i) {
-                                case 1 -> shotVelocity * (1.65F * 1.5F);
-                                case 2 -> shotVelocity * (1.275F * 1.5F);
-                                default -> shotVelocity * (2.0F * 1.5F);
-                            };
+                            switch (i) {
+                            case 1:
+                                velocityChoice = shotVelocity * (1.65F * 1.5F);
+                                break;
+
+                            case 2:
+                                velocityChoice = shotVelocity * (1.275F * 1.5F);
+                                break;
+
+                            default:
+                                velocityChoice = shotVelocity * (2.0F * 1.5F);
+                                break;
+                            }
 
                             if (i > 0) {
                                 arrs[i] = arrowHelper(world, player, velocityChoice, useAmmo, useArrow);
-                                arrs[i].pickupType = pickStatus;
+                                arrs[i].pickup = pickStatus;
                             } else {
                                 arrs[i] = arrowHelper(world, player, velocityChoice, ammo, arrow);
                             }
@@ -258,113 +286,123 @@ public final class CustomBow extends BowItem {
                      * Note to self: this is after the multi-arrow bows
                      * due to the multi bow having arrows of a normal type.
                      */
-                    arrs = new PersistentProjectileEntity[] { arrowHelper(world, player, shotVelocity * (2.0F * 1.5F), ammo, arrow) };
+                    arrs = new AbstractArrowEntity[] { arrowHelper(world, player, shotVelocity * (2.0F * 1.5F), ammo, arrow) };
                 } else { // Bows that shoot only one custom arrow, currently only frost / fire bows
-                    arrs = new PersistentProjectileEntity[] { possiblyCustomArrowHelper(world, player, shotVelocity * (2.0F * 1.5F), ammo, arrow, bowType) };
+                    arrs = new AbstractArrowEntity[] { possiblyCustomArrowHelper(world, player, shotVelocity * (2.0F * 1.5F), ammo, arrow, bowType) };
                 }
 
-                if (infiniteAmmo || (player.getAbilities().creativeMode && (ammo.isOf(Items.SPECTRAL_ARROW) || ammo.isOf(Items.TIPPED_ARROW)))) {
-                    arrs[0].pickupType = PersistentProjectileEntity.PickupPermission.CREATIVE_ONLY;
+                //if (infiniteAmmo || (player.getAbilities().creativeMode && (ammo.isOf(Items.SPECTRAL_ARROW) || ammo.isOf(Items.TIPPED_ARROW)))) {
+                if (infiniteAmmo || (player.abilities.instabuild && ((ammo.getItem() == Items.SPECTRAL_ARROW) || (ammo.getItem() == Items.TIPPED_ARROW)))) {
+                    arrs[0].pickup = AbstractArrowEntity.PickupStatus.CREATIVE_ONLY;
                 }
 
                 // Set up flags for adding enchantment effects / other modifiers
-                final int power = EnchantmentHelper.getLevel(Enchantments.POWER, stack);
-                final int knockback = EnchantmentHelper.getLevel(Enchantments.PUNCH, stack);
-                final boolean flame = EnchantmentHelper.getLevel(Enchantments.FLAME, stack) > 0;
+                final int power = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.POWER_ARROWS, stack);
+                final int knockback = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.PUNCH_ARROWS, stack);
+                final boolean flame = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FLAMING_ARROWS, stack) > 0;
 
                 // Add enchantment effects / other modifiers to each arrow
                 // TODO review
-                for (final PersistentProjectileEntity arr : arrs) {
+                for (final AbstractArrowEntity arr : arrs) {
                     if (isCrit) { /* setIsCritical calls dataWatcher methods, avoid calling it unless needed. */
-                        arr.setCritical(true);
+                        arr.setCritArrow(true);
                     }
 
                     if (power > 0) {
-                        arr.setDamage(arr.getDamage() + (power * 0.5) + 0.5);
+                        arr.setBaseDamage(arr.getBaseDamage() + (power * 0.5) + 0.5);
                     }
 
                     if (knockback > 0) {
-                        arr.setPunch(knockback);
+                        arr.setKnockback(knockback);
                     }
 
                     if (flame) {
-                        arr.setOnFireFor(100);
+                        arr.setSecondsOnFire(100);
 
                         if (bowType == ARROW_TYPE_FIRE) {
-                            arr.setDamage(arr.getDamage() * 1.25);
+                            arr.setBaseDamage(arr.getBaseDamage() * 1.25);
                         }
                     } else if (bowType == ARROW_TYPE_FIRE) {
-                        arr.setOnFireFor(50);
+                        arr.setSecondsOnFire(50);
                     }
 
-                    arr.setDamage(arr.getDamage() * damageMult);
+                    arr.setBaseDamage(arr.getBaseDamage() * damageMult);
                 }
 
-                stack.damage(1, player, p -> p.sendToolBreakStatus(player.getActiveHand()));
+                stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(player.getUsedItemHand()));
 
                 // Spawn the arrows
 
                 if (multiShot) {
                     if (bowType == ARROW_TYPE_ENDER) { // Ender bow
-                        world.spawnEntity(new ArrowSpawner(world, player.getX(), player.getY(), player.getZ(), shotVelocity, arrs));
+                        world.addFreshEntity(new ArrowSpawner(world, player.getX(), player.getY(), player.getZ(), shotVelocity, arrs));
                     } else { // Multi bow
                         for (int i = 0; i < shotArrows; ++i) {
-                            final @NotNull PersistentProjectileEntity arr = arrs[i];
-                            world.spawnEntity(arr);
+                            final @NotNull AbstractArrowEntity arr = arrs[i];
+                            world.addFreshEntity(arr);
+                            final double damageMultiChoice;
 
-                            final double damageMultiChoice = switch (i) {
-                                case 1 -> 1.3;
-                                case 2 -> 1.15;
-                                default -> 1.5;
-                            };
+                            switch (i) {
+                            case 1:
+                                damageMultiChoice = 1.3;
+                                break;
+
+                            case 2:
+                                damageMultiChoice = 1.15;
+                                break;
+
+                            default:
+                                damageMultiChoice = 1.5;
+                                break;
+                            }
 
                             final @Nullable Entity arrOwner = arr.getOwner();
 
                             if ((i > 0) && (arrOwner != null)) {
                                 final double negate = ((i & 1) << 1) - 1;
-                                final double newPosX = arr.getX() + ((arrOwner.getYaw() / 180.0) * negate);
-                                arr.refreshPositionAndAngles(newPosX, arr.getY(), arr.getZ(), arr.getYaw(), arr.getPitch());
+                                final double newPosX = arr.getX() + ((arrOwner.yRot / 180.0) * negate);
+                                arr.setPos(newPosX, arr.getY(), arr.getZ());
                             }
 
-                            arr.setDamage(arr.getDamage() * damageMultiChoice);
+                            arr.setBaseDamage(arr.getBaseDamage() * damageMultiChoice);
                         }
                     }
                 } else { // Other bows
-                    for (final PersistentProjectileEntity arr : arrs) {
-                        world.spawnEntity(arr);
+                    for (final AbstractArrowEntity arr : arrs) {
+                        world.addFreshEntity(arr);
                     }
                 }
             }
 
             // Play the "bow shot" sound
             if (multiShot && (bowType != ARROW_TYPE_ENDER)) { // Multi bow
-                world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, (1.0F / ((world.getRandom().nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
+                world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, (1.0F / ((world.getRandom().nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
 
                 if (shotArrows > 1) {
-                    world.playSound(null, player.getX() + (player.getYaw() / 180.0F), player.getY(), player.getZ(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, (1.0F / ((world.getRandom().nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
+                    world.playSound(null, player.getX() + (player.yRot / 180.0F), player.getY(), player.getZ(), SoundEvents.ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, (1.0F / ((world.getRandom().nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
                 }
 
                 if (shotArrows > 2) {
-                    world.playSound(null, player.getX() - (player.getYaw() / 180.0F), player.getY(), player.getZ(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, (1.0F / ((world.getRandom().nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
+                    world.playSound(null, player.getX() - (player.yRot / 180.0F), player.getY(), player.getZ(), SoundEvents.ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, (1.0F / ((world.getRandom().nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
                 }
             } else { // Other bows
-                world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, (1.0F / ((world.getRandom().nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
+                world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, (1.0F / ((world.getRandom().nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F));
             }
 
-            if (!infiniteAmmo && !player.getAbilities().creativeMode) {
-                ammo.decrement(usedAmmo);
+            if (!infiniteAmmo && !player.abilities.instabuild) {
+                ammo.shrink(usedAmmo);
 
                 // Nyf's Quivers compatibility
-                if (isNyfsQuiversPresent && !alwaysShoots && MoreBows.configGeneralInst.nyfsQuiversCompatEnabled) {
+                /*if (isNyfsQuiversPresent && !alwaysShoots && MoreBows.configGeneralInst.nyfsQuiversCompatEnabled) {
                     NyfsQuiversCompat.drawFromQuiver(player, usedAmmo);
-                }
+                }*/
 
                 if (ammo.isEmpty()) {
-                    player.getInventory().removeOne(ammo);
+                    player.inventory.removeItem(ammo);
                 }
             }
 
-            player.incrementStat(Stats.USED.getOrCreateStat(this));
+            player.awardStat(Stats.ITEM_USED.get(this));
         }
     }
 
@@ -373,17 +411,22 @@ public final class CustomBow extends BowItem {
      * TODO probably replace with client-side function
      */
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+    public ActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         if (bowType == ARROW_TYPE_ENDER) {
-            MoreBows.tryPart(user.world, user, ParticleTypes.PORTAL, true, 1.0);
+            MoreBows.tryPart(user.level, user, ParticleTypes.PORTAL, true, 1.0);
         }
 
         return super.use(world, user, hand);
     }
 
     @Override
-    public boolean canRepair(ItemStack stack, ItemStack ingredient) {
-        return repairIngredient.get().test(ingredient) || super.canRepair(stack, ingredient);
+    public boolean isValidRepairItem(ItemStack stack, ItemStack ingredient) {
+        return repairIngredient.get().test(ingredient) || super.isValidRepairItem(stack, ingredient);
+    }
+
+    @Override
+    public boolean isRepairable(ItemStack stack) {
+        return true;
     }
 
 }

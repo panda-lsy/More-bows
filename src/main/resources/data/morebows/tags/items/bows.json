@@ -2,11 +2,11 @@
     "replace": false,
     "values": [
         {
-            "id": "#c:bows",
+            "id": "#forge:bows",
             "required": false
         },
         {
-            "id": "#c:tools/bows",
+            "id": "#forge:tools/bows",
             "required": false
         }
     ]

@@ -2,11 +2,11 @@
     "replace": false,
     "values": [
         {
-            "id": "#c:blaze_rods",
+            "id": "#forge:blaze_rods",
             "required": false
         },
         {
-            "id": "#c:rods/blaze",
+            "id": "#forge:rods/blaze",
             "required": false
         }
     ]

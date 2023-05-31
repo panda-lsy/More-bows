@@ -4,7 +4,7 @@
             "conditions": {
                 "items": [
                     {
-                        "tag": "c:iron_bows"
+                        "tag": "forge:iron_bows"
                     }
                 ]
             },

@@ -1,9 +1,9 @@
 package iDiamondhunter.morebows.config;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
+import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
 
 import com.google.errorprone.annotations.CompileTimeConstant;
@@ -12,7 +12,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 
 import iDiamondhunter.morebows.MoreBows;
-import net.fabricmc.loader.api.FabricLoader;
+import net.minecraftforge.fml.loading.FMLPaths;
 
 /** General config settings. */
 public final class ConfigGeneral {
@@ -75,12 +75,12 @@ public final class ConfigGeneral {
      * @return the read config settings
      */
     public static @NotNull ConfigGeneral readConfig() {
-        final Path configPath = FabricLoader.getInstance().getConfigDir().resolve(MoreBows.MOD_ID + "_general.json");
+        final Path configPath = FMLPaths.CONFIGDIR.get().resolve(MoreBows.MOD_ID + "_general.json");
         @NotNull ConfigGeneral loadedConfig = new ConfigGeneral();
 
         if (configPath.toFile().exists()) {
             try {
-                loadedConfig = OUTPUT_GSON.fromJson(Files.readString(configPath), ConfigGeneral.class);
+                loadedConfig = OUTPUT_GSON.fromJson(FileUtils.readFileToString(configPath.toFile()), ConfigGeneral.class);
             } catch (JsonSyntaxException | IOException e) {
                 MoreBows.modLog.error("Error while reading general config from file", e);
                 loadedConfig = new ConfigGeneral();
@@ -96,10 +96,10 @@ public final class ConfigGeneral {
      * @param config the config to write
      */
     public static void writeConfig(ConfigGeneral config) {
-        final Path configPath = FabricLoader.getInstance().getConfigDir().resolve(MoreBows.MOD_ID + "_general.json");
+        final Path configPath = FMLPaths.CONFIGDIR.get().resolve(MoreBows.MOD_ID + "_general.json");
 
         try {
-            Files.writeString(configPath, OUTPUT_GSON.toJson(config));
+            FileUtils.writeStringToFile(configPath.toFile(), OUTPUT_GSON.toJson(config));
         } catch (final IOException e) {
             MoreBows.modLog.error("Error while writing general config to file", e);
         }

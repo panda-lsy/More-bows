@@ -7,7 +7,7 @@
             "tag": "morebows:string"
         },
         "D": {
-            "tag": "c:iron_bows"
+            "tag": "forge:iron_bows"
         }
     },
     "pattern": [

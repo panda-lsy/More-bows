@@ -1,9 +1,9 @@
 package iDiamondhunter.morebows.config;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
+import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
 
 import com.google.errorprone.annotations.CompileTimeConstant;
@@ -12,7 +12,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 
 import iDiamondhunter.morebows.MoreBows;
-import net.fabricmc.loader.api.FabricLoader;
+import net.minecraftforge.fml.loading.FMLPaths;
 
 /** Bow stats config settings. */
 public final class ConfigBows {
@@ -89,12 +89,12 @@ public final class ConfigBows {
      * @return the read config settings
      */
     public static @NotNull ConfigBows readConfig() {
-        final Path configPath = FabricLoader.getInstance().getConfigDir().resolve(MoreBows.MOD_ID + "_bowstats.json");
+        final Path configPath = FMLPaths.CONFIGDIR.get().resolve(MoreBows.MOD_ID + "_bowstats.json");
         @NotNull ConfigBows loadedConfig = new ConfigBows();
 
         if (configPath.toFile().exists()) {
             try {
-                loadedConfig = OUTPUT_GSON.fromJson(Files.readString(configPath), ConfigBows.class);
+                loadedConfig = OUTPUT_GSON.fromJson(FileUtils.readFileToString(configPath.toFile()), ConfigBows.class);
             } catch (JsonSyntaxException | IOException e) {
                 MoreBows.modLog.error("Error while reading bow stats config from file", e);
                 loadedConfig = new ConfigBows();
@@ -110,10 +110,10 @@ public final class ConfigBows {
      * @param config the config to write
      */
     public static void writeConfig(ConfigBows config) {
-        final Path configPath = FabricLoader.getInstance().getConfigDir().resolve(MoreBows.MOD_ID + "_bowstats.json");
+        final Path configPath = FMLPaths.CONFIGDIR.get().resolve(MoreBows.MOD_ID + "_bowstats.json");
 
         try {
-            Files.writeString(configPath, OUTPUT_GSON.toJson(config));
+            FileUtils.writeStringToFile(configPath.toFile(), OUTPUT_GSON.toJson(config));
         } catch (final IOException e) {
             MoreBows.modLog.error("Error while writing bow stats config to file", e);
         }

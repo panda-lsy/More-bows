@@ -1,0 +1,30 @@
+modLoader="javafml"
+loaderVersion="[36,)"
+license="CC0-1.0"
+issueTrackerURL="https://github.com/NeRdTheNed/More-bows/issues"
+[[mods]]
+modId="morebows"
+version="${version}"
+displayName="${modName}"
+updateJSONURL="https://nerdthened.github.io/More-bows/update.json"
+displayURL="https://nerdthened.github.io/More-bows/"
+logoFile="mb.png"
+credits="GaussFire and iDiamondhunter, for making the mod and assets! Ninjamight, for making the mod logo!"
+authors="GaussFire, iDiamondhunter, NeRd"
+description='''
+A port of the More Bows mod to 1.7.10 and above!
+
+This mod was originally created by GaussFire, and maintained + updated by iDiamondhunter. Ported by NeRd!
+'''
+[[dependencies.morebows]]
+    modId="forge"
+    mandatory=true
+    versionRange="[36,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.morebows]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.16.5,1.17)"
+    ordering="NONE"
+    side="BOTH"

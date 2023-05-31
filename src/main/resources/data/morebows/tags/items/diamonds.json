@@ -2,19 +2,19 @@
     "replace": false,
     "values": [
         {
-            "id": "#c:diamond",
+            "id": "#forge:diamond",
             "required": false
         },
         {
-            "id": "#c:diamonds",
+            "id": "#forge:diamonds",
             "required": false
         },
         {
-            "id": "#c:gems/diamond",
+            "id": "#forge:gems/diamond",
             "required": false
         },
         {
-            "id": "#c:gems/diamonds",
+            "id": "#forge:gems/diamonds",
             "required": false
         }
     ]

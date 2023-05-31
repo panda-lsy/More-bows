@@ -2,11 +2,11 @@
     "replace": false,
     "values": [
         {
-            "id": "#c:gold_ingots",
+            "id": "#forge:gold_ingots",
             "required": false
         },
         {
-            "id": "#c:ingots/gold",
+            "id": "#forge:ingots/gold",
             "required": false
         }
     ]

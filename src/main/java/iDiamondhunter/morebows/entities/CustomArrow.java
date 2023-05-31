@@ -6,32 +6,34 @@ import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_FROST;
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_NOT_CUSTOM;
 
 import iDiamondhunter.morebows.MoreBows;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.SnowBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.FlyingItemEntity;
+import net.minecraft.entity.IRendersAsItem;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.mob.BlazeEntity;
-import net.minecraft.entity.projectile.PersistentProjectileEntity;
+import net.minecraft.entity.monster.BlazeEntity;
+import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.particle.DefaultParticleType;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.util.hit.EntityHitResult;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.IPacket;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.BasicParticleType;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.EntityRayTraceResult;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 /**
  * This entity is a custom arrow.
@@ -39,13 +41,19 @@ import net.minecraft.world.World;
  * is handled in the MoreBows class with SubscribeEvents.
  * TODO much of this is really out of date
  */
-public final class CustomArrow extends PersistentProjectileEntity implements FlyingItemEntity {
+public final class CustomArrow extends AbstractArrowEntity implements IRendersAsItem {
 
     /** The type of this arrow. */
-    public static final TrackedData<Byte> trackedType = DataTracker.registerData(CustomArrow.class, TrackedDataHandlerRegistry.BYTE);
+    public static final DataParameter<Byte> trackedType = EntityDataManager.defineId(CustomArrow.class, DataSerializers.BYTE);
+
 
     /** If this is the first time this arrow has hit a block. */
     private boolean firstBlockHit = true;
+
+    @Override
+    public IPacket<?> getAddEntityPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
 
     /**
      * Don't use this.
@@ -70,7 +78,7 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
      * @deprecated Don't use this
      */
     public CustomArrow(World world, double x, double y, double z) {
-        super(MoreBows.CUSTOM_ARROW, x, y, z, world);
+        super(MoreBows.CUSTOM_ARROW.get(), x, y, z, world);
     }
 
     /**
@@ -82,7 +90,7 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
      * @deprecated Don't use this
      */
     public CustomArrow(World world, LivingEntity owner) {
-        super(MoreBows.CUSTOM_ARROW, owner, world);
+        super(MoreBows.CUSTOM_ARROW.get(), owner, world);
     }
 
     /**
@@ -93,8 +101,8 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
      * @param type  the type of arrow
      */
     public CustomArrow(World world, LivingEntity owner, byte type) {
-        super(MoreBows.CUSTOM_ARROW, owner, world);
-        dataTracker.set(trackedType, type);
+        super(MoreBows.CUSTOM_ARROW.get(), owner, world);
+        entityData.set(trackedType, type);
     }
 
     /**
@@ -105,7 +113,7 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
      *         the default arrow item}
      */
     @Override
-    protected ItemStack asItemStack() {
+    protected ItemStack getPickupItem() {
         return new ItemStack(Items.ARROW);
     }
 
@@ -116,15 +124,15 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
      *         the default snowball item}
      */
     @Override
-    public ItemStack getStack() {
+    public ItemStack getItem() {
         return new ItemStack(Items.SNOWBALL);
     }
 
     /** Initializes the data tracker. Used to track the arrow's type. */
     @Override
-    protected void initDataTracker() {
-        super.initDataTracker();
-        dataTracker.startTracking(trackedType, ARROW_TYPE_NOT_CUSTOM);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        entityData.define(trackedType, ARROW_TYPE_NOT_CUSTOM);
     }
 
     /**
@@ -135,9 +143,9 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
      * @return true if critical (mostly)
      */
     @Override
-    @Environment(EnvType.CLIENT)
-    public boolean isCritical() {
-        return (dataTracker.get(trackedType) != ARROW_TYPE_FROST) && super.isCritical();
+    @OnlyIn(Dist.CLIENT)
+    public boolean isCritArrow() {
+        return (entityData.get(trackedType) != ARROW_TYPE_FROST) && super.isCritArrow();
         /*
          * Obviously, you're just a bad shot :D
          * This is a hack to prevent the vanilla crit particles from displaying
@@ -155,53 +163,53 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
      * @param nbt the NBT tag
      */
     @Override
-    public void readCustomDataFromNbt(NbtCompound nbt) {
-        super.readCustomDataFromNbt(nbt);
-        dataTracker.set(trackedType, nbt.getByte("type"));
+    public void readAdditionalSaveData(CompoundNBT nbt) {
+        super.readAdditionalSaveData(nbt);
+        entityData.set(trackedType, nbt.getByte("type"));
     }
 
     /** TODO review a bunch of this logic, some of it should be updated. */
     @Override
     public void tick() {
-        final byte arrType = dataTracker.get(trackedType);
+        final byte arrType = entityData.get(trackedType);
 
-        if ((arrType == ARROW_TYPE_FROST) && super.isCritical()) {
-            final Vec3d currentVelocity = getVelocity();
+        if ((arrType == ARROW_TYPE_FROST) && super.isCritArrow()) {
+            final Vector3d currentVelocity = getDeltaMovement();
             final double motionX = currentVelocity.x;
             final double motionY = currentVelocity.y;
             final double motionZ = currentVelocity.z;
 
             for (int i = 0; i < 4; ++i) {
-                world.addParticle(ParticleTypes.SPLASH, getX() + ((motionX * i) / 4.0), getY() + ((motionY * i) / 4.0), getZ() + ((motionZ * i) / 4.0), -motionX, -motionY + 0.2, -motionZ);
+                level.addParticle(ParticleTypes.SPLASH, getX() + ((motionX * i) / 4.0), getY() + ((motionY * i) / 4.0), getZ() + ((motionZ * i) / 4.0), -motionX, -motionY + 0.2, -motionZ);
             }
         }
 
         super.tick();
 
         if (arrType == ARROW_TYPE_FROST) {
-            if ((age == 1) && MoreBows.configGeneralInst.frostArrowsShouldBeCold) {
+            if ((tickCount == 1) && MoreBows.configGeneralInst.frostArrowsShouldBeCold) {
                 // TODO Fix
                 //isImmuneToFire = true;
-                extinguish();
+                clearFire();
             }
 
             if (inGroundTime > 0) {
                 if (inGroundTime == 1) {
-                    pickupType = PickupPermission.DISALLOWED;
+                    pickup = PickupStatus.DISALLOWED;
                 }
 
                 /*
                  * Shrinks the size of the frost arrow if it's in the ground,
                  * and the mod is in old rendering mode.
                  */
-                if (firstBlockHit && world.isClient && MoreBows.configGeneralInst.oldFrostArrowRendering) {
+                if (firstBlockHit && level.isClientSide && MoreBows.configGeneralInst.oldFrostArrowRendering) {
                     // TODO fix
                     //setSize(0.1F, 0.1F);
                     firstBlockHit = false;
                 }
 
                 if (inGroundTime <= 3) {
-                    world.addParticle(ParticleTypes.ITEM_SNOWBALL, getX(), getY(), getZ(), 0.0, 0.0, 0.0);
+                    level.addParticle(ParticleTypes.ITEM_SNOWBALL, getX(), getY(), getZ(), 0.0, 0.0, 0.0);
                 }
 
                 /*
@@ -215,7 +223,7 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
                  * </pre>
                  */
                 if (inGroundTime <= 31) {
-                    world.addParticle(ParticleTypes.SPLASH, getX(), getY(), getZ(), 0.0, 0.0, 0.0);
+                    level.addParticle(ParticleTypes.SPLASH, getX(), getY(), getZ(), 0.0, 0.0, 0.0);
                 }
 
                 /*
@@ -223,10 +231,10 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
                  * or "freezing" the water it's in by setting the block to ice.
                  */
                 if (inGroundTime == 65) {
-                    BlockPos inBlockPos = getBlockPos();
-                    BlockState inBlockState = world.getBlockState(inBlockPos);
+                    BlockPos inBlockPos = blockPosition();
+                    BlockState inBlockState = level.getBlockState(inBlockPos);
                     Block inBlock = inBlockState.getBlock();
-                    final BlockState defaultSnowState = Blocks.SNOW.getDefaultState();
+                    final BlockState defaultSnowState = Blocks.SNOW.defaultBlockState();
 
                     /*
                      * If this arrow is inside an air block,
@@ -239,105 +247,114 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
                      * If this arrow is inside water, replace the water with ice.
                      */
 
-                    if (inBlockState.isAir() && defaultSnowState.canPlaceAt(world, inBlockPos)) {
-                        world.setBlockState(inBlockPos, defaultSnowState);
+                    //if (inBlockState.isAir() && defaultSnowState.canPlaceAt(level, inBlockPos)) {
+                    if (inBlockState.isAir() && defaultSnowState.canSurvive(level, inBlockPos)) {
+                        //level.setBlockState(inBlockPos, defaultSnowState);
+                        level.setBlockAndUpdate(inBlockPos, defaultSnowState);
                     } else if (inBlock == Blocks.WATER) {
                         /*
                          * TODO Check if the earlier event or this one is the correct one.
                          * Consider using world.canBlockFreezeWater(inBlockPos).
                          * Also: bouncy arrow on ice, a bit like stone skimming? Could be cool.
                          */
-                        final BlockState defaultIce = Blocks.ICE.getDefaultState();
-                        world.setBlockState(inBlockPos, defaultIce);
+                        final BlockState defaultIce = Blocks.ICE.defaultBlockState();
+                        //world.setBlockState(inBlockPos, defaultIce);
+                        level.setBlockAndUpdate(inBlockPos, defaultIce);
                     } else if (inBlock == Blocks.SNOW) {
                         int currentSnowLevel = 8;
 
-                        for (int upCount = 0; (upCount < 1024) && (inBlock == Blocks.SNOW) && ((currentSnowLevel = inBlockState.<Integer>get(SnowBlock.LAYERS)) > 7); upCount++) {
-                            inBlockPos = inBlockPos.up();
-                            inBlockState = world.getBlockState(inBlockPos);
+                        for (int upCount = 0; (upCount < 1024) && (inBlock == Blocks.SNOW) && ((currentSnowLevel = inBlockState.<Integer>getValue(SnowBlock.LAYERS)) > 7); upCount++) {
+                            inBlockPos = inBlockPos.above();
+                            inBlockState = level.getBlockState(inBlockPos);
                             inBlock = inBlockState.getBlock();
                         }
 
                         if (currentSnowLevel < 8) {
-                            final BlockState extraSnow = inBlockState.with(SnowBlock.LAYERS, currentSnowLevel + 1);
-                            world.setBlockState(inBlockPos, extraSnow, 10);
-                        } else if (inBlockState.isAir() && defaultSnowState.canPlaceAt(world, inBlockPos)) {
-                            world.setBlockState(inBlockPos, defaultSnowState);
+                            //final BlockState extraSnow = inBlockState.with(SnowBlock.LAYERS, currentSnowLevel + 1);
+                            final BlockState extraSnow = inBlockState.setValue(SnowBlock.LAYERS, currentSnowLevel + 1);
+                            //level.setBlockState(inBlockPos, extraSnow, 10);
+                            level.setBlock(inBlockPos, extraSnow, 10);
+                            //} else if (inBlockState.isAir() && defaultSnowState.canPlaceAt(level, inBlockPos)) {
+                        } else if (inBlockState.isAir() && defaultSnowState.canSurvive(level, inBlockPos)) {
+                            //level.setBlockState(inBlockPos, defaultSnowState);
+                            level.setBlockAndUpdate(inBlockPos, defaultSnowState);
                         }
                     }
                 }
 
                 if (inGroundTime >= 65) {
-                    discard();
+                    remove();
                 }
             }
         }
     }
 
     @Override
-    protected void onEntityHit(EntityHitResult entityHitResult) {
-        final byte arrType = dataTracker.get(trackedType);
+    protected void onHitEntity(EntityRayTraceResult entityHitResult) {
+        final byte arrType = entityData.get(trackedType);
         final Entity entityHit = entityHitResult.getEntity();
 
         if (arrType == ARROW_TYPE_FROST) {
             if (MoreBows.configGeneralInst.frostArrowsShouldBeCold) {
                 if (entityHit instanceof BlazeEntity) {
-                    setDamage(getDamage() * 3.0);
+                    setBaseDamage(getBaseDamage() * 3.0);
                 }
 
-                entityHit.extinguish();
+                entityHit.clearFire();
             }
 
-            if (entityHit instanceof final LivingEntity entityHitLiving) {
+            if (entityHit instanceof LivingEntity) {
+                final LivingEntity entityHitLiving = (LivingEntity) entityHit;
+
                 if (!MoreBows.configGeneralInst.oldFrostArrowMobSlowdown) {
-                    entityHitLiving.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 300, 2));
+                    entityHitLiving.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 300, 2));
                 } else {
-                    entityHitLiving.slowMovement(Blocks.COBWEB.getDefaultState(), new Vec3d(0.25, 0.05, 0.25));
+                    entityHitLiving.makeStuckInBlock(Blocks.COBWEB.defaultBlockState(), new Vector3d(0.25, 0.05, 0.25));
                 }
             }
         }
 
-        final DefaultParticleType part;
+        final BasicParticleType part;
         final int amount;
         final double velocity;
         final boolean randDisp;
 
         switch (arrType) {
-            case ARROW_TYPE_ENDER -> {
-                part = ParticleTypes.PORTAL;
-                amount = 3;
-                randDisp = true;
-                velocity = 1.0;
-            }
+        case ARROW_TYPE_ENDER:
+            part = ParticleTypes.PORTAL;
+            amount = 3;
+            randDisp = true;
+            velocity = 1.0;
+            break;
 
-            case ARROW_TYPE_FIRE -> {
-                part = isOnFire() ? ParticleTypes.FLAME : ParticleTypes.SMOKE;
-                amount = 5;
-                randDisp = true;
-                velocity = 0.05;
-            }
+        case ARROW_TYPE_FIRE:
+            part = isOnFire() ? ParticleTypes.FLAME : ParticleTypes.SMOKE;
+            amount = 5;
+            randDisp = true;
+            velocity = 0.05;
+            break;
 
-            case ARROW_TYPE_FROST -> {
-                part = ParticleTypes.SPLASH;
-                amount = 1;
-                randDisp = false;
-                velocity = 0.01;
-            }
+        case ARROW_TYPE_FROST:
+            part = ParticleTypes.SPLASH;
+            amount = 1;
+            randDisp = false;
+            velocity = 0.01;
+            break;
 
-            default -> {
-                part = ParticleTypes.EXPLOSION;
-                amount = 20;
-                randDisp = true;
-                velocity = 0.0;
-            }
+        default:
+            part = ParticleTypes.EXPLOSION;
+            amount = 20;
+            randDisp = true;
+            velocity = 0.0;
+            break;
         }
 
         // TODO replace with client-side method
         for (int i = 0; i < amount; i++) {
-            MoreBows.tryPart(world, entityHit, part, randDisp, velocity);
+            MoreBows.tryPart(level, entityHit, part, randDisp, velocity);
         }
 
-        super.onEntityHit(entityHitResult);
+        super.onHitEntity(entityHitResult);
     }
 
     /**
@@ -346,9 +363,9 @@ public final class CustomArrow extends PersistentProjectileEntity implements Fly
      * @param nbt the NBT tag
      */
     @Override
-    public void writeCustomDataToNbt(NbtCompound nbt) {
-        super.writeCustomDataToNbt(nbt);
-        nbt.putByte("type", dataTracker.get(trackedType));
+    public void addAdditionalSaveData(CompoundNBT nbt) {
+        super.addAdditionalSaveData(nbt);
+        nbt.putByte("type", entityData.get(trackedType));
     }
 
 }

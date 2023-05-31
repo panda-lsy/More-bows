@@ -2,11 +2,11 @@
     "replace": false,
     "values": [
         {
-            "id": "#c:netherrack",
+            "id": "#forge:netherrack",
             "required": false
         },
         {
-            "id": "#c:netherracks",
+            "id": "#forge:netherracks",
             "required": false
         }
     ]

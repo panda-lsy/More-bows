@@ -1,16 +1,16 @@
 {
     "key": {
         "A": {
-            "tag": "c:ender_eyes"
+            "tag": "forge:ender_eyes"
         },
         "B": {
-            "tag": "c:iron_bows"
+            "tag": "forge:iron_bows"
         },
         "C": {
             "tag": "morebows:gold_ingots"
         },
         "D": {
-            "tag": "c:ender_pearls"
+            "tag": "forge:ender_pearls"
         }
     },
     "pattern": [
