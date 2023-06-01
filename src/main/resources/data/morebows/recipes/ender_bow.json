@@ -7,7 +7,7 @@
             "tag": "forge:iron_bows"
         },
         "C": {
-            "tag": "morebows:gold_ingots"
+            "tag": "forge:ingots/gold"
         },
         "D": {
             "tag": "forge:ender_pearls"

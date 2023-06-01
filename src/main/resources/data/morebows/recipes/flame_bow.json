@@ -1,16 +1,16 @@
 {
     "key": {
         "A": {
-            "tag": "morebows:gold_ingots"
+            "tag": "forge:ingots/gold"
         },
         "B": {
             "tag": "forge:iron_bows"
         },
         "C": {
-            "tag": "morebows:netherrack"
+            "tag": "forge:netherrack"
         },
         "D": {
-            "tag": "morebows:blaze_rods"
+            "tag": "forge:rods/blaze"
         }
     },
     "pattern": [

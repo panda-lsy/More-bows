@@ -1,13 +1,13 @@
 {
     "key": {
         "A": {
-            "tag": "morebows:iron_ingots"
+            "tag": "forge:ingots/iron"
         },
         "B": {
             "tag": "morebows:bows"
         },
         "C": {
-            "tag": "morebows:string"
+            "tag": "forge:string"
         }
     },
     "pattern": [
