@@ -183,7 +183,7 @@ public final class MoreBows {
         if (allItems == null) {
             final Supplier<Ingredient> diamonds = () -> Ingredient.of(ItemTags.getAllTags().getTagOrEmpty(new ResourceLocation(MOD_ID, "diamonds")));
             final Supplier<Ingredient> gold = () -> Ingredient.of(ItemTags.getAllTags().getTagOrEmpty(new ResourceLocation(MOD_ID, "gold_ingots")));
-            final Supplier<Ingredient> enderPearls = () -> Ingredient.of(ItemTags.getAllTags().getTagOrEmpty(new ResourceLocation("c", "ender_pearls")));
+            final Supplier<Ingredient> enderPearls = () -> Ingredient.of(ItemTags.getAllTags().getTagOrEmpty(new ResourceLocation("forge", "ender_pearls")));
             final Supplier<Ingredient> stone = () -> Ingredient.of(ItemTags.getAllTags().getTagOrEmpty(new ResourceLocation(MOD_ID, "stone")));
             final Supplier<Ingredient> iron = () -> Ingredient.of(ItemTags.getAllTags().getTagOrEmpty(new ResourceLocation(MOD_ID, "iron_ingots")));
             final Supplier<Ingredient> ice = () -> Ingredient.of(ItemTags.getAllTags().getTagOrEmpty(new ResourceLocation(MOD_ID, "ice")));
