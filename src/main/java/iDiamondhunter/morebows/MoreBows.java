@@ -171,6 +171,8 @@ public final class MoreBows {
             .build(new ResourceLocation(MOD_ID, "custom_arrow").toString())
                                                                                               );
 
+    private static final String FORGE_NAMSPACE = "forge";
+
     /**
      * Constructs the array of all bow items if it hasn't been constructed,
      * and returns it. This is a hack to construct the items
@@ -181,12 +183,12 @@ public final class MoreBows {
      */
     static @NotNull Item @NotNull [] getAllItems() {
         if (allItems == null) {
-            final Supplier<Ingredient> diamonds = () -> Ingredient.of(ItemTags.getAllTags().getTagOrEmpty(new ResourceLocation(MOD_ID, "diamonds")));
-            final Supplier<Ingredient> gold = () -> Ingredient.of(ItemTags.getAllTags().getTagOrEmpty(new ResourceLocation(MOD_ID, "gold_ingots")));
-            final Supplier<Ingredient> enderPearls = () -> Ingredient.of(ItemTags.getAllTags().getTagOrEmpty(new ResourceLocation("forge", "ender_pearls")));
-            final Supplier<Ingredient> stone = () -> Ingredient.of(ItemTags.getAllTags().getTagOrEmpty(new ResourceLocation(MOD_ID, "stone")));
-            final Supplier<Ingredient> iron = () -> Ingredient.of(ItemTags.getAllTags().getTagOrEmpty(new ResourceLocation(MOD_ID, "iron_ingots")));
-            final Supplier<Ingredient> ice = () -> Ingredient.of(ItemTags.getAllTags().getTagOrEmpty(new ResourceLocation(MOD_ID, "ice")));
+            final Supplier<Ingredient> diamonds = () -> Ingredient.of(ItemTags.getAllTags().getTagOrEmpty(new ResourceLocation(FORGE_NAMSPACE, "gems/diamond")));
+            final Supplier<Ingredient> gold = () -> Ingredient.of(ItemTags.getAllTags().getTagOrEmpty(new ResourceLocation(FORGE_NAMSPACE, "ingots/gold")));
+            final Supplier<Ingredient> enderPearls = () -> Ingredient.of(ItemTags.getAllTags().getTagOrEmpty(new ResourceLocation(FORGE_NAMSPACE, "ender_pearls")));
+            final Supplier<Ingredient> stone = () -> Ingredient.of(ItemTags.getAllTags().getTagOrEmpty(new ResourceLocation(FORGE_NAMSPACE, "stone")));
+            final Supplier<Ingredient> iron = () -> Ingredient.of(ItemTags.getAllTags().getTagOrEmpty(new ResourceLocation(FORGE_NAMSPACE, "ingots/iron")));
+            final Supplier<Ingredient> ice = () -> Ingredient.of(ItemTags.getAllTags().getTagOrEmpty(new ResourceLocation(FORGE_NAMSPACE, "ice")));
             DiamondBow = new CustomBow(new Item.Properties().tab(ItemGroup.TAB_COMBAT).durability(configBowsInst.DiamondBow.confBowDurability).rarity(Rarity.RARE), diamonds, defaultArrowType, configBowsInst.DiamondBow.confBowDamageMult, false, configBowsInst.DiamondBow.confBowDrawbackDiv).setRegistryName(new ResourceLocation(MOD_ID, DiamondBowName));
             GoldBow = new CustomBow(new Item.Properties().tab(ItemGroup.TAB_COMBAT).durability(configBowsInst.GoldBow.confBowDurability).rarity(Rarity.UNCOMMON), gold, defaultArrowType, configBowsInst.GoldBow.confBowDamageMult, false, configBowsInst.GoldBow.confBowDrawbackDiv).setRegistryName(new ResourceLocation(MOD_ID, GoldBowName));
             EnderBow = new CustomBow(new Item.Properties().tab(ItemGroup.TAB_COMBAT).durability(configBowsInst.EnderBow.confBowDurability).rarity(Rarity.EPIC), enderPearls, ARROW_TYPE_ENDER, configBowsInst.EnderBow.confBowDamageMult, true, configBowsInst.EnderBow.confBowDrawbackDiv).setRegistryName(new ResourceLocation(MOD_ID, EnderBowName));
