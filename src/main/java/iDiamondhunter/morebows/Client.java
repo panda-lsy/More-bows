@@ -80,7 +80,7 @@ public class Client {
             finalFov *= 1.0F - (customBow * 0.15F);
             event.setNewfov(finalFov);*/
             float finalFov = event.getFov();
-            final float itemUseCount = bowMaxUseDuration - eventPlayer.getTicksUsingItem();
+            final float itemUseCount = bowMaxUseDuration - eventPlayer.getUseItemRemainingTicks();
             /*
              * First, we have to reverse the standard bow zoom.
              * Minecraft helpfully applies the standard bow zoom
