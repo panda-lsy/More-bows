@@ -28,3 +28,9 @@ This mod was originally created by GaussFire, and maintained + updated by iDiamo
     versionRange="[1.16.5,1.17)"
     ordering="NONE"
     side="BOTH"
+[[dependencies.morebows]]
+    modId="cloth-config"
+    mandatory=false
+    versionRange="[${cloth_config_version},)"
+    ordering="AFTER"
+    side="CLIENT"

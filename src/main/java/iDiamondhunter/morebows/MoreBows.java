@@ -47,7 +47,7 @@ public final class MoreBows {
     /** The loaded bow stats config settings. */
     @SuppressWarnings("NullAway.Init")
     @SuppressFBWarnings("MS_CANNOT_BE_FINAL")
-    static ConfigBows configBowsInst;
+    public static ConfigBows configBowsInst;
 
     /** The loaded general config settings. */
     @SuppressWarnings("NullAway.Init")

@@ -20,6 +20,9 @@ import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ExtensionPoint;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -48,6 +51,10 @@ public class Client {
         final Client clientListener = new Client();
         MinecraftForge.EVENT_BUS.addListener(clientListener::FOV);
         MinecraftForge.EVENT_BUS.addListener(clientListener::renderBow);
+
+        if (ModList.get().isLoaded("cloth-config")) {
+            ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.CONFIGGUIFACTORY, () -> (mc, screen) -> iDiamondhunter.morebows.compat.ConfigScreen.moreBowsConfigScreen(screen));
+        }
     }
 
     /**

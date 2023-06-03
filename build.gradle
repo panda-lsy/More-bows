@@ -29,6 +29,10 @@ plugins {
     id 'com.github.spotbugs' version '5.0.13'
 }
 
+repositories {
+    maven { url "https://maven.shedaniel.me/" }
+}
+
 // Reproducible builds! https://docs.gradle.org/4.9/userguide/working_with_files.html#sec:reproducible_archives
 tasks.withType(AbstractArchiveTask).configureEach {
     preserveFileTimestamps = false
@@ -112,6 +116,10 @@ configurations {
 dependencies {
     minecraft "net.minecraftforge:forge:${project.forge_version}"
 
+    // Cloth config
+    compileOnly(fg.deobf("me.shedaniel.cloth:cloth-config-forge:${project.cloth_config_version}"))
+    proguardHack(fg.deobf("me.shedaniel.cloth:cloth-config-forge:${project.cloth_config_version}"))
+
     // NullAway
     annotationProcessor "com.uber.nullaway:nullaway:0.10.10"
 
@@ -138,7 +146,7 @@ processResources {
 
     // Replace values in only mods.toml.
     filesMatching("META-INF/mods.toml") {
-        expand "version": internalVersion, "modName": project.mod_name
+        expand "version": internalVersion, "modName": project.mod_name, "cloth_config_version": project.cloth_config_version
     }
 
     // Minify .json files in built .jar
