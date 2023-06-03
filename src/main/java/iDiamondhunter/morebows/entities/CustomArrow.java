@@ -6,34 +6,34 @@ import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_FROST;
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_NOT_CUSTOM;
 
 import iDiamondhunter.morebows.MoreBows;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.SnowBlock;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.IRendersAsItem;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.monster.BlazeEntity;
-import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.particles.BasicParticleType;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Blaze;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.ItemSupplier;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SnowLayerBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 
 /**
  * This entity is a custom arrow.
@@ -41,18 +41,17 @@ import net.minecraftforge.fml.network.NetworkHooks;
  * is handled in the MoreBows class with SubscribeEvents.
  * TODO much of this is really out of date
  */
-@OnlyIn(value = Dist.CLIENT, _interface = IRendersAsItem.class)
-public final class CustomArrow extends AbstractArrowEntity implements IRendersAsItem {
+public final class CustomArrow extends AbstractArrow implements ItemSupplier {
 
     /** The type of this arrow. */
-    public static final DataParameter<Byte> trackedType = EntityDataManager.defineId(CustomArrow.class, DataSerializers.BYTE);
+    public static final EntityDataAccessor<Byte> trackedType = SynchedEntityData.defineId(CustomArrow.class, EntityDataSerializers.BYTE);
 
 
     /** If this is the first time this arrow has hit a block. */
     private boolean firstBlockHit = true;
 
     @Override
-    public IPacket<?> getAddEntityPacket() {
+    public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
@@ -64,7 +63,7 @@ public final class CustomArrow extends AbstractArrowEntity implements IRendersAs
      * @param world      used in super construction
      * @deprecated Don't use this
      */
-    public CustomArrow(EntityType<CustomArrow> entityType, World world) {
+    public CustomArrow(EntityType<CustomArrow> entityType, Level world) {
         super(entityType, world);
     }
 
@@ -78,7 +77,7 @@ public final class CustomArrow extends AbstractArrowEntity implements IRendersAs
      * @param z     used in super construction
      * @deprecated Don't use this
      */
-    public CustomArrow(World world, double x, double y, double z) {
+    public CustomArrow(Level world, double x, double y, double z) {
         super(MoreBows.CUSTOM_ARROW.get(), x, y, z, world);
     }
 
@@ -90,7 +89,7 @@ public final class CustomArrow extends AbstractArrowEntity implements IRendersAs
      * @param owner used in super construction
      * @deprecated Don't use this
      */
-    public CustomArrow(World world, LivingEntity owner) {
+    public CustomArrow(Level world, LivingEntity owner) {
         super(MoreBows.CUSTOM_ARROW.get(), owner, world);
     }
 
@@ -101,7 +100,7 @@ public final class CustomArrow extends AbstractArrowEntity implements IRendersAs
      * @param owner used in super construction
      * @param type  the type of arrow
      */
-    public CustomArrow(World world, LivingEntity owner, byte type) {
+    public CustomArrow(Level world, LivingEntity owner, byte type) {
         super(MoreBows.CUSTOM_ARROW.get(), owner, world);
         entityData.set(trackedType, type);
     }
@@ -164,7 +163,7 @@ public final class CustomArrow extends AbstractArrowEntity implements IRendersAs
      * @param nbt the NBT tag
      */
     @Override
-    public void readAdditionalSaveData(CompoundNBT nbt) {
+    public void readAdditionalSaveData(CompoundTag nbt) {
         super.readAdditionalSaveData(nbt);
         entityData.set(trackedType, nbt.getByte("type"));
     }
@@ -175,7 +174,7 @@ public final class CustomArrow extends AbstractArrowEntity implements IRendersAs
         final byte arrType = entityData.get(trackedType);
 
         if ((arrType == ARROW_TYPE_FROST) && super.isCritArrow()) {
-            final Vector3d currentVelocity = getDeltaMovement();
+            final Vec3 currentVelocity = getDeltaMovement();
             final double motionX = currentVelocity.x;
             final double motionY = currentVelocity.y;
             final double motionZ = currentVelocity.z;
@@ -196,7 +195,7 @@ public final class CustomArrow extends AbstractArrowEntity implements IRendersAs
 
             if (inGroundTime > 0) {
                 if (inGroundTime == 1) {
-                    pickup = PickupStatus.DISALLOWED;
+                    pickup = Pickup.DISALLOWED;
                 }
 
                 /*
@@ -264,7 +263,7 @@ public final class CustomArrow extends AbstractArrowEntity implements IRendersAs
                     } else if (inBlock == Blocks.SNOW) {
                         int currentSnowLevel = 8;
 
-                        for (int upCount = 0; (upCount < 1024) && (inBlock == Blocks.SNOW) && ((currentSnowLevel = inBlockState.<Integer>getValue(SnowBlock.LAYERS)) > 7); upCount++) {
+                        for (int upCount = 0; (upCount < 1024) && (inBlock == Blocks.SNOW) && ((currentSnowLevel = inBlockState.<Integer>getValue(SnowLayerBlock.LAYERS)) > 7); upCount++) {
                             inBlockPos = inBlockPos.above();
                             inBlockState = level.getBlockState(inBlockPos);
                             inBlock = inBlockState.getBlock();
@@ -272,7 +271,7 @@ public final class CustomArrow extends AbstractArrowEntity implements IRendersAs
 
                         if (currentSnowLevel < 8) {
                             //final BlockState extraSnow = inBlockState.with(SnowBlock.LAYERS, currentSnowLevel + 1);
-                            final BlockState extraSnow = inBlockState.setValue(SnowBlock.LAYERS, currentSnowLevel + 1);
+                            final BlockState extraSnow = inBlockState.setValue(SnowLayerBlock.LAYERS, currentSnowLevel + 1);
                             //level.setBlockState(inBlockPos, extraSnow, 10);
                             level.setBlock(inBlockPos, extraSnow, 10);
                             //} else if (inBlockState.isAir() && defaultSnowState.canPlaceAt(level, inBlockPos)) {
@@ -284,38 +283,36 @@ public final class CustomArrow extends AbstractArrowEntity implements IRendersAs
                 }
 
                 if (inGroundTime >= 65) {
-                    remove();
+                    discard();
                 }
             }
         }
     }
 
     @Override
-    protected void onHitEntity(EntityRayTraceResult entityHitResult) {
+    protected void onHitEntity(EntityHitResult entityHitResult) {
         final byte arrType = entityData.get(trackedType);
         final Entity entityHit = entityHitResult.getEntity();
 
         if (arrType == ARROW_TYPE_FROST) {
             if (MoreBows.configGeneralInst.frostArrowsShouldBeCold) {
-                if (entityHit instanceof BlazeEntity) {
+                if (entityHit instanceof Blaze) {
                     setBaseDamage(getBaseDamage() * 3.0);
                 }
 
                 entityHit.clearFire();
             }
 
-            if (entityHit instanceof LivingEntity) {
-                final LivingEntity entityHitLiving = (LivingEntity) entityHit;
-
+            if (entityHit instanceof final LivingEntity entityHitLiving) {
                 if (!MoreBows.configGeneralInst.oldFrostArrowMobSlowdown) {
-                    entityHitLiving.addEffect(new EffectInstance(Effects.MOVEMENT_SLOWDOWN, 300, 2));
+                    entityHitLiving.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 300, 2));
                 } else {
-                    entityHitLiving.makeStuckInBlock(Blocks.COBWEB.defaultBlockState(), new Vector3d(0.25, 0.05, 0.25));
+                    entityHitLiving.makeStuckInBlock(Blocks.COBWEB.defaultBlockState(), new Vec3(0.25, 0.05, 0.25));
                 }
             }
         }
 
-        final BasicParticleType part;
+        final SimpleParticleType part;
         final int amount;
         final double velocity;
         final boolean randDisp;
@@ -364,7 +361,7 @@ public final class CustomArrow extends AbstractArrowEntity implements IRendersAs
      * @param nbt the NBT tag
      */
     @Override
-    public void addAdditionalSaveData(CompoundNBT nbt) {
+    public void addAdditionalSaveData(CompoundTag nbt) {
         super.addAdditionalSaveData(nbt);
         nbt.putByte("type", entityData.get(trackedType));
     }

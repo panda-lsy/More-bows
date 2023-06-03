@@ -45,11 +45,11 @@ apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
 // TODO add compilation with Java toolchains
 
-sourceCompatibility = 8
-targetCompatibility = 8
+sourceCompatibility = JavaVersion.VERSION_16
+sourceCompatibility = JavaVersion.VERSION_16
 
 final def compiler = javaToolchains.compilerFor {
-    languageVersion = JavaLanguageVersion.of(8)
+    languageVersion = JavaLanguageVersion.of(16)
 }
 
 import groovy.json.JsonOutput
@@ -57,7 +57,7 @@ import groovy.json.JsonSlurper
 import proguard.gradle.ProGuardTask
 
 archivesBaseName = project.archives_base_name
-version = project.mod_version + "+1.16.x.forge"
+version = project.mod_version + "+1.17.x.forge"
 group = project.maven_group
 //def internalVersion = project.mod_version
 // Version scheme more compatible with the version tags I use on Modrinth
@@ -215,11 +215,8 @@ tasks.register('proguard', ProGuardTask) {
     injars "build/libs/" + rootProject.name + "-" + version + "-dev.jar"
     outjars "build/libs/" + rootProject.name + "-" + version + "-proguard-dev.jar"
 
-    // Get the location of rt.jar from the provided toolchain.
-    // Note to self: probably support building with not outdated versions of Java in the future.
-    libraryjars compiler.get().metadata.installationPath.asFile.absolutePath + "/lib/rt.jar"
-    // If rt.jar is not there, try looking inside a JRE folder instead.
-    libraryjars compiler.get().metadata.installationPath.asFile.absolutePath + "/jre/lib/rt.jar"
+    // Get the Java standard library from the provided toolchain.
+    libraryjars compiler.get().metadata.installationPath.asFile.absolutePath + "/jmods/java.base.jmod", jarfilter: '!**.jar', filter: '!module-info.class'
 
     // Add relevant Minecraft libraries to ProGuard's list of libraries to obfuscate against.
     libraryjars project.configurations.minecraft

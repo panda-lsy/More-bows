@@ -1,31 +1,32 @@
 package iDiamondhunter.morebows;
 
 import com.google.errorprone.annotations.CompileTimeConstant;
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.entity.NoopRenderer;
+import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.IItemPropertyGetter;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemModelsProperties;
-import net.minecraft.util.Hand;
-import net.minecraft.util.HandSide;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ExtensionPoint;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fmlclient.ConfigGuiHandler;
 
 /** The client mod initializer. */
 @Mod.EventBusSubscriber(modid = MoreBows.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
@@ -35,17 +36,21 @@ public class Client {
     static final int bowMaxUseDuration = 72000;
 
     @SubscribeEvent
+    public static void registerRenderer(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerEntityRenderer(MoreBows.CUSTOM_ARROW.get(), CustomArrowRenderer::new);
+        event.registerEntityRenderer(MoreBows.ARROW_SPAWNER.get(), NoopRenderer::new);
+    }
+
+    @SubscribeEvent
     public static void onInitializeClient(FMLClientSetupEvent event) {
-        RenderingRegistry.registerEntityRenderingHandler(MoreBows.CUSTOM_ARROW.get(), CustomArrowRenderer::new);
-        // RenderingRegistry.registerEntityRenderingHandler(MoreBows.ARROW_SPAWNER.get(), EmptyEntityRenderer::new);
         final ResourceLocation PULL = new ResourceLocation("pull");
         final ResourceLocation PULLING = new ResourceLocation("pulling");
-        final IItemPropertyGetter PULL_PROVIDER = (stack, world, entity) -> (entity == null ? 0.0F : entity.getUseItem() != stack ? 0.0F : (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / ((CustomBow) stack.getItem()).powerDiv);
-        final IItemPropertyGetter PULLING_PROVIDER = (stack, world, entity) -> ((entity != null) && entity.isUsingItem() && (entity.getUseItem() == stack) ? 1.0F : 0.0F);
+        final ItemPropertyFunction PULL_PROVIDER = (stack, world, entity, unused) -> (entity == null ? 0.0F : entity.getUseItem() != stack ? 0.0F : (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / ((CustomBow) stack.getItem()).powerDiv);
+        final ItemPropertyFunction PULLING_PROVIDER = (stack, world, entity, unused) -> ((entity != null) && entity.isUsingItem() && (entity.getUseItem() == stack) ? 1.0F : 0.0F);
 
         for (final Item bow : MoreBows.getAllItems()) {
-            ItemModelsProperties.register(bow, PULL, PULL_PROVIDER);
-            ItemModelsProperties.register(bow, PULLING, PULLING_PROVIDER);
+            ItemProperties.register(bow, PULL, PULL_PROVIDER);
+            ItemProperties.register(bow, PULLING, PULLING_PROVIDER);
         }
 
         final Client clientListener = new Client();
@@ -53,7 +58,7 @@ public class Client {
         MinecraftForge.EVENT_BUS.addListener(clientListener::renderBow);
 
         if (ModList.get().isLoaded("cloth-config")) {
-            ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.CONFIGGUIFACTORY, () -> (mc, screen) -> iDiamondhunter.morebows.compat.ConfigScreen.moreBowsConfigScreen(screen));
+            ModLoadingContext.get().registerExtensionPoint(ConfigGuiHandler.ConfigGuiFactory.class, () -> new ConfigGuiHandler.ConfigGuiFactory((mc, screen) -> iDiamondhunter.morebows.compat.ConfigScreen.moreBowsConfigScreen(screen)));
         }
     }
 
@@ -64,11 +69,11 @@ public class Client {
      */
     @SubscribeEvent
     public void FOV(FOVUpdateEvent event) {
-        final PlayerEntity eventPlayer = event.getEntity();
+        final Player eventPlayer = event.getEntity();
         final Item eventItem = eventPlayer.getUseItem().getItem();
 
         if (eventItem instanceof CustomBow) {
-            /*float finalFov = event.getFov();
+            float finalFov = event.getFov();
             float customBow = eventPlayer.getTicksUsingItem() / ((CustomBow) eventItem).powerDiv;
 
             if (customBow > 1.0F) {
@@ -78,8 +83,8 @@ public class Client {
             }
 
             finalFov *= 1.0F - (customBow * 0.15F);
-            event.setNewfov(finalFov);*/
-            float finalFov = event.getFov();
+            event.setNewfov(finalFov);
+            /*float finalFov = event.getFov();
             final float itemUseCount = bowMaxUseDuration - eventPlayer.getUseItemRemainingTicks();
             /*
              * First, we have to reverse the standard bow zoom.
@@ -89,7 +94,7 @@ public class Client {
              * so the standard zoom is not at the right speed.
              * To compensate for this, we just calculate the standard bow zoom,
              * and apply it in reverse.
-             */
+             * /
             float realBow = itemUseCount / 20.0F;
 
             if (realBow > 1.0F) {
@@ -102,14 +107,14 @@ public class Client {
              * Minecraft uses finalFov *= 1.0F - (realBow * 0.15F)
              * to calculate the standard bow zoom.
              * To reverse this, we just divide it instead.
-             */
+             * /
             finalFov /= 1.0F - (realBow * 0.15F);
             /*
              * We now calculate and apply our CustomBow zoom.
              * The only difference between standard bow zoom and CustomBow zoom
              * is that we change the hardcoded value of 20.0F to
              * whatever powerDiv is.
-             */
+             * /
             float customBow = itemUseCount / ((CustomBow) eventItem).powerDiv;
 
             if (customBow > 1.0F) {
@@ -119,7 +124,7 @@ public class Client {
             }
 
             finalFov *= 1.0F - (customBow * 0.15F);
-            event.setNewfov(finalFov);
+            event.setNewfov(finalFov);*/
         }
     }
 
@@ -140,10 +145,10 @@ public class Client {
         if (mc.options.getCameraType().isFirstPerson() && mc.player.isUsingItem() && (mc.player.getUsedItemHand() == event.getHand()) && (mc.player.getTicksUsingItem() > 0) && (event.getItemStack().getItem() instanceof CustomBow)) {
             // Cancel rendering so we can render instead
             event.setCanceled(true);
-            final MatrixStack stack = event.getMatrixStack();
+            final PoseStack stack = event.getMatrixStack();
             stack.pushPose();
             // TODO this is silly
-            final boolean rightHanded = (event.getHand() == Hand.MAIN_HAND ? mc.player.getMainArm() : mc.player.getMainArm().getOpposite()) == HandSide.RIGHT;
+            final boolean rightHanded = (event.getHand() == InteractionHand.MAIN_HAND ? mc.player.getMainArm() : mc.player.getMainArm().getOpposite()) == HumanoidArm.RIGHT;
             final int handedSide = rightHanded ? 1 : -1;
             /*
              * Translate to current hand
@@ -168,7 +173,7 @@ public class Client {
             // Bow animations and transformations
             if (divTicks > 0.1F) {
                 // Bow shake
-                stack.translate(0.0F, MathHelper.sin((ticks - 0.1F) * 1.3F) * (divTicks - 0.1F) * 0.004F, 0.0F);
+                stack.translate(0.0F, Mth.sin((ticks - 0.1F) * 1.3F) * (divTicks - 0.1F) * 0.004F, 0.0F);
             }
 
             // Backwards motion ("draw back" animation)
@@ -178,7 +183,8 @@ public class Client {
             // Rotate bow based on handedness
             stack.mulPose(Vector3f.YN.rotationDegrees(handedSide * 45.0F));
             // Let Minecraft do the rest of the item rendering
-            mc.getItemRenderer().renderStatic(mc.player, event.getItemStack(), rightHanded ? ItemCameraTransforms.TransformType.FIRST_PERSON_RIGHT_HAND : ItemCameraTransforms.TransformType.FIRST_PERSON_LEFT_HAND, !rightHanded, stack, event.getBuffers(), mc.player.level, event.getLight(), OverlayTexture.NO_OVERLAY);
+            final ItemTransforms.TransformType type = rightHanded ? ItemTransforms.TransformType.FIRST_PERSON_RIGHT_HAND : ItemTransforms.TransformType.FIRST_PERSON_LEFT_HAND;
+            mc.getItemRenderer().renderStatic(mc.player, event.getItemStack(), type, !rightHanded, stack, event.getBuffers(), mc.player.level, event.getLight(), OverlayTexture.NO_OVERLAY, mc.player.getId() + type.ordinal());
             stack.popPose();
         }
     }
