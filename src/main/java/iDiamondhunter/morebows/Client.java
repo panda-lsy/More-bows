@@ -57,7 +57,7 @@ public class Client {
         MinecraftForge.EVENT_BUS.addListener(clientListener::FOV);
         MinecraftForge.EVENT_BUS.addListener(clientListener::renderBow);
 
-        if (ModList.get().isLoaded("cloth-config")) {
+        if (ModList.get().isLoaded("cloth_config")) {
             ModLoadingContext.get().registerExtensionPoint(ConfigGuiHandler.ConfigGuiFactory.class, () -> new ConfigGuiHandler.ConfigGuiFactory((mc, screen) -> iDiamondhunter.morebows.compat.ConfigScreen.moreBowsConfigScreen(screen)));
         }
     }
