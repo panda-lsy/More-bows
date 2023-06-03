@@ -1,9 +1,9 @@
 package iDiamondhunter.morebows.config;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
-import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
 
 import com.google.errorprone.annotations.CompileTimeConstant;
@@ -94,7 +94,7 @@ public final class ConfigBows {
 
         if (configPath.toFile().exists()) {
             try {
-                loadedConfig = OUTPUT_GSON.fromJson(FileUtils.readFileToString(configPath.toFile()), ConfigBows.class);
+                loadedConfig = OUTPUT_GSON.fromJson(Files.readString(configPath), ConfigBows.class);
             } catch (JsonSyntaxException | IOException e) {
                 MoreBows.modLog.error("Error while reading bow stats config from file", e);
                 loadedConfig = new ConfigBows();
@@ -113,7 +113,7 @@ public final class ConfigBows {
         final Path configPath = FMLPaths.CONFIGDIR.get().resolve(MoreBows.MOD_ID + "_bowstats.json");
 
         try {
-            FileUtils.writeStringToFile(configPath.toFile(), OUTPUT_GSON.toJson(config));
+            Files.writeString(configPath, OUTPUT_GSON.toJson(config));
         } catch (final IOException e) {
             MoreBows.modLog.error("Error while writing bow stats config to file", e);
         }

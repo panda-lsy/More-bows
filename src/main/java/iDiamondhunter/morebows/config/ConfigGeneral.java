@@ -1,9 +1,9 @@
 package iDiamondhunter.morebows.config;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
-import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
 
 import com.google.errorprone.annotations.CompileTimeConstant;
@@ -80,7 +80,7 @@ public final class ConfigGeneral {
 
         if (configPath.toFile().exists()) {
             try {
-                loadedConfig = OUTPUT_GSON.fromJson(FileUtils.readFileToString(configPath.toFile()), ConfigGeneral.class);
+                loadedConfig = OUTPUT_GSON.fromJson(Files.readString(configPath), ConfigGeneral.class);
             } catch (JsonSyntaxException | IOException e) {
                 MoreBows.modLog.error("Error while reading general config from file", e);
                 loadedConfig = new ConfigGeneral();
@@ -99,7 +99,7 @@ public final class ConfigGeneral {
         final Path configPath = FMLPaths.CONFIGDIR.get().resolve(MoreBows.MOD_ID + "_general.json");
 
         try {
-            FileUtils.writeStringToFile(configPath.toFile(), OUTPUT_GSON.toJson(config));
+            Files.writeString(configPath, OUTPUT_GSON.toJson(config));
         } catch (final IOException e) {
             MoreBows.modLog.error("Error while writing general config to file", e);
         }
