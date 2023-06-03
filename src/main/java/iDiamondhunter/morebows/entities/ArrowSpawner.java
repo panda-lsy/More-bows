@@ -191,45 +191,41 @@ public final class ArrowSpawner extends Entity {
                     final float soundPitch;
 
                     switch (i) {
-                    case 2:
-                        arrYDisp = 1.0;
-                        arrXDisp = -1.25;
-                        arrZDisp = 1.75;
-                        soundVolume = 1.0F;
-                        soundPitch = (1.0F / ((random.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F);
-                        break;
-
-                    case 3:
-                        arrYDisp = 1.45;
-                        arrXDisp = -2.25;
-                        arrZDisp = -0.75;
-                        soundVolume = 0.25F;
-                        soundPitch = (1.0F / ((random.nextFloat() * 0.4F) + 1.0F)) + (shotVelocity * 0.3F);
-                        break;
-
-                    case 4:
-                        arrYDisp = 2.0;
-                        arrXDisp = 0.25;
-                        arrZDisp = 2.5;
-                        soundVolume = 1.0F;
-                        soundPitch = (1.0F / ((random.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F);
-                        break;
-
-                    case 5:
-                        arrYDisp = 1.75;
-                        arrXDisp = 1.75;
-                        arrZDisp = 1.5;
-                        soundVolume = 0.5F;
-                        soundPitch = (1.0F / ((random.nextFloat() * 0.4F) + 1.0F)) + (shotVelocity * 0.4F);
-                        break;
-
-                    default:
-                        arrYDisp = 0.0;
-                        arrXDisp = 0.0;
-                        arrZDisp = 0.0;
-                        soundVolume = 0.5F;
-                        soundPitch = (1.0F / ((random.nextFloat() * 0.4F) + 1.0F)) + (shotVelocity * 0.4F);
-                        break;
+                        case 2 -> {
+                            arrYDisp = 1.0;
+                            arrXDisp = -1.25;
+                            arrZDisp = 1.75;
+                            soundVolume = 1.0F;
+                            soundPitch = (1.0F / ((random.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F);
+                        }
+                        case 3 -> {
+                            arrYDisp = 1.45;
+                            arrXDisp = -2.25;
+                            arrZDisp = -0.75;
+                            soundVolume = 0.25F;
+                            soundPitch = (1.0F / ((random.nextFloat() * 0.4F) + 1.0F)) + (shotVelocity * 0.3F);
+                        }
+                        case 4 -> {
+                            arrYDisp = 2.0;
+                            arrXDisp = 0.25;
+                            arrZDisp = 2.5;
+                            soundVolume = 1.0F;
+                            soundPitch = (1.0F / ((random.nextFloat() * 0.4F) + 1.2F)) + (shotVelocity * 0.5F);
+                        }
+                        case 5 -> {
+                            arrYDisp = 1.75;
+                            arrXDisp = 1.75;
+                            arrZDisp = 1.5;
+                            soundVolume = 0.5F;
+                            soundPitch = (1.0F / ((random.nextFloat() * 0.4F) + 1.0F)) + (shotVelocity * 0.4F);
+                        }
+                        default -> {
+                            arrYDisp = 0.0;
+                            arrXDisp = 0.0;
+                            arrZDisp = 0.0;
+                            soundVolume = 0.5F;
+                            soundPitch = (1.0F / ((random.nextFloat() * 0.4F) + 1.0F)) + (shotVelocity * 0.4F);
+                        }
                     }
 
                     arrow.setPos(arrow.getX() + arrXDisp, arrow.getY() + arrYDisp, arrow.getZ() + arrZDisp);

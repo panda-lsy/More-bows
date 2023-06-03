@@ -214,33 +214,15 @@ public final class CustomBow extends BowItem {
                         arrs = new AbstractArrow[shotArrows];
 
                         for (int i = 0; i < shotArrows; ++i) {
-                            final float velocityChoice;
 
-                            switch (i) {
-                            case 1:
-                                velocityChoice = shotVelocity * (1.0F * 1.5F);
-                                break;
-
-                            case 2:
-                                velocityChoice = shotVelocity * (1.2F * 1.5F);
-                                break;
-
-                            case 3:
-                                velocityChoice = shotVelocity * (1.5F * 1.5F);
-                                break;
-
-                            case 4:
-                                velocityChoice = shotVelocity * (1.75F * 1.5F);
-                                break;
-
-                            case 5:
-                                velocityChoice = shotVelocity * (1.825F * 1.5F);
-                                break;
-
-                            default:
-                                velocityChoice = shotVelocity * (2.0F * 1.5F);
-                                break;
-                            }
+                            final float velocityChoice = switch (i) {
+                                case 1 -> shotVelocity * (1.0F * 1.5F);
+                                case 2 -> shotVelocity * (1.2F * 1.5F);
+                                case 3 -> shotVelocity * (1.5F * 1.5F);
+                                case 4 -> shotVelocity * (1.75F * 1.5F);
+                                case 5 -> shotVelocity * (1.825F * 1.5F);
+                                default -> shotVelocity * (2.0F * 1.5F);
+                            };
 
                             if (i > 0) {
                                 arrs[i] = possiblyCustomArrowHelper(world, player, velocityChoice, useAmmo, useArrow, bowType);
@@ -253,21 +235,12 @@ public final class CustomBow extends BowItem {
                         arrs = new AbstractArrow[shotArrows];
 
                         for (int i = 0; i < shotArrows; ++i) {
-                            final float velocityChoice;
 
-                            switch (i) {
-                            case 1:
-                                velocityChoice = shotVelocity * (1.65F * 1.5F);
-                                break;
-
-                            case 2:
-                                velocityChoice = shotVelocity * (1.275F * 1.5F);
-                                break;
-
-                            default:
-                                velocityChoice = shotVelocity * (2.0F * 1.5F);
-                                break;
-                            }
+                            final float velocityChoice = switch (i) {
+                                case 1 -> shotVelocity * (1.65F * 1.5F);
+                                case 2 -> shotVelocity * (1.275F * 1.5F);
+                                default -> shotVelocity * (2.0F * 1.5F);
+                            };
 
                             if (i > 0) {
                                 arrs[i] = arrowHelper(world, player, velocityChoice, useAmmo, useArrow);
@@ -338,21 +311,12 @@ public final class CustomBow extends BowItem {
                         for (int i = 0; i < shotArrows; ++i) {
                             final @NotNull AbstractArrow arr = arrs[i];
                             world.addFreshEntity(arr);
-                            final double damageMultiChoice;
 
-                            switch (i) {
-                            case 1:
-                                damageMultiChoice = 1.3;
-                                break;
-
-                            case 2:
-                                damageMultiChoice = 1.15;
-                                break;
-
-                            default:
-                                damageMultiChoice = 1.5;
-                                break;
-                            }
+                            final double damageMultiChoice = switch (i) {
+                                case 1 -> 1.3;
+                                case 2 -> 1.15;
+                                default -> 1.5;
+                            };
 
                             final @Nullable Entity arrOwner = arr.getOwner();
 

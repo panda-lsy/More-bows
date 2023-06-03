@@ -318,33 +318,33 @@ public final class CustomArrow extends AbstractArrow implements ItemSupplier {
         final boolean randDisp;
 
         switch (arrType) {
-        case ARROW_TYPE_ENDER:
-            part = ParticleTypes.PORTAL;
-            amount = 3;
-            randDisp = true;
-            velocity = 1.0;
-            break;
+            case ARROW_TYPE_ENDER -> {
+                part = ParticleTypes.PORTAL;
+                amount = 3;
+                randDisp = true;
+                velocity = 1.0;
+            }
 
-        case ARROW_TYPE_FIRE:
-            part = isOnFire() ? ParticleTypes.FLAME : ParticleTypes.SMOKE;
-            amount = 5;
-            randDisp = true;
-            velocity = 0.05;
-            break;
+            case ARROW_TYPE_FIRE -> {
+                part = isOnFire() ? ParticleTypes.FLAME : ParticleTypes.SMOKE;
+                amount = 5;
+                randDisp = true;
+                velocity = 0.05;
+            }
 
-        case ARROW_TYPE_FROST:
-            part = ParticleTypes.SPLASH;
-            amount = 1;
-            randDisp = false;
-            velocity = 0.01;
-            break;
+            case ARROW_TYPE_FROST -> {
+                part = ParticleTypes.SPLASH;
+                amount = 1;
+                randDisp = false;
+                velocity = 0.01;
+            }
 
-        default:
-            part = ParticleTypes.EXPLOSION;
-            amount = 20;
-            randDisp = true;
-            velocity = 0.0;
-            break;
+            default -> {
+                part = ParticleTypes.EXPLOSION;
+                amount = 20;
+                randDisp = true;
+                velocity = 0.0;
+            }
         }
 
         // TODO replace with client-side method
