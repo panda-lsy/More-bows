@@ -107,13 +107,6 @@ public final class ConfigGeneral {
 
     /**
      * MoreBows config setting:
-     * Enable Nyf's Quivers compatibility.
-     * This should only be disabled if it's causing issues.
-     */
-    public boolean nyfsQuiversCompatEnabled = true;
-
-    /**
-     * MoreBows config setting:
      * If true, frost arrows extinguish fire from Entities that are on fire.
      * If false, frost arrows can be on fire.
      */
