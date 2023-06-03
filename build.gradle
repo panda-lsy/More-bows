@@ -53,8 +53,9 @@ import groovy.json.JsonSlurper
 import proguard.gradle.ProGuardTask
 
 archivesBaseName = project.archives_base_name
-version = project.mod_version
+version = project.mod_version + "+1.16.x.forge"
 group = project.maven_group
+def internalVersion = project.mod_version
 
 //final def modName = project.mod_name
 final def build_release = System.getenv("BUILD_RELEASE") == "true"
@@ -62,7 +63,8 @@ final def build_release = System.getenv("BUILD_RELEASE") == "true"
 // Add snapshot suffix to version if not building a release.
 // To build a release, set the environment variable BUILD_RELEASE to true.
 if (!build_release) {
-    version += ".SNAPSHOT"
+    version += "-SNAPSHOT"
+    internalVersion += "-SNAPSHOT"
 }
 
 // Information for ForgeGradle to configure the Minecraft / Forge version.
@@ -129,12 +131,12 @@ jar.finalizedBy('reobfJar')
 
 processResources {
     // This will ensure that this task is redone when the versions change.
-    inputs.property "version", project.mod_version
+    inputs.property "version", internalVersion
     inputs.property "modName", project.mod_name
 
     // Replace values in only mods.toml.
     filesMatching("META-INF/mods.toml") {
-        expand "version": project.mod_version, "modName": project.mod_name
+        expand "version": internalVersion, "modName": project.mod_name
     }
 
     // Minify .json files in built .jar
