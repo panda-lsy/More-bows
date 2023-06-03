@@ -41,6 +41,7 @@ import net.minecraftforge.fml.network.NetworkHooks;
  * is handled in the MoreBows class with SubscribeEvents.
  * TODO much of this is really out of date
  */
+@OnlyIn(value = Dist.CLIENT, _interface = IRendersAsItem.class)
 public final class CustomArrow extends AbstractArrowEntity implements IRendersAsItem {
 
     /** The type of this arrow. */
