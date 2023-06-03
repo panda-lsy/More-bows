@@ -33,7 +33,6 @@ public class Client {
 
     @SubscribeEvent
     public static void onInitializeClient(FMLClientSetupEvent event) {
-        MoreBows.modLog.info("client mod init");
         RenderingRegistry.registerEntityRenderingHandler(MoreBows.CUSTOM_ARROW.get(), CustomArrowRenderer::new);
         // RenderingRegistry.registerEntityRenderingHandler(MoreBows.ARROW_SPAWNER.get(), EmptyEntityRenderer::new);
         final ResourceLocation PULL = new ResourceLocation("pull");

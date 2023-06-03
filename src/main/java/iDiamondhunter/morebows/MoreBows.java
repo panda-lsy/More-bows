@@ -228,7 +228,6 @@ public final class MoreBows {
 
     @SubscribeEvent
     public void registerItems(RegistryEvent.Register<Item> event) {
-        modLog.info("item register");
         event.getRegistry().registerAll(getAllItems());
     }
 
