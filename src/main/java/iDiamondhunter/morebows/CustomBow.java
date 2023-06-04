@@ -128,13 +128,17 @@ public final class CustomBow extends BowItem {
 
         final boolean alwaysShoots = player.getAbilities().instabuild || (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, stack) > 0);
         ItemStack ammo = player.getProjectile(stack);
+        final int charge = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(stack, world, player, getUseDuration(stack) - remainingUseTicks, !stack.isEmpty() || alwaysShoots);
+
+        if (charge < 0) {
+            return;
+        }
 
         if (!ammo.isEmpty() || alwaysShoots) {
             if (ammo.isEmpty()) {
                 ammo = new ItemStack(Items.ARROW);
             }
 
-            final int charge = getUseDuration(stack) - remainingUseTicks;
             float shotVelocity = charge / powerDiv;
             shotVelocity = ((shotVelocity * shotVelocity) + (shotVelocity * 2.0F)) / 3.0F;
 
