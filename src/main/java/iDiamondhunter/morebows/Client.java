@@ -45,7 +45,7 @@ public class Client {
     public static void onInitializeClient(FMLClientSetupEvent event) {
         final ResourceLocation PULL = new ResourceLocation("pull");
         final ResourceLocation PULLING = new ResourceLocation("pulling");
-        final ItemPropertyFunction PULL_PROVIDER = (stack, world, entity, unused) -> (entity == null ? 0.0F : entity.getUseItem() != stack ? 0.0F : (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / ((CustomBow) stack.getItem()).powerDiv);
+        final ItemPropertyFunction PULL_PROVIDER = (stack, world, entity, unused) -> ((entity == null) || (entity.getUseItem() != stack) ? 0.0F : (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / ((CustomBow) stack.getItem()).powerDiv);
         final ItemPropertyFunction PULLING_PROVIDER = (stack, world, entity, unused) -> ((entity != null) && entity.isUsingItem() && (entity.getUseItem() == stack) ? 1.0F : 0.0F);
 
         for (final Item bow : MoreBows.getAllItems()) {
