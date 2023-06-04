@@ -2,7 +2,7 @@ package iDiamondhunter.morebows;
 
 import com.google.errorprone.annotations.CompileTimeConstant;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
@@ -159,9 +159,9 @@ public class Client {
              */
             stack.translate(handedSide * 0.2814318F, -0.3365561F + (event.getEquipProgress() * -0.6F), -0.5626847F);
             // Rotate angles
-            stack.mulPose(Vector3f.XP.rotationDegrees(-13.935F));
-            stack.mulPose(Vector3f.YP.rotationDegrees(handedSide * 35.3F));
-            stack.mulPose(Vector3f.ZP.rotationDegrees(handedSide * -9.785F));
+            stack.mulPose(Axis.XP.rotationDegrees(-13.935F));
+            stack.mulPose(Axis.YP.rotationDegrees(handedSide * 35.3F));
+            stack.mulPose(Axis.ZP.rotationDegrees(handedSide * -9.785F));
             final float ticks = bowMaxUseDuration - ((mc.player.getUseItemRemainingTicks() - event.getPartialTick()) + 1.0F);
             float divTicks = ticks / bow.powerDiv;
             divTicks = ((divTicks * divTicks) + (divTicks * 2.0F)) / 3.0F;
@@ -181,7 +181,7 @@ public class Client {
             // Relative scaling for FOV reasons
             stack.scale(1.0F, 1.0F, 1.0F + (divTicks * 0.2F));
             // Rotate bow based on handedness
-            stack.mulPose(Vector3f.YN.rotationDegrees(handedSide * 45.0F));
+            stack.mulPose(Axis.YN.rotationDegrees(handedSide * 45.0F));
             // Let Minecraft do the rest of the item rendering
             final ItemTransforms.TransformType type = rightHanded ? ItemTransforms.TransformType.FIRST_PERSON_RIGHT_HAND : ItemTransforms.TransformType.FIRST_PERSON_LEFT_HAND;
             mc.getItemRenderer().renderStatic(mc.player, event.getItemStack(), type, !rightHanded, stack, event.getMultiBufferSource(), mc.player.level, event.getPackedLight(), OverlayTexture.NO_OVERLAY, mc.player.getId() + type.ordinal());

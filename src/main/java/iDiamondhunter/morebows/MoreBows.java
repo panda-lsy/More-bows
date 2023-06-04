@@ -20,11 +20,12 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.event.CreativeModeTabEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -189,14 +190,14 @@ public final class MoreBows {
             final Supplier<Ingredient> stone = () -> Ingredient.of(ItemTags.create(new ResourceLocation(FORGE_NAMSPACE, "stone")));
             final Supplier<Ingredient> iron = () -> Ingredient.of(ItemTags.create(new ResourceLocation(FORGE_NAMSPACE, "ingots/iron")));
             final Supplier<Ingredient> ice = () -> Ingredient.of(ItemTags.create(new ResourceLocation(FORGE_NAMSPACE, "ice")));
-            DiamondBow = new CustomBow(new Item.Properties().tab(CreativeModeTab.TAB_COMBAT).durability(configBowsInst.DiamondBow.confBowDurability).rarity(Rarity.RARE), diamonds, defaultArrowType, configBowsInst.DiamondBow.confBowDamageMult, false, configBowsInst.DiamondBow.confBowDrawbackDiv);
-            GoldBow = new CustomBow(new Item.Properties().tab(CreativeModeTab.TAB_COMBAT).durability(configBowsInst.GoldBow.confBowDurability).rarity(Rarity.UNCOMMON), gold, defaultArrowType, configBowsInst.GoldBow.confBowDamageMult, false, configBowsInst.GoldBow.confBowDrawbackDiv);
-            EnderBow = new CustomBow(new Item.Properties().tab(CreativeModeTab.TAB_COMBAT).durability(configBowsInst.EnderBow.confBowDurability).rarity(Rarity.EPIC), enderPearls, ARROW_TYPE_ENDER, configBowsInst.EnderBow.confBowDamageMult, true, configBowsInst.EnderBow.confBowDrawbackDiv);
-            StoneBow = new CustomBow(new Item.Properties().tab(CreativeModeTab.TAB_COMBAT).durability(configBowsInst.StoneBow.confBowDurability).rarity(Rarity.COMMON), stone, defaultArrowType, configBowsInst.StoneBow.confBowDamageMult, false, configBowsInst.StoneBow.confBowDrawbackDiv);
-            IronBow = new CustomBow(new Item.Properties().tab(CreativeModeTab.TAB_COMBAT).durability(configBowsInst.IronBow.confBowDurability).rarity(Rarity.COMMON), iron, defaultArrowType, configBowsInst.IronBow.confBowDamageMult, false, configBowsInst.IronBow.confBowDrawbackDiv);
-            MultiBow = new CustomBow(new Item.Properties().tab(CreativeModeTab.TAB_COMBAT).durability(configBowsInst.MultiBow.confBowDurability).rarity(Rarity.RARE), iron, ARROW_TYPE_NOT_CUSTOM, configBowsInst.MultiBow.confBowDamageMult, true, configBowsInst.MultiBow.confBowDrawbackDiv);
-            FlameBow = new CustomBow(new Item.Properties().tab(CreativeModeTab.TAB_COMBAT).durability(configBowsInst.FlameBow.confBowDurability).rarity(Rarity.UNCOMMON).fireResistant(), gold, ARROW_TYPE_FIRE, configBowsInst.FlameBow.confBowDamageMult, false, configBowsInst.FlameBow.confBowDrawbackDiv);
-            FrostBow = new CustomBow(new Item.Properties().tab(CreativeModeTab.TAB_COMBAT).durability(configBowsInst.FrostBow.confBowDurability).rarity(Rarity.COMMON), ice, ARROW_TYPE_FROST, configBowsInst.FrostBow.confBowDamageMult, false, configBowsInst.FrostBow.confBowDrawbackDiv);
+            DiamondBow = new CustomBow(new Item.Properties().durability(configBowsInst.DiamondBow.confBowDurability).rarity(Rarity.RARE), diamonds, defaultArrowType, configBowsInst.DiamondBow.confBowDamageMult, false, configBowsInst.DiamondBow.confBowDrawbackDiv);
+            GoldBow = new CustomBow(new Item.Properties().durability(configBowsInst.GoldBow.confBowDurability).rarity(Rarity.UNCOMMON), gold, defaultArrowType, configBowsInst.GoldBow.confBowDamageMult, false, configBowsInst.GoldBow.confBowDrawbackDiv);
+            EnderBow = new CustomBow(new Item.Properties().durability(configBowsInst.EnderBow.confBowDurability).rarity(Rarity.EPIC), enderPearls, ARROW_TYPE_ENDER, configBowsInst.EnderBow.confBowDamageMult, true, configBowsInst.EnderBow.confBowDrawbackDiv);
+            StoneBow = new CustomBow(new Item.Properties().durability(configBowsInst.StoneBow.confBowDurability).rarity(Rarity.COMMON), stone, defaultArrowType, configBowsInst.StoneBow.confBowDamageMult, false, configBowsInst.StoneBow.confBowDrawbackDiv);
+            IronBow = new CustomBow(new Item.Properties().durability(configBowsInst.IronBow.confBowDurability).rarity(Rarity.COMMON), iron, defaultArrowType, configBowsInst.IronBow.confBowDamageMult, false, configBowsInst.IronBow.confBowDrawbackDiv);
+            MultiBow = new CustomBow(new Item.Properties().durability(configBowsInst.MultiBow.confBowDurability).rarity(Rarity.RARE), iron, ARROW_TYPE_NOT_CUSTOM, configBowsInst.MultiBow.confBowDamageMult, true, configBowsInst.MultiBow.confBowDrawbackDiv);
+            FlameBow = new CustomBow(new Item.Properties().durability(configBowsInst.FlameBow.confBowDurability).rarity(Rarity.UNCOMMON).fireResistant(), gold, ARROW_TYPE_FIRE, configBowsInst.FlameBow.confBowDamageMult, false, configBowsInst.FlameBow.confBowDrawbackDiv);
+            FrostBow = new CustomBow(new Item.Properties().durability(configBowsInst.FrostBow.confBowDurability).rarity(Rarity.COMMON), ice, ARROW_TYPE_FROST, configBowsInst.FrostBow.confBowDamageMult, false, configBowsInst.FrostBow.confBowDrawbackDiv);
             allItems = new Item[] { DiamondBow, EnderBow, FlameBow, FrostBow, GoldBow, IronBow, MultiBow, StoneBow };
         }
 
@@ -219,6 +220,7 @@ public final class MoreBows {
         //MinecraftForge.EVENT_BUS.register(this);
         //FMLJavaModLoadingContext.get().getModEventBus().register(this);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::registerItems);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::addItemsToTab);
         ENTITY.register(FMLJavaModLoadingContext.get().getModEventBus());
     }
 
@@ -237,6 +239,20 @@ public final class MoreBows {
             helper.register(new ResourceLocation(MOD_ID, FrostBowName), FrostBow);
         }
                       );
+    }
+
+    @SubscribeEvent
+    public void addItemsToTab(CreativeModeTabEvent.BuildContents event) {
+        if (event.getTab() == CreativeModeTabs.COMBAT) {
+            event.accept(DiamondBow);
+            event.accept(GoldBow);
+            event.accept(EnderBow);
+            event.accept(StoneBow);
+            event.accept(IronBow);
+            event.accept(MultiBow);
+            event.accept(FlameBow);
+            event.accept(FrostBow);
+        }
     }
 
     /**
