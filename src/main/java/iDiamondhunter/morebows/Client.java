@@ -72,9 +72,9 @@ public class Client {
         final Player eventPlayer = event.getEntity();
         final Item eventItem = eventPlayer.getUseItem().getItem();
 
-        if (eventItem instanceof CustomBow) {
+        if (eventItem instanceof final CustomBow bow) {
             float finalFov = event.getFov();
-            float customBow = eventPlayer.getTicksUsingItem() / ((CustomBow) eventItem).powerDiv;
+            float customBow = eventPlayer.getTicksUsingItem() / bow.powerDiv;
 
             if (customBow > 1.0F) {
                 customBow = 1.0F;
@@ -142,7 +142,7 @@ public class Client {
         final Minecraft mc = Minecraft.getInstance();
 
         // Only handle rendering if we're in first person and drawing back a CustomBow.
-        if (mc.options.getCameraType().isFirstPerson() && mc.player.isUsingItem() && (mc.player.getUsedItemHand() == event.getHand()) && (mc.player.getTicksUsingItem() > 0) && (event.getItemStack().getItem() instanceof CustomBow)) {
+        if (mc.options.getCameraType().isFirstPerson() && mc.player.isUsingItem() && (mc.player.getUsedItemHand() == event.getHand()) && (mc.player.getTicksUsingItem() > 0) && (event.getItemStack().getItem() instanceof final CustomBow bow)) {
             // Cancel rendering so we can render instead
             event.setCanceled(true);
             final PoseStack stack = event.getMatrixStack();
@@ -163,7 +163,7 @@ public class Client {
             stack.mulPose(Vector3f.YP.rotationDegrees(handedSide * 35.3F));
             stack.mulPose(Vector3f.ZP.rotationDegrees(handedSide * -9.785F));
             final float ticks = bowMaxUseDuration - ((mc.player.getUseItemRemainingTicks() - event.getPartialTicks()) + 1.0F);
-            float divTicks = ticks / ((CustomBow) event.getItemStack().getItem()).powerDiv;
+            float divTicks = ticks / bow.powerDiv;
             divTicks = ((divTicks * divTicks) + (divTicks * 2.0F)) / 3.0F;
 
             if (divTicks > 1.0F) {

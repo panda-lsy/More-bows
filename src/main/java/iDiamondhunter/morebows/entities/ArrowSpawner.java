@@ -123,8 +123,8 @@ public final class ArrowSpawner extends Entity {
                          */
                         final @Nullable Entity savedEntity = EntityType.create(currentArrow, level).orElse(null);
 
-                        if (savedEntity instanceof AbstractArrow) {
-                            toAdd = (AbstractArrow) savedEntity;
+                        if (savedEntity instanceof final AbstractArrow savedEntityProjectile) {
+                            toAdd = savedEntityProjectile;
                         } else {
                             MoreBows.modLog.error("The saved NBT data for arrow {} for ArrowSpawner {} ({}) was not able to spawn an AbstractArrow (spawned Entity was {}).", i, this, currentArrow, savedEntity);
 
