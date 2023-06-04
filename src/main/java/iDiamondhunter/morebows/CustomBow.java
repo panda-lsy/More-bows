@@ -149,7 +149,7 @@ public final class CustomBow extends BowItem {
 
             // TODO merge with alwaysShoots somehow
             //final boolean infiniteAmmo = alwaysShoots && ammo.isOf(Items.ARROW);
-            final boolean infiniteAmmo = player.getAbilities().instabuild || ((ammo.getItem() instanceof ArrowItem) && ((ArrowItem)ammo.getItem()).isInfinite(ammo, stack, player));
+            final boolean infiniteAmmo = player.getAbilities().instabuild || ((ammo.getItem() instanceof final ArrowItem arrowItem) && arrowItem.isInfinite(ammo, stack, player));
             final int ammoCount = infiniteAmmo ? 64 : ammo.getCount();
             final int usedAmmo;
             final int shotArrows;
@@ -185,7 +185,7 @@ public final class CustomBow extends BowItem {
                     isCrit = false;
                 }
 
-                final ArrowItem arrow = (ArrowItem) (ammo.getItem() instanceof ArrowItem ? ammo.getItem() : Items.ARROW);
+                final ArrowItem arrow = (ArrowItem) (ammo.getItem() instanceof final ArrowItem arrowItem ? arrowItem : Items.ARROW);
                 final @NotNull AbstractArrow @NotNull [] arrs;
 
                 /*
