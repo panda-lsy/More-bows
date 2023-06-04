@@ -5,7 +5,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
@@ -16,6 +15,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.client.event.ComputeFovModifierEvent;
@@ -183,7 +183,7 @@ public class Client {
             // Rotate bow based on handedness
             stack.mulPose(Axis.YN.rotationDegrees(handedSide * 45.0F));
             // Let Minecraft do the rest of the item rendering
-            final ItemTransforms.TransformType type = rightHanded ? ItemTransforms.TransformType.FIRST_PERSON_RIGHT_HAND : ItemTransforms.TransformType.FIRST_PERSON_LEFT_HAND;
+            final ItemDisplayContext type = rightHanded ? ItemDisplayContext.FIRST_PERSON_RIGHT_HAND : ItemDisplayContext.FIRST_PERSON_LEFT_HAND;
             mc.getItemRenderer().renderStatic(mc.player, event.getItemStack(), type, !rightHanded, stack, event.getMultiBufferSource(), mc.player.level, event.getPackedLight(), OverlayTexture.NO_OVERLAY, mc.player.getId() + type.ordinal());
             stack.popPose();
         }
