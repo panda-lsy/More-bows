@@ -48,25 +48,26 @@ public final class CustomBow extends BowItem {
     private static final ArrowItem defaultArrow = (ArrowItem) Items.ARROW;
 
     /** TODO review */
-    private static AbstractArrow arrowHelper(Level world, Player player, float velocity, ItemStack ammo, ArrowItem arrow) {
+    private AbstractArrow arrowHelper(Level world, Player player, float velocity, ItemStack ammo, ArrowItem arrow) {
         final AbstractArrow entityarrow = arrow.createArrow(world, ammo, player);
         return arrowHelperHelper(player, velocity, entityarrow);
     }
 
     /** TODO review */
-    private static AbstractArrow arrowHelperHelper(Player player, float velocity, AbstractArrow entityarrow) {
+    private AbstractArrow arrowHelperHelper(Player player, float velocity, AbstractArrow entityarrow) {
+        entityarrow = customArrow(entityarrow);
         entityarrow.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0f, velocity, 1.0f);
         return entityarrow;
     }
 
     /** TODO review */
-    private static AbstractArrow customArrowHelper(Level world, Player player, float velocity, byte arrType) {
+    private AbstractArrow customArrowHelper(Level world, Player player, float velocity, byte arrType) {
         final AbstractArrow entityarrow = new CustomArrow(world, player, arrType);
         return arrowHelperHelper(player, velocity, entityarrow);
     }
 
     /** TODO review */
-    private static AbstractArrow possiblyCustomArrowHelper(Level world, Player player, float velocity, ItemStack ammo, ArrowItem arrow, byte arrType) {
+    private AbstractArrow possiblyCustomArrowHelper(Level world, Player player, float velocity, ItemStack ammo, ArrowItem arrow, byte arrType) {
         if (arrow == Items.ARROW) {
             return customArrowHelper(world, player, velocity, arrType);
         }
