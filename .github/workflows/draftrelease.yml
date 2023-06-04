@@ -1,13 +1,13 @@
 # This workflow will build a Java project with Gradle
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
 
-name: Java CI with Gradle (Forge 1.17.x - draft release)
+name: Java CI with Gradle (Forge 1.18.x - draft release)
 
 on:
   push:
     # Sequence of patterns matched against refs/tags
     tags:
-      - 'v*1.17.x.forge' # Push events to matching v*1.17.x.forge
+      - 'v*1.18.x.forge' # Push events to matching v*1.18.x.forge
 
 jobs:
   build:
@@ -17,13 +17,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Set up JDK 16 & 17
+      - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: |
-            16
-            17
+          java-version: 17
       - name: Install advancecomp
         run: sudo apt-get install advancecomp
       - name: Install strip-nondeterminism

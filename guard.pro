@@ -6,7 +6,7 @@
 -dontskipnonpubliclibraryclassmembers
 -forceprocessing
 
--target 16
+-target 17
 
 # TODO Figure out how to do this but for annotations
 

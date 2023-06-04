@@ -1,15 +1,15 @@
 # This workflow will build a Java project with Gradle
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
 
-name: Java CI with Gradle (Forge 1.17.x - snapshot)
+name: Java CI with Gradle (Forge 1.18.x - snapshot)
 
 on:
   push:
     branches:
-      - forge-1.17.x
+      - forge-1.18.x
   pull_request:
     branches:
-      - forge-1.17.x
+      - forge-1.18.x
 
 jobs:
   build:
@@ -19,13 +19,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Set up JDK 16 & 17
+      - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: |
-            16
-            17
+          java-version: 17
       - name: Install advancecomp
         run: sudo apt-get install advancecomp
       - name: Install strip-nondeterminism
@@ -36,7 +34,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           gradle-version: wrapper
-          cache-read-only: ${{ github.ref != 'refs/heads/forge-1.17.x' }}
+          cache-read-only: ${{ github.ref != 'refs/heads/forge-1.18.x' }}
           arguments: build --scan --stacktrace --warning-mode all
       - name: Rezip mod .jar files to remove directory entries
         run: bash removeDirectoryEntries.sh
