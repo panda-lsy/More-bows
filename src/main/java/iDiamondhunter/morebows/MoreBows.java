@@ -29,9 +29,9 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 /** If you're reading this, I'm very sorry you have to deal with my code. */
 @Mod("morebows")
@@ -183,12 +183,12 @@ public final class MoreBows {
      */
     static @NotNull Item @NotNull [] getAllItems() {
         if (allItems == null) {
-            final Supplier<Ingredient> diamonds = () -> Ingredient.of(ItemTags.getAllTags().getTagOrEmpty(new ResourceLocation(FORGE_NAMSPACE, "gems/diamond")));
-            final Supplier<Ingredient> gold = () -> Ingredient.of(ItemTags.getAllTags().getTagOrEmpty(new ResourceLocation(FORGE_NAMSPACE, "ingots/gold")));
-            final Supplier<Ingredient> enderPearls = () -> Ingredient.of(ItemTags.getAllTags().getTagOrEmpty(new ResourceLocation(FORGE_NAMSPACE, "ender_pearls")));
-            final Supplier<Ingredient> stone = () -> Ingredient.of(ItemTags.getAllTags().getTagOrEmpty(new ResourceLocation(FORGE_NAMSPACE, "stone")));
-            final Supplier<Ingredient> iron = () -> Ingredient.of(ItemTags.getAllTags().getTagOrEmpty(new ResourceLocation(FORGE_NAMSPACE, "ingots/iron")));
-            final Supplier<Ingredient> ice = () -> Ingredient.of(ItemTags.getAllTags().getTagOrEmpty(new ResourceLocation(FORGE_NAMSPACE, "ice")));
+            final Supplier<Ingredient> diamonds = () -> Ingredient.m_43911_(ItemTags.createOptional(new ResourceLocation(FORGE_NAMSPACE, "gems/diamond")));
+            final Supplier<Ingredient> gold = () -> Ingredient.m_43911_(ItemTags.createOptional(new ResourceLocation(FORGE_NAMSPACE, "ingots/gold")));
+            final Supplier<Ingredient> enderPearls = () -> Ingredient.m_43911_(ItemTags.createOptional(new ResourceLocation(FORGE_NAMSPACE, "ender_pearls")));
+            final Supplier<Ingredient> stone = () -> Ingredient.m_43911_(ItemTags.createOptional(new ResourceLocation(FORGE_NAMSPACE, "stone")));
+            final Supplier<Ingredient> iron = () -> Ingredient.m_43911_(ItemTags.createOptional(new ResourceLocation(FORGE_NAMSPACE, "ingots/iron")));
+            final Supplier<Ingredient> ice = () -> Ingredient.m_43911_(ItemTags.createOptional(new ResourceLocation(FORGE_NAMSPACE, "ice")));
             DiamondBow = new CustomBow(new Item.Properties().tab(CreativeModeTab.TAB_COMBAT).durability(configBowsInst.DiamondBow.confBowDurability).rarity(Rarity.RARE), diamonds, defaultArrowType, configBowsInst.DiamondBow.confBowDamageMult, false, configBowsInst.DiamondBow.confBowDrawbackDiv).setRegistryName(new ResourceLocation(MOD_ID, DiamondBowName));
             GoldBow = new CustomBow(new Item.Properties().tab(CreativeModeTab.TAB_COMBAT).durability(configBowsInst.GoldBow.confBowDurability).rarity(Rarity.UNCOMMON), gold, defaultArrowType, configBowsInst.GoldBow.confBowDamageMult, false, configBowsInst.GoldBow.confBowDrawbackDiv).setRegistryName(new ResourceLocation(MOD_ID, GoldBowName));
             EnderBow = new CustomBow(new Item.Properties().tab(CreativeModeTab.TAB_COMBAT).durability(configBowsInst.EnderBow.confBowDurability).rarity(Rarity.EPIC), enderPearls, ARROW_TYPE_ENDER, configBowsInst.EnderBow.confBowDamageMult, true, configBowsInst.EnderBow.confBowDrawbackDiv).setRegistryName(new ResourceLocation(MOD_ID, EnderBowName));

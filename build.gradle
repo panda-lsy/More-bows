@@ -57,7 +57,7 @@ import groovy.json.JsonSlurper
 import proguard.gradle.ProGuardTask
 
 archivesBaseName = project.archives_base_name
-version = project.mod_version + "+1.17.x.forge"
+version = project.mod_version + "+1.18.x.forge"
 group = project.maven_group
 def internalVersion = project.mod_version
 

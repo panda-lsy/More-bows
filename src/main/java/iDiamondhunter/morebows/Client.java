@@ -17,8 +17,9 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.ConfigGuiHandler;
 import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.FOVUpdateEvent;
+import net.minecraftforge.client.event.FOVModifierEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -26,7 +27,6 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fmlclient.ConfigGuiHandler;
 
 /** The client mod initializer. */
 @Mod.EventBusSubscriber(modid = MoreBows.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
@@ -68,7 +68,7 @@ public class Client {
      * @param event the FOVUpdateEvent
      */
     @SubscribeEvent
-    public void FOV(FOVUpdateEvent event) {
+    public void FOV(FOVModifierEvent event) {
         final Player eventPlayer = event.getEntity();
         final Item eventItem = eventPlayer.getUseItem().getItem();
 
@@ -145,7 +145,7 @@ public class Client {
         if (mc.options.getCameraType().isFirstPerson() && mc.player.isUsingItem() && (mc.player.getUsedItemHand() == event.getHand()) && (mc.player.getTicksUsingItem() > 0) && (event.getItemStack().getItem() instanceof final CustomBow bow)) {
             // Cancel rendering so we can render instead
             event.setCanceled(true);
-            final PoseStack stack = event.getMatrixStack();
+            final PoseStack stack = event.getPoseStack();
             stack.pushPose();
             // TODO this is silly
             final boolean rightHanded = (event.getHand() == InteractionHand.MAIN_HAND ? mc.player.getMainArm() : mc.player.getMainArm().getOpposite()) == HumanoidArm.RIGHT;
@@ -184,7 +184,7 @@ public class Client {
             stack.mulPose(Vector3f.YN.rotationDegrees(handedSide * 45.0F));
             // Let Minecraft do the rest of the item rendering
             final ItemTransforms.TransformType type = rightHanded ? ItemTransforms.TransformType.FIRST_PERSON_RIGHT_HAND : ItemTransforms.TransformType.FIRST_PERSON_LEFT_HAND;
-            mc.getItemRenderer().renderStatic(mc.player, event.getItemStack(), type, !rightHanded, stack, event.getBuffers(), mc.player.level, event.getLight(), OverlayTexture.NO_OVERLAY, mc.player.getId() + type.ordinal());
+            mc.getItemRenderer().renderStatic(mc.player, event.getItemStack(), type, !rightHanded, stack, event.getMultiBufferSource(), mc.player.level, event.getPackedLight(), OverlayTexture.NO_OVERLAY, mc.player.getId() + type.ordinal());
             stack.popPose();
         }
     }
