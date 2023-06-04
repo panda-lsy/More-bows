@@ -59,9 +59,7 @@ import proguard.gradle.ProGuardTask
 archivesBaseName = project.archives_base_name
 version = project.mod_version + "+1.17.x.forge"
 group = project.maven_group
-//def internalVersion = project.mod_version
-// Version scheme more compatible with the version tags I use on Modrinth
-def internalVersion = version
+def internalVersion = project.mod_version
 
 //final def modName = project.mod_name
 final def build_release = System.getenv("BUILD_RELEASE") == "true"
