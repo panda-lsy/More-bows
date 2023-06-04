@@ -1,15 +1,15 @@
 # This workflow will build a Java project with Gradle
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
 
-name: Java CI with Gradle (Forge 1.19.x - snapshot)
+name: Java CI with Gradle (Forge 1.19.3 - snapshot)
 
 on:
   push:
     branches:
-      - forge-1.19.x
+      - forge-1.19.3
   pull_request:
     branches:
-      - forge-1.19.x
+      - forge-1.19.3
 
 jobs:
   build:
@@ -34,7 +34,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           gradle-version: wrapper
-          cache-read-only: ${{ github.ref != 'refs/heads/forge-1.19.x' }}
+          cache-read-only: ${{ github.ref != 'refs/heads/forge-1.19.3' }}
           arguments: build --scan --stacktrace --warning-mode all
       - name: Rezip mod .jar files to remove directory entries
         run: bash removeDirectoryEntries.sh
