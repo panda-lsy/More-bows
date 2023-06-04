@@ -5,7 +5,6 @@ import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_FIRE;
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_FROST;
 import static iDiamondhunter.morebows.MoreBows.ARROW_TYPE_NOT_CUSTOM;
 
-import java.util.Random;
 import java.util.function.Supplier;
 
 import org.intellij.lang.annotations.MagicConstant;
@@ -19,6 +18,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -155,7 +155,7 @@ public final class CustomBow extends BowItem {
             final int shotArrows;
             final int maxAmmo;
             /* TODO Review */
-            final Random playerRandom = player.getRandom();
+            final RandomSource playerRandom = player.getRandom();
 
             if (multiShot) {
                 if (bowType == ARROW_TYPE_ENDER) {

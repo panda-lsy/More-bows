@@ -17,9 +17,9 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.ConfigGuiHandler;
+import net.minecraftforge.client.ConfigScreenHandler;
+import net.minecraftforge.client.event.ComputeFovModifierEvent;
 import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.FOVModifierEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -58,7 +58,7 @@ public class Client {
         MinecraftForge.EVENT_BUS.addListener(clientListener::renderBow);
 
         if (ModList.get().isLoaded("cloth_config")) {
-            ModLoadingContext.get().registerExtensionPoint(ConfigGuiHandler.ConfigGuiFactory.class, () -> new ConfigGuiHandler.ConfigGuiFactory((mc, screen) -> iDiamondhunter.morebows.compat.ConfigScreen.moreBowsConfigScreen(screen)));
+            ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory((mc, screen) -> iDiamondhunter.morebows.compat.ConfigScreen.moreBowsConfigScreen(screen)));
         }
     }
 
@@ -68,12 +68,12 @@ public class Client {
      * @param event the FOVUpdateEvent
      */
     @SubscribeEvent
-    public void FOV(FOVModifierEvent event) {
-        final Player eventPlayer = event.getEntity();
+    public void FOV(ComputeFovModifierEvent event) {
+        final Player eventPlayer = event.getPlayer();
         final Item eventItem = eventPlayer.getUseItem().getItem();
 
         if (eventItem instanceof final CustomBow bow) {
-            float finalFov = event.getFov();
+            float finalFov = event.getNewFovModifier();
             float customBow = eventPlayer.getTicksUsingItem() / bow.powerDiv;
 
             if (customBow > 1.0F) {
@@ -83,7 +83,7 @@ public class Client {
             }
 
             finalFov *= 1.0F - (customBow * 0.15F);
-            event.setNewfov(finalFov);
+            event.setNewFovModifier(finalFov);
             /*float finalFov = event.getFov();
             final float itemUseCount = bowMaxUseDuration - eventPlayer.getUseItemRemainingTicks();
             /*
@@ -162,7 +162,7 @@ public class Client {
             stack.mulPose(Vector3f.XP.rotationDegrees(-13.935F));
             stack.mulPose(Vector3f.YP.rotationDegrees(handedSide * 35.3F));
             stack.mulPose(Vector3f.ZP.rotationDegrees(handedSide * -9.785F));
-            final float ticks = bowMaxUseDuration - ((mc.player.getUseItemRemainingTicks() - event.getPartialTicks()) + 1.0F);
+            final float ticks = bowMaxUseDuration - ((mc.player.getUseItemRemainingTicks() - event.getPartialTick()) + 1.0F);
             float divTicks = ticks / bow.powerDiv;
             divTicks = ((divTicks * divTicks) + (divTicks * 2.0F)) / 3.0F;
 
