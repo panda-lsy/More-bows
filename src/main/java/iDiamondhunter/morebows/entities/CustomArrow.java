@@ -29,6 +29,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
@@ -251,6 +252,7 @@ public final class CustomArrow extends AbstractArrow implements ItemSupplier {
                     if (inBlockState.isAir() && defaultSnowState.canSurvive(level, inBlockPos)) {
                         //level.setBlockState(inBlockPos, defaultSnowState);
                         level.setBlockAndUpdate(inBlockPos, defaultSnowState);
+                        level.gameEvent(GameEvent.BLOCK_PLACE, inBlockPos, GameEvent.Context.of(this, defaultSnowState));
                     } else if (inBlock == Blocks.WATER) {
                         /*
                          * TODO Check if the earlier event or this one is the correct one.
@@ -260,6 +262,7 @@ public final class CustomArrow extends AbstractArrow implements ItemSupplier {
                         final BlockState defaultIce = Blocks.ICE.defaultBlockState();
                         //world.setBlockState(inBlockPos, defaultIce);
                         level.setBlockAndUpdate(inBlockPos, defaultIce);
+                        level.gameEvent(GameEvent.BLOCK_CHANGE, inBlockPos, GameEvent.Context.of(this, defaultIce));
                     } else if (inBlock == Blocks.SNOW) {
                         int currentSnowLevel = 8;
 
@@ -274,10 +277,12 @@ public final class CustomArrow extends AbstractArrow implements ItemSupplier {
                             final BlockState extraSnow = inBlockState.setValue(SnowLayerBlock.LAYERS, currentSnowLevel + 1);
                             //level.setBlockState(inBlockPos, extraSnow, 10);
                             level.setBlock(inBlockPos, extraSnow, 10);
+                            level.gameEvent(GameEvent.BLOCK_CHANGE, inBlockPos, GameEvent.Context.of(this, extraSnow));
                             //} else if (inBlockState.isAir() && defaultSnowState.canPlaceAt(level, inBlockPos)) {
                         } else if (inBlockState.isAir() && defaultSnowState.canSurvive(level, inBlockPos)) {
                             //level.setBlockState(inBlockPos, defaultSnowState);
                             level.setBlockAndUpdate(inBlockPos, defaultSnowState);
+                            level.gameEvent(GameEvent.BLOCK_PLACE, inBlockPos, GameEvent.Context.of(this, defaultSnowState));
                         }
                     }
                 }
