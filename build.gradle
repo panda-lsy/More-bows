@@ -78,9 +78,7 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     // Fabric API. This is technically optional, but you probably want it anyway.
-    // TODO Uncomment this once 1.20 releases
-    //modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}+${project.minecraft_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}+1.20"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}+${project.minecraft_version}"
     //modImplementation(fabricApi.module("fabric-api-base", "${project.fabric_version}+${project.minecraft_version}"))
     //modImplementation(fabricApi.module("fabric-object-builder-api-v1", "${project.fabric_version}+${project.minecraft_version}"))
     //modImplementation(fabricApi.module("fabric-item-api-v1", "${project.fabric_version}+${project.minecraft_version}"))
