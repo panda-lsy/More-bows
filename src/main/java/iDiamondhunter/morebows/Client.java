@@ -184,7 +184,7 @@ public class Client {
             stack.mulPose(Axis.YN.rotationDegrees(handedSide * 45.0F));
             // Let Minecraft do the rest of the item rendering
             final ItemDisplayContext type = rightHanded ? ItemDisplayContext.FIRST_PERSON_RIGHT_HAND : ItemDisplayContext.FIRST_PERSON_LEFT_HAND;
-            mc.getItemRenderer().renderStatic(mc.player, event.getItemStack(), type, !rightHanded, stack, event.getMultiBufferSource(), mc.player.level, event.getPackedLight(), OverlayTexture.NO_OVERLAY, mc.player.getId() + type.ordinal());
+            mc.getItemRenderer().renderStatic(mc.player, event.getItemStack(), type, !rightHanded, stack, event.getMultiBufferSource(), mc.player.level(), event.getPackedLight(), OverlayTexture.NO_OVERLAY, mc.player.getId() + type.ordinal());
             stack.popPose();
         }
     }

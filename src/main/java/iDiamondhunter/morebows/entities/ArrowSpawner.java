@@ -122,7 +122,7 @@ public final class ArrowSpawner extends Entity {
                          * arrows[i] is set to an arrow created by calling
                          * createEntityFromNBT with the saved NBT data.
                          */
-                        final @Nullable Entity savedEntity = EntityType.create(currentArrow, level).orElse(null);
+                        final @Nullable Entity savedEntity = EntityType.create(currentArrow, level()).orElse(null);
 
                         if (savedEntity instanceof final AbstractArrow savedEntityProjectile) {
                             toAdd = savedEntityProjectile;
@@ -148,7 +148,7 @@ public final class ArrowSpawner extends Entity {
                  * If the data isn't valid, a new AbstractArrow is created
                  * to avoid null objects.
                  */
-                readArrows[i] = toAdd != null ? toAdd : new Arrow(level, getX(), getY(), getZ());
+                readArrows[i] = toAdd != null ? toAdd : new Arrow(level(), getX(), getY(), getZ());
             }
 
             arrows = readArrows;
@@ -166,7 +166,7 @@ public final class ArrowSpawner extends Entity {
             return;
         }
 
-        if (!level.isClientSide) {
+        if (!level().isClientSide) {
             if (tickCount == 1) {
                 /* Check that the arrows exist before accessing them. */
                 if (arrows.length == 0) {
@@ -176,7 +176,7 @@ public final class ArrowSpawner extends Entity {
                 }
 
                 // First arrow
-                level.addFreshEntity(arrows[0]);
+                level().addFreshEntity(arrows[0]);
             }
 
             if (tickCount == 61) {
@@ -184,7 +184,7 @@ public final class ArrowSpawner extends Entity {
 
                 for (int i = 1; i < arrLength; ++i) {
                     final @NotNull AbstractArrow arrow = arrows[i];
-                    level.addFreshEntity(arrow);
+                    level().addFreshEntity(arrow);
                     final double arrYDisp;
                     final double arrXDisp;
                     final double arrZDisp;
@@ -230,7 +230,7 @@ public final class ArrowSpawner extends Entity {
                     }
 
                     arrow.setPos(arrow.getX() + arrXDisp, arrow.getY() + arrYDisp, arrow.getZ() + arrZDisp);
-                    level.playSound(null, arrow.getX(), arrow.getY(), arrow.getZ(), (i & 1) != 0 ? SoundEvents.ENDERMAN_TELEPORT : SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, soundVolume, soundPitch);
+                    level().playSound(null, arrow.getX(), arrow.getY(), arrow.getZ(), (i & 1) != 0 ? SoundEvents.ENDERMAN_TELEPORT : SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, soundVolume, soundPitch);
                 }
             }
         }
@@ -266,7 +266,7 @@ public final class ArrowSpawner extends Entity {
             } catch (final Exception e) {
                 /* Some mods don't properly register entities. */
                 MoreBows.modLog.error("An error occurred when trying to serialize the NBT data of {}. This is likely due to an error made by the mod that added the type of arrow that was being shot ({}).", arrows[i], arrows[i].getClass(), e);
-                final CompoundTag toSave = new Arrow(level, getX(), getY(), getZ()).serializeNBT();
+                final CompoundTag toSave = new Arrow(level(), getX(), getY(), getZ()).serializeNBT();
                 arrTag = toSave;
             }
 

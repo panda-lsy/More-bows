@@ -182,7 +182,7 @@ public final class CustomArrow extends AbstractArrow implements ItemSupplier {
             final double motionZ = currentVelocity.z;
 
             for (int i = 0; i < 4; ++i) {
-                level.addParticle(ParticleTypes.SPLASH, getX() + ((motionX * i) / 4.0), getY() + ((motionY * i) / 4.0), getZ() + ((motionZ * i) / 4.0), -motionX, -motionY + 0.2, -motionZ);
+                level().addParticle(ParticleTypes.SPLASH, getX() + ((motionX * i) / 4.0), getY() + ((motionY * i) / 4.0), getZ() + ((motionZ * i) / 4.0), -motionX, -motionY + 0.2, -motionZ);
             }
         }
 
@@ -204,14 +204,14 @@ public final class CustomArrow extends AbstractArrow implements ItemSupplier {
                  * Shrinks the size of the frost arrow if it's in the ground,
                  * and the mod is in old rendering mode.
                  */
-                if (firstBlockHit && level.isClientSide && MoreBows.configGeneralInst.oldFrostArrowRendering) {
+                if (firstBlockHit && level().isClientSide && MoreBows.configGeneralInst.oldFrostArrowRendering) {
                     // TODO fix
                     //setSize(0.1F, 0.1F);
                     firstBlockHit = false;
                 }
 
                 if (inGroundTime <= 3) {
-                    level.addParticle(ParticleTypes.ITEM_SNOWBALL, getX(), getY(), getZ(), 0.0, 0.0, 0.0);
+                    level().addParticle(ParticleTypes.ITEM_SNOWBALL, getX(), getY(), getZ(), 0.0, 0.0, 0.0);
                 }
 
                 /*
@@ -225,7 +225,7 @@ public final class CustomArrow extends AbstractArrow implements ItemSupplier {
                  * </pre>
                  */
                 if (inGroundTime <= 31) {
-                    level.addParticle(ParticleTypes.SPLASH, getX(), getY(), getZ(), 0.0, 0.0, 0.0);
+                    level().addParticle(ParticleTypes.SPLASH, getX(), getY(), getZ(), 0.0, 0.0, 0.0);
                 }
 
                 /*
@@ -234,7 +234,7 @@ public final class CustomArrow extends AbstractArrow implements ItemSupplier {
                  */
                 if (inGroundTime == 65) {
                     BlockPos inBlockPos = blockPosition();
-                    BlockState inBlockState = level.getBlockState(inBlockPos);
+                    BlockState inBlockState = level().getBlockState(inBlockPos);
                     Block inBlock = inBlockState.getBlock();
                     final BlockState defaultSnowState = Blocks.SNOW.defaultBlockState();
 
@@ -250,10 +250,10 @@ public final class CustomArrow extends AbstractArrow implements ItemSupplier {
                      */
 
                     //if (inBlockState.isAir() && defaultSnowState.canPlaceAt(level, inBlockPos)) {
-                    if (inBlockState.isAir() && defaultSnowState.canSurvive(level, inBlockPos)) {
+                    if (inBlockState.isAir() && defaultSnowState.canSurvive(level(), inBlockPos)) {
                         //level.setBlockState(inBlockPos, defaultSnowState);
-                        level.setBlockAndUpdate(inBlockPos, defaultSnowState);
-                        level.gameEvent(GameEvent.BLOCK_PLACE, inBlockPos, GameEvent.Context.of(this, defaultSnowState));
+                        level().setBlockAndUpdate(inBlockPos, defaultSnowState);
+                        level().gameEvent(GameEvent.BLOCK_PLACE, inBlockPos, GameEvent.Context.of(this, defaultSnowState));
                     } else if (inBlock == Blocks.WATER) {
                         /*
                          * TODO Check if the earlier event or this one is the correct one.
@@ -262,14 +262,14 @@ public final class CustomArrow extends AbstractArrow implements ItemSupplier {
                          */
                         final BlockState defaultIce = Blocks.ICE.defaultBlockState();
                         //world.setBlockState(inBlockPos, defaultIce);
-                        level.setBlockAndUpdate(inBlockPos, defaultIce);
-                        level.gameEvent(GameEvent.BLOCK_CHANGE, inBlockPos, GameEvent.Context.of(this, defaultIce));
+                        level().setBlockAndUpdate(inBlockPos, defaultIce);
+                        level().gameEvent(GameEvent.BLOCK_CHANGE, inBlockPos, GameEvent.Context.of(this, defaultIce));
                     } else if (inBlock == Blocks.SNOW) {
                         int currentSnowLevel = 8;
 
                         for (int upCount = 0; (upCount < 1024) && (inBlock == Blocks.SNOW) && ((currentSnowLevel = inBlockState.<Integer>getValue(SnowLayerBlock.LAYERS)) > 7); upCount++) {
                             inBlockPos = inBlockPos.above();
-                            inBlockState = level.getBlockState(inBlockPos);
+                            inBlockState = level().getBlockState(inBlockPos);
                             inBlock = inBlockState.getBlock();
                         }
 
@@ -277,13 +277,13 @@ public final class CustomArrow extends AbstractArrow implements ItemSupplier {
                             //final BlockState extraSnow = inBlockState.with(SnowBlock.LAYERS, currentSnowLevel + 1);
                             final BlockState extraSnow = inBlockState.setValue(SnowLayerBlock.LAYERS, currentSnowLevel + 1);
                             //level.setBlockState(inBlockPos, extraSnow, 10);
-                            level.setBlock(inBlockPos, extraSnow, 10);
-                            level.gameEvent(GameEvent.BLOCK_CHANGE, inBlockPos, GameEvent.Context.of(this, extraSnow));
+                            level().setBlock(inBlockPos, extraSnow, 10);
+                            level().gameEvent(GameEvent.BLOCK_CHANGE, inBlockPos, GameEvent.Context.of(this, extraSnow));
                             //} else if (inBlockState.isAir() && defaultSnowState.canPlaceAt(level, inBlockPos)) {
-                        } else if (inBlockState.isAir() && defaultSnowState.canSurvive(level, inBlockPos)) {
+                        } else if (inBlockState.isAir() && defaultSnowState.canSurvive(level(), inBlockPos)) {
                             //level.setBlockState(inBlockPos, defaultSnowState);
-                            level.setBlockAndUpdate(inBlockPos, defaultSnowState);
-                            level.gameEvent(GameEvent.BLOCK_PLACE, inBlockPos, GameEvent.Context.of(this, defaultSnowState));
+                            level().setBlockAndUpdate(inBlockPos, defaultSnowState);
+                            level().gameEvent(GameEvent.BLOCK_PLACE, inBlockPos, GameEvent.Context.of(this, defaultSnowState));
                         }
                     }
                 }
@@ -355,7 +355,7 @@ public final class CustomArrow extends AbstractArrow implements ItemSupplier {
 
         // TODO replace with client-side method
         for (int i = 0; i < amount; i++) {
-            MoreBows.tryPart(level, entityHit, part, randDisp, velocity);
+            MoreBows.tryPart(level(), entityHit, part, randDisp, velocity);
         }
 
         super.onHitEntity(entityHitResult);
