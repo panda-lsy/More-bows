@@ -38,16 +38,18 @@ public class Client {
     public static void onInitializeClient(FMLClientSetupEvent event) {
         RenderingRegistry.registerEntityRenderingHandler(MoreBows.CUSTOM_ARROW.get(), CustomArrowRenderer::new);
         // RenderingRegistry.registerEntityRenderingHandler(MoreBows.ARROW_SPAWNER.get(), EmptyEntityRenderer::new);
-        final ResourceLocation PULL = new ResourceLocation("pull");
-        final ResourceLocation PULLING = new ResourceLocation("pulling");
-        final IItemPropertyGetter PULL_PROVIDER = (stack, world, entity) -> (entity == null ? 0.0F : entity.getUseItem() != stack ? 0.0F : (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / ((CustomBow) stack.getItem()).powerDiv);
-        final IItemPropertyGetter PULLING_PROVIDER = (stack, world, entity) -> ((entity != null) && entity.isUsingItem() && (entity.getUseItem() == stack) ? 1.0F : 0.0F);
+        final Item[] bows = MoreBows.getAllItems();
+        event.enqueueWork(() -> {
+            final ResourceLocation PULL = new ResourceLocation("pull");
+            final ResourceLocation PULLING = new ResourceLocation("pulling");
+            final IItemPropertyGetter PULL_PROVIDER = (stack, world, entity) -> (entity == null ? 0.0F : entity.getUseItem() != stack ? 0.0F : (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / ((CustomBow) stack.getItem()).powerDiv);
+            final IItemPropertyGetter PULLING_PROVIDER = (stack, world, entity) -> ((entity != null) && entity.isUsingItem() && (entity.getUseItem() == stack) ? 1.0F : 0.0F);
 
-        for (final Item bow : MoreBows.getAllItems()) {
-            ItemModelsProperties.register(bow, PULL, PULL_PROVIDER);
-            ItemModelsProperties.register(bow, PULLING, PULLING_PROVIDER);
-        }
-
+            for (final Item bow : bows) {
+                ItemModelsProperties.register(bow, PULL, PULL_PROVIDER);
+                ItemModelsProperties.register(bow, PULLING, PULLING_PROVIDER);
+            }
+        });
         final Client clientListener = new Client();
         MinecraftForge.EVENT_BUS.addListener(clientListener::FOV);
         MinecraftForge.EVENT_BUS.addListener(clientListener::renderBow);
