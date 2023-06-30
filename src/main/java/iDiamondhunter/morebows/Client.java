@@ -43,16 +43,18 @@ public class Client {
 
     @SubscribeEvent
     public static void onInitializeClient(FMLClientSetupEvent event) {
-        final ResourceLocation PULL = new ResourceLocation("pull");
-        final ResourceLocation PULLING = new ResourceLocation("pulling");
-        final ItemPropertyFunction PULL_PROVIDER = (stack, world, entity, unused) -> ((entity == null) || (entity.getUseItem() != stack) ? 0.0F : (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / ((CustomBow) stack.getItem()).powerDiv);
-        final ItemPropertyFunction PULLING_PROVIDER = (stack, world, entity, unused) -> ((entity != null) && entity.isUsingItem() && (entity.getUseItem() == stack) ? 1.0F : 0.0F);
+        final Item[] bows = MoreBows.getAllItems();
+        event.enqueueWork(() -> {
+            final ResourceLocation PULL = new ResourceLocation("pull");
+            final ResourceLocation PULLING = new ResourceLocation("pulling");
+            final ItemPropertyFunction PULL_PROVIDER = (stack, world, entity, unused) -> ((entity == null) || (entity.getUseItem() != stack) ? 0.0F : (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / ((CustomBow) stack.getItem()).powerDiv);
+            final ItemPropertyFunction PULLING_PROVIDER = (stack, world, entity, unused) -> ((entity != null) && entity.isUsingItem() && (entity.getUseItem() == stack) ? 1.0F : 0.0F);
 
-        for (final Item bow : MoreBows.getAllItems()) {
-            ItemProperties.register(bow, PULL, PULL_PROVIDER);
-            ItemProperties.register(bow, PULLING, PULLING_PROVIDER);
-        }
-
+            for (final Item bow : bows) {
+                ItemProperties.register(bow, PULL, PULL_PROVIDER);
+                ItemProperties.register(bow, PULLING, PULLING_PROVIDER);
+            }
+        });
         final Client clientListener = new Client();
         MinecraftForge.EVENT_BUS.addListener(clientListener::FOV);
         MinecraftForge.EVENT_BUS.addListener(clientListener::renderBow);
