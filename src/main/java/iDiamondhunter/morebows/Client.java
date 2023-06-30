@@ -42,7 +42,7 @@ public class Client {
         event.enqueueWork(() -> {
             final ResourceLocation PULL = new ResourceLocation("pull");
             final ResourceLocation PULLING = new ResourceLocation("pulling");
-            final IItemPropertyGetter PULL_PROVIDER = (stack, world, entity) -> (entity == null ? 0.0F : entity.getUseItem() != stack ? 0.0F : (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / ((CustomBow) stack.getItem()).powerDiv);
+            final IItemPropertyGetter PULL_PROVIDER = (stack, world, entity) -> ((entity == null) || (entity.getUseItem() != stack) ? 0.0F : (stack.getUseDuration() - entity.getUseItemRemainingTicks()) / ((CustomBow) stack.getItem()).powerDiv);
             final IItemPropertyGetter PULLING_PROVIDER = (stack, world, entity) -> ((entity != null) && entity.isUsingItem() && (entity.getUseItem() == stack) ? 1.0F : 0.0F);
 
             for (final Item bow : bows) {
